@@ -49,11 +49,16 @@ CREATE TABLE IF NOT EXISTS history(
   t INTEGER, mode TEXT, unit TEXT, cn TEXT, en TEXT,
   ok INTEGER, assisted INTEGER, ms INTEGER, bad INTEGER
 );
+CREATE TABLE IF NOT EXISTS plan_ledger(t INTEGER, delta INTEGER, reason TEXT);
+CREATE TABLE IF NOT EXISTS prizes(id TEXT, name TEXT, prob INTEGER);
+CREATE TABLE IF NOT EXISTS lottery_log(t INTEGER, cost INTEGER, prize TEXT);
+CREATE TABLE IF NOT EXISTS app_meta(k TEXT PRIMARY KEY, v TEXT);
 """
 
 NORMALIZED_TABLES = [
     "grades", "books", "packs", "units", "questions", "words",
     "vocab", "progress", "wrong", "stats", "history",
+    "plan_ledger", "prizes", "lottery_log", "app_meta",
 ]
 
 
@@ -259,6 +264,23 @@ class Store:
                  1 if h.get("assisted") else 0, int(h.get("ms") or 0),
                  int(h.get("bad") or 0)),
             )
+
+        plan = state.get("plan") or {}
+        lottery = state.get("lottery") or {}
+        for item in plan.get("ledger") or []:
+            conn.execute("INSERT INTO plan_ledger VALUES(?,?,?)",
+                         (int(item.get("t") or 0), int(item.get("delta") or 0),
+                          _s(item.get("reason"))))
+        for pz in lottery.get("prizes") or []:
+            conn.execute("INSERT INTO prizes VALUES(?,?,?)",
+                         (_s(pz.get("id")), _s(pz.get("name")), int(pz.get("prob") or 0)))
+        for item in lottery.get("log") or []:
+            conn.execute("INSERT INTO lottery_log VALUES(?,?,?)",
+                         (int(item.get("t") or 0), int(item.get("cost") or 0),
+                          _s(item.get("prize"))))
+        for key, val in (("plan", plan), ("lottery", lottery),
+                         ("session", state.get("session") or {})):
+            conn.execute("INSERT OR REPLACE INTO app_meta VALUES(?,?)", (key, _j(val)))
 
     def info(self) -> dict:
         with self._lock:

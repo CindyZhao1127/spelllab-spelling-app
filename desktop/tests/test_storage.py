@@ -46,6 +46,11 @@ def sample_state():
              "cn": "下雪了。", "en": "It is snowing.",
              "ok": 0, "assisted": 1, "ms": 15000, "bad": 2},
         ],
+        "plan": {"enabled": True, "type": "units", "target": 3, "points": 42,
+                 "ledger": [{"t": 1763200010000, "delta": 20, "reason": "计划达标"}]},
+        "lottery": {"cost": 10, "prizes": [{"id": "p1", "name": "小贴纸", "prob": 10}],
+                    "log": [{"t": 1763200020000, "cost": 10, "prize": "小贴纸"}]},
+        "session": {"mode": "sentence", "unitId": "u6", "qPos": 2, "draft": ["It"]},
     }
 
 
@@ -90,6 +95,10 @@ class StoreTest(unittest.TestCase):
         self.assertEqual(counts["wrong"], 1)
         self.assertEqual(counts["stats"], 2)
         self.assertEqual(counts["history"], 2)
+        self.assertEqual(counts["plan_ledger"], 1)
+        self.assertEqual(counts["prizes"], 1)
+        self.assertEqual(counts["lottery_log"], 1)
+        self.assertEqual(counts["app_meta"], 3)
 
         import sqlite3
         conn = sqlite3.connect(str(self.path))
@@ -103,6 +112,14 @@ class StoreTest(unittest.TestCase):
             hist = conn.execute(
                 "SELECT en,ok,ms,bad FROM history ORDER BY t DESC LIMIT 1").fetchone()
             self.assertEqual(hist, ("It is snowing.", 0, 15000, 2))
+            self.assertEqual(conn.execute("SELECT delta,reason FROM plan_ledger").fetchone(),
+                             (20, "计划达标"))
+            self.assertEqual(conn.execute("SELECT name,prob FROM prizes").fetchone(),
+                             ("小贴纸", 10))
+            self.assertEqual(conn.execute("SELECT prize FROM lottery_log").fetchone(),
+                             ("小贴纸",))
+            self.assertEqual(json.loads(
+                conn.execute("SELECT v FROM app_meta WHERE k='session'").fetchone()[0])["qPos"], 2)
         finally:
             conn.close()
 
@@ -151,8 +168,9 @@ class StoreTest(unittest.TestCase):
             self.store.save(["not", "a", "dict"])
 
     def test_all_tables_declared(self):
-        self.assertEqual(len(NORMALIZED_TABLES), 11)
-        self.assertIn("history", NORMALIZED_TABLES)
+        self.assertEqual(len(NORMALIZED_TABLES), 15)
+        for name in ("history", "plan_ledger", "prizes", "lottery_log", "app_meta"):
+            self.assertIn(name, NORMALIZED_TABLES)
 
     def test_source_db_path_is_next_to_module(self):
         from unittest.mock import patch

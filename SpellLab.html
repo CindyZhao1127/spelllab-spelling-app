@@ -98,10 +98,11 @@
 
   .slots{
     margin:clamp(28px,5vh,54px) auto 0;
-    display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-end;
-    gap:0 clamp(2px,.9vw,12px);max-width:940px;
+    display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;
+    column-gap:var(--word-gap,22px);row-gap:var(--slot-row-gap,16px);max-width:940px;
   }
-  .slot{position:relative;display:flex;flex-direction:column;align-items:center;margin:8px 0 30px;min-width:62px}
+  .slot{position:relative;display:flex;flex-direction:column;align-items:center;margin:8px 0 6px;min-width:62px;max-width:190px;flex:0 0 auto}
+  .slot-core{display:flex;flex-direction:column;align-items:center;width:max-content;max-width:100%}
   .slot .answer{
     height:1.35em;display:flex;align-items:center;justify-content:center;
     font-size:clamp(25px,3.5vw,38px);font-weight:900;letter-spacing:.5px;line-height:1.2;
@@ -118,9 +119,11 @@
     transition:.2s;margin-top:4px;
   }
   .slot.focus .line{background:#c3b6ff;box-shadow:0 0 14px rgba(160,140,255,.8);height:3px}
+  /* 提示改为参与布局：中文意思再长也只在本词下方换行，不会压到相邻单词 */
   .slot .hint{
-    position:absolute;top:calc(100% + 12px);left:50%;transform:translateX(-50%);
-    font-size:14px;color:#a5b0d8;white-space:nowrap;pointer-events:none;
+    margin-top:9px;max-width:var(--hint-max,180px);width:max-content;
+    font-size:13px;color:#a5b0d8;line-height:1.4;text-align:center;
+    white-space:normal;overflow-wrap:anywhere;pointer-events:none;
   }
   .hide-hints .slot .hint{visibility:hidden}
   .slot.correct .answer{color:var(--ok)}
@@ -161,6 +164,44 @@
   }
   .slot.boxed .line{background:rgba(226,232,255,.18)}
   .slot.boxed.focus .line{background:#c3b6ff;box-shadow:0 0 14px rgba(160,140,255,.8);height:3px}
+
+  /* ---------- 计时 / 难度 / 积分 / 弹窗 ---------- */
+  .stage-meta{display:flex;justify-content:center;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap}
+  .meta-chip{
+    padding:5px 12px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.4px;
+    background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:#cbd3ff;
+  }
+  .meta-chip.timer{font-variant-numeric:tabular-nums;min-width:88px;text-align:center}
+  .meta-chip.timer.urgent{background:rgba(255,122,134,.18);border-color:rgba(255,122,134,.5);color:#ffb3ba;animation:pulse 1s infinite}
+  @keyframes pulse{50%{opacity:.55}}
+  .points-chip{display:flex;align-items:center;gap:7px;padding:5px 12px;border-radius:999px;
+    background:rgba(255,214,102,.14);border:1px solid rgba(255,214,102,.32);color:#ffe39a;font-weight:800}
+  .points-chip b{font-size:16px}.points-chip span{font-size:10px;opacity:.8}
+  .points-chip:hover{background:rgba(255,214,102,.26)}
+  .modal-mask{position:fixed;inset:0;background:rgba(5,8,26,.74);z-index:70;display:grid;place-items:center;padding:18px}
+  .modal-mask[hidden],.modal[hidden]{display:none}
+  .modal{
+    width:min(430px,94vw);max-height:86vh;overflow:auto;padding:24px;border-radius:20px;
+    background:linear-gradient(160deg,#28305e,#171c3b);border:1px solid rgba(255,255,255,.16);
+    box-shadow:0 24px 70px rgba(0,0,0,.6);animation:fade .25s ease;
+  }
+  .modal h3{margin:0 0 10px;font-size:19px;font-weight:800;color:#fff}
+  .modal p{margin:0;font-size:13px;line-height:1.8;color:#c3cbeb;white-space:pre-line}
+  .modal-actions{display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end;margin-top:20px}
+  .modal-actions button{padding:9px 18px;border-radius:999px;font-size:13px;font-weight:700;
+    background:rgba(255,255,255,.12);color:#e8ecff}
+  .modal-actions button:hover{background:rgba(255,255,255,.22)}
+  .modal-actions button.primary{background:linear-gradient(135deg,#6a5cff,#4361ee);color:#fff}
+  .draw-result{text-align:center;font-size:24px;font-weight:900;color:#ffe39a;margin:14px 0 4px}
+  .plan-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:10px}
+  .plan-head b{font-size:30px;font-weight:900;color:#ffe39a}
+  .prize-row{display:flex;gap:6px;align-items:center;margin-bottom:7px}
+  .prize-row .field{flex:1;min-width:0}
+  .prize-row .prob{width:76px;flex:none}
+  .ledger-item{display:flex;justify-content:space-between;gap:8px;padding:7px 0;
+    font-size:11px;border-bottom:1px solid rgba(255,255,255,.06);color:var(--muted)}
+  .ledger-item b{font-weight:800}
+  .ledger-item b.plus{color:var(--ok)}.ledger-item b.minus{color:#ffb3ba}
 
   .feedback{min-height:24px;margin-top:4px;font-size:14px;font-weight:600;color:var(--muted)}
   .feedback.ok{color:var(--ok)}
@@ -340,8 +381,9 @@
     .toolbar{bottom:12px;gap:1px;padding:6px}
     .toolbar .tb{width:36px;height:36px}
     .toolbar .tb-main{height:36px;padding:0 12px;font-size:12px}
-    .slot{min-width:50px;margin-bottom:26px}
-    .slot .hint{font-size:12px}
+    .slot{min-width:50px;margin-bottom:4px}
+    .slot .hint{font-size:12px;max-width:120px}
+    .slots{column-gap:var(--word-gap,16px)}
     .lbox{width:clamp(17px,5vw,23px);height:clamp(27px,8vw,34px);font-size:clamp(15px,4.4vw,20px)}
     .tips{font-size:11px}
     .chunk-card{width:min(200px,84vw);min-height:126px}
@@ -370,8 +412,8 @@
   .link-btn:hover{color:#fff}
 
   /* ---------- 抽屉分页 ---------- */
-  .drawer-tabs{display:flex;gap:4px;padding:4px;margin:2px 0 20px;background:rgba(255,255,255,.06);border-radius:12px}
-  .drawer-tabs button{flex:1;padding:9px 4px;border-radius:9px;font-size:12px;font-weight:700;color:var(--muted);transition:.18s}
+  .drawer-tabs{display:flex;flex-wrap:wrap;gap:4px;padding:4px;margin:2px 0 20px;background:rgba(255,255,255,.06);border-radius:12px}
+  .drawer-tabs button{flex:1 1 auto;min-width:54px;padding:9px 4px;border-radius:9px;font-size:12px;font-weight:700;color:var(--muted);transition:.18s}
   .drawer-tabs button.active{background:linear-gradient(135deg,#6a5cff,#4361ee);color:#fff;box-shadow:0 4px 14px rgba(74,84,240,.35)}
   .tab-page{animation:fade .25s ease}
   .panel-note{font-size:11px;color:var(--muted);line-height:1.7;margin:-4px 0 10px}
@@ -496,6 +538,7 @@
     <div class="top-right">
       <div class="stat"><b id="statStreak">0</b><span>连对</span></div>
       <div class="stat"><b id="statAcc">--</b><span>正确率</span></div>
+      <button class="points-chip" id="btnPoints" title="学习计划与积分"><b id="statPoints">0</b><span>积分</span></button>
       <button class="icon-btn" id="btnMenu" title="学习面板" aria-label="打开学习面板"></button>
     </div>
   </header>
@@ -515,6 +558,10 @@
     <section class="view" id="sentenceView">
       <div class="stage" id="stage">
         <div class="stage-label" id="stageLabel">看中文 · 按词义提示拼出英文</div>
+        <div class="stage-meta">
+          <span class="meta-chip" id="diffChip">正常</span>
+          <span class="meta-chip timer" id="timerChip">用时 00:00</span>
+        </div>
         <h1 class="question-cn" id="questionCn"></h1>
         <div class="phase-bar" id="phaseBar" hidden></div>
         <div class="chunk-cards" id="chunkCards" hidden></div>
@@ -527,6 +574,7 @@
           <div class="sc-note" id="scNote"></div>
           <div class="sc-actions">
             <button id="scSpeak">朗读句子</button>
+            <button id="scStar">本题生词入本</button>
             <button class="primary" id="scNext">下一题</button>
           </div>
         </div>
@@ -563,6 +611,8 @@
       <button data-tab="learn" id="tabLearn" class="active">学习</button>
       <button data-tab="history" id="tabHistory">记录</button>
       <button data-tab="vocab" id="tabVocab">生词本</button>
+      <button data-tab="plan" id="tabPlan">计划</button>
+      <button data-tab="lottery" id="tabLottery">抽奖</button>
       <button data-tab="manage" id="tabManage">管理</button>
       <button data-tab="library" id="tabLibrary">教材库</button>
       <button data-tab="storage" id="tabStorage">存储</button>
@@ -591,10 +641,19 @@
         <div class="setting-row"><span>按字母显示小空格</span><button class="switch" data-set="letterBoxes" id="swLetterBoxes"></button></div>
         <div class="setting-row"><span>预先露出字母 <b id="revealVal">0</b> 个</span><input class="rate" type="range" id="revealRange" min="0" max="3" step="1" value="0"></div>
         <div class="subtle" style="margin-top:8px">小空格数量＝该单词的字母数，整句横向排列、放不下自动换行。露出的字母是提示，不用再输入。改动后当前题会重做。</div>
+        <div class="setting-row"><span>单词间距 <b id="gapVal">22</b> px</span><input class="rate" type="range" id="gapRange" min="10" max="44" step="2" value="22"></div>
+        <div class="subtle" style="margin-top:8px">中文提示现在显示在各自单词的正下方，过长时自动换行、不会挤到相邻单词；加大间距后整句更易读。</div>
         <div class="setting-row"><span>按键 / 判定音效</span><button class="switch" data-set="sound" id="swSound"></button></div>
         <div class="setting-row"><span>音效音量 <b id="volVal">35</b></span><input class="rate" type="range" id="volRange" min="0" max="100" step="5" value="35"></div>
         <div class="setting-row"><span>拼完句子后自动朗读整句</span><button class="switch" data-set="speakOnFinish" id="swSpeakOnFinish"></button></div>
-        <div class="subtle" style="margin-top:8px">句子或分步练习完成时，稍等完成音效后自动朗读完整英文句子；成功卡片上也有「朗读句子」可重听。</div>
+        <div class="setting-row"><span>朗读延迟 <b id="speakDelayVal">120</b> ms</span><input class="rate" type="range" id="speakDelayRange" min="0" max="600" step="20" value="120"></div>
+        <div class="subtle" style="margin-top:8px">完成音效播完后朗读完整英文句子；默认 120ms，调到 0 可几乎立即朗读。成功卡片上也能重听。</div>
+        <div class="setting-row"><span>练习计时方式</span><span class="sel"><select id="timerModeSel"><option value="count">只显示用时</option><option value="countdown">倒计时</option></select></span></div>
+        <div class="setting-row"><span>难度</span><span class="sel"><select id="difficultySel"><option value="easy">简单</option><option value="normal">正常</option><option value="hard">困难</option></select></span></div>
+        <div class="subtle" style="margin-top:8px">简单 120 秒 / 两级提示 / 多露 1 个字母；正常 60 秒 / 两级提示；困难 35 秒 / 只有首字母提示。选「倒计时」时到点自动显示答案，选「只显示用时」不限时。</div>
+        <div class="setting-row"><span>拼错或用提示时自动加入生词本</span><button class="switch" data-set="autoVocab" id="swAutoVocab"></button></div>
+        <div class="setting-row"><span>启动时询问是否继续上次练习</span><button class="switch" data-set="askResume" id="swAskResume"></button></div>
+        <div class="setting-row"><span>单元练完时询问是否进入下一单元</span><button class="switch" data-set="askNextUnit" id="swAskNextUnit"></button></div>
         <div class="setting-row"><span>忽略大小写</span><button class="switch" data-set="ignoreCase" id="swCase"></button></div>
         <div class="setting-row"><span>智能复习（优先薄弱句）</span><button class="switch" data-set="smart" id="swSmart"></button></div>
         <div class="setting-row"><span>朗读语速 <b id="rateVal">0.9</b></span><input class="rate" type="range" id="rateRange" min="0.6" max="1.2" step="0.1" value="0.9"></div>
@@ -670,6 +729,46 @@
         <h3>生词练习集</h3>
         <div id="setList"></div>
       </div>
+    </div>
+
+    <div class="tab-page" id="pagePlan" hidden>
+      <div class="panel">
+        <h3>我的积分</h3>
+        <div class="plan-head"><div><b id="planPoints">0</b> <span>分</span></div><button class="mini-btn sm" id="planGoLottery">去抽奖</button></div>
+        <div class="panel-note">不借助提示答对一题 +<b id="planPerCorrect">1</b> 分；每日计划达标额外加分，未达标扣分。积分可在「抽奖」页使用。</div>
+        <div class="stat-grid" id="planTodayGrid"></div>
+      </div>
+      <div class="panel">
+        <h3>每日学习计划</h3>
+        <div class="setting-row"><span>启用每日计划</span><button class="switch" id="swPlanEnabled"></button></div>
+        <div class="setting-row"><span>计划类型</span><span class="sel"><select id="planType"><option value="units">按单元数</option><option value="minutes">按练习时长</option></select></span></div>
+        <div class="field-row"><input class="field" id="planTarget" type="number" min="1" max="600" value="3" placeholder="每日目标"></div>
+        <div class="field-row"><input class="field" id="planReward" type="number" min="0" max="999" value="20" placeholder="完成奖励分"><input class="field" id="planPenalty" type="number" min="0" max="999" value="10" placeholder="未达标扣分"></div>
+        <div class="field-row"><input class="field" id="planPerCorrectInput" type="number" min="0" max="20" value="1" placeholder="每题一次答对加分"></div>
+        <div class="btn-row tight"><button class="mini-btn primary sm" id="planSave">保存计划</button></div>
+        <div class="panel-note" style="margin-top:10px">「按单元数」＝当天练过的不同单元数；「按练习时长」＝当天累计练习分钟数。每天首次打开时自动结算前一天并加减分。</div>
+      </div>
+      <div class="panel"><h3>最近结算</h3><div id="planResults"></div></div>
+      <div class="panel"><h3>积分流水</h3><div id="planLedger"></div></div>
+    </div>
+
+    <div class="tab-page" id="pageLottery" hidden>
+      <div class="panel">
+        <h3>积分抽奖</h3>
+        <div class="plan-head"><div><b id="lotteryPoints">0</b> <span>分</span></div><span class="badge" id="lotteryCostTag">每次 10 分</span></div>
+        <div class="field-row"><input class="field" id="lotteryCost" type="number" min="1" max="999" value="10" placeholder="每次消耗积分"><button class="mini-btn primary sm" id="lotteryDraw">抽一次</button></div>
+        <div class="panel-note">概率按百分比填写，所有奖项概率之和需 ≤ 100%，剩余部分为「谢谢参与」。奖项名称与概率改完即自动保存，随时可改。</div>
+      </div>
+      <div class="panel">
+        <h3>奖项设置</h3>
+        <div id="prizeList"></div>
+        <div class="btn-row tight" style="margin-top:10px">
+          <button class="mini-btn sm" id="prizeAdd">添加奖项</button>
+          <button class="mini-btn danger sm" id="prizeReset">恢复默认</button>
+        </div>
+        <div class="panel-note" style="margin-top:8px" id="prizeSum"></div>
+      </div>
+      <div class="panel"><h3>最近抽奖</h3><div id="lotteryLog"></div></div>
     </div>
 
     <div class="tab-page" id="pageManage" hidden>
@@ -810,6 +909,15 @@
   </aside>
 </div>
 
+<div class="modal-mask" id="modalMask" hidden>
+  <div class="modal" id="modal" role="dialog" aria-modal="true">
+    <h3 id="modalTitle"></h3>
+    <p id="modalText"></p>
+    <div id="modalResult"></div>
+    <div class="modal-actions" id="modalActions"></div>
+  </div>
+</div>
+
 <script>
 /* =========================================================
    SpellLab · 单词句子拼写记忆
@@ -907,16 +1015,37 @@ const HISTORY_LIMIT = 500;   // 练习记录最多保留 500 条，避免存档�
 function gradeName(id){ const g=(state.grades||[]).find(x=>x.id===id); return g?g.name:'未分类'; }
 function bookName(id){ const b=(state.books||[]).find(x=>x.id===id); return b?b.name:'未分类'; }
 
+/* ---------------- 难度 / 计划 / 抽奖默认配置 ---------------- */
+const DIFFICULTY = {
+  easy:  {label:'简单', seconds:120, hints:2, bonusReveal:1},
+  normal:{label:'正常', seconds:60,  hints:2, bonusReveal:0},
+  hard:  {label:'困难', seconds:35,  hints:1, bonusReveal:0}
+};
+const DEFAULT_PRIZES = [
+  {id:'p1',name:'免写一次抄写',prob:5},
+  {id:'p2',name:'一张小贴纸',prob:10},
+  {id:'p3',name:'多玩十分钟',prob:8},
+  {id:'p4',name:'挑一本睡前绘本',prob:5},
+  {id:'p5',name:'再抽一次',prob:12}
+];
+const DEFAULT_PLAN = {enabled:false,type:'units',target:3,reward:20,penalty:10,perCorrect:1,
+  points:0,ledger:[],results:{},since:'',lastEval:''};
+const DEFAULT_LOTTERY = {cost:10,prizes:clone(DEFAULT_PRIZES),log:[]};
+const LEDGER_LIMIT = 200, LOTTERY_LOG_LIMIT = 100, SESSION_MAX_AGE = 7*24*3600*1000;
+
 /* ---------------- 状态 ---------------- */
 const KEY = 'spelllab.state.v1';
 const DEFAULT_STATE = {
   progress:{}, wrong:[], wordStats:{}, history:[],
   stats:{attempted:0,correct:0,streak:0,best:0,today:'',todayDone:0,todayRight:0,wordRight:0},
-  settings:{showHints:true,speakOnFinish:true,ignoreCase:true,smart:true,rate:0.9,sound:true,volume:0.35,letterBoxes:true,revealLetters:0},
+  settings:{showHints:true,speakOnFinish:true,speakDelayMs:120,ignoreCase:true,smart:true,
+    rate:0.9,sound:true,volume:0.35,letterBoxes:true,revealLetters:0,wordGap:22,
+    timerMode:'count',difficulty:'normal',autoVocab:true,askResume:true,askNextUnit:true},
   custom:[], customMeta:{gradeId:'g4',bookId:'b_hj'},
   grades:DEFAULT_GRADES, books:DEFAULT_BOOKS, unitMeta:{},
   filter:{gradeId:'all',bookId:'all'},
-  vocab:[], practiceSets:[], textbooks:[], seq:1
+  vocab:[], practiceSets:[], textbooks:[], seq:1,
+  session:null, plan:clone(DEFAULT_PLAN), lottery:clone(DEFAULT_LOTTERY)
 };
 let state = loadState();
 let mode = 'sentence';
@@ -928,6 +1057,10 @@ let chunkPhase = 0, chunkList = [], chunkIdx = 0, chunkTimer = null;
 let wordCur = null, letters = [], placed = [], wordSolved = false, wordAssisted = false, lastWord = '';
 let toastTimer = null;
 let questionStartedAt = Date.now(), questionMistakes = 0;
+let questionDeadline = 0, questionTimer = 0;
+let unitRoundCount = 0, unitRoundPrompted = false;
+let resumeCandidate = (state.session && state.session.unitId) ? clone(state.session) : null;
+let sessionSuspended = !!resumeCandidate, resumeOffered = false;
 
 /* ---------------- 本地数据库：IndexedDB 主库 + localStorage 镜像 ---------------- */
 const DB_NAME='spelllab.db', DB_VER=1, DB_STORE='kv';
@@ -992,7 +1125,9 @@ function normalizeState(s){
     settings:Object.assign({},DEFAULT_STATE.settings,s.settings||{}),
     stats:Object.assign({},DEFAULT_STATE.stats,s.stats||{}),
     filter:Object.assign({},DEFAULT_STATE.filter,s.filter||{}),
-    customMeta:Object.assign({},DEFAULT_STATE.customMeta,s.customMeta||{})
+    customMeta:Object.assign({},DEFAULT_STATE.customMeta,s.customMeta||{}),
+    plan:Object.assign({},DEFAULT_PLAN,(s.plan&&typeof s.plan==='object')?s.plan:{}),
+    lottery:Object.assign({},DEFAULT_LOTTERY,(s.lottery&&typeof s.lottery==='object')?s.lottery:{})
   });
   ['custom','wrong','vocab','practiceSets','grades','books','textbooks','history'].forEach(k=>{
     if(!Array.isArray(out[k])) out[k]=clone(DEFAULT_STATE[k]);
@@ -1003,6 +1138,19 @@ function normalizeState(s){
   if(out.history.length>HISTORY_LIMIT) out.history=out.history.slice(-HISTORY_LIMIT);
   if(!out.grades.length) out.grades=clone(DEFAULT_GRADES);
   if(!out.books.length) out.books=clone(DEFAULT_BOOKS);
+  if(!Array.isArray(out.plan.ledger)) out.plan.ledger=[];
+  if(!out.plan.results || typeof out.plan.results!=='object' || Array.isArray(out.plan.results)) out.plan.results={};
+  if(out.plan.ledger.length>LEDGER_LIMIT) out.plan.ledger=out.plan.ledger.slice(-LEDGER_LIMIT);
+  if(!Array.isArray(out.lottery.prizes) || !out.lottery.prizes.length) out.lottery.prizes=clone(DEFAULT_PRIZES);
+  if(!Array.isArray(out.lottery.log)) out.lottery.log=[];
+  if(out.lottery.log.length>LOTTERY_LOG_LIMIT) out.lottery.log=out.lottery.log.slice(-LOTTERY_LOG_LIMIT);
+  if(out.session && typeof out.session!=='object') out.session=null;
+  const st=out.settings;
+  st.wordGap=Math.max(10,Math.min(44,Number(st.wordGap)||22));
+  st.speakDelayMs=Math.max(0,Math.min(600,Number(st.speakDelayMs)||0));
+  st.revealLetters=Math.max(0,Math.min(3,Number(st.revealLetters)||0));
+  if(!DIFFICULTY[st.difficulty]) st.difficulty='normal';
+  if(st.timerMode!=='countdown') st.timerMode='count';
   return out;
 }
 function loadState(){
@@ -1108,6 +1256,8 @@ function scheduleDBWrite(){
 /* 页面卸载 / 切后台时的最后一道保险。桌面版必须用 sendBeacon：
    普通 fetch 在 beforeunload 里会被浏览器取消，服务端又随窗口一起退出。 */
 function flushStorage(){
+  /* 关窗前把题目指针、模式与未填完的字母一起写进 state，供下次启动恢复 */
+  try{ snapshotSession(false); }catch(e){}
   if(DESKTOP){
     if(STORE.desktopTimer){ try{ clearTimeout(STORE.desktopTimer); }catch(e){} STORE.desktopTimer=0; }
     STORE.queued=false;
@@ -1151,7 +1301,11 @@ function applyLoadedState(){
   sessionOrder={unitId:'',list:[]};
   libSel={packId:'',unitId:'',qIdx:-1};
   vocabSelected=new Set(); vocabQuery=''; vocabOnlyNew=false;
+  /* 先取出存档里的现场并挂起快照，否则下面的 setMode 会立刻覆盖它 */
+  resumeCandidate=(state.session && state.session.unitId)?clone(state.session):null;
+  sessionSuspended=!!resumeCandidate;
   rollDay(); renderFilters(); renderHeader(); renderDrawer(); setMode(mode);
+  offerResume();
 }
 async function bootStorage(){
   const mirrorTs=mirrorTimestamp();
@@ -1189,6 +1343,7 @@ async function bootStorage(){
   renderSaveBadge();
   if(drawerTab==='storage') renderStorage();
   if(STORE.migrated) toast('已将旧存档迁移到本地数据库','ok');
+  offerResume();
 }
 function scheduleDesktopSave(){
   STORE.queued=true;
@@ -1233,6 +1388,7 @@ async function bootDesktop(){
   STORE.ready=true;
   renderSaveBadge();
   if(drawerTab==='storage') renderStorage();
+  offerResume();
 }
 async function refreshStorageInfo(){
   try{
@@ -1448,6 +1604,8 @@ function renderHeader(){
   $('progressBar').style.width = ((qPos+1)/total*100)+'%';
   $('statStreak').textContent = state.stats.streak;
   $('statAcc').textContent = state.stats.attempted ? Math.round(state.stats.correct/state.stats.attempted*100)+'%' : '--';
+  renderPoints();
+  $('diffChip').textContent='难度 · '+difficulty().label;
   $('stage').classList.toggle('hide-hints',!state.settings.showHints);
   $('sentenceView').hidden = mode==='word';
   $('wordView').hidden = mode!=='word';
@@ -1460,6 +1618,7 @@ function renderToolbars(){
   $('toolbarSentence').innerHTML =
     tb('sPrev','left','上一题')+
     tb('sSpeak','volume','朗读英文句子')+
+    tb('sStar','star','把本题单词加入生词本')+
     tb('sHints','eye','显示/隐藏逐词中文提示')+
     tb('sHint','bulb','给一个提示')+
     tb('sReset','refresh','重做本题')+
@@ -1497,8 +1656,9 @@ function tb(id,ic,title,cls){ return '<button class="tb '+(cls||'')+'" id="'+id+
 function boxesOn(){ return !!state.settings.letterBoxes; }
 function revealCount(word){
   if(!boxesOn()) return 0;
-  const n=Math.max(0,Math.min(3,Number(state.settings.revealLetters)||0));
-  return Math.min(n,Math.max(0,String(word).length-1));  /* 至少留一个字母给用户 */
+  /* 简单难度额外露 1 个字母；至少留一个字母给用户 */
+  const n=Math.max(0,Math.min(3,(Number(state.settings.revealLetters)||0)+difficulty().bonusReveal));
+  return Math.min(n,Math.max(0,String(word).length-1));
 }
 function slotGiven(i){ const s=slots[i]; return s?Number(s.dataset.given||0):0; }
 function boxesMarkup(word,given){
@@ -1538,13 +1698,17 @@ function renderBoard(tokens, cn, label, tip, onComplete){
   renderPhaseBar();
   const box=$('slots'); box.innerHTML='';
   const useBoxes=boxesOn();
+  if(box.style && typeof box.style.setProperty==='function'){
+    box.style.setProperty('--word-gap',(Number(state.settings.wordGap)||22)+'px');
+    box.style.setProperty('--hint-max','180px');
+  }
 
   tokens.forEach((t,i)=>{
     const el=document.createElement('div');
     el.className='slot'+(t.punct?' punct':'');
     const hint=t.hint||'·';
     if(t.punct){
-      el.innerHTML='<div class="answer">'+esc(t.word)+'</div><div class="line"></div>';
+      el.innerHTML='<div class="slot-core"><div class="answer">'+esc(t.word)+'</div><div class="line"></div></div>';
       box.appendChild(el); slots.push(null); draft.push(t.word); return;
     }
     const given=revealCount(t.word);
@@ -1553,13 +1717,13 @@ function renderBoard(tokens, cn, label, tip, onComplete){
     el.dataset.givenText=t.word.slice(0,given);
     if(useBoxes){
       el.classList.add('boxed');
-      el.innerHTML='<div class="answer"><div class="boxes">'+boxesMarkup(t.word,given)+'</div>'+inputHtml+'</div>'+
-                   '<div class="line"></div><div class="hint">'+esc(hint)+'</div>';
+      el.innerHTML='<div class="slot-core"><div class="answer"><div class="boxes">'+boxesMarkup(t.word,given)+'</div>'+inputHtml+'</div><div class="line"></div></div>'+
+                   '<div class="hint">'+esc(hint)+'</div>';
     }else{
       const width=Math.max(t.word.length*1.2,hint.length*1.4,3.2);
       el.style.minWidth=Math.min(width*20,210)+'px';
-      el.innerHTML='<div class="answer">'+inputHtml+'</div>'+
-                   '<div class="line"></div><div class="hint">'+esc(hint)+'</div>';
+      el.innerHTML='<div class="slot-core"><div class="answer">'+inputHtml+'</div><div class="line"></div></div>'+
+                   '<div class="hint">'+esc(hint)+'</div>';
     }
     const input=el.querySelector('input');
     input.dataset.i=i;
@@ -1576,6 +1740,7 @@ function renderBoard(tokens, cn, label, tip, onComplete){
   if(useBoxes) slots.forEach((s,i)=>{ if(s) paintBoxes(i); });
   renderHeader();
   updateChunkMain();
+  startQuestionTimer();
   const first=box.querySelector('input');
   if(first) first.focus();
 }
@@ -1587,6 +1752,7 @@ function renderSentence(){
     : '点击横线输入单词 · 空格/回车确认 · 输满字母自动判定 · Tab 跳到下一个空';
   renderBoard(tokenize(cq.q.en,cq.q.hints,cq.q.cn), cq.q.cn,
     '看中文 · 按词义提示拼出英文', tip, finishQuestion);
+  snapshotSession();
 }
 function onSlotInput(e){
   const input=e.target, i=Number(input.dataset.i);
@@ -1658,6 +1824,7 @@ function commitSlot(i,fromCheck){
   slot.classList.remove('wrong'); void slot.offsetWidth; slot.classList.add('wrong');
   SFX.wrong();
   if(!fromCheck){ toast('再检查一下这个词的拼写','bad'); }
+  autoStarToken(i,'拼错自动收藏');
   markMistake();
   return false;
 }
@@ -1687,6 +1854,10 @@ function finishQuestion(){
   }
   addHistory({mode:mode,unit:(cq.unit&&cq.unit.name)||'',cn:cq.q.cn,en:cq.q.en,
     ok:!assisted,assisted:!!assisted,ms:Date.now()-questionStartedAt,bad:questionMistakes});
+  stopQuestionTimer();
+  if(!assisted && Number(state.plan.perCorrect||0)>0)
+    addPoints(Number(state.plan.perCorrect),'一次答对');
+  unitRoundCount++;
   state.progress[id]=p; saveState(true);   // 关键节点立刻写盘，不等防抖
   SFX.complete();
   $('feedback').textContent=''; $('feedback').className='feedback';
@@ -1699,7 +1870,14 @@ function finishQuestion(){
   renderHeader(); renderDrawer(); updateChunkMain();
   if(state.settings.speakOnFinish && mode!=='word'){
     const en=cq.q.en;
-    setTimeout(()=>speak(en),650);   // 让完成音效先播完，再朗读整句
+    setTimeout(()=>speak(en),Number(state.settings.speakDelayMs)||0);
+  }
+  snapshotSession();
+  const total=order().length||1;
+  if(unitRoundCount>=total && !unitRoundPrompted){
+    unitRoundPrompted=true;
+    if(state.settings.askNextUnit && units().length>1 && typeof setTimeout==='function')
+      setTimeout(()=>{ try{ promptNextUnit(); }catch(e){} },400);
   }
 }
 function markMistake(){
@@ -1727,6 +1905,8 @@ function checkAll(){
 }
 function hintCurrent(){
   if(solved) return;
+  const maxHints=difficulty().hints;
+  if(maxHints<=0){ toast('困难模式不提供提示，试着自己想出来','bad'); return; }
   const active=document.activeElement;
   let i = active && active.dataset && active.dataset.i!=null ? Number(active.dataset.i) : null;
   if(i==null || !slots[i] || slots[i].querySelector('input').readOnly){
@@ -1751,6 +1931,8 @@ function hintCurrent(){
       toast('提示：首字母是 '+answer[0].toUpperCase());
     }
   }else{
+    if(maxHints<2){ toast('当前难度每个词只能提示一次','bad'); return; }
+    autoStarToken(i,'用提示自动收藏');
     slot.dataset.hintLevel='2';
     input.value=answer.slice(given); draft[i]=answer.slice(given); input.readOnly=true;
     slot.classList.add('correct','assisted');
@@ -1832,6 +2014,7 @@ function startChunk(){
   $('chunkCards').hidden=false;
   $('chunkProgress').hidden=false;
   renderChunkCards(); renderPhaseBar(); renderHeader(); updateChunkMain();
+  startQuestionTimer(); snapshotSession();
 }
 function renderChunkCards(){
   const box=$('chunkCards'); box.innerHTML='';
@@ -1941,6 +2124,7 @@ function pickWord(){
   wordCur=pick.w;
   questionStartedAt=Date.now(); questionMistakes=0;
   renderWord();
+  startQuestionTimer(); snapshotSession();
 }
 function renderWord(){
   if(!wordCur){ pickWord(); return; }
@@ -2008,6 +2192,9 @@ function judgeWord(){
     if(!wordAssisted){ st.ok++; st.m=Math.min(3,(st.m||0)+1); state.stats.wordRight++; }
     if(v){ v.ok=(v.ok||0)+1; if(!wordAssisted) v.m=Math.min(3,(v.m||0)+1); }
     state.wordStats[en]=st;
+    stopQuestionTimer();
+    if(!wordAssisted && Number(state.plan.perCorrect||0)>0)
+      addPoints(Number(state.plan.perCorrect),'单词一次拼对');
     addHistory({mode:'word',unit:(currentUnit()&&currentUnit().name)||'',cn:wordCur[1]||'',en:en,
       ok:!wordAssisted,assisted:!!wordAssisted,ms:Date.now()-questionStartedAt,bad:questionMistakes});
     saveState(true);
@@ -2018,6 +2205,11 @@ function judgeWord(){
   }else{
     SFX.wrong();
     if(v){ v.bad=(v.bad||0)+1; v.m=Math.max(0,(v.m||0)-1); }
+    if(state.settings.autoVocab){
+      const before=state.vocab.length;
+      addVocab(en,wordCur[1]||'','单词拼错自动收藏',questionScope(),true);
+      if(state.vocab.length>before) toast('已自动加入生词本：'+en,'ok');
+    }
     questionMistakes++; saveState(true);
     $('wordFeedback').textContent='顺序不对，再试一次'; $('wordFeedback').className='feedback bad';
     document.querySelectorAll('.letter-slot').forEach(x=>{x.classList.add('bad');});
@@ -2850,7 +3042,12 @@ function exportSQLite(){
   add('CREATE TABLE IF NOT EXISTS wrong(id TEXT PRIMARY KEY,unit_id TEXT,idx INTEGER,cn TEXT);');
   add('CREATE TABLE IF NOT EXISTS stats(k TEXT PRIMARY KEY,v TEXT);');
   add('CREATE TABLE IF NOT EXISTS history(t INTEGER,mode TEXT,unit TEXT,cn TEXT,en TEXT,ok INTEGER,assisted INTEGER,ms INTEGER,bad INTEGER);');
-  ['questions','words','vocab','progress','wrong','stats','units','packs','books','grades','history']
+  add('CREATE TABLE IF NOT EXISTS plan_ledger(t INTEGER,delta INTEGER,reason TEXT);');
+  add('CREATE TABLE IF NOT EXISTS prizes(id TEXT,name TEXT,prob INTEGER);');
+  add('CREATE TABLE IF NOT EXISTS lottery_log(t INTEGER,cost INTEGER,prize TEXT);');
+  add('CREATE TABLE IF NOT EXISTS app_meta(k TEXT PRIMARY KEY,v TEXT);');
+  ['questions','words','vocab','progress','wrong','stats','units','packs','books','grades',
+   'history','plan_ledger','prizes','lottery_log','app_meta']
     .forEach(t=>add('DELETE FROM '+t+';'));
   (state.grades||[]).forEach(g=>add('INSERT INTO grades VALUES'+sqlVals([g.id,g.name])));
   (state.books||[]).forEach(b=>add('INSERT INTO books VALUES'+sqlVals([b.id,b.name])));
@@ -2886,6 +3083,15 @@ function exportSQLite(){
   Object.keys(state.stats||{}).forEach(k=>add('INSERT INTO stats VALUES'+sqlVals([k,state.stats[k]])));
   (state.history||[]).forEach(h=>add('INSERT INTO history VALUES'+sqlVals([
     h.t||0,h.mode||'',h.unit||'',h.cn||'',h.en||'',h.ok?1:0,h.assisted?1:0,h.ms||0,h.bad||0])));
+  const plan=state.plan||{}, lot=state.lottery||{};
+  (plan.ledger||[]).forEach(x=>add('INSERT INTO plan_ledger VALUES'+sqlVals([
+    x.t||0,x.delta||0,x.reason||''])));
+  (lot.prizes||[]).forEach(p=>add('INSERT INTO prizes VALUES'+sqlVals([
+    p.id||'',p.name||'',p.prob||0])));
+  (lot.log||[]).forEach(x=>add('INSERT INTO lottery_log VALUES'+sqlVals([
+    x.t||0,x.cost||0,x.prize||''])));
+  [['plan',plan],['lottery',lot],['session',state.session||{}]].forEach(([k,v])=>
+    add('INSERT OR REPLACE INTO app_meta VALUES'+sqlVals([k,JSON.stringify(v)])));
   add('COMMIT;');
   return L.join('\n')+'\n';
 }
@@ -2950,6 +3156,351 @@ function exportHistoryCSV(){
   else toast('浏览器未开放下载，请用桌面版导出','bad');
 }
 
+/* ---------------- 通用弹窗 ---------------- */
+let modalDismissible = false;
+function showModal(opts){
+  try{
+    $('modalTitle').textContent=opts.title||'';
+    $('modalText').textContent=opts.text||'';
+    $('modalResult').innerHTML=opts.result||'';
+    const acts=opts.actions||[{label:'知道了'}];
+    const host=$('modalActions'); host.innerHTML='';
+    acts.forEach(a=>{
+      const b=document.createElement('button');
+      b.textContent=a.label;
+      if(a.primary) b.className='primary';
+      b.addEventListener('click',()=>{ hideModal(); if(a.onClick) a.onClick(); });
+      host.appendChild(b);
+    });
+    modalDismissible=!!opts.dismissible;
+    $('modalMask').hidden=false;
+  }catch(e){}
+}
+function hideModal(){ try{ $('modalMask').hidden=true; }catch(e){} }
+
+/* ---------------- 难度 / 计时 ---------------- */
+function difficulty(){ return DIFFICULTY[state.settings.difficulty]||DIFFICULTY.normal; }
+function fmtTime(ms){
+  const s=Math.max(0,Math.round(Number(ms||0)/1000));
+  return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+}
+function stopQuestionTimer(){
+  if(questionTimer && typeof clearInterval==='function'){ try{ clearInterval(questionTimer); }catch(e){} }
+  questionTimer=0;
+}
+function renderTimer(){
+  if(state.settings.timerMode==='countdown'){
+    const left=Math.max(0,questionDeadline-Date.now());
+    $('timerChip').textContent='剩余 '+fmtTime(left);
+    $('timerChip').classList.toggle('urgent',left<=10000);
+    if(left<=0 && !solved){
+      stopQuestionTimer();
+      if(mode==='word') toast('时间到，继续试试或换一个词','bad');
+      else if(slots.length) timeUp();
+    }
+  }else{
+    $('timerChip').textContent='用时 '+fmtTime(Date.now()-questionStartedAt);
+    $('timerChip').classList.remove('urgent');
+  }
+}
+function startQuestionTimer(){
+  stopQuestionTimer();
+  questionDeadline=Date.now()+difficulty().seconds*1000;
+  $('diffChip').textContent='难度 · '+difficulty().label;
+  renderTimer();
+  if(typeof setInterval==='function'){
+    try{ questionTimer=setInterval(()=>{ try{ renderTimer(); }catch(e){} },250); }catch(e){}
+  }
+}
+function timeUp(){
+  if(solved) return;
+  stopQuestionTimer();
+  try{ SFX.wrong(); }catch(e){}
+  toast('时间到，本题已显示答案','bad');
+  revealWholeBoard();
+}
+function revealWholeBoard(){
+  assisted=true;
+  slots.forEach((s,i)=>{
+    if(!s) return;
+    const inp=s.querySelector('input'), given=slotGiven(i);
+    inp.value=curTokens[i].word.slice(given);
+    inp.readOnly=true;
+    draft[i]=curTokens[i].word.slice(given);
+    s.classList.add('correct','assisted'); s.classList.remove('wrong');
+    paintBoxes(i);
+  });
+  if(boardOnComplete) boardOnComplete();
+}
+
+/* ---------------- 生词自动收藏 ---------------- */
+function questionScope(){
+  const u=currentUnit()||{};
+  return {gradeId:u.gradeId||'g4',bookId:u.bookId||'b_hj'};
+}
+function autoStarToken(i,reason){
+  if(!state.settings.autoVocab) return;
+  const t=curTokens[i]; if(!t||t.punct) return;
+  const v=addVocab(t.word,t.hint||'',reason||'练习中自动收藏',questionScope(),true);
+  if(v) toast('已自动加入生词本：'+t.word,'ok');
+}
+function starQuestionWords(){
+  const cq=currentQuestion(), scope=questionScope();
+  const toks=tokenize(cq.q.en,cq.q.hints,cq.q.cn).filter(t=>!t.punct);
+  let added=0;
+  toks.forEach(t=>{
+    const before=state.vocab.length;
+    addVocab(t.word,t.hint||'','练习手动收藏',scope,true);
+    if(state.vocab.length>before) added++;
+  });
+  saveState(); renderDrawer();
+  toast(added?'已加入 '+added+' 个生词':'这些词都已在生词本里',added?'ok':'');
+}
+
+/* ---------------- 积分 / 学习计划 ---------------- */
+function addPoints(delta,reason){
+  const p=state.plan, d=Number(delta)||0;
+  p.points=Math.max(0,(Number(p.points)||0)+d);
+  if(!Array.isArray(p.ledger)) p.ledger=[];
+  p.ledger.push({t:Date.now(),delta:d,reason:reason||''});
+  if(p.ledger.length>LEDGER_LIMIT) p.ledger.splice(0,p.ledger.length-LEDGER_LIMIT);
+  renderPoints();
+}
+function renderPoints(){ $('statPoints').textContent=Number(state.plan.points)||0; }
+function dayNum(day){ const a=String(day).split('-').map(Number); return (a[0]||0)*10000+(a[1]||0)*100+(a[2]||0); }
+function dateShift(day,delta){
+  const a=String(day).split('-').map(Number);
+  const d=new Date(a[0],(a[1]||1)-1,(a[2]||1)+delta);
+  return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+}
+function dayStats(day){
+  const h=(state.history||[]).filter(x=>histDate(x.t)===day);
+  const set=new Set(h.map(x=>x.unit||'').filter(Boolean));
+  return {count:h.length,units:set.size,
+    minutes:Math.round(h.reduce((a,x)=>a+(Number(x.ms)||0),0)/60000)};
+}
+function planActual(day){
+  const s=dayStats(day);
+  return state.plan.type==='minutes'?s.minutes:s.units;
+}
+function settlePlan(){
+  const p=state.plan, tk=today();
+  renderPoints();
+  if(!p.enabled) return;
+  if(!p.since) p.since=tk;
+  let cursor=p.lastEval||p.since;
+  if(dayNum(cursor)>dayNum(tk)) cursor=p.since;
+  let guard=0;
+  while(dayNum(cursor)<dayNum(tk) && guard++<31){
+    const actual=planActual(cursor), ok=actual>=Math.max(1,Number(p.target)||1);
+    const delta=ok?(Number(p.reward)||0):-(Number(p.penalty)||0);
+    p.results[cursor]={actual:actual,target:Math.max(1,Number(p.target)||1),ok:ok,delta:delta};
+    addPoints(delta,(ok?'计划达标 · ':'计划未达标 · ')+cursor);
+    cursor=dateShift(cursor,1);
+  }
+  p.lastEval=tk;
+  saveState(true);
+}
+function renderPlan(){
+  const p=state.plan, tk=today();
+  $('planPoints').textContent=Number(p.points)||0;
+  $('planPerCorrect').textContent=Number(p.perCorrect)||0;
+  $('swPlanEnabled').classList.toggle('on',!!p.enabled);
+  $('planType').value=p.type==='minutes'?'minutes':'units';
+  $('planTarget').value=Number(p.target)||3;
+  $('planReward').value=Number(p.reward)||0;
+  $('planPenalty').value=Number(p.penalty)||0;
+  $('planPerCorrectInput').value=Number(p.perCorrect)||0;
+  const s=dayStats(tk), target=Math.max(1,Number(p.target)||1);
+  const actual=p.type==='minutes'?s.minutes:s.units;
+  $('planTodayGrid').innerHTML=
+    box(actual,'今日已完成')+box(target,'今日目标')+
+    box(p.enabled?(actual>=target?'已达标':'进行中'):'未启用','计划状态')+box(s.count,'今日练习');
+  const days=Object.keys(p.results||{}).sort((a,b)=>dayNum(b)-dayNum(a)).slice(0,7);
+  $('planResults').innerHTML=days.length?days.map(d=>{
+    const r=p.results[d];
+    return '<div class="ledger-item"><span>'+esc(d)+' · 完成 '+r.actual+' / '+r.target+'</span>'+
+      '<b class="'+(r.ok?'plus':'minus')+'">'+esc(r.ok?'达标':'未达标')+' '+(r.delta>=0?'+':'')+r.delta+'</b></div>';
+  }).join(''):'<div class="empty">启用计划后，每天首次打开会自动结算前一天。</div>';
+  const led=(p.ledger||[]).slice(-12).reverse();
+  $('planLedger').innerHTML=led.length?led.map(x=>
+    '<div class="ledger-item"><span>'+esc(new Date(x.t).toLocaleString('zh-CN'))+' · '+esc(x.reason||'')+'</span>'+
+    '<b class="'+(x.delta>=0?'plus':'minus')+'">'+(x.delta>=0?'+':'')+x.delta+'</b></div>'
+  ).join(''):'<div class="empty">还没有积分流水。</div>';
+  renderPoints();
+}
+function savePlanForm(){
+  const p=state.plan, was=!!p.enabled;
+  p.enabled=$('swPlanEnabled').classList.contains('on');
+  p.type=$('planType').value==='minutes'?'minutes':'units';
+  p.target=Math.max(1,Math.min(600,Number($('planTarget').value)||3));
+  p.reward=Math.max(0,Math.min(999,Number($('planReward').value)||0));
+  p.penalty=Math.max(0,Math.min(999,Number($('planPenalty').value)||0));
+  p.perCorrect=Math.max(0,Math.min(20,Number($('planPerCorrectInput').value)||0));
+  if(p.enabled && !was){ p.since=today(); p.lastEval=today(); }
+  if(!p.enabled) p.lastEval=today();
+  saveState(true); renderDrawer(); toast('学习计划已保存','ok');
+}
+
+/* ---------------- 积分抽奖 ---------------- */
+function renderLottery(){
+  const L=state.lottery, points=Number(state.plan.points)||0;
+  $('lotteryPoints').textContent=points;
+  $('lotteryCost').value=Number(L.cost)||10;
+  $('lotteryCostTag').textContent='每次 '+(Number(L.cost)||10)+' 分';
+  const prizes=Array.isArray(L.prizes)?L.prizes:[];
+  $('prizeList').innerHTML=prizes.length?prizes.map(p=>
+    '<div class="prize-row">'+
+      '<input class="field" data-prize-name="'+esc(p.id)+'" value="'+esc(p.name)+'" placeholder="奖项内容">'+
+      '<input class="field prob" type="number" min="0" max="100" step="1" data-prize-prob="'+esc(p.id)+'" value="'+(Number(p.prob)||0)+'" aria-label="中奖概率 %">'+
+      '<button class="mini-btn danger sm" data-prize-del="'+esc(p.id)+'">删</button>'+
+    '</div>').join(''):'<div class="empty">还没有奖项，点「添加奖项」新建一个。</div>';
+  const sum=prizes.reduce((a,p)=>a+(Number(p.prob)||0),0);
+  $('prizeSum').textContent='当前总中奖概率 '+sum+'%（剩余 '+Math.max(0,100-sum)+'% 为「谢谢参与」）'+(sum>100?' · 超过 100%，请调低':'');
+  const log=(L.log||[]).slice(-12).reverse();
+  $('lotteryLog').innerHTML=log.length?log.map(x=>
+    '<div class="ledger-item"><span>'+esc(new Date(x.t).toLocaleString('zh-CN'))+'</span><b>'+esc(x.prize||'谢谢参与')+'</b></div>'
+  ).join(''):'<div class="empty">还没有抽奖记录。</div>';
+}
+function updatePrizeField(id,field,value){
+  const p=(state.lottery.prizes||[]).find(x=>x.id===id); if(!p) return;
+  if(field==='name') p.name=String(value).slice(0,40);
+  else p.prob=Math.max(0,Math.min(100,Number(value)||0));
+  saveState(); renderLottery();
+}
+function addPrize(){
+  if(!Array.isArray(state.lottery.prizes)) state.lottery.prizes=[];
+  state.lottery.prizes.push({id:nextId('p'),name:'新奖项',prob:5});
+  saveState(); renderLottery();
+}
+function delPrize(id){
+  state.lottery.prizes=(state.lottery.prizes||[]).filter(x=>x.id!==id);
+  saveState(); renderLottery();
+}
+function resetPrizes(){
+  state.lottery.prizes=clone(DEFAULT_PRIZES); saveState(); renderLottery(); toast('已恢复默认奖项');
+}
+function drawLottery(){
+  const L=state.lottery, cost=Math.max(1,Number(L.cost)||10);
+  L.cost=cost;
+  const points=Number(state.plan.points)||0;
+  if(points<cost){ toast('积分不足，还差 '+(cost-points)+' 分','bad'); return; }
+  const prizes=Array.isArray(L.prizes)?L.prizes:[];
+  const total=prizes.reduce((a,p)=>a+(Number(p.prob)||0),0);
+  if(total>100){ toast('奖项概率合计超过 100%，请先调整','bad'); return; }
+  addPoints(-cost,'积分抽奖');
+  const r=Math.random()*100;
+  let acc=0, win=null;
+  for(let k=0;k<prizes.length;k++){
+    acc+=Number(prizes[k].prob)||0;
+    if(r<acc){ win=prizes[k]; break; }
+  }
+  const name=win?win.name:'谢谢参与';
+  if(!Array.isArray(L.log)) L.log=[];
+  L.log.push({t:Date.now(),cost:cost,prize:name});
+  if(L.log.length>LOTTERY_LOG_LIMIT) L.log.splice(0,L.log.length-LOTTERY_LOG_LIMIT);
+  saveState(true); renderDrawer();
+  showModal({title:win?'恭喜中奖！':'再接再厉',
+    text:'本次消耗 '+cost+' 分，当前剩余 '+(Number(state.plan.points)||0)+' 分。',
+    result:'<div class="draw-result">'+esc(name)+'</div>',
+    actions:[{label:'再抽一次',primary:true,onClick:drawLottery},{label:'收起'}]});
+}
+
+/* ---------------- 单元完成后的去向 ---------------- */
+function promptNextUnit(){
+  if(!state.settings.askNextUnit || units().length<2) return;
+  const next=units()[(unitPos+1)%units().length];
+  showModal({title:'本单元这一轮练完了',
+    text:'当前单元共 '+order().length+' 题，这一轮已全部完成。\n下一单元：'+(next.name||''),
+    actions:[
+      {label:'继续本单元',onClick:()=>{ unitRoundCount=0; unitRoundPrompted=false; gotoQuestion(1); }},
+      {label:'进入下一单元',primary:true,onClick:nextUnit},
+      {label:'稍后再说'}
+    ]});
+}
+function nextUnit(){
+  const us=units(); if(!us.length) return;
+  unitPos=(unitPos+1)%us.length;
+  qPos=0; unitRoundCount=0; unitRoundPrompted=false;
+  sessionOrder={unitId:'',list:[]}; wordCur=null;
+  setMode(mode); renderHeader(); renderDrawer();
+  toast('已切换到 '+(currentUnit().name||'下一单元'),'ok');
+}
+
+/* ---------------- 练习现场保存 / 恢复 ---------------- */
+function snapshotSession(write){
+  if(sessionSuspended) return;
+  let cq;
+  try{ cq=currentQuestion(); }catch(e){ return; }
+  const next={
+    savedAt:Date.now(), mode:mode, unitId:cq.unit.id, unitName:cq.unit.name||'',
+    unitPos:unitPos, qPos:qPos, idx:cq.idx, filter:clone(state.filter),
+    solved:!!solved, draft:draft.slice(), chunkPhase:chunkPhase,
+    wordEn:wordCur?wordCur[0]:'', unitRoundCount:unitRoundCount,
+    elapsed:Math.max(0,Date.now()-questionStartedAt)
+  };
+  const key=o=>JSON.stringify({m:o.mode,u:o.unitId,p:o.qPos,i:o.idx,s:o.solved,
+    d:o.draft||[],c:o.chunkPhase,w:o.wordEn,f:o.filter,r:o.unitRoundCount,up:o.unitPos});
+  const changed=key(next)!==key(state.session||{});
+  state.session=next;
+  if(write!==false) saveState();
+  else if(changed) STORE.dirty=true;   // 只输入了字母没换题，关窗也要补写
+}
+function restoreDraft(saved){
+  if(!Array.isArray(saved)) return;
+  slots.forEach((s,i)=>{
+    if(!s) return;
+    const inp=s.querySelector('input');
+    if(inp.readOnly) return;
+    const v=String(saved[i]||'');
+    inp.value=v; draft[i]=v; paintBoxes(i);
+  });
+}
+function resumePractice(choice){
+  const snap=resumeCandidate;
+  sessionSuspended=false;
+  if(choice==='continue' && snap){
+    try{
+      if(snap.filter){ state.filter=Object.assign({},state.filter,snap.filter); renderFilters(); }
+      mode=['sentence','chunk','word'].indexOf(snap.mode)>=0?snap.mode:'sentence';
+      unitPos=findUnitIndex(snap.unitId);
+      sessionOrder={unitId:'',list:[]};
+      qPos=Math.max(0,Math.min(Number(snap.qPos)||0,(order().length||1)-1));
+      chunkPhase=Number(snap.chunkPhase)||0;
+      unitRoundCount=Number(snap.unitRoundCount)||0;
+      setMode(mode);
+      if(!snap.solved) restoreDraft(snap.draft);
+      toast('已恢复上次练习现场','ok');
+    }catch(e){ qPos=0; setMode('sentence'); }
+  }else{
+    state.session=null;
+    unitPos=0; qPos=0; unitRoundCount=0; unitRoundPrompted=false;
+    sessionOrder={unitId:'',list:[]}; wordCur=null;
+    setMode(mode); toast('已开始新的练习');
+  }
+  snapshotSession(false);
+  saveState(true);
+  renderHeader(); renderDrawer();
+}
+function offerResume(){
+  if(resumeOffered) return;
+  resumeOffered=true;
+  settlePlan();
+  const snap=resumeCandidate;
+  if(!snap || !state.settings.askResume || !snap.unitId ||
+     (Date.now()-(Number(snap.savedAt)||0))>SESSION_MAX_AGE){
+    sessionSuspended=false; snapshotSession(); return;
+  }
+  showModal({title:'要继续上次的练习吗？',
+    text:'上次退出停在「'+(snap.unitName||snap.unitId)+'」第 '+(Number(snap.qPos)+1)+' 题'+
+         (snap.solved?'（已完成）':'，未填完的字母也会恢复')+'。\n可以继续上次进度，也可以从第一题重新开始。',
+    dismissible:true,
+    actions:[
+      {label:'重新开始',onClick:()=>resumePractice('restart')},
+      {label:'继续上次练习',primary:true,onClick:()=>resumePractice('continue')}
+    ]});
+}
+
 /* ---------------- 学习面板 ---------------- */
 function renderDrawer(){
   const us=units();
@@ -2965,7 +3516,9 @@ function renderDrawer(){
   $('wrongList').innerHTML=state.wrong.length?state.wrong.slice().reverse().slice(0,12).map(w=>
     '<div class="wrong-item"><button data-wrong="'+esc(w.id)+'">'+esc(w.cn)+'</button><span style="color:var(--muted)">去练习</span></div>'
   ).join(''):'<div class="empty">还没有错题，保持住！</div>';
-  [['swHints','showHints'],['swSpeakOnFinish','speakOnFinish'],['swCase','ignoreCase'],['swSmart','smart'],['swSound','sound'],['swLetterBoxes','letterBoxes']].forEach(([el,k])=>{
+  [['swHints','showHints'],['swSpeakOnFinish','speakOnFinish'],['swCase','ignoreCase'],
+   ['swSmart','smart'],['swSound','sound'],['swLetterBoxes','letterBoxes'],
+   ['swAutoVocab','autoVocab'],['swAskResume','askResume'],['swAskNextUnit','askNextUnit']].forEach(([el,k])=>{
     $(el).classList.toggle('on',!!state.settings[k]);
   });
   const vol=typeof state.settings.volume==='number'?state.settings.volume:0.35;
@@ -2974,16 +3527,22 @@ function renderDrawer(){
   const reveal=Math.max(0,Math.min(3,Number(state.settings.revealLetters)||0));
   $('revealRange').value=reveal;
   $('revealVal').textContent=reveal;
+  const gap=Math.max(10,Math.min(44,Number(state.settings.wordGap)||22));
+  $('gapRange').value=gap; $('gapVal').textContent=gap;
+  const delay=Math.max(0,Math.min(600,Number(state.settings.speakDelayMs)||0));
+  $('speakDelayRange').value=delay; $('speakDelayVal').textContent=delay;
+  $('timerModeSel').value=state.settings.timerMode;
+  $('difficultySel').value=state.settings.difficulty;
   $('rateRange').value=state.settings.rate;
   $('rateVal').textContent=Number(state.settings.rate).toFixed(1);
-  renderHistory(); renderSaveBadge();
+  renderHistory(); renderSaveBadge(); renderPlan(); renderLottery();
   renderVocab(); renderSets(); renderManagement(); renderLibrary(); renderFilters();
   if(drawerTab==='storage') renderStorage();
 }
 function box(v,label){ return '<div class="stat-box"><b>'+esc(v)+'</b><span>'+esc(label)+'</span></div>'; }
 function switchTab(t){
   drawerTab=t;
-  ['learn','history','vocab','manage','library','storage'].forEach(k=>{
+  ['learn','history','vocab','plan','lottery','manage','library','storage'].forEach(k=>{
     const cap=k[0].toUpperCase()+k.slice(1);
     $('page'+cap).hidden=(k!==t);
     $('tab'+cap).classList.toggle('active',k===t);
@@ -2991,6 +3550,8 @@ function switchTab(t){
   if(t==='history') renderHistory();
   if(t==='storage') renderSaveBadge();
   if(t==='vocab') renderVocab();
+  if(t==='plan') renderPlan();
+  if(t==='lottery') renderLottery();
   if(t==='manage') renderManagement();
   if(t==='library') renderLibrary();
   if(t==='storage') renderStorage();
@@ -3004,6 +3565,7 @@ function setSetting(k,v){
   state.settings[k]=v; saveState(); renderDrawer();
   if(k==='showHints'){ $('stage').classList.toggle('hide-hints',!v); $('sHints').classList.toggle('on',v); }
   if(k==='letterBoxes') refreshBoardSettings();
+  if(k==='difficulty'||k==='timerMode'){ startQuestionTimer(); if(mode!=='word') refreshBoardSettings(); }
   if(k==='smart' && mode!=='word'){
     const curIdx=currentQuestion().idx;
     sessionOrder={unitId:'',list:[]};
@@ -3056,6 +3618,7 @@ function setMode(m){
   if(m==='word'){ if(!wordCur) pickWord(); else renderWord(); }
   else if(m==='chunk') startChunk();
   else renderSentence();
+  snapshotSession();
 }
 function bind(){
   $('modeSwitch').addEventListener('click',e=>{
@@ -3070,6 +3633,60 @@ function bind(){
   $('drawerTabs').addEventListener('click',e=>{
     const b=e.target.closest('button[data-tab]'); if(b) switchTab(b.dataset.tab);
   });
+  $('btnPoints').addEventListener('click',()=>openDrawer(true,'plan'));
+  $('scStar').addEventListener('click',starQuestionWords);
+  $('modalMask').addEventListener('click',e=>{
+    if(modalDismissible && e.target===$('modalMask')){ hideModal(); sessionSuspended=false; snapshotSession(); }
+  });
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape' && modalDismissible && !$('modalMask').hidden){
+      hideModal(); sessionSuspended=false; snapshotSession();
+    }
+  });
+
+  /* 练习显示 / 计时 / 难度 */
+  $('gapRange').addEventListener('input',e=>{
+    state.settings.wordGap=Number(e.target.value);
+    $('gapVal').textContent=e.target.value;
+    const box=$('slots');
+    if(box.style && typeof box.style.setProperty==='function')
+      box.style.setProperty('--word-gap',Number(e.target.value)+'px');
+    saveState();
+  });
+  $('speakDelayRange').addEventListener('input',e=>{
+    state.settings.speakDelayMs=Number(e.target.value);
+    $('speakDelayVal').textContent=e.target.value;
+    saveState();
+  });
+  $('timerModeSel').addEventListener('change',e=>setSetting('timerMode',e.target.value));
+  $('difficultySel').addEventListener('change',e=>setSetting('difficulty',e.target.value));
+
+  /* 学习计划 */
+  $('planGoLottery').addEventListener('click',()=>switchTab('lottery'));
+  $('swPlanEnabled').addEventListener('click',()=>{
+    $('swPlanEnabled').classList.toggle('on');
+    savePlanForm();
+  });
+  $('planSave').addEventListener('click',savePlanForm);
+
+  /* 抽奖：奖项随时可改 */
+  $('lotteryCost').addEventListener('change',e=>{
+    state.lottery.cost=Math.max(1,Math.min(999,Number(e.target.value)||10));
+    saveState(); renderLottery();
+  });
+  $('lotteryDraw').addEventListener('click',drawLottery);
+  $('prizeAdd').addEventListener('click',addPrize);
+  $('prizeReset').addEventListener('click',resetPrizes);
+  $('prizeList').addEventListener('click',e=>{
+    const b=e.target.closest('button[data-prize-del]');
+    if(b) delPrize(b.dataset.prizeDel);
+  });
+  $('prizeList').addEventListener('change',e=>{
+    const t=e.target, d=t.dataset||{};
+    if(d.prizeName!=null) updatePrizeField(d.prizeName,'name',t.value);
+    else if(d.prizeProb!=null) updatePrizeField(d.prizeProb,'prob',t.value);
+  });
+
   $('gradeFilter').addEventListener('change',e=>setFilter('gradeId',e.target.value));
   $('bookFilter').addEventListener('change',e=>setFilter('bookId',e.target.value));
 
@@ -3080,6 +3697,7 @@ function bind(){
       case 'sPrev': gotoQuestion(-1); break;
       case 'sNext': gotoQuestion(1); break;
       case 'sSpeak': speak(cq.q.en); break;
+      case 'sStar': starQuestionWords(); break;
       case 'sHints': setSetting('showHints',!state.settings.showHints); break;
       case 'sHint': hintCurrent(); break;
       case 'sReset': resetQuestion(); break;
@@ -3116,6 +3734,7 @@ function bind(){
   $('unitList').addEventListener('click',e=>{
     const b=e.target.closest('button[data-unit]'); if(!b) return;
     unitPos=Number(b.dataset.unit); qPos=0; wordCur=null;
+    unitRoundCount=0; unitRoundPrompted=false;
     sessionOrder={unitId:'',list:[]};
     openDrawer(false);
     setMode(mode);

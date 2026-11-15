@@ -176,15 +176,27 @@ function fireScheduled(){
     return '记录 1 条 + 立即 POST /api/save';
   });
 
-  check('完成后自动朗读整句（避开完成音效再播）', () => {
+  check('完成后自动朗读整句（延迟可配置，默认 120ms）', () => {
     const en = run('currentQuestion().q.en');
-    const item = scheduled.filter(x => x.ms === 650);
-    assert(item.length >= 1, '未安排延迟朗读');
-    assert(item[0].ms >= 500, '延迟太短会盖住完成音效');
+    const delay = run('Number(state.settings.speakDelayMs)');
+    assert(delay === 120, '默认延迟应为 120ms，实际 ' + delay);
+    const item = scheduled.filter(x => x.ms === delay);
+    assert(item.length >= 1, '未按设置安排延迟朗读');
     spoken.length = 0;
     item.forEach(x => x.fn());
     assert(spoken.indexOf(en) >= 0, '未朗读整句：' + JSON.stringify(spoken));
-    return en + '（延迟 650ms）';
+
+    scheduled.length = 0;
+    run('state.settings.speakDelayMs=300; state.history=[]; renderSentence();');
+    run(`(function(){
+      const toks=tokenize(currentQuestion().q.en,currentQuestion().q.hints,currentQuestion().q.cn);
+      slots.forEach((s,i)=>{ if(!s) return; const inp=s.querySelector('input');
+        inp.value=toks[i].word; onSlotInput({target:inp}); });
+    })()`);
+    assert(scheduled.some(x => x.ms === 300), '自定义延迟未生效');
+    run('state.settings.speakDelayMs=120');
+    assert(/speakDelayRange/.test(html) && /朗读延迟/.test(html), '设置面板缺延迟控件');
+    return en + '（默认 120ms，可配 0-600ms）';
   });
 
   check('关闭自动朗读开关后不再朗读', () => {
@@ -320,6 +332,205 @@ function fireScheduled(){
     assert(code.indexOf('state.settings.autoSpeak') < 0, '仍在读取旧开关');
     assert(code.indexOf('saveState(true)') >= 0, '缺关键节点立即保存');
     return '旧开关已下线';
+  });
+
+  /* ---------------- 新增：间距 / 难度计时 / 生词 / 现场 / 计划 / 抽奖 ---------------- */
+  check('词间距可配置，长中文提示改为词下方换行', () => {
+    assert(/column-gap:var\(--word-gap,22px\)/.test(html), '缺可配置列间距');
+    assert(/\.slot \.hint\{[\s\S]*?white-space:normal/.test(html), '提示未改为自动换行');
+    assert(/slot-core/.test(html), '缺 slot-core 包裹，横线会被提示撑长');
+    const markup = run('(function(){renderSentence();return slots.find(s=>s).innerHTML;})()');
+    assert(markup.indexOf('slot-core') >= 0 && markup.indexOf('class="hint"') >= 0, markup);
+    assert(markup.indexOf('</div><div class="hint">') >= 0, '提示不在词槽下方');
+    assert(run('Number(state.settings.wordGap)') === 22, '默认间距应为 22px');
+    assert(/id="gapRange"/.test(html) && /id="gapVal"/.test(html), '设置面板缺间距控件');
+    return '22px 可配 · 提示参与布局 · 横线不被撑长';
+  });
+
+  check('难度档位、露出字母与计时/倒计时', () => {
+    const d = JSON.parse(run('JSON.stringify(DIFFICULTY)'));
+    assert(d.easy.seconds === 120 && d.normal.seconds === 60 && d.hard.seconds === 35, JSON.stringify(d));
+    assert(d.easy.hints === 2 && d.hard.hints === 1, '提示级数不对');
+    run("state.settings.difficulty='easy'; state.settings.revealLetters=0; renderSentence();");
+    assert(run('revealCount("weather")') === 1, '简单难度未多露 1 个字母');
+    run("state.settings.difficulty='hard'; state.settings.timerMode='countdown'; renderSentence();");
+    assert(run("$('diffChip').textContent").indexOf('困难') >= 0, '难度标签未更新');
+    assert(run("$('timerChip').textContent").indexOf('剩余') >= 0, '未显示倒计时');
+    run('hintCurrent();');
+    assert(run('assisted') === false, '困难模式不应给出二级提示');
+    run("state.settings.timerMode='count'; state.settings.difficulty='normal'; renderSentence();");
+    assert(run("$('timerChip').textContent").indexOf('用时') >= 0, '未显示用时');
+    return '三档倒计时 / 提示级数 / 露出字母 / 计时显示';
+  });
+
+  check('倒计时到点自动显示答案并记为借助提示', () => {
+    run(`(function(){state.settings.timerMode='countdown'; state.history=[]; renderSentence();
+      questionDeadline=Date.now()-1; timeUp();})()`);
+    const o = JSON.parse(run('JSON.stringify({solved:solved,assisted:assisted,h:state.history.length})'));
+    assert(o.solved && o.assisted && o.h === 1, JSON.stringify(o));
+    run("state.settings.timerMode='count'; state.history=[]; renderSentence();");
+    return 'timeUp -> revealWholeBoard -> finishQuestion(assisted)';
+  });
+
+  check('拼错自动加入生词本且不会重复收录', () => {
+    run(`(function(){state.vocab=[]; state.settings.autoVocab=true; state.settings.difficulty='normal';
+      state.history=[]; renderSentence();
+      const i=slots.findIndex(s=>s), inp=slots[i].querySelector('input');
+      inp.value='zzz'; commitSlot(i);})()`);
+    const w = JSON.parse(run('JSON.stringify(state.vocab.map(v=>({en:v.en,source:v.source})))'));
+    const word = run('curTokens[slots.findIndex(s=>s)].word');
+    assert(w.some(x => x.en === word), JSON.stringify(w));
+    assert(w[0].source.indexOf('拼错') >= 0, JSON.stringify(w));
+    const n = run('state.vocab.length');
+    run(`(function(){const i=slots.findIndex(s=>s), inp=slots[i].querySelector('input');
+      inp.value='qqq'; commitSlot(i);})()`);
+    assert(run('state.vocab.length') === n, '重复收藏未去重');
+    run(`(function(){state.settings.autoVocab=false; state.vocab=[];
+      const i=slots.findIndex(s=>s), inp=slots[i].querySelector('input');
+      inp.value='zzz'; commitSlot(i);})()`);
+    assert(run('state.vocab.length') === 0, '关闭开关后仍在自动收藏');
+    run('state.settings.autoVocab=true');
+    return '拼错自动收藏 · 去重 · 开关生效';
+  });
+
+  check('手动把本题单词加入生词本', () => {
+    run('state.vocab=[]; starQuestionWords();');
+    const n = run('state.vocab.length');
+    assert(n > 0, '未加入');
+    run('starQuestionWords();');
+    assert(run('state.vocab.length') === n, '重复加入');
+    return n + ' 个词 · 去重';
+  });
+
+  check('退出前保存练习现场，下次可继续或重开', () => {
+    run(`(function(){sessionSuspended=false; unitPos=1; qPos=2; renderSentence();
+      draft[slots.findIndex(s=>s)]='ab'; snapshotSession(false);})()`);
+    const s = JSON.parse(run('JSON.stringify(state.session)'));
+    assert(s.unitId && s.qPos === 2 && s.mode === 'sentence' && s.savedAt > 0, JSON.stringify(s));
+    assert(s.draft.some(x => x === 'ab'), '未保存未填完的字母');
+    run(`(function(){resumeCandidate=clone(state.session); sessionSuspended=true;
+      unitPos=0; qPos=0; resumePractice('continue');})()`);
+    assert(run('qPos') === 2, '未恢复题序');
+    assert(run('sessionSuspended') === false, '恢复后仍在挂起');
+    run(`(function(){resumeCandidate=clone(state.session); sessionSuspended=true;
+      resumePractice('restart');})()`);
+    assert(run('qPos') === 0 && run('unitPos') === 0, '重新开始未复位');
+    return '快照含单元/题序/草稿 · 继续与重开两条路径';
+  });
+
+  check('关窗 beacon 里含可恢复的练习现场', () => {
+    run('sessionSuspended=false; snapshotSession(false); STORE.dirty=true; flushStorage();');
+    const body = JSON.parse(beacons[beacons.length - 1].body.parts.join(''));
+    assert(body.session && body.session.unitId, 'beacon 缺 session');
+    return 'session 随 state 一起补写';
+  });
+
+  check('只输入了字母没换题，关窗也会补写草稿', () => {
+    run(`(function(){sessionSuspended=false; state.history=[]; renderSentence();
+      snapshotSession(false); STORE.dirty=false; STORE.lastFlush=Date.now();
+      draft[slots.findIndex(s=>s)]='zz';})()`);
+    const before = beacons.length;
+    run('flushStorage();');
+    assert(beacons.length === before + 1, '草稿变化未触发补写');
+    const body = JSON.parse(beacons[before].body.parts.join(''));
+    assert(body.session.draft.some(x => x === 'zz'), 'session 里没有最新草稿');
+    return 'draft 变化即触发 beacon';
+  });
+
+  check('单元一轮练完弹出「下一单元 / 继续本单元」', () => {
+    run(`(function(){state.settings.askNextUnit=true; unitRoundCount=0; unitRoundPrompted=false;
+      const total=order().length; unitRoundCount=total-1; state.history=[];
+      renderSentence(); finishQuestion();})()`);
+    assert(run('unitRoundPrompted') === true, '未标记已询问');
+    scheduled.length = 0;
+    run('promptNextUnit()');
+    const title = run("$('modalTitle').textContent");
+    assert(title.indexOf('本单元') >= 0, title);
+    assert(run("$('modalActions').children.length") === 3, '按钮数不对');
+    const before = run('unitPos');
+    run('nextUnit()');
+    assert(run('unitPos') !== before && run('qPos') === 0, '未切到下一单元');
+    return '弹框 3 个选项 · nextUnit 复位题序';
+  });
+
+  check('积分：答对加分、扣分不会为负、顶部同步', () => {
+    run(`(function(){state.plan.points=0; state.plan.ledger=[];
+      addPoints(5,'测试加分'); addPoints(-100,'测试扣分');})()`);
+    const o = JSON.parse(run('JSON.stringify({p:state.plan.points,n:state.plan.ledger.length})'));
+    assert(o.p === 0 && o.n === 2, JSON.stringify(o));
+    assert(String(run("$('statPoints').textContent")) === '0', '顶部积分未刷新');
+    return '流水 2 条 · 下限 0';
+  });
+
+  check('学习计划：按单元/时长统计与每日结算', () => {
+    run(`(function(){
+      const t=Date.now();
+      state.history=[
+        {t:t,mode:'sentence',unit:'U1',cn:'a',en:'a b',ok:true,ms:60000,bad:0},
+        {t:t,mode:'sentence',unit:'U1',cn:'b',en:'c d',ok:true,ms:60000,bad:0},
+        {t:t,mode:'sentence',unit:'U2',cn:'c',en:'e f',ok:true,ms:60000,bad:0}
+      ];
+      state.plan={enabled:true,type:'units',target:2,reward:20,penalty:10,perCorrect:1,
+        points:0,ledger:[],results:{},since:today(),lastEval:dateShift(today(),-1)};
+      settlePlan();
+    })()`);
+    const o = JSON.parse(run('JSON.stringify({p:state.plan.points,e:state.plan.lastEval,r:state.plan.results[dateShift(today(),-1)]})'));
+    assert(o.r && o.r.actual === 0 && o.r.ok === false, '昨日无练习却算达标: ' + JSON.stringify(o));
+    assert(o.e === run('today()'), '结算后未推进 lastEval');
+    run("state.plan.type='minutes'; state.plan.target=3; renderPlan();");
+    assert(run("$('planTodayGrid').innerHTML").indexOf('今日已完成') >= 0, '今日进度未渲染');
+    return '按单元 2 / 按时长 3 分钟 · 昨日未达标扣分';
+  });
+
+  check('抽奖：扣分、概率边界与奖项随时可改', () => {
+    run(`(function(){state.plan.points=100; state.lottery={cost:10,
+      prizes:[{id:'p1',name:'一等奖',prob:100}],log:[]};})()`);
+    const before = run('state.plan.points');
+    run('drawLottery()');
+    const o = JSON.parse(run('JSON.stringify({p:state.plan.points,n:state.lottery.log.length,prize:state.lottery.log[0].prize})'));
+    assert(o.p === before - 10 && o.n === 1 && o.prize === '一等奖', JSON.stringify(o));
+    run(`(function(){updatePrizeField('p1','name','换一个奖');updatePrizeField('p1','prob',25);
+      addPrize();delPrize(state.lottery.prizes[1].id);})()`);
+    assert(run("state.lottery.prizes[0].name") === '换一个奖', '名称未更新');
+    assert(run('Number(state.lottery.prizes[0].prob)') === 25, '概率未更新');
+    assert(run('state.lottery.prizes.length') === 1, '增删奖项不对');
+    run('resetPrizes()');
+    assert(run('state.lottery.prizes.length') === 5, '恢复默认失败');
+    run(`(function(){state.lottery.prizes[0].prob=150;const b=state.plan.points;drawLottery();
+      if(state.plan.points!==b) throw new Error('概率超 100% 仍然扣分');})()`);
+    return '必中奖 / 实时改名称与概率 / 超 100% 拦截';
+  });
+
+  check('SQLite 快照含计划 / 奖项 / 现场数据', () => {
+    const sql = run('exportSQLite()');
+    ['plan_ledger','prizes','lottery_log','app_meta'].forEach(t => {
+      assert(sql.indexOf('CREATE TABLE IF NOT EXISTS ' + t) >= 0, '缺表 ' + t);
+    });
+    assert(sql.indexOf('INSERT OR REPLACE INTO app_meta VALUES') >= 0, '缺 app_meta 数据');
+    return '4 张新表 + app_meta 三份 JSON';
+  });
+
+  check('旧存档平滑升级：补齐全部新字段且保留旧统计', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      const s=normalizeState({stats:{attempted:7},history:[],vocab:[]});
+      return {gap:s.settings.wordGap,delay:s.settings.speakDelayMs,diff:s.settings.difficulty,
+        timer:s.settings.timerMode,auto:s.settings.autoVocab,ask:s.settings.askResume,
+        points:s.plan.points,prizes:s.lottery.prizes.length,session:s.session,
+        attempted:s.stats.attempted};
+    })())`));
+    assert(o.gap === 22 && o.delay === 120 && o.diff === 'normal' && o.timer === 'count', JSON.stringify(o));
+    assert(o.auto === true && o.ask === true && o.points === 0 && o.prizes === 5 && o.session === null, JSON.stringify(o));
+    assert(o.attempted === 7, '旧统计丢失');
+    return '设置/计划/抽奖/现场全补默认值';
+  });
+
+  check('通用弹窗可显示与关闭', () => {
+    run(`showModal({title:'测试',text:'内容',actions:[{label:'好'}]})`);
+    assert(run("$('modalTitle').textContent") === '测试', '标题未设置');
+    assert(run("$('modalMask').hidden") === false, '未显示');
+    run('hideModal()');
+    assert(run("$('modalMask').hidden") === true, '未关闭');
+    return 'showModal / hideModal';
   });
 
   const failed = results.filter(r => r[1] === 'FAIL');
