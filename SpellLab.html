@@ -299,6 +299,15 @@
   .wrong-item button:first-child{flex:1;text-align:left;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .wrong-item:hover{background:rgba(255,122,134,.16)}
   .empty{font-size:12px;color:var(--muted);padding:8px 2px}
+  .hist-day{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.5px;margin:14px 2px 7px}
+  .hist-item{display:flex;gap:9px;align-items:flex-start;padding:9px 10px;border-radius:10px;background:rgba(255,255,255,.055);margin-bottom:6px;font-size:12px}
+  .hist-time{color:var(--muted);font-variant-numeric:tabular-nums;flex:none;width:38px}
+  .hist-body{flex:1;min-width:0}
+  .hist-en{font-weight:700;overflow-wrap:anywhere}
+  .hist-cn{color:var(--muted);font-size:11px;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .hist-meta{color:var(--muted);font-size:10px;margin-top:4px}
+  .hist-badge{flex:none;font-size:10px;font-weight:700;padding:3px 7px;border-radius:99px;background:rgba(93,231,163,.16);color:#8ff0c0}
+  .hist-badge.assist{background:rgba(255,196,105,.16);color:#ffd08a}
   .setting-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;font-size:13px;border-bottom:1px solid rgba(255,255,255,.06)}
   .switch{width:42px;height:24px;border-radius:99px;background:rgba(255,255,255,.16);position:relative;transition:.2s;flex:none}
   .switch::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.2s}
@@ -548,10 +557,11 @@
   <aside class="drawer" id="drawer">
     <button class="icon-btn drawer-close" id="drawerClose" aria-label="关闭"></button>
     <h2>学习面板</h2>
-    <div class="dsub">数据自动保存在本机 IndexedDB 数据库中</div>
+    <div class="dsub" id="saveBadge">数据自动保存在本机</div>
 
     <div class="drawer-tabs" id="drawerTabs">
       <button data-tab="learn" id="tabLearn" class="active">学习</button>
+      <button data-tab="history" id="tabHistory">记录</button>
       <button data-tab="vocab" id="tabVocab">生词本</button>
       <button data-tab="manage" id="tabManage">管理</button>
       <button data-tab="library" id="tabLibrary">教材库</button>
@@ -583,7 +593,8 @@
         <div class="subtle" style="margin-top:8px">小空格数量＝该单词的字母数，整句横向排列、放不下自动换行。露出的字母是提示，不用再输入。改动后当前题会重做。</div>
         <div class="setting-row"><span>按键 / 判定音效</span><button class="switch" data-set="sound" id="swSound"></button></div>
         <div class="setting-row"><span>音效音量 <b id="volVal">35</b></span><input class="rate" type="range" id="volRange" min="0" max="100" step="5" value="35"></div>
-        <div class="setting-row"><span>答对后自动朗读</span><button class="switch" data-set="autoSpeak" id="swSpeak"></button></div>
+        <div class="setting-row"><span>拼完句子后自动朗读整句</span><button class="switch" data-set="speakOnFinish" id="swSpeakOnFinish"></button></div>
+        <div class="subtle" style="margin-top:8px">句子或分步练习完成时，稍等完成音效后自动朗读完整英文句子；成功卡片上也有「朗读句子」可重听。</div>
         <div class="setting-row"><span>忽略大小写</span><button class="switch" data-set="ignoreCase" id="swCase"></button></div>
         <div class="setting-row"><span>智能复习（优先薄弱句）</span><button class="switch" data-set="smart" id="swSmart"></button></div>
         <div class="setting-row"><span>朗读语速 <b id="rateVal">0.9</b></span><input class="rate" type="range" id="rateRange" min="0.6" max="1.2" step="0.1" value="0.9"></div>
@@ -598,6 +609,22 @@
           <button class="mini-btn" id="fillExample">填入示例</button>
           <button class="mini-btn danger" id="clearCustom">清空我的题库</button>
         </div>
+      </div>
+    </div>
+
+    <div class="tab-page" id="pageHistory" hidden>
+      <div class="panel">
+        <h3>练习记录</h3>
+        <div class="panel-note">每完成一道题自动记一条：时间、模式、句子、是否借助提示、用时。最多保留最近 500 条，随全库备份与 SQLite 一起保存。</div>
+        <div class="stat-grid" id="histGrid"></div>
+        <div class="btn-row" style="margin-top:10px">
+          <button class="mini-btn primary" id="exportHistory">导出 CSV</button>
+          <button class="mini-btn danger" id="clearHistory">清空记录</button>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>最近练习</h3>
+        <div id="histList"></div>
       </div>
     </div>
 
@@ -876,15 +903,16 @@ const DEFAULT_BOOKS = [
   {id:'b_bsd',name:'北师大版'}
 ];
 const clone = o => JSON.parse(JSON.stringify(o));
+const HISTORY_LIMIT = 500;   // 练习记录最多保留 500 条，避免存档无限膨胀
 function gradeName(id){ const g=(state.grades||[]).find(x=>x.id===id); return g?g.name:'未分类'; }
 function bookName(id){ const b=(state.books||[]).find(x=>x.id===id); return b?b.name:'未分类'; }
 
 /* ---------------- 状态 ---------------- */
 const KEY = 'spelllab.state.v1';
 const DEFAULT_STATE = {
-  progress:{}, wrong:[], wordStats:{},
+  progress:{}, wrong:[], wordStats:{}, history:[],
   stats:{attempted:0,correct:0,streak:0,best:0,today:'',todayDone:0,todayRight:0,wordRight:0},
-  settings:{showHints:true,autoSpeak:false,ignoreCase:true,smart:true,rate:0.9,sound:true,volume:0.35,letterBoxes:true,revealLetters:0},
+  settings:{showHints:true,speakOnFinish:true,ignoreCase:true,smart:true,rate:0.9,sound:true,volume:0.35,letterBoxes:true,revealLetters:0},
   custom:[], customMeta:{gradeId:'g4',bookId:'b_hj'},
   grades:DEFAULT_GRADES, books:DEFAULT_BOOKS, unitMeta:{},
   filter:{gradeId:'all',bookId:'all'},
@@ -899,6 +927,7 @@ let boardOnComplete = null;
 let chunkPhase = 0, chunkList = [], chunkIdx = 0, chunkTimer = null;
 let wordCur = null, letters = [], placed = [], wordSolved = false, wordAssisted = false, lastWord = '';
 let toastTimer = null;
+let questionStartedAt = Date.now(), questionMistakes = 0;
 
 /* ---------------- 本地数据库：IndexedDB 主库 + localStorage 镜像 ---------------- */
 const DB_NAME='spelllab.db', DB_VER=1, DB_STORE='kv';
@@ -910,7 +939,8 @@ const STORE = {
   timer:0, queued:false, writing:false,
   fileHandle:null, fileName:'', fileState:'', fileLast:0, fileTimer:0,
   usage:0, quota:0, persisted:false,
-  dbPath:'', dbSize:0, dbCounts:null, desktopTimer:0
+  dbPath:'', dbSize:0, dbCounts:null, desktopTimer:0,
+  dirty:false, lastFlush:0
 };
 
 /* ---------------- 桌面版桥接（Python 本地服务） ----------------
@@ -931,6 +961,24 @@ const DESKTOP_API = {
   },
   load(){ return this.req('load'); },
   save(s){ return this.req('save',s); },
+  /* 关窗 / 切后台时用 sendBeacon：普通 fetch 在页面卸载时会被浏览器直接取消，
+     这正是「答对后立刻关程序，最后几条练习没了」的根因。 */
+  beacon(s){
+    try{
+      if(typeof navigator!=='undefined' && typeof navigator.sendBeacon==='function'){
+        const body=new Blob([JSON.stringify(s)],{type:'application/json'});
+        if(navigator.sendBeacon('/api/save',body)) return true;
+      }
+    }catch(e){}
+    try{
+      if(typeof fetch==='function'){
+        fetch('/api/save',{method:'POST',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify(s),keepalive:true}).catch(()=>{});
+        return true;
+      }
+    }catch(e){}
+    return false;
+  },
   info(){ return this.req('info'); },
   exportFile(text,filename){ return this.req('export',{text:text,filename:filename}); },
   openFolder(){ return this.req('open-folder'); },
@@ -946,12 +994,13 @@ function normalizeState(s){
     filter:Object.assign({},DEFAULT_STATE.filter,s.filter||{}),
     customMeta:Object.assign({},DEFAULT_STATE.customMeta,s.customMeta||{})
   });
-  ['custom','wrong','vocab','practiceSets','grades','books','textbooks'].forEach(k=>{
+  ['custom','wrong','vocab','practiceSets','grades','books','textbooks','history'].forEach(k=>{
     if(!Array.isArray(out[k])) out[k]=clone(DEFAULT_STATE[k]);
   });
   ['progress','wordStats','unitMeta'].forEach(k=>{
     if(!out[k] || typeof out[k]!=='object' || Array.isArray(out[k])) out[k]={};
   });
+  if(out.history.length>HISTORY_LIMIT) out.history=out.history.slice(-HISTORY_LIMIT);
   if(!out.grades.length) out.grades=clone(DEFAULT_GRADES);
   if(!out.books.length) out.books=clone(DEFAULT_BOOKS);
   return out;
@@ -982,14 +1031,26 @@ function writeMirror(force){
     return false;
   }
 }
-function saveState(){
+/* immediate=true 用于「答对 / 答错 / 完成单词」等关键节点：立刻写盘，
+   不等防抖；否则用户刚做完就关窗口，最后几条练习会留在内存里丢失。 */
+function saveState(immediate){
   STORE.savedAt=Date.now();
+  STORE.dirty=true;
   if(DESKTOP){
-    if(STORE.mode==='sqlite') scheduleDesktopSave();
+    if(STORE.mode==='sqlite'){
+      if(immediate) flushDesktopNow(); else scheduleDesktopSave();
+    }
   }else{
     writeMirror(false);
-    if(STORE.mode==='idb' && STORE.db) scheduleDBWrite();
+    if(STORE.mode==='idb' && STORE.db){
+      if(immediate){
+        writeNow().then(ok=>{
+          if(ok){ STORE.dirty=false; STORE.lastFlush=Date.now(); renderSaveBadge(); }
+        });
+      }else scheduleDBWrite();
+    }
   }
+  renderSaveBadge();
 }
 function idbOpen(){
   return new Promise((resolve,reject)=>{
@@ -1038,21 +1099,52 @@ function scheduleDBWrite(){
     STORE.timer=0;
     if(!STORE.queued) return;
     STORE.queued=false;
-    writeNow().then(()=>renderStorage());
-  },220);
+    writeNow().then(ok=>{
+      if(ok){ STORE.dirty=false; STORE.lastFlush=Date.now(); renderSaveBadge(); }
+      if(drawerTab==='storage') renderStorage();
+    });
+  },60);
 }
+/* 页面卸载 / 切后台时的最后一道保险。桌面版必须用 sendBeacon：
+   普通 fetch 在 beforeunload 里会被浏览器取消，服务端又随窗口一起退出。 */
 function flushStorage(){
   if(DESKTOP){
     if(STORE.desktopTimer){ try{ clearTimeout(STORE.desktopTimer); }catch(e){} STORE.desktopTimer=0; }
-    if(STORE.queued && STORE.mode==='sqlite'){
-      STORE.queued=false;
-      DESKTOP_API.save(clone(state)).catch(()=>{});
+    STORE.queued=false;
+    if(STORE.dirty && STORE.mode==='sqlite'){
+      STORE.dirty=false;
+      DESKTOP_API.beacon(clone(state));
     }
     return;
   }
-  writeMirror(true);
+  writeMirror(true);                 // localStorage 是同步写，关页也来得及
+  STORE.dirty=false;
   if(STORE.timer){ try{ clearTimeout(STORE.timer); }catch(e){} STORE.timer=0; }
   if(STORE.mode==='idb'){ STORE.queued=false; writeNow(); }
+}
+function flushDesktopNow(){
+  if(STORE.desktopTimer){ try{ clearTimeout(STORE.desktopTimer); }catch(e){} STORE.desktopTimer=0; }
+  STORE.queued=false;
+  DESKTOP_API.save(clone(state)).then(r=>{
+    STORE.savedAt=r.savedAt||STORE.savedAt;
+    STORE.dirty=false; STORE.lastFlush=Date.now(); STORE.error='';
+    renderSaveBadge();
+    if(drawerTab==='storage') renderStorage();
+  }).catch(e=>{
+    STORE.error='SQLite 写入失败：'+String((e&&e.message)||e);
+    renderSaveBadge();
+  });
+}
+function renderSaveBadge(){
+  const el=typeof document!=='undefined' ? $('saveBadge') : null;
+  if(!el) return;
+  const where = DESKTOP
+    ? 'SQLite · '+(STORE.dbPath||'桌面数据库')
+    : (STORE.mode==='idb' ? '浏览器 IndexedDB（与桌面版数据互相独立）'
+                          : '浏览器 localStorage（与桌面版数据互相独立）');
+  const t=STORE.lastFlush?new Date(STORE.lastFlush).toLocaleTimeString('zh-CN'):'';
+  el.textContent=where+(STORE.error?' · 写入异常':(STORE.dirty?' · 正在写入…':(t?' · 已保存 '+t:'')));
+  el.style.color=STORE.error?'#ffb3ba':'';
 }
 function applyLoadedState(){
   unitPos=0; qPos=0; wordCur=null;
@@ -1094,6 +1186,7 @@ async function bootStorage(){
   }
   STORE.ready=true;
   await refreshStorageInfo();
+  renderSaveBadge();
   if(drawerTab==='storage') renderStorage();
   if(STORE.migrated) toast('已将旧存档迁移到本地数据库','ok');
 }
@@ -1106,12 +1199,14 @@ function scheduleDesktopSave(){
     STORE.queued=false;
     DESKTOP_API.save(clone(state)).then(r=>{
       STORE.savedAt=r.savedAt||STORE.savedAt;
-      STORE.error='';
+      STORE.dirty=false; STORE.lastFlush=Date.now(); STORE.error='';
+      renderSaveBadge();
       if(drawerTab==='storage') renderStorage();
     }).catch(e=>{
       STORE.error='SQLite 写入失败：'+String((e&&e.message)||e);
+      renderSaveBadge();
     });
-  },220);
+  },60);
 }
 async function bootDesktop(){
   STORE.mode='sqlite';
@@ -1130,11 +1225,13 @@ async function bootDesktop(){
     STORE.dbSize=info.size||0;
     STORE.dbCounts=info.counts||null;
     STORE.savedAt=info.savedAt||STORE.savedAt;
+    STORE.dirty=false;
   }catch(e){
     STORE.mode='local';
     STORE.error='本地服务不可用：'+String((e&&e.message)||e);
   }
   STORE.ready=true;
+  renderSaveBadge();
   if(drawerTab==='storage') renderStorage();
 }
 async function refreshStorageInfo(){
@@ -1483,6 +1580,7 @@ function renderBoard(tokens, cn, label, tip, onComplete){
   if(first) first.focus();
 }
 function renderSentence(){
+  questionStartedAt=Date.now(); questionMistakes=0;
   const cq=currentQuestion();
   const tip=boxesOn()
     ? '点击字母格逐字输入 · 输满自动判定 · 空格/回车确认 · Tab 跳到下一个词'
@@ -1587,7 +1685,9 @@ function finishQuestion(){
     state.stats.streak=0;
     p.bad++;
   }
-  state.progress[id]=p; saveState();
+  addHistory({mode:mode,unit:(cq.unit&&cq.unit.name)||'',cn:cq.q.cn,en:cq.q.en,
+    ok:!assisted,assisted:!!assisted,ms:Date.now()-questionStartedAt,bad:questionMistakes});
+  state.progress[id]=p; saveState(true);   // 关键节点立刻写盘，不等防抖
   SFX.complete();
   $('feedback').textContent=''; $('feedback').className='feedback';
   $('scTitle').textContent=mode==='chunk'
@@ -1597,7 +1697,10 @@ function finishQuestion(){
   $('scNote').textContent=assisted?'不借助提示再做一次，记忆会更牢':'已加入掌握清单 · 连对 '+state.stats.streak+' 题';
   $('successCard').hidden=false;
   renderHeader(); renderDrawer(); updateChunkMain();
-  if(state.settings.autoSpeak) speak(cq.q.en);
+  if(state.settings.speakOnFinish && mode!=='word'){
+    const en=cq.q.en;
+    setTimeout(()=>speak(en),650);   // 让完成音效先播完，再朗读整句
+  }
 }
 function markMistake(){
   if(solved) return;
@@ -1610,7 +1713,8 @@ function markMistake(){
   p.bad++; p.m=Math.max(0,(p.m||0)-1);
   state.progress[id]=p;
   state.stats.streak=0;
-  saveState(); renderHeader();
+  questionMistakes++;
+  saveState(true); renderHeader();
 }
 function checkAll(){
   if(solved){ if(mode==='sentence') gotoQuestion(1); return; }
@@ -1714,6 +1818,7 @@ function buildChunks(q){
 }
 function startChunk(){
   clearTimeout(chunkTimer);
+  questionStartedAt=Date.now(); questionMistakes=0;
   const cq=currentQuestion();
   chunkPhase=0; chunkIdx=0; solved=false; boardOnComplete=null;
   chunkList=buildChunks(cq.q);
@@ -1834,6 +1939,7 @@ function pickWord(){
   const pick=(pool.length?pool:scored)[Math.floor(Math.random()*(pool.length?pool.length:scored.length))];
   lastWord=pick.w[0];
   wordCur=pick.w;
+  questionStartedAt=Date.now(); questionMistakes=0;
   renderWord();
 }
 function renderWord(){
@@ -1901,14 +2007,18 @@ function judgeWord(){
     const st=state.wordStats[en]||{m:0,ok:0,bad:0};
     if(!wordAssisted){ st.ok++; st.m=Math.min(3,(st.m||0)+1); state.stats.wordRight++; }
     if(v){ v.ok=(v.ok||0)+1; if(!wordAssisted) v.m=Math.min(3,(v.m||0)+1); }
-    state.wordStats[en]=st; saveState();
+    state.wordStats[en]=st;
+    addHistory({mode:'word',unit:(currentUnit()&&currentUnit().name)||'',cn:wordCur[1]||'',en:en,
+      ok:!wordAssisted,assisted:!!wordAssisted,ms:Date.now()-questionStartedAt,bad:questionMistakes});
+    saveState(true);
     $('wordFeedback').textContent='拼对了！ '+en+'  '+(wordCur[1]||''); $('wordFeedback').className='feedback ok';
     document.querySelectorAll('.letter-slot').forEach(x=>x.classList.add('ok'));
     speak(en); renderHeader(); renderDrawer();
     $('wNext').textContent='下一个单词';
   }else{
     SFX.wrong();
-    if(v){ v.bad=(v.bad||0)+1; v.m=Math.max(0,(v.m||0)-1); saveState(); }
+    if(v){ v.bad=(v.bad||0)+1; v.m=Math.max(0,(v.m||0)-1); }
+    questionMistakes++; saveState(true);
     $('wordFeedback').textContent='顺序不对，再试一次'; $('wordFeedback').className='feedback bad';
     document.querySelectorAll('.letter-slot').forEach(x=>{x.classList.add('bad');});
     setTimeout(()=>{
@@ -2561,6 +2671,7 @@ function dbCounts(){
   let bytes=0; try{ bytes=JSON.stringify(state).length*2; }catch(e){}
   return {packs:(state.textbooks||[]).length,questions:questions,words:words,
     vocab:(state.vocab||[]).length,wrong:(state.wrong||[]).length,
+    history:(state.history||[]).length,
     progress:Object.keys(state.progress||{}).length,bytes:bytes};
 }
 function kvBox(v,label){ return '<div class="kv"><b>'+esc(v)+'</b><span>'+esc(label)+'</span></div>'; }
@@ -2599,10 +2710,10 @@ function renderStorage(){
   $('dbEngine').textContent=sqlite?'SQLite · 本地数据库文件'
     :(idb?'IndexedDB · 本地事务型数据库':'localStorage · 兼容模式');
   $('dbDesc').textContent=sqlite
-    ? '桌面版把每次改动写进独立的 .db 文件，可用任意 SQLite 工具直接查询；数据同时展开成年级 / 教材 / 单元 / 题目 / 生词等规范表。'
+    ? '桌面版写进下方显示的 .db 文件（run.bat 与 exe 共用同一份）：答对 / 答错立即写盘，关窗前再补写一次。浏览器直接打开 SpellLab.html 用的是另一套存储，两边数据不互通，需要同步请用「导出全库备份 / 从备份恢复」。'
     :(idb
-      ? '学习数据以事务写入浏览器本地数据库，容量按磁盘剩余空间分配；关闭页面、重启浏览器都不会丢，旧版存档会自动迁移。'
-      : '当前环境无法使用 IndexedDB（隐私模式或旧浏览器），已回退到 localStorage，容量约 5 MB，请定期导出备份。');
+      ? '学习数据以事务写入浏览器本地数据库，容量按磁盘剩余空间分配；关闭页面、重启浏览器都不会丢。注意：这是浏览器版独立数据，与桌面版 SQLite 不互通，需要同步请用「导出全库备份 / 从备份恢复」。'
+      : '当前环境无法使用 IndexedDB（隐私模式或旧浏览器），已回退到 localStorage，容量约 5 MB，请定期导出备份；这也是浏览器版独立数据，与桌面版不互通。');
   if(sqlite){
     $('dbUsageBar').style.width=Math.min(100,Math.max(3,STORE.dbSize/(10*1048576)*100)).toFixed(2)+'%';
     $('dbUsageText').textContent='数据库文件 '+fmtBytes(STORE.dbSize)+
@@ -2616,7 +2727,8 @@ function renderStorage(){
   }
   $('dbCounts').innerHTML=
     kvBox(c.packs,'教材包')+kvBox(c.questions,'题目')+kvBox(c.words,'单词')+
-    kvBox(c.vocab,'生词')+kvBox(c.wrong,'错题')+kvBox(c.progress,'进度记录');
+    kvBox(c.vocab,'生词')+kvBox(c.wrong,'错题')+kvBox(c.progress,'进度记录')+
+    kvBox(c.history,'练习记录');
   let rows=
     dbRow('写入状态',STORE.error?('异常：'+STORE.error):(STORE.queued?'待写入':'已同步'))+
     dbRow('最近保存',STORE.savedAt?new Date(STORE.savedAt).toLocaleString('zh-CN'):'尚未保存');
@@ -2737,7 +2849,8 @@ function exportSQLite(){
   add('CREATE TABLE IF NOT EXISTS progress(id TEXT PRIMARY KEY,mastery INTEGER,ok INTEGER,bad INTEGER);');
   add('CREATE TABLE IF NOT EXISTS wrong(id TEXT PRIMARY KEY,unit_id TEXT,idx INTEGER,cn TEXT);');
   add('CREATE TABLE IF NOT EXISTS stats(k TEXT PRIMARY KEY,v TEXT);');
-  ['questions','words','vocab','progress','wrong','stats','units','packs','books','grades']
+  add('CREATE TABLE IF NOT EXISTS history(t INTEGER,mode TEXT,unit TEXT,cn TEXT,en TEXT,ok INTEGER,assisted INTEGER,ms INTEGER,bad INTEGER);');
+  ['questions','words','vocab','progress','wrong','stats','units','packs','books','grades','history']
     .forEach(t=>add('DELETE FROM '+t+';'));
   (state.grades||[]).forEach(g=>add('INSERT INTO grades VALUES'+sqlVals([g.id,g.name])));
   (state.books||[]).forEach(b=>add('INSERT INTO books VALUES'+sqlVals([b.id,b.name])));
@@ -2771,8 +2884,70 @@ function exportSQLite(){
   (state.wrong||[]).forEach(w=>add('INSERT OR REPLACE INTO wrong VALUES'+
     sqlVals([w.id,w.unitId||'',w.idx==null?0:w.idx,w.cn||''])));
   Object.keys(state.stats||{}).forEach(k=>add('INSERT INTO stats VALUES'+sqlVals([k,state.stats[k]])));
+  (state.history||[]).forEach(h=>add('INSERT INTO history VALUES'+sqlVals([
+    h.t||0,h.mode||'',h.unit||'',h.cn||'',h.en||'',h.ok?1:0,h.assisted?1:0,h.ms||0,h.bad||0])));
   add('COMMIT;');
   return L.join('\n')+'\n';
+}
+
+/* ---------------- 练习记录 ---------------- */
+const MODE_CN={sentence:'整句',chunk:'分步',word:'单词'};
+function histDate(t){
+  const d=new Date(t||Date.now());
+  return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();   // 与 today() 同格式
+}
+function addHistory(rec){
+  if(!Array.isArray(state.history)) state.history=[];
+  state.history.push(Object.assign({t:Date.now()},rec));
+  if(state.history.length>HISTORY_LIMIT) state.history.splice(0,state.history.length-HISTORY_LIMIT);
+}
+function renderHistory(){
+  const h=(Array.isArray(state.history)?state.history:[]).slice().sort((a,b)=>(b.t||0)-(a.t||0));
+  const tk=today();
+  const okCount=h.filter(x=>x.ok).length;
+  const mins=Math.round(h.reduce((n,x)=>n+(Number(x.ms)||0),0)/60000);
+  $('histGrid').innerHTML=
+    box(h.filter(x=>histDate(x.t)===tk).length,'今日练习')+box(h.length,'累计练习')+
+    box(h.length?Math.round(okCount/h.length*100)+'%':'--','一次答对率')+box(mins,'累计分钟');
+  if(!h.length){
+    const legacy=Number((state.stats||{}).attempted||0);
+    $('histList').innerHTML='<div class="empty">'+(legacy
+      ? '升级前已有 '+legacy+' 次练习，累计数据仍保留在「学习」面板的统计里；逐条明细从现在开始记录，完成下一道题后就会出现在这里。'
+      : '还没有练习记录。完成一道题后，这里会自动记下时间和结果。')+'</div>';
+    return;
+  }
+  const shown=h.slice(0,120), parts=[]; let lastDay='';
+  shown.forEach(x=>{
+    const d=histDate(x.t);
+    if(d!==lastDay){ parts.push('<div class="hist-day">'+esc(d===tk?d+' · 今天':d)+'</div>'); lastDay=d; }
+    const time=new Date(x.t).toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'});
+    parts.push(
+      '<div class="hist-item"><span class="hist-time">'+esc(time)+'</span>'+
+      '<div class="hist-body"><div class="hist-en">'+esc(x.en||'')+'</div>'+
+      '<div class="hist-cn">'+esc(x.cn||'')+'</div>'+
+      '<div class="hist-meta">'+esc(MODE_CN[x.mode]||'练习')+' · '+esc(x.unit||'')+
+      ' · '+Math.max(1,Math.round((Number(x.ms)||0)/1000))+' 秒'+
+      (x.bad?' · 错 '+Number(x.bad)+' 次':'')+'</div></div>'+
+      '<span class="hist-badge'+(x.ok?'':' assist')+'">'+esc(x.ok?'一次过':'借助提示')+'</span></div>'
+    );
+  });
+  if(h.length>shown.length) parts.push('<div class="empty">仅显示最近 120 条，完整记录可导出 CSV。</div>');
+  $('histList').innerHTML=parts.join('');
+}
+function exportHistoryCSV(){
+  const h=Array.isArray(state.history)?state.history:[];
+  if(!h.length){ toast('还没有练习记录','bad'); return; }
+  const q=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+  const rows=[['时间','模式','单元','中文','英文','结果','用时秒','错误次数'].map(q).join(',')];
+  h.slice().sort((a,b)=>(a.t||0)-(b.t||0)).forEach(x=>{
+    rows.push([new Date(x.t).toLocaleString('zh-CN'),MODE_CN[x.mode]||x.mode,
+      x.unit||'',x.cn||'',x.en||'',x.ok?'一次过':'借助提示',
+      Math.round((Number(x.ms)||0)/1000),x.bad||0].map(q).join(','));
+  });
+  const name='spelllab-history-'+today()+'.csv';
+  if(downloadText(name,'\ufeff'+rows.join('\r\n'),'text/csv;charset=utf-8'))
+    toast('已导出 '+h.length+' 条记录','ok');
+  else toast('浏览器未开放下载，请用桌面版导出','bad');
 }
 
 /* ---------------- 学习面板 ---------------- */
@@ -2790,7 +2965,7 @@ function renderDrawer(){
   $('wrongList').innerHTML=state.wrong.length?state.wrong.slice().reverse().slice(0,12).map(w=>
     '<div class="wrong-item"><button data-wrong="'+esc(w.id)+'">'+esc(w.cn)+'</button><span style="color:var(--muted)">去练习</span></div>'
   ).join(''):'<div class="empty">还没有错题，保持住！</div>';
-  [['swHints','showHints'],['swSpeak','autoSpeak'],['swCase','ignoreCase'],['swSmart','smart'],['swSound','sound'],['swLetterBoxes','letterBoxes']].forEach(([el,k])=>{
+  [['swHints','showHints'],['swSpeakOnFinish','speakOnFinish'],['swCase','ignoreCase'],['swSmart','smart'],['swSound','sound'],['swLetterBoxes','letterBoxes']].forEach(([el,k])=>{
     $(el).classList.toggle('on',!!state.settings[k]);
   });
   const vol=typeof state.settings.volume==='number'?state.settings.volume:0.35;
@@ -2801,17 +2976,20 @@ function renderDrawer(){
   $('revealVal').textContent=reveal;
   $('rateRange').value=state.settings.rate;
   $('rateVal').textContent=Number(state.settings.rate).toFixed(1);
+  renderHistory(); renderSaveBadge();
   renderVocab(); renderSets(); renderManagement(); renderLibrary(); renderFilters();
   if(drawerTab==='storage') renderStorage();
 }
 function box(v,label){ return '<div class="stat-box"><b>'+esc(v)+'</b><span>'+esc(label)+'</span></div>'; }
 function switchTab(t){
   drawerTab=t;
-  ['learn','vocab','manage','library','storage'].forEach(k=>{
+  ['learn','history','vocab','manage','library','storage'].forEach(k=>{
     const cap=k[0].toUpperCase()+k.slice(1);
     $('page'+cap).hidden=(k!==t);
     $('tab'+cap).classList.toggle('active',k===t);
   });
+  if(t==='history') renderHistory();
+  if(t==='storage') renderSaveBadge();
   if(t==='vocab') renderVocab();
   if(t==='manage') renderManagement();
   if(t==='library') renderLibrary();
@@ -2953,6 +3131,12 @@ function bind(){
     setMode(mode); renderHeader();
   });
   $('clearWrong').addEventListener('click',()=>{ state.wrong=[]; saveState(); renderDrawer(); toast('错题本已清空'); });
+  $('exportHistory').addEventListener('click',exportHistoryCSV);
+  $('clearHistory').addEventListener('click',()=>{
+    if(!(state.history||[]).length){ toast('还没有练习记录'); return; }
+    if(!confirm('确定清空全部练习记录？学习统计和掌握进度不会受影响。')) return;
+    state.history=[]; saveState(true); renderDrawer(); toast('练习记录已清空');
+  });
   document.querySelectorAll('.switch[data-set]').forEach(sw=>{
     sw.addEventListener('click',()=>setSetting(sw.dataset.set,!state.settings[sw.dataset.set]));
   });
@@ -3234,6 +3418,9 @@ if(DESKTOP) bootDesktop(); else bootStorage();
 if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
   window.addEventListener('pagehide',flushStorage);
   window.addEventListener('beforeunload',flushStorage);
+  document.addEventListener('visibilitychange',()=>{
+    if(document.visibilityState==='hidden') flushStorage();
+  });
   if(!DESKTOP) window.addEventListener('storage',e=>{
     if(!e || e.key!==KEY || !e.newValue) return;
     try{

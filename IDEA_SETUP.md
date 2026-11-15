@@ -63,7 +63,7 @@
 | `SpellLab 服务（不开窗口）` | 带 `--no-browser --port 8792`，方便在浏览器或调试器里访问 `http://127.0.0.1:8792/` |
 | `SpellLab 全部测试` | 等价于 `python -m unittest discover -s desktop/tests -v` |
 
-工作目录都设为项目根，环境变量带 `PYTHONUNBUFFERED=1`（日志实时输出）。
+工作目录都设为项目根，环境变量带 `PYTHONUNBUFFERED=1`（日志实时输出）和 `SPELLLAB_DB=$PROJECT_DIR$/desktop/dist/data/spelllab.db`。后者让 IDEA 里运行源码与双击 `run.bat` / `dist/SpellLab.exe` **共用同一个 SQLite 数据库**，不会出现「换个入口打开练习就没了」；需要隔离测试数据时，把该环境变量删掉即可回到 `desktop/data/spelllab.db`。
 
 ## 换机器 / 重新 clone
 

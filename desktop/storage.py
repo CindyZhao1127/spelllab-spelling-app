@@ -45,11 +45,15 @@ CREATE TABLE IF NOT EXISTS progress(
 );
 CREATE TABLE IF NOT EXISTS wrong(id TEXT PRIMARY KEY, unit_id TEXT, idx INTEGER, cn TEXT);
 CREATE TABLE IF NOT EXISTS stats(k TEXT PRIMARY KEY, v TEXT);
+CREATE TABLE IF NOT EXISTS history(
+  t INTEGER, mode TEXT, unit TEXT, cn TEXT, en TEXT,
+  ok INTEGER, assisted INTEGER, ms INTEGER, bad INTEGER
+);
 """
 
 NORMALIZED_TABLES = [
     "grades", "books", "packs", "units", "questions", "words",
-    "vocab", "progress", "wrong", "stats",
+    "vocab", "progress", "wrong", "stats", "history",
 ]
 
 
@@ -65,7 +69,20 @@ def program_dir() -> Path:
 
 
 def default_db_path() -> Path:
-    """优先放在程序旁的 data/ 目录，方便直接看到 .db 文件；不可写时回退到 APPDATA。"""
+    """优先放在程序旁的 data/ 目录，方便直接看到 .db 文件；不可写时回退到 APPDATA。
+
+    源码运行（run.bat / IDEA）与打包 exe 的默认目录不同，会导致「换个方式
+    打开，之前的练习全没了」。run.bat 会设置 SPELLLAB_DB 指向 exe 同目录的
+    dist/data/spelllab.db，让两个入口读写同一个文件。
+    """
+    override = os.environ.get("SPELLLAB_DB")
+    if override:
+        target = Path(override).expanduser().resolve()
+        try:
+            target.parent.mkdir(parents=True, exist_ok=True)
+            return target
+        except OSError:
+            pass
     base = program_dir() / "data"
     try:
         base.mkdir(parents=True, exist_ok=True)
@@ -234,6 +251,14 @@ class Store:
         for key, val in (state.get("stats") or {}).items():
             conn.execute("INSERT OR REPLACE INTO stats VALUES(?,?)",
                          (key, _j(val)))
+        for h in state.get("history") or []:
+            conn.execute(
+                "INSERT INTO history VALUES(?,?,?,?,?,?,?,?,?)",
+                (int(h.get("t") or 0), _s(h.get("mode")), _s(h.get("unit")),
+                 _s(h.get("cn")), _s(h.get("en")), 1 if h.get("ok") else 0,
+                 1 if h.get("assisted") else 0, int(h.get("ms") or 0),
+                 int(h.get("bad") or 0)),
+            )
 
     def info(self) -> dict:
         with self._lock:

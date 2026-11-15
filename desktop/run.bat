@@ -2,6 +2,9 @@
 setlocal
 cd /d "%~dp0"
 
+rem Share the same database with the packaged exe (dist\SpellLab.exe).
+if not defined SPELLLAB_DB set "SPELLLAB_DB=%~dp0dist\data\spelllab.db"
+
 rem Keep this file pure ASCII with CRLF line endings.
 rem cmd.exe misreads UTF-8 batch files when the console code page is switched.
 set "PY=%~dp0..\.venv\Scripts\python.exe"

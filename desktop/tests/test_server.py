@@ -179,6 +179,23 @@ class ServerTest(unittest.TestCase):
         status, data = self.jcall("/api/ping", host="evil.example.com")
         self.assertEqual(status, 403)
 
+    def test_beacon_save_with_plain_content_type(self):
+        """关窗时 sendBeacon 可能带 text/plain；服务端不能依赖 Content-Type 解析。"""
+        payload = json.dumps({
+            "stats": {"attempted": 3},
+            "history": [{"t": 1763200000000, "mode": "sentence", "unit": "Unit 1",
+                         "cn": "今天很冷。", "en": "It is cold today.",
+                         "ok": 1, "assisted": 0, "ms": 5000, "bad": 0}],
+        }, ensure_ascii=False).encode("utf-8")
+        req = urllib.request.Request(
+            "http://127.0.0.1:%d/api/save" % self.port, data=payload,
+            headers={"Content-Type": "text/plain;charset=UTF-8"}, method="POST")
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            self.assertEqual(resp.status, 200)
+            self.assertTrue(json.loads(resp.read().decode("utf-8"))["normalized"])
+        self.assertEqual(self.store.load()["state"]["stats"]["attempted"], 3)
+        self.assertEqual(self.store.info()["counts"]["history"], 1)
+
     def test_favicon(self):
         status, _ = self.call("/favicon.ico")
         self.assertEqual(status, 204)

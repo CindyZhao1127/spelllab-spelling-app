@@ -18,11 +18,11 @@ python app.py
 ```
 SpellLab 桌面版  v1.0.0
 地址     http://127.0.0.1:8790/
-数据库   C:\...\desktop\data\spelllab.db
+数据库   C:\...\desktop\dist\data\spelllab.db
 关闭窗口或按 Ctrl+C 结束程序
 ```
 
-关闭窗口，Python 进程与服务会一起退出。端口被占用时会自动往后找一个空闲端口。
+关闭窗口后，页面会先用 `sendBeacon` 补写最后一次状态，服务端等 1.2 秒再退出，然后 Python 进程与服务一起结束。侧栏顶部会显示数据库位置和「已保存 HH:MM / 正在写入…」。端口被占用时会自动往后找一个空闲端口。
 
 常用参数：
 
@@ -36,7 +36,7 @@ SpellLab 桌面版  v1.0.0
 
 ## 数据放在哪
 
-默认 `desktop/data/spelllab.db`；打包成 exe 后是 **exe 同目录**的 `data/spelllab.db`（`dist/data/`），不会再落到 PyInstaller 的临时解压目录里。若程序所在目录不可写（例如装在 `C:\Program Files`），自动回退到 `%APPDATA%\SpellLab\`。这是**普通 SQLite 数据库文件**，可以直接用 DB Browser for SQLite、VS Code SQLite 插件或 `sqlite3` 命令行打开。
+统一使用 `desktop/dist/data/spelllab.db`：打包 exe 时是 **exe 同目录**的 `data/spelllab.db`，`run.bat` 与 IDEA 运行配置则通过 `SPELLLAB_DB` 环境变量指向同一个文件，所以三种启动方式看到的是同一批练习记录。不会再落到 PyInstaller 的临时解压目录里。若程序所在目录不可写（例如装在 `C:\Program Files`），自动回退到 `%APPDATA%\SpellLab\`；也可用 `--db <路径>` 或 `SPELLLAB_DB` 自定义。这是**普通 SQLite 数据库文件**，可以直接用 DB Browser for SQLite、VS Code SQLite 插件或 `sqlite3` 命令行打开。
 
 | 表 | 内容 |
 |---|---|
@@ -46,8 +46,11 @@ SpellLab 桌面版  v1.0.0
 | `packs` / `units` | 教材包、单元 |
 | `questions` / `words` | 题目（含 hints、chunks JSON 文本）与单词表 |
 | `vocab` / `progress` / `wrong` / `stats` | 生词本、掌握度、错题、学习统计 |
+| `history` | 逐次练习记录（时间、模式、单元、句子、结果、是否借助提示、用时、错误次数） |
 
 每次保存时，`state` 快照与所有规范表在**同一个事务**里更新，永远一致；内容没变化时只更新快照，跳过规范表重建。启用 WAL 模式，多个窗口同时读写也安全。内置课程单元直接写在 HTML 里，不属于"用户数据"，所以不在数据库中。
+
+**保存时机**：答对/答错、收藏生词、清空记录、改动设置等关键操作**立即写盘**（`saveState(true)`），其余改动 60ms 内防抖合并；页面切后台或关闭时用 `navigator.sendBeacon('/api/save', ...)` 补写最后一次状态（普通 `fetch` 在 `beforeunload` 里会被浏览器取消），服务端延迟 1.2 秒退出等待它落库。这三处一起修掉了「答对后直接关程序，练习全没了」的问题。
 
 `data/exports/` 存放从界面「保存备份到磁盘」生成的 JSON 文件，`data/browser-profile/` 是独立窗口的浏览器配置（可删，会自动重建）。
 
@@ -109,11 +112,12 @@ python -m unittest discover -s tests -v
 
 ## 常见问题
 
+- **直接关掉程序后，练习/统计/记录全丢了**：旧版有三个叠加原因——① 所有保存都走 220ms 防抖，答对后立刻关窗口，最后一次写入还没发出，而 `beforeunload` 里的普通 `fetch` 会被浏览器直接取消；② 服务端随窗口一起立刻退出，即使请求发出也来不及落库；③ `run.bat` 源码运行用 `desktop/data/spelllab.db`，exe 用 `dist/data/spelllab.db`，换个入口打开就像数据全没了。现在关键节点立即写盘、关窗用 `sendBeacon` 补写、服务端延迟 1.2 秒退出、两个入口共用 `SPELLLAB_DB` 指向同一个文件。侧栏顶部会显示数据库路径和保存状态；侧栏「记录」页可逐条查看每次练习并导出 CSV。另注意**网页版直接用浏览器 IndexedDB，与桌面版 SQLite 互相独立**，需要互通请用导出/导入备份。
 - **窗口提示「无法访问此网站 / 127.0.0.1 拒绝了连接请求」**：旧版所有实例共用同一个 `browser-profile`；Edge/Chrome 在该目录已有实例时会把新窗口请求转交给旧实例、自己立刻退出，程序误以为「窗口已关闭」就把服务关掉了，于是还开着的窗口随后连不上。现在每次启动使用独立的 `browser-profiles/profile-<端口>-<进程号>`，并加了「浏览器进程秒退则服务保持运行」的兜底；3 天前的旧 profile 会自动清理。若桌面上还留着旧窗口，刷新或关掉重开即可。
 - **打开后显示「MusicBox · 本地音乐库」或别的页面，而不是 SpellLab**：本机 `8765` 端口被另一个本地 Python 程序（MusicBox 音乐库）占着，而旧版 SpellLab 的默认端口恰好也是 8765。Windows 的 `SO_REUSEADDR` 允许两个进程绑定同一个 IP:端口，bind 不会报错，于是 SpellLab 以为自己占了 8765，窗口实际打开的是先启动的那个程序。现在默认端口改为 **8790**，且绑定前会主动探测端口是否已被监听，冲突则自动顺延并打印提示。请不要再手动访问 `http://127.0.0.1:8765/`；以控制台打印的「地址」为准，或用 `--port 8800` 固定自己的端口。
 - **窗口没弹出来**：确认装了 Edge 或 Chrome；或用 `--no-browser` 自己打开控制台显示的地址。
 - **朗读没声音**：系统需要装英文语音包（Windows：设置 → 时间和语言 → 语音 → 添加语音）。其余功能不受影响。
-- **想换台电脑用**：复制 `data/spelllab.db`（连同 `-wal` / `-shm` 若程序正在运行则先退出）到新机器的 `data/` 即可；更稳妥的做法是导出全库备份 JSON 再导入。
+- **想换台电脑用**：复制 `dist/data/spelllab.db`（连同 `-wal` / `-shm` 若程序正在运行则先退出）到新机器的 `dist/data/` 即可；更稳妥的做法是导出全库备份 JSON 再导入。
 - **杀毒/防火墙提示**：服务只监听本机回环地址，不联网；若被拦截，允许 `python.exe` 的本地连接即可。
 - **想用原生 WebView 窗口**：`pip install -r requirements-optional.txt` 后加 `--pywebview`。Windows 需要 WebView2 Runtime（Win10/11 一般已自带）。
 - **双击 `.bat` 报 `=python`、`'--upgrade' 不是内部或外部命令`、乱码中文或 `'oconfirm' 不是内部或外部命令`**：这是旧版批处理文件用了「UTF-8 中文 + `chcp 65001` + LF 换行」，cmd.exe 切换控制台代码页后会按字节重新读取文件，把命令行截断、拼接、串位造成的解析错乱。`=python` 并不是项目里缺失的文件，不需要创建它。仓库里的 `run.bat` / `build_exe.bat` 已改成**纯 ASCII 提示 + CRLF 换行 + 不切换代码页 + 不用 `^` 续行**，重新取这两个文件即可。手头只有旧副本时，绕开批处理直接用虚拟环境：

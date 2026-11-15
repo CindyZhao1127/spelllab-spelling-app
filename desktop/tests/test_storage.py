@@ -1,5 +1,6 @@
 """SQLite 存储层单元测试：python -m unittest discover -s desktop/tests -v"""
 import json
+import os
 import sys
 import tempfile
 import unittest
@@ -37,6 +38,14 @@ def sample_state():
         "progress": {"u6:0": {"m": 2, "ok": 1, "bad": 0}},
         "wrong": [{"id": "w1", "unitId": "u6", "idx": 0, "cn": "错题"}],
         "stats": {"attempted": 9, "correct": 7},
+        "history": [
+            {"t": 1763200000000, "mode": "sentence", "unit": "Unit 1",
+             "cn": "今天很冷。", "en": "It is cold today.",
+             "ok": 1, "assisted": 0, "ms": 8200, "bad": 0},
+            {"t": 1763200005000, "mode": "chunk", "unit": "Unit 1",
+             "cn": "下雪了。", "en": "It is snowing.",
+             "ok": 0, "assisted": 1, "ms": 15000, "bad": 2},
+        ],
     }
 
 
@@ -80,6 +89,7 @@ class StoreTest(unittest.TestCase):
         self.assertEqual(counts["progress"], 1)
         self.assertEqual(counts["wrong"], 1)
         self.assertEqual(counts["stats"], 2)
+        self.assertEqual(counts["history"], 2)
 
         import sqlite3
         conn = sqlite3.connect(str(self.path))
@@ -90,6 +100,9 @@ class StoreTest(unittest.TestCase):
             self.assertEqual(row[0], "It is cold today.")
             self.assertEqual(json.loads(row[1]), ["它", "是", "冷的", "今天"])
             self.assertEqual(json.loads(row[2]), [["天气", 3], ["今天", 1]])
+            hist = conn.execute(
+                "SELECT en,ok,ms,bad FROM history ORDER BY t DESC LIMIT 1").fetchone()
+            self.assertEqual(hist, ("It is snowing.", 0, 15000, 2))
         finally:
             conn.close()
 
@@ -138,12 +151,29 @@ class StoreTest(unittest.TestCase):
             self.store.save(["not", "a", "dict"])
 
     def test_all_tables_declared(self):
-        self.assertEqual(len(NORMALIZED_TABLES), 10)
+        self.assertEqual(len(NORMALIZED_TABLES), 11)
+        self.assertIn("history", NORMALIZED_TABLES)
 
     def test_source_db_path_is_next_to_module(self):
-        self.assertEqual(default_db_path().name, "spelllab.db")
-        self.assertEqual(default_db_path().parent.name, "data")
+        from unittest.mock import patch
+        with patch.dict(os.environ):
+            os.environ.pop("SPELLLAB_DB", None)
+            self.assertEqual(default_db_path().name, "spelllab.db")
+            self.assertEqual(default_db_path().parent.name, "data")
         self.assertEqual(program_dir().resolve(), Path(storage.__file__).resolve().parent)
+
+    def test_env_override_shares_db_with_packaged_exe(self):
+        """run.bat 用 SPELLLAB_DB 指向 exe 同目录，两个入口读同一个文件。"""
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory() as tmp:
+            shared = Path(tmp) / "dist" / "data" / "spelllab.db"
+            with patch.dict(os.environ, {"SPELLLAB_DB": str(shared)}):
+                self.assertEqual(default_db_path(), shared.resolve())
+                a = Store()
+                a.save(sample_state())
+            b = Store(shared)
+            self.assertEqual(b.load()["state"]["stats"]["attempted"], 9)
+            self.assertEqual(b.info()["counts"]["history"], 2)
 
     def test_frozen_db_path_is_next_to_exe_not_temp_dir(self):
         """PyInstaller 单文件模式下 _MEIxxxx 是临时目录，退出即删，不能存数据。"""

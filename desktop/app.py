@@ -325,6 +325,9 @@ def main(argv=None):
     except KeyboardInterrupt:
         pass
     finally:
+        # 窗口关闭时页面会触发 pagehide 并用 sendBeacon 补写最后一次状态。
+        # 先留一点时间让这个请求落盘，再停服务；否则服务先退出会丢掉最后几条练习。
+        time.sleep(1.2)
         server.shutdown()
         server.server_close()
         if profile_dir is not None:

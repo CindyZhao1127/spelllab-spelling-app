@@ -646,7 +646,7 @@ check('存储分页渲染与状态行', () => {
       desc:$('dbDesc').textContent.length};
     switchTab('learn'); return JSON.stringify(out);
   })()`));
-  if(r.hidden || r.kv !== 6 || r.rows < 6 || !r.file || r.desc < 10) throw new Error(JSON.stringify(r));
+  if(r.hidden || r.kv !== 7 || r.rows < 6 || !r.file || r.desc < 10) throw new Error(JSON.stringify(r));
   return '引擎 ' + r.engine + ' · ' + r.kv + ' 个统计格 / ' + r.rows + ' 行状态';
 });
 check('SQLite 导出结构与单引号转义', () => {
@@ -912,9 +912,9 @@ async function asyncChecks(){
       info:$('desktopDbInfo').innerHTML,rows:$('dbRows').innerHTML,
       kv:($('dbCounts').innerHTML.match(/class="kv"/g)||[]).length});})()`));
     if(r.engine.indexOf('SQLite') < 0 || r.desktopHidden || !r.fileHidden || !r.persistHidden ||
-       r.info.indexOf('spelllab.db') < 0 || r.rows.indexOf('sqlite3') < 0 || r.kv !== 6)
+       r.info.indexOf('spelllab.db') < 0 || r.rows.indexOf('sqlite3') < 0 || r.kv !== 7)
       throw new Error(JSON.stringify(r));
-    return '引擎 / 文件路径 / 事务说明 / 6 个统计格 / 隐藏网页版专属控件均正确';
+    return '引擎 / 文件路径 / 事务说明 / 7 个统计格 / 隐藏网页版专属控件均正确';
   });
 
   await checkAsync('桌面版 saveState 防抖写入 SQLite', async () => {
