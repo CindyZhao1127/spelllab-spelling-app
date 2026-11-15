@@ -59,8 +59,8 @@
 
 | 名称 | 作用 |
 |---|---|
-| `SpellLab 桌面版` | 运行 `desktop/app.py`，打开独立应用窗口（默认端口 8765） |
-| `SpellLab 服务（不开窗口）` | 带 `--no-browser --port 8791`，方便在浏览器或调试器里访问 `http://127.0.0.1:8791/` |
+| `SpellLab 桌面版` | 运行 `desktop/app.py`，打开独立应用窗口（默认端口 8790） |
+| `SpellLab 服务（不开窗口）` | 带 `--no-browser --port 8792`，方便在浏览器或调试器里访问 `http://127.0.0.1:8792/` |
 | `SpellLab 全部测试` | 等价于 `python -m unittest discover -s desktop/tests -v` |
 
 工作目录都设为项目根，环境变量带 `PYTHONUNBUFFERED=1`（日志实时输出）。

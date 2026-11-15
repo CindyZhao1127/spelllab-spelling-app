@@ -5,7 +5,7 @@
 如果安装了 pywebview，加 --pywebview 可改用原生 WebView 窗口。
 
     python app.py                 # 自动选端口 + 打开独立窗口
-    python app.py --port 8765
+    python app.py --port 8790
     python app.py --db D:/mydata/spelllab.db
     python app.py --no-browser    # 只起服务，自己开浏览器
     python app.py --pywebview     # 需要 pip install pywebview
@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import socket
 import subprocess
 import sys
 import threading
@@ -150,8 +151,28 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
 
 
+def port_in_use(port: int) -> bool:
+    """主动探测 127.0.0.1:port 是否已有别的程序在监听。
+
+    Windows 上 SO_REUSEADDR 允许两个进程绑定同一个 IP:端口，bind() 不会报错，
+    结果后启动的程序以为自己占用成功，请求却落到先启动的程序上（例如本机
+    8765 上另一个「MusicBox · 本地音乐库」）。所以不能只依赖 bind 是否抛异常。
+    """
+    if port == 0:
+        return False
+    probe = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    probe.settimeout(0.25)
+    try:
+        return probe.connect_ex(("127.0.0.1", port)) == 0
+    finally:
+        probe.close()
+
+
 def make_server(port: int, store: Store):
+    requested = port
     for candidate in [port] + list(range(port + 1, port + 20)) + [0]:
+        if port_in_use(candidate):
+            continue
         try:
             server = ThreadingHTTPServer(("127.0.0.1", candidate), Handler)
             break
@@ -159,6 +180,9 @@ def make_server(port: int, store: Store):
             continue
     else:
         raise RuntimeError("无法绑定本地端口")
+    actual = server.server_address[1]
+    if requested and actual != requested:
+        print("  端口 %d 已被其他程序占用，本程序改用 %d" % (requested, actual), flush=True)
     server.daemon_threads = True
     server.store = store
     server.html_bytes = b""
@@ -213,7 +237,7 @@ def open_app_window(url: str, profile_dir: Path):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description="SpellLab 桌面版")
-    parser.add_argument("--port", type=int, default=8765, help="本地服务端口，默认 8765")
+    parser.add_argument("--port", type=int, default=8790, help="本地服务端口，默认 8790；被占用则自动顺延")
     parser.add_argument("--db", help="SQLite 数据库路径，默认 desktop/data/spelllab.db")
     parser.add_argument("--html", help="SpellLab.html 路径")
     parser.add_argument("--no-browser", action="store_true", help="只启动服务，不打开窗口")

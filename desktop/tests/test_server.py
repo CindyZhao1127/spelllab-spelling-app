@@ -1,5 +1,6 @@
 """本地 HTTP 服务单元测试：启动真实服务并用 urllib 打接口。"""
 import json
+import socket
 import sys
 import tempfile
 import threading
@@ -59,6 +60,38 @@ class ServerTest(unittest.TestCase):
     def jcall(self, path, payload=None, **kw):
         status, body = self.call(path, payload, **kw)
         return status, json.loads(body.decode("utf-8"))
+
+    def test_occupied_port_is_skipped(self):
+        """端口已被别的程序监听时必须顺延，不能误绑到同一个 IP:端口上。"""
+        blocker = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        blocker.bind(("127.0.0.1", 0))
+        blocker.listen(1)
+        occupied = blocker.getsockname()[1]
+        tmp = tempfile.TemporaryDirectory()
+        server = None
+        thread = None
+        try:
+            store = Store(Path(tmp.name) / "occupied.db")
+            server = app.make_server(occupied, store)
+            actual = server.server_address[1]
+            self.assertNotEqual(actual, occupied)
+            server.html_bytes = app.build_html(ROOT_DIR / "SpellLab.html", actual)
+            thread = threading.Thread(
+                target=server.serve_forever, kwargs={"poll_interval": 0.05}, daemon=True)
+            thread.start()
+            with urllib.request.urlopen(
+                    "http://127.0.0.1:%d/api/ping" % actual, timeout=5) as resp:
+                data = json.loads(resp.read().decode("utf-8"))
+            self.assertEqual(data["app"], "SpellLab")
+        finally:
+            if thread is not None:
+                server.shutdown()
+            if server is not None:
+                server.server_close()
+            if thread is not None:
+                thread.join(timeout=2)
+            blocker.close()
+            tmp.cleanup()
 
     def test_html_injects_desktop_marker(self):
         status, body = self.call("/")
