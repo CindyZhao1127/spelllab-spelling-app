@@ -1,0 +1,14 @@
+# WorkBuddy 工作区数据（非项目文件）
+.workbuddy/
+
+# 操作系统
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 编辑器 / 临时文件
+.vscode/
+.idea/
+*.swp
+*.tmp
+*.log
