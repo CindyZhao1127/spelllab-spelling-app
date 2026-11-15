@@ -41,6 +41,8 @@ python app.py          # Windows 也可双击 run.bat
 
 完整说明、参数、打包 exe 与迁移步骤见 [desktop/README.md](desktop/README.md)。
 
+用 PyCharm / IntelliJ IDEA 开发时，项目已配成 Python 项目（项目内 `.venv`、模块与测试根、运行配置），环境限制与两条使用路径见 [IDEA_SETUP.md](IDEA_SETUP.md)。
+
 ## 教材包管理
 
 层级是 `教材包（一册书） → 单元 → 句子 + 单词表`。每个含题目的单元会自动成为课程单元，进入句子拼写 / 分步记忆 / 单词速记三种模式，并参与顶部年级 / 教材筛选。

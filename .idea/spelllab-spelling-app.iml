@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="PYTHON_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$PROJECT_DIR$">
+      <sourceFolder url="file://$PROJECT_DIR$/desktop" isTestSource="false" />
+      <sourceFolder url="file://$PROJECT_DIR$/desktop/tests" isTestSource="true" />
+      <excludeFolder url="file://$PROJECT_DIR$/.venv" />
+      <excludeFolder url="file://$PROJECT_DIR$/desktop/data" />
+      <excludeFolder url="file://$PROJECT_DIR$/desktop/build" />
+      <excludeFolder url="file://$PROJECT_DIR$/desktop/dist" />
+      <excludeFolder url="file://$PROJECT_DIR$/out" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+  <component name="PyDocumentationSettings">
+    <option name="format" value="PLAIN" />
+    <option name="myDocStringFormat" value="Plain" />
+  </component>
+  <component name="TestRunnerService">
+    <option name="PROJECT_TEST_RUNNER" value="Unittests" />
+  </component>
+</module>

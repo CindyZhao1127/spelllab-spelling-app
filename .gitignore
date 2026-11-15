@@ -8,7 +8,16 @@ desktop.ini
 
 # 编辑器 / 临时文件
 .vscode/
-.idea/
+# JetBrains IDE：提交项目级配置，忽略个人状态文件（workspace.xml 等）
+.idea/*
+!.idea/.gitignore
+!.idea/misc.xml
+!.idea/modules.xml
+!.idea/*.iml
+!.idea/vcs.xml
+!.idea/runConfigurations/
+!.idea/codeStyles/
+!.idea/inspectionProfiles/
 *.swp
 *.tmp
 *.log

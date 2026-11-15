@@ -1,14 +1,16 @@
 @echo off
 chcp 65001 >nul
 cd /d "%~dp0"
+set "PY=%~dp0..\.venv\Scripts\python.exe"
+if not exist "%PY%" set "PY=python"
 echo 正在准备打包环境（首次需要联网安装 PyInstaller）...
-python -m pip install --upgrade pyinstaller
+"%PY%" -m pip install --upgrade pyinstaller
 if errorlevel 1 (
   echo PyInstaller 安装失败，请检查网络或手动执行 pip install pyinstaller
   pause
   exit /b 1
 )
-python -m PyInstaller --noconfirm --onefile --windowed ^
+"%PY%" -m PyInstaller --noconfirm --onefile --windowed ^
   --name SpellLab ^
   --add-data "..\SpellLab.html;." ^
   app.py
