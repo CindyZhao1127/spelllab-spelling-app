@@ -53,6 +53,15 @@ python app.py          # Windows 也可双击 run.bat
 - **导入**：粘贴 JSON 或选择 `.json` 文件；包与单元会重新生成 id 避免冲突；JSON 带 `gradeName` / `bookName` 时，本机缺失的年级 / 教材版本会自动补建。
 - **备份**：「导出全库备份」包含进度、错题、生词、设置与全部教材；「从备份恢复」覆盖当前全部数据，操作前请先备份。
 
+## 预制教材包：人教版 PEP（三年级起点）
+
+仓库的 [`textbooks/`](textbooks/README.md) 已备好可直接导入的教材包，覆盖三上~六下 8 册 / 46 单元 / 849 词 / 254 句：
+
+- `textbooks/pep-sanqi-2024.json`：总包，一次导入 8 册。
+- `textbooks/packs/pep-3a.json` … `pep-6b.json`：按册拆分，按需导入单册。
+
+三上~六上为 2024 新课标版（2024 秋–2026 秋滚动启用），五下、六下仍是现行 2013 审定版（2027 春换新版）。在「教材库」导入区选择 `.json` 文件即可；版本对照、内容准确性说明与重新生成方法见 [textbooks/README.md](textbooks/README.md)。
+
 教材包 JSON 最小示例：
 
 ```json

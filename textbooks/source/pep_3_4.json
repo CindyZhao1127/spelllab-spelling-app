@@ -1,0 +1,788 @@
+[
+  {
+    "id": "3a",
+    "name": "人教版 PEP 三年级上册（2024版·三年级起点）",
+    "gradeId": "g3",
+    "edition": "2024版 · 2024年秋启用",
+    "sources": [
+      "https://zy.21cnjy.com/26168697",
+      "https://zy.21cnjy.com/21794825",
+      "https://zy.21cnjy.com/26462722",
+      "https://m.renrendoc.com/paper/454742235.html",
+      "http://www.dzkbw.com/books/rjb/yingyu/pep3s_2024/"
+    ],
+    "units": [
+      {
+        "name": "Unit 1 Making friends",
+        "words": [
+          ["nice", "令人愉快的；友好的"],
+          ["ear", "耳朵"],
+          ["hand", "手"],
+          ["eye", "眼睛"],
+          ["mouth", "嘴"],
+          ["arm", "胳膊"],
+          ["can", "可以"],
+          ["share", "分享"],
+          ["smile", "微笑"],
+          ["listen", "听；倾听"],
+          ["help", "帮助"],
+          ["say", "说；讲"],
+          ["and", "和；与"],
+          ["goodbye", "再见"],
+          ["toy", "玩具"],
+          ["friend", "朋友"],
+          ["good", "好的"]
+        ],
+        "sentences": [
+          {"cn": "你好！我是迈克。", "en": "Hello! I'm Mike."},
+          {"cn": "嗨！我叫吴彬彬。", "en": "Hi! My name is Wu Binbin."},
+          {"cn": "很高兴认识你。", "en": "Nice to meet you."},
+          {"cn": "我也很高兴认识你。", "en": "Nice to meet you, too."},
+          {"cn": "我们可以分享。", "en": "We can share."},
+          {"cn": "我能帮助我的朋友。", "en": "I can help my friends."}
+        ]
+      },
+      {
+        "name": "Unit 2 Different families",
+        "words": [
+          ["mum", "妈妈"],
+          ["dad", "爸爸"],
+          ["grandma", "奶奶；姥姥"],
+          ["grandpa", "爷爷；姥爷"],
+          ["grandfather", "祖父；外公"],
+          ["grandmother", "祖母；外婆"],
+          ["mother", "母亲；妈妈"],
+          ["father", "父亲；爸爸"],
+          ["me", "我"],
+          ["sister", "姐；妹"],
+          ["family", "家；家庭"],
+          ["have", "有"],
+          ["big", "大的"],
+          ["cousin", "堂表兄弟姐妹"],
+          ["brother", "兄；弟"],
+          ["baby", "婴儿"],
+          ["uncle", "叔伯舅父"],
+          ["aunt", "姑姨婶母"],
+          ["some", "一些"],
+          ["small", "小的"]
+        ],
+        "sentences": [
+          {"cn": "这是我的家庭。", "en": "This is my family."},
+          {"cn": "这是我的妈妈。", "en": "This is my mum."},
+          {"cn": "这是我的爸爸。", "en": "This is my father."},
+          {"cn": "这是我的姐姐吗？", "en": "Is this your sister?"},
+          {"cn": "我有一个大家庭。", "en": "I have a big family."},
+          {"cn": "我爱我的家人。", "en": "I love my family."}
+        ]
+      },
+      {
+        "name": "Unit 3 Amazing animals",
+        "words": [
+          ["like", "喜欢"],
+          ["dog", "狗"],
+          ["pet", "宠物"],
+          ["cat", "猫"],
+          ["fish", "鱼；鱼肉"],
+          ["bird", "鸟"],
+          ["rabbit", "兔"],
+          ["go", "去；走"],
+          ["zoo", "动物园"],
+          ["fox", "狐狸"],
+          ["Miss", "女士"],
+          ["panda", "大熊猫"],
+          ["cute", "可爱的"],
+          ["monkey", "猴子"],
+          ["tiger", "老虎"],
+          ["elephant", "大象"],
+          ["lion", "狮子"],
+          ["giraffe", "长颈鹿"],
+          ["tall", "高的"],
+          ["fast", "快的"]
+        ],
+        "sentences": [
+          {"cn": "我喜欢猫。", "en": "I like cats."},
+          {"cn": "你养宠物吗？", "en": "Do you have a pet?"},
+          {"cn": "它是一只狐狸。", "en": "It's a fox."},
+          {"cn": "看那只长颈鹿。", "en": "Look at the giraffe."},
+          {"cn": "它好高啊。", "en": "It's so tall."},
+          {"cn": "这只猴子很可爱。", "en": "The monkey is cute."}
+        ]
+      },
+      {
+        "name": "Unit 4 Plants around us",
+        "words": [
+          ["apple", "苹果"],
+          ["banana", "香蕉"],
+          ["farm", "农场"],
+          ["air", "空气"],
+          ["orange", "橙子"],
+          ["grape", "葡萄"],
+          ["school", "学校"],
+          ["garden", "花园"],
+          ["need", "需要"],
+          ["water", "水；浇水"],
+          ["flower", "花"],
+          ["grass", "草；草地"],
+          ["plant", "植物；种植"],
+          ["new", "新的"],
+          ["tree", "树"],
+          ["sun", "太阳"],
+          ["give", "给"],
+          ["us", "我们"],
+          ["them", "它们"]
+        ],
+        "sentences": [
+          {"cn": "植物需要空气、水和阳光。", "en": "Plants need air, water and sun."},
+          {"cn": "我们可以给花浇水。", "en": "We can water the flowers."},
+          {"cn": "我喜欢苹果。", "en": "I like apples."},
+          {"cn": "看这棵树。", "en": "Look at the tree."},
+          {"cn": "有一朵花。", "en": "There is a flower."},
+          {"cn": "我们种一棵树吧。", "en": "Let's plant a tree."}
+        ]
+      },
+      {
+        "name": "Unit 5 The colourful world",
+        "words": [
+          ["colour", "颜色"],
+          ["orange", "橙红色"],
+          ["green", "绿色"],
+          ["red", "红色"],
+          ["blue", "蓝色"],
+          ["make", "做；使出现"],
+          ["purple", "紫色"],
+          ["brown", "棕色"],
+          ["bear", "熊"],
+          ["yellow", "黄色"],
+          ["duck", "鸭"],
+          ["sea", "海洋"],
+          ["pink", "粉色"],
+          ["draw", "画"],
+          ["white", "白色"],
+          ["black", "黑色"]
+        ],
+        "sentences": [
+          {"cn": "它是什么颜色？", "en": "What colour is it?"},
+          {"cn": "红色和蓝色变成紫色。", "en": "Red and blue make purple."},
+          {"cn": "我看见一只棕色的熊。", "en": "I see a brown bear."},
+          {"cn": "给我看看红色。", "en": "Show me red."},
+          {"cn": "把它涂成绿色。", "en": "Colour it green."},
+          {"cn": "大海是蓝色的。", "en": "The sea is blue."}
+        ]
+      },
+      {
+        "name": "Unit 6 Useful numbers",
+        "words": [
+          ["old", "岁；旧的"],
+          ["five", "五"],
+          ["year", "年；年纪"],
+          ["one", "一"],
+          ["two", "二"],
+          ["three", "三"],
+          ["four", "四"],
+          ["ten", "十"],
+          ["six", "六"],
+          ["seven", "七"],
+          ["eight", "八"],
+          ["nine", "九"],
+          ["o'clock", "点钟"],
+          ["cut", "切"],
+          ["piece", "块；片"],
+          ["eat", "吃"],
+          ["cake", "蛋糕"]
+        ],
+        "sentences": [
+          {"cn": "你几岁了？", "en": "How old are you?"},
+          {"cn": "我五岁了。", "en": "I'm five years old."},
+          {"cn": "有多少个苹果？", "en": "How many apples?"},
+          {"cn": "现在七点了。", "en": "It's seven o'clock."},
+          {"cn": "祝你生日快乐！", "en": "Happy birthday to you!"},
+          {"cn": "我们来切蛋糕吧。", "en": "Let's cut the cake."}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "3b",
+    "name": "人教版 PEP 三年级下册（2024版·三年级起点）",
+    "gradeId": "g3",
+    "edition": "2024版 · 2025年春启用",
+    "sources": [
+      "https://zy.21cnjy.com/23370609",
+      "https://wenku.baidu.com/view/9f883bf7f211f18583d049649b6648d7c1c708a0.html",
+      "http://www.dzkbw.com/books/rjb/yingyu/pep3x_2025/"
+    ],
+    "units": [
+      {
+        "name": "Unit 1 Meeting new people",
+        "words": [
+          ["who", "谁"],
+          ["girl", "女孩"],
+          ["student", "学生"],
+          ["he", "他"],
+          ["China", "中国"],
+          ["after", "在后面"],
+          ["she", "她"],
+          ["today", "今天"],
+          ["neighbour", "邻居"],
+          ["boy", "男孩"],
+          ["teacher", "教师"],
+          ["man", "男人"],
+          ["very", "很；非常"],
+          ["English", "英语"],
+          ["from", "来自"],
+          ["where", "在哪里"],
+          ["about", "大约；关于"],
+          ["woman", "妇女"],
+          ["Mr", "先生"],
+          ["Miss", "女士"]
+        ],
+        "sentences": [
+          {"cn": "你叫什么名字？", "en": "What's your name?"},
+          {"cn": "我叫张丽。", "en": "My name is Zhang Li."},
+          {"cn": "你来自哪里？", "en": "Where are you from?"},
+          {"cn": "我来自加拿大。", "en": "I'm from Canada."},
+          {"cn": "这个男孩是谁？", "en": "Who's this boy?"},
+          {"cn": "这是我的哥哥。", "en": "This is my brother."}
+        ]
+      },
+      {
+        "name": "Unit 2 Expressing yourself",
+        "words": [
+          ["gift", "礼物"],
+          ["tail", "尾巴"],
+          ["song", "歌曲"],
+          ["thin", "瘦的"],
+          ["dance", "跳舞"],
+          ["much", "许多"],
+          ["body", "身体"],
+          ["face", "脸"],
+          ["or", "或者"],
+          ["her", "她；她的"],
+          ["all", "全部"],
+          ["slow", "慢的"],
+          ["picture", "图画"],
+          ["short", "短的；矮的"],
+          ["sing", "唱歌"],
+          ["card", "卡片"],
+          ["talk", "说话"],
+          ["so", "这么"],
+          ["right", "对的"],
+          ["has", "有"]
+        ],
+        "sentences": [
+          {"cn": "这只小猫很可爱。", "en": "The little cat is very lovely."},
+          {"cn": "它有一条长尾巴。", "en": "It has a long tail."},
+          {"cn": "它有两只长耳朵。", "en": "It has two long ears."},
+          {"cn": "你给妈妈做礼物吗？", "en": "Do you make gifts for your mum?"},
+          {"cn": "是的，我做。", "en": "Yes, I do."},
+          {"cn": "我们唱歌跳舞吧。", "en": "Let's sing and dance."}
+        ]
+      },
+      {
+        "name": "Unit 3 Learning better",
+        "words": [
+          ["see", "看见"],
+          ["pen", "钢笔"],
+          ["nose", "鼻子"],
+          ["bag", "包"],
+          ["pencil", "铅笔"],
+          ["class", "课；班级"],
+          ["paper", "纸"],
+          ["these", "这些"],
+          ["find", "找到"],
+          ["ruler", "直尺"],
+          ["learn", "学习"],
+          ["book", "书"],
+          ["hear", "听见"],
+          ["computer", "电脑"]
+        ],
+        "sentences": [
+          {"cn": "我能用一下你的铅笔吗？", "en": "Can I use your pencil?"},
+          {"cn": "当然可以，给你。", "en": "Sure. Here you are."},
+          {"cn": "这是什么，迈克？", "en": "What's this, Mike?"},
+          {"cn": "它是一只猫。", "en": "It's a cat."},
+          {"cn": "这些是什么？", "en": "What are these?"},
+          {"cn": "它们是我的书。", "en": "They're my books."}
+        ]
+      },
+      {
+        "name": "Unit 4 Healthy food",
+        "words": [
+          ["meat", "肉"],
+          ["rice", "米饭"],
+          ["fruit", "水果"],
+          ["soup", "汤"],
+          ["time", "时间"],
+          ["juice", "果汁"],
+          ["candy", "糖果"],
+          ["bread", "面包"],
+          ["vegetable", "蔬菜"],
+          ["healthy", "健康的"],
+          ["breakfast", "早餐"],
+          ["milk", "奶"],
+          ["noodle", "面条"],
+          ["egg", "蛋"]
+        ],
+        "sentences": [
+          {"cn": "我想喝点水。", "en": "I'd like some water."},
+          {"cn": "我想吃点鸡蛋。", "en": "I'd like some eggs, please."},
+          {"cn": "吃点梨吧，莉莉。", "en": "Have some pears, Lily."},
+          {"cn": "非常感谢。", "en": "Thank you very much."},
+          {"cn": "牛奶对你有好处。", "en": "Milk is good for you."},
+          {"cn": "健康的食物让我们强壮。", "en": "Healthy food makes us strong."}
+        ]
+      },
+      {
+        "name": "Unit 5 Old toys",
+        "words": [
+          ["ball", "球"],
+          ["doll", "玩具娃娃"],
+          ["box", "盒子"],
+          ["now", "现在"],
+          ["map", "地图"],
+          ["put", "放"],
+          ["at", "在"],
+          ["boat", "小船"],
+          ["home", "家"],
+          ["car", "小汽车"],
+          ["in", "在里面"],
+          ["keep", "保留"],
+          ["cap", "帽子"],
+          ["on", "在上面"],
+          ["under", "在下面"],
+          ["cool", "酷的"]
+        ],
+        "sentences": [
+          {"cn": "你有旧玩具吗？", "en": "Do you have old toys?"},
+          {"cn": "是的，我有。", "en": "Yes, I do."},
+          {"cn": "我的小船在哪里？", "en": "Where is my boat?"},
+          {"cn": "它在盒子里。", "en": "It's in the box."},
+          {"cn": "把它放进盒子里。", "en": "Put it in the box."},
+          {"cn": "帽子在架子上面。", "en": "The cap is on the shelf."}
+        ]
+      },
+      {
+        "name": "Unit 6 Numbers in life",
+        "words": [
+          ["fifteen", "十五"],
+          ["eleven", "十一"],
+          ["eighteen", "十八"],
+          ["twelve", "十二"],
+          ["twenty", "二十"],
+          ["nineteen", "十九"],
+          ["fourteen", "十四"],
+          ["seventeen", "十七"],
+          ["back", "回原处"],
+          ["thirteen", "十三"],
+          ["sixteen", "十六"]
+        ],
+        "sentences": [
+          {"cn": "你们有多少把尺子？", "en": "How many rulers do you have?"},
+          {"cn": "我们有五把尺子。", "en": "We have five rulers."},
+          {"cn": "这个铅笔盒多少钱？", "en": "How much is this pencil box?"},
+          {"cn": "十八元。", "en": "It's eighteen yuan."},
+          {"cn": "我花二十元买了这辆玩具车。", "en": "I pay twenty yuan for this toy car."},
+          {"cn": "请把书放回去。", "en": "Put the books back, please."}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "4a",
+    "name": "人教版 PEP 四年级上册（2024版·三年级起点）",
+    "gradeId": "g4",
+    "edition": "2024版 · 2025年秋启用",
+    "sources": [
+      "https://zy.21cnjy.com/26168697",
+      "http://mp.weixin.qq.com/s?__biz=MzkxMTIzOTY5OQ==&mid=2247507817&idx=1&sn=767ce554e0f24a4829ae44212c7117ef",
+      "https://zy.21cnjy.com/24490822",
+      "http://www.dzkbw.com/books/rjb/yingyu/pep4s_2025/"
+    ],
+    "units": [
+      {
+        "name": "Unit 1 Helping at home",
+        "words": [
+          ["PE", "体育"],
+          ["job", "工作"],
+          ["doctor", "医生"],
+          ["farmer", "农民"],
+          ["nurse", "护士"],
+          ["busy", "忙碌的"],
+          ["tired", "疲倦的"],
+          ["chore", "家务"],
+          ["cook", "烹饪"],
+          ["clean", "打扫"],
+          ["room", "房间"],
+          ["sweep", "扫"],
+          ["floor", "地板"],
+          ["together", "一起"],
+          ["people", "人们"],
+          ["child", "小孩"]
+        ],
+        "sentences": [
+          {"cn": "你妈妈是做什么工作的？", "en": "What's your mother's job?"},
+          {"cn": "她是一名医生。", "en": "She's a doctor."},
+          {"cn": "他是一名体育老师。", "en": "He's a PE teacher."},
+          {"cn": "我们能为他们做什么？", "en": "What can we do for them?"},
+          {"cn": "我们能做些家务。", "en": "We can do some chores."},
+          {"cn": "你能帮忙吗？", "en": "Can you help?"}
+        ]
+      },
+      {
+        "name": "Unit 2 My friends",
+        "words": [
+          ["his", "他的"],
+          ["strong", "强壮的"],
+          ["hair", "头发"],
+          ["also", "也"],
+          ["kind", "友好的"],
+          ["quiet", "文静的"],
+          ["best", "最好的"],
+          ["read", "阅读"],
+          ["Chinese", "中文"],
+          ["play", "玩耍"],
+          ["game", "游戏"],
+          ["football", "足球"],
+          ["basketball", "篮球"],
+          ["always", "总是"]
+        ],
+        "sentences": [
+          {"cn": "你的朋友叫什么名字？", "en": "What's your friend's name?"},
+          {"cn": "他叫张鹏。", "en": "His name is Zhang Peng."},
+          {"cn": "他又高又壮。", "en": "He's tall and strong."},
+          {"cn": "她有长头发。", "en": "She has long hair."},
+          {"cn": "谁是你最好的朋友？", "en": "Who's your best friend?"},
+          {"cn": "我们一起玩游戏。", "en": "We play games together."}
+        ]
+      },
+      {
+        "name": "Unit 3 Places we live in",
+        "words": [
+          ["afternoon", "下午"],
+          ["there", "在那里"],
+          ["playground", "操场"],
+          ["park", "公园"],
+          ["over", "在对面"],
+          ["hospital", "医院"],
+          ["shop", "商店"],
+          ["toilet", "卫生间"],
+          ["library", "图书馆"],
+          ["sport", "运动"],
+          ["walk", "散步"],
+          ["community", "社区"],
+          ["favourite", "最喜欢的"],
+          ["place", "地方"],
+          ["photo", "照片"],
+          ["story", "故事"],
+          ["buy", "购买"]
+        ],
+        "sentences": [
+          {"cn": "你住在哪里？", "en": "Where do you live?"},
+          {"cn": "我住在一个社区里。", "en": "I live in a community."},
+          {"cn": "你家附近有什么？", "en": "What's near your home?"},
+          {"cn": "有一个图书馆。", "en": "There's a library."},
+          {"cn": "公园里有一个游乐场。", "en": "There is a playground in the park."},
+          {"cn": "我最喜欢的地方是公园。", "en": "My favourite place is the park."}
+        ]
+      },
+      {
+        "name": "Unit 4 Helping in the community",
+        "words": [
+          ["firefighter", "消防员"],
+          ["why", "为什么"],
+          ["driver", "司机"],
+          ["cleaner", "清洁工"],
+          ["cook", "厨师"],
+          ["now", "现在"],
+          ["old", "年老的"],
+          ["tell", "讲述"],
+          ["everyone", "每人"],
+          ["Ms", "女士"],
+          ["busy", "忙碌的"],
+          ["tired", "疲倦的"],
+          ["chore", "家务"],
+          ["help", "帮助"],
+          ["also", "也"]
+        ],
+        "sentences": [
+          {"cn": "你爸爸是做什么工作的？", "en": "What's your father's job?"},
+          {"cn": "他是一名消防员。", "en": "He's a firefighter."},
+          {"cn": "社区需要哪些工作？", "en": "What jobs does a community need?"},
+          {"cn": "陈杰正在铺床。", "en": "Chen Jie is making the bed."},
+          {"cn": "他经常帮助别人。", "en": "He often helps others."},
+          {"cn": "她正在讲故事。", "en": "She is telling stories."}
+        ]
+      },
+      {
+        "name": "Unit 5 The weather and us",
+        "words": [
+          ["speak", "说话"],
+          ["weather", "天气"],
+          ["sunny", "晴朗的"],
+          ["hot", "热的"],
+          ["bad", "坏的"],
+          ["cold", "冷的"],
+          ["windy", "多风的"],
+          ["cloudy", "多云的"],
+          ["rainy", "多雨的"],
+          ["snowy", "多雪的"],
+          ["cool", "凉爽的"],
+          ["warm", "温暖的"],
+          ["tomorrow", "明天"],
+          ["rain", "雨；下雨"],
+          ["closed", "关闭的"],
+          ["film", "电影"],
+          ["idea", "主意"],
+          ["fly", "飞"],
+          ["kite", "风筝"],
+          ["snowman", "雪人"],
+          ["fun", "乐趣"],
+          ["their", "他们的"],
+          ["swim", "游泳"],
+          ["Sydney", "悉尼"]
+        ],
+        "sentences": [
+          {"cn": "今天天气怎么样？", "en": "What's the weather like today?"},
+          {"cn": "天气凉爽又晴朗。", "en": "It's cool and sunny."},
+          {"cn": "天气晴朗，我们可以放风筝。", "en": "It's sunny. We can fly a kite."},
+          {"cn": "下雪天我们可以堆雪人。", "en": "On snowy days, we can make a snowman."},
+          {"cn": "下雨了，我们不能在公园踢足球。", "en": "It's rainy. We can't play football."},
+          {"cn": "悉尼天气热吗？", "en": "Is it hot in Sydney?"}
+        ]
+      },
+      {
+        "name": "Unit 6 Changing for the seasons",
+        "words": [
+          ["whose", "谁的"],
+          ["sweater", "毛衣"],
+          ["sock", "短袜"],
+          ["mine", "我的"],
+          ["wear", "穿；戴"],
+          ["shirt", "衬衫"],
+          ["coat", "外套"],
+          ["dress", "连衣裙"],
+          ["which", "哪一个"],
+          ["season", "季节"],
+          ["winter", "冬天"],
+          ["snow", "雪"],
+          ["spring", "春天"],
+          ["summer", "夏天"],
+          ["autumn", "秋天"],
+          ["T-shirt", "T恤衫"],
+          ["fall", "落下"],
+          ["leaf", "叶子"],
+          ["glove", "手套"],
+          ["then", "然后"]
+        ],
+        "sentences": [
+          {"cn": "这是谁的毛衣？", "en": "Whose sweater is this?"},
+          {"cn": "这件毛衣是我的。", "en": "This sweater is mine."},
+          {"cn": "你最喜欢哪个季节？", "en": "Which season do you like best?"},
+          {"cn": "我最喜欢秋天。", "en": "I like autumn best."},
+          {"cn": "冬天我可以穿外套。", "en": "I can wear a coat in winter."},
+          {"cn": "春天树叶变绿了。", "en": "Leaves turn green in spring."}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "4b",
+    "name": "人教版 PEP 四年级下册（2024版·三年级起点）",
+    "gradeId": "g4",
+    "edition": "2024版 · 2026年春启用",
+    "sources": [
+      "http://mp.weixin.qq.com/s?__biz=MzUzMDAxNzQ1NA==&mid=2247512288&idx=5&sn=259e52ffc6abadbcef3b9284371fcf00",
+      "https://yyld.51jiaoxi.com/sixia/rjbp_danci.html",
+      "http://mp.weixin.qq.com/s?__biz=MzI2ODM2MzA1MA==&mid=2247603524&idx=2&sn=0a2b8cb8d5f83081e812200bc8d9241b",
+      "https://c.sjds.net/a/465296.html",
+      "https://zy.21cnjy.com/24914673",
+      "http://www.dzkbw.com/books/rjb/yingyu/pep4x_2026/"
+    ],
+    "units": [
+      {
+        "name": "Unit 1 Class rules",
+        "words": [
+          ["sorry", "对不起"],
+          ["late", "迟到"],
+          ["class", "课；班级"],
+          ["ready", "准备好"],
+          ["rule", "规则"],
+          ["classroom", "教室"],
+          ["light", "灯"],
+          ["blackboard", "黑板"],
+          ["desk", "书桌"],
+          ["chair", "椅子"],
+          ["tidy", "整洁的"],
+          ["music", "音乐"],
+          ["door", "门"],
+          ["window", "窗"],
+          ["fan", "风扇"],
+          ["when", "什么时候"],
+          ["understand", "理解"],
+          ["wall", "墙"],
+          ["newspaper", "报纸"],
+          ["workbook", "练习册"]
+        ],
+        "sentences": [
+          {"cn": "上课别迟到。", "en": "Don't be late for class."},
+          {"cn": "保持教室整洁。", "en": "Keep the classroom clean."},
+          {"cn": "举手发言。", "en": "Put up your hand to speak."},
+          {"cn": "放学后关灯。", "en": "Turn off the lights after school."},
+          {"cn": "今天谁值日？", "en": "Who's on duty today?"},
+          {"cn": "请遵守班级规则。", "en": "Please follow the class rules."}
+        ]
+      },
+      {
+        "name": "Unit 2 Family rules",
+        "words": [
+          ["watch", "看"],
+          ["TV", "电视"],
+          ["homework", "家庭作业"],
+          ["first", "首先"],
+          ["wet", "湿的"],
+          ["run", "跑"],
+          ["safe", "安全的"],
+          ["word", "单词"],
+          ["wash", "洗"],
+          ["helpful", "有帮助的"],
+          ["loud", "吵闹的"],
+          ["sleep", "睡觉"],
+          ["bedroom", "卧室"],
+          ["kitchen", "厨房"],
+          ["study", "书房"],
+          ["bathroom", "浴室"],
+          ["think", "思考"],
+          ["work", "工作"],
+          ["hard", "努力地"],
+          ["follow", "遵循"],
+          ["feel", "感到"]
+        ],
+        "sentences": [
+          {"cn": "我能看电视吗？", "en": "Can I watch TV?"},
+          {"cn": "你得先做家庭作业。", "en": "You have to do your homework first."},
+          {"cn": "别在客厅里跑。", "en": "Don't run in the living room."},
+          {"cn": "别碰烫的东西。", "en": "Don't touch hot things."},
+          {"cn": "她在书房吗？", "en": "Is she in the study?"},
+          {"cn": "使用礼貌用语。", "en": "Use kind words."}
+        ]
+      },
+      {
+        "name": "Unit 3 Time for school",
+        "words": [
+          ["over", "结束"],
+          ["kid", "小孩"],
+          ["dinner", "正餐"],
+          ["art", "美术"],
+          ["lunch", "午餐"],
+          ["maths", "数学"],
+          ["want", "想要"],
+          ["clock", "时钟"],
+          ["just", "只是"],
+          ["minute", "分钟"],
+          ["time", "时间"],
+          ["breakfast", "早餐"]
+        ],
+        "sentences": [
+          {"cn": "几点了？", "en": "What time is it?"},
+          {"cn": "现在七点了。", "en": "It's seven o'clock."},
+          {"cn": "该吃早餐了。", "en": "It's time for breakfast."},
+          {"cn": "该起床了。", "en": "It's time to get up."},
+          {"cn": "该上学了。", "en": "It's time for school."},
+          {"cn": "祝你一天愉快！", "en": "Have a nice day!"}
+        ]
+      },
+      {
+        "name": "Unit 4 Going shopping",
+        "words": [
+          ["trousers", "裤子"],
+          ["pair", "一条；一副"],
+          ["clothes", "衣服"],
+          ["those", "那些"],
+          ["shorts", "短裤"],
+          ["jacket", "夹克衫"],
+          ["skirt", "裙子"],
+          ["dear", "亲爱的"],
+          ["expensive", "昂贵的"],
+          ["take", "买下"],
+          ["cheap", "便宜的"],
+          ["shoe", "鞋"],
+          ["beautiful", "美丽的"],
+          ["hat", "帽子"],
+          ["sunglasses", "太阳镜"],
+          ["free", "免费的"],
+          ["large", "大号的"],
+          ["size", "尺码"],
+          ["list", "清单"],
+          ["any", "任何的"]
+        ],
+        "sentences": [
+          {"cn": "我能帮忙吗？", "en": "Can I help you?"},
+          {"cn": "它多少钱？", "en": "How much is it?"},
+          {"cn": "它们多少钱？", "en": "How much are they?"},
+          {"cn": "那太贵了。", "en": "That's too expensive."},
+          {"cn": "我能试穿一下吗？", "en": "Can I try it on?"},
+          {"cn": "我们买下它吧。", "en": "Let's take it."}
+        ]
+      },
+      {
+        "name": "Unit 5 Farms and us",
+        "words": [
+          ["cow", "奶牛"],
+          ["horse", "马"],
+          ["sheep", "绵羊"],
+          ["pig", "猪"],
+          ["chicken", "鸡"],
+          ["tomato", "西红柿"],
+          ["bee", "蜜蜂"],
+          ["mouse", "老鼠"],
+          ["carrot", "胡萝卜"],
+          ["potato", "土豆"],
+          ["can", "金属罐"],
+          ["farm", "农场"],
+          ["fresh", "新鲜的"],
+          ["food", "食物"],
+          ["grow", "种植"],
+          ["vegetable", "蔬菜"]
+        ],
+        "sentences": [
+          {"cn": "你的农场里有什么动物？", "en": "What animals do you have on the farm?"},
+          {"cn": "我有很多动物。", "en": "I have a lot of animals."},
+          {"cn": "你有多少头奶牛？", "en": "How many cows do you have?"},
+          {"cn": "这些是什么？", "en": "What are these?"},
+          {"cn": "它们是新鲜的西红柿。", "en": "They're fresh tomatoes."},
+          {"cn": "这些蔬菜真新鲜。", "en": "The vegetables are so fresh."}
+        ]
+      },
+      {
+        "name": "Unit 6 On the farm",
+        "words": [
+          ["feed", "喂养"],
+          ["pass", "递"],
+          ["pick", "采摘"],
+          ["milk", "挤奶"],
+          ["knife", "刀"],
+          ["fork", "餐叉"],
+          ["chopstick", "筷子"],
+          ["waste", "浪费"],
+          ["food", "食物"],
+          ["delicious", "美味的"],
+          ["bowl", "碗"],
+          ["spoon", "勺"],
+          ["supermarket", "超市"],
+          ["herself", "她自己"],
+          ["week", "星期"],
+          ["salad", "沙拉"],
+          ["ad", "广告"]
+        ],
+        "sentences": [
+          {"cn": "我们喂鸡吧。", "en": "Let's feed the chickens."},
+          {"cn": "能请你把蔬菜递给我吗？", "en": "Can you please pass me the vegetables?"},
+          {"cn": "你需要刀叉吗？", "en": "Would you like a knife and fork?"},
+          {"cn": "我会用筷子。", "en": "I can use chopsticks."},
+          {"cn": "别浪费食物。", "en": "Don't waste food."},
+          {"cn": "食物很美味！", "en": "The food is delicious!"}
+        ]
+      }
+    ]
+  }
+]

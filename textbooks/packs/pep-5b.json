@@ -1,0 +1,854 @@
+{
+  "format": "spelllab.textbook.v1",
+  "exportedAt": "2026-11-15T12:38:10Z",
+  "packs": [
+    {
+      "name": "人教版 PEP 五年级下册（现行版·三年级起点）",
+      "gradeId": "g5",
+      "gradeName": "小学五年级",
+      "bookId": "b_pep",
+      "bookName": "人教版 PEP（三年级起点）",
+      "units": [
+        {
+          "name": "Unit 1 My day",
+          "sentences": [
+            {
+              "cn": "你什么时候起床？",
+              "en": "When do you get up?",
+              "hints": [
+                "什么时候",
+                "做；助动词",
+                "你；你们",
+                "得到；到达",
+                "向上"
+              ]
+            },
+            {
+              "cn": "我通常六点起床。",
+              "en": "I usually get up at six o'clock.",
+              "hints": [
+                "我",
+                "通常地",
+                "得到；到达",
+                "向上",
+                "在",
+                "六",
+                "点钟"
+              ]
+            },
+            {
+              "cn": "你什么时候吃晚饭？",
+              "en": "When do you eat dinner?",
+              "hints": [
+                "什么时候",
+                "做；助动词",
+                "你；你们",
+                "吃",
+                "正餐"
+              ]
+            },
+            {
+              "cn": "我周末去购物。",
+              "en": "I go shopping on the weekend.",
+              "hints": [
+                "我",
+                "去",
+                "购物",
+                "在……上",
+                "这个；那个",
+                "周末"
+              ]
+            },
+            {
+              "cn": "你为什么这么忙？",
+              "en": "Why are you so busy today?",
+              "hints": [
+                "为什么",
+                "是",
+                "你；你们",
+                "这么",
+                "忙碌的",
+                "今天"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "when",
+              "什么时候；何时"
+            ],
+            [
+              "after",
+              "在……之后"
+            ],
+            [
+              "start",
+              "开始"
+            ],
+            [
+              "usually",
+              "通常地；惯常地"
+            ],
+            [
+              "Spain",
+              "西班牙"
+            ],
+            [
+              "late",
+              "晚；迟"
+            ],
+            [
+              "why",
+              "为什么"
+            ],
+            [
+              "shop",
+              "去买东西；购物"
+            ],
+            [
+              "work",
+              "工作"
+            ],
+            [
+              "last",
+              "上一个的；刚过去的"
+            ],
+            [
+              "sound",
+              "听起来好像"
+            ],
+            [
+              "also",
+              "还；也"
+            ],
+            [
+              "busy",
+              "忙的"
+            ],
+            [
+              "need",
+              "需要"
+            ],
+            [
+              "play",
+              "戏剧；剧本"
+            ],
+            [
+              "letter",
+              "信"
+            ],
+            [
+              "live",
+              "居住"
+            ],
+            [
+              "island",
+              "岛"
+            ],
+            [
+              "always",
+              "总是；一直"
+            ],
+            [
+              "cave",
+              "山洞；洞穴"
+            ],
+            [
+              "win",
+              "获胜"
+            ],
+            [
+              "exercise",
+              "活动；运动"
+            ],
+            [
+              "take",
+              "学习；上课"
+            ],
+            [
+              "dancing",
+              "跳舞；舞蹈"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 2 My favourite season",
+          "sentences": [
+            {
+              "cn": "你最喜欢哪个季节？",
+              "en": "Which season do you like best?",
+              "hints": [
+                "哪一个",
+                "季节",
+                "做；助动词",
+                "你；你们",
+                "喜欢",
+                "最好的"
+              ]
+            },
+            {
+              "cn": "我最喜欢秋天。",
+              "en": "I like autumn best.",
+              "hints": [
+                "我",
+                "喜欢",
+                "秋天",
+                "最好的"
+              ]
+            },
+            {
+              "cn": "你为什么喜欢夏天？",
+              "en": "Why do you like summer?",
+              "hints": [
+                "为什么",
+                "做；助动词",
+                "你；你们",
+                "喜欢",
+                "夏天"
+              ]
+            },
+            {
+              "cn": "因为我可以去游泳。",
+              "en": "Because I can go swimming.",
+              "hints": [
+                "因为",
+                "我",
+                "可以",
+                "去",
+                "游泳"
+              ]
+            },
+            {
+              "cn": "冬天我们可以堆雪人。",
+              "en": "We can make a snowman in winter.",
+              "hints": [
+                "我们",
+                "可以",
+                "做",
+                "一；一个",
+                "雪人",
+                "在……里",
+                "冬天"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "spring",
+              "春天"
+            ],
+            [
+              "summer",
+              "夏天"
+            ],
+            [
+              "autumn",
+              "秋天"
+            ],
+            [
+              "winter",
+              "冬天"
+            ],
+            [
+              "season",
+              "季节"
+            ],
+            [
+              "picnic",
+              "野餐"
+            ],
+            [
+              "pick",
+              "摘"
+            ],
+            [
+              "snowman",
+              "雪人"
+            ],
+            [
+              "which",
+              "哪一个"
+            ],
+            [
+              "best",
+              "最"
+            ],
+            [
+              "snow",
+              "雪"
+            ],
+            [
+              "because",
+              "因为"
+            ],
+            [
+              "vacation",
+              "假期"
+            ],
+            [
+              "pink",
+              "粉色"
+            ],
+            [
+              "lovely",
+              "可爱的"
+            ],
+            [
+              "leaf",
+              "叶子"
+            ],
+            [
+              "fall",
+              "落下"
+            ],
+            [
+              "paint",
+              "绘画"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 3 My school calendar",
+          "sentences": [
+            {
+              "cn": "运动会是什么时候？",
+              "en": "When is the sports meet?",
+              "hints": [
+                "什么时候",
+                "是",
+                "这个；那个",
+                "运动",
+                "集会"
+              ]
+            },
+            {
+              "cn": "在四月。",
+              "en": "It is in April.",
+              "hints": [
+                "它",
+                "是",
+                "在……里",
+                "四月"
+              ]
+            },
+            {
+              "cn": "你的生日在什么时候？",
+              "en": "When is your birthday?",
+              "hints": [
+                "什么时候",
+                "是",
+                "你的；你们的",
+                "生日"
+              ]
+            },
+            {
+              "cn": "我们十月有一次学校旅行。",
+              "en": "We have a school trip in October.",
+              "hints": [
+                "我们",
+                "有",
+                "一；一个",
+                "学校",
+                "旅行",
+                "在……里",
+                "十月"
+              ]
+            },
+            {
+              "cn": "圣诞节在十二月。",
+              "en": "Christmas is in December.",
+              "hints": [
+                "圣诞节",
+                "是",
+                "在……里",
+                "十二月"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "January",
+              "一月"
+            ],
+            [
+              "February",
+              "二月"
+            ],
+            [
+              "March",
+              "三月"
+            ],
+            [
+              "April",
+              "四月"
+            ],
+            [
+              "May",
+              "五月"
+            ],
+            [
+              "June",
+              "六月"
+            ],
+            [
+              "July",
+              "七月"
+            ],
+            [
+              "August",
+              "八月"
+            ],
+            [
+              "September",
+              "九月"
+            ],
+            [
+              "October",
+              "十月"
+            ],
+            [
+              "November",
+              "十一月"
+            ],
+            [
+              "December",
+              "十二月"
+            ],
+            [
+              "few",
+              "不多；很少"
+            ],
+            [
+              "thing",
+              "事情"
+            ],
+            [
+              "meet",
+              "集会；运动会"
+            ],
+            [
+              "Easter",
+              "复活节"
+            ],
+            [
+              "trip",
+              "旅行"
+            ],
+            [
+              "year",
+              "年"
+            ],
+            [
+              "plant",
+              "种植"
+            ],
+            [
+              "contest",
+              "比赛；竞赛"
+            ],
+            [
+              "holiday",
+              "节日；假日"
+            ],
+            [
+              "game",
+              "游戏"
+            ],
+            [
+              "chocolate",
+              "巧克力"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 4 When is Easter?",
+          "sentences": [
+            {
+              "cn": "艺术节是什么时候？",
+              "en": "When is the art show?",
+              "hints": [
+                "什么时候",
+                "是",
+                "这个；那个",
+                "美术",
+                "节目"
+              ]
+            },
+            {
+              "cn": "在五月一日。",
+              "en": "It is on May first.",
+              "hints": [
+                "它",
+                "是",
+                "在……上",
+                "五月",
+                "首先"
+              ]
+            },
+            {
+              "cn": "今天几号？",
+              "en": "What is the date today?",
+              "hints": [
+                "什么",
+                "是",
+                "这个；那个",
+                "日期",
+                "今天"
+              ]
+            },
+            {
+              "cn": "复活节在什么时候？",
+              "en": "When is Easter?",
+              "hints": [
+                "什么时候",
+                "是",
+                "复活节"
+              ]
+            },
+            {
+              "cn": "这是特别的一天。",
+              "en": "It is a special day.",
+              "hints": [
+                "它",
+                "是",
+                "一；一个",
+                "特殊的",
+                "天；日子"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "first",
+              "第一"
+            ],
+            [
+              "second",
+              "第二"
+            ],
+            [
+              "third",
+              "第三"
+            ],
+            [
+              "fourth",
+              "第四"
+            ],
+            [
+              "fifth",
+              "第五"
+            ],
+            [
+              "twelfth",
+              "第十二"
+            ],
+            [
+              "twentieth",
+              "第二十"
+            ],
+            [
+              "twenty-first",
+              "第二十一"
+            ],
+            [
+              "twenty-third",
+              "第二十三"
+            ],
+            [
+              "thirtieth",
+              "第三十"
+            ],
+            [
+              "special",
+              "特殊的"
+            ],
+            [
+              "fool",
+              "蠢人；傻瓜"
+            ],
+            [
+              "kitten",
+              "小猫"
+            ],
+            [
+              "diary",
+              "日记"
+            ],
+            [
+              "still",
+              "仍然"
+            ],
+            [
+              "noise",
+              "噪音"
+            ],
+            [
+              "fur",
+              "动物皮毛"
+            ],
+            [
+              "open",
+              "开着的"
+            ],
+            [
+              "walk",
+              "行走"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 5 Whose dog is it?",
+          "sentences": [
+            {
+              "cn": "这是谁的狗？",
+              "en": "Whose dog is it?",
+              "hints": [
+                "谁的",
+                "狗",
+                "是",
+                "它"
+              ]
+            },
+            {
+              "cn": "它是我的。",
+              "en": "It is mine.",
+              "hints": [
+                "它",
+                "是",
+                "我的"
+              ]
+            },
+            {
+              "cn": "这本书是你的吗？",
+              "en": "Is this book yours?",
+              "hints": [
+                "是",
+                "这个",
+                "书",
+                "你的"
+              ]
+            },
+            {
+              "cn": "这些是谁的？",
+              "en": "Whose are these?",
+              "hints": [
+                "谁的",
+                "是",
+                "这些"
+              ]
+            },
+            {
+              "cn": "看，那只兔子在跳。",
+              "en": "Look, the rabbit is jumping.",
+              "hints": [
+                "看",
+                "这个；那个",
+                "兔",
+                "是",
+                "跳"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "mine",
+              "我的"
+            ],
+            [
+              "yours",
+              "你的；你们的"
+            ],
+            [
+              "his",
+              "他的"
+            ],
+            [
+              "hers",
+              "她的"
+            ],
+            [
+              "theirs",
+              "他们的"
+            ],
+            [
+              "ours",
+              "我们的"
+            ],
+            [
+              "climbing",
+              "攀登"
+            ],
+            [
+              "eating",
+              "吃"
+            ],
+            [
+              "playing",
+              "玩"
+            ],
+            [
+              "jumping",
+              "跳"
+            ],
+            [
+              "drinking",
+              "喝"
+            ],
+            [
+              "sleeping",
+              "睡觉"
+            ],
+            [
+              "each",
+              "每个"
+            ],
+            [
+              "other",
+              "其他"
+            ],
+            [
+              "excited",
+              "兴奋的"
+            ],
+            [
+              "like",
+              "像……那样"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 6 Work quickly",
+          "sentences": [
+            {
+              "cn": "靠右走。",
+              "en": "Keep to the right.",
+              "hints": [
+                "保留",
+                "到；向",
+                "这个；那个",
+                "对的"
+              ]
+            },
+            {
+              "cn": "请小声说话。",
+              "en": "Please talk quietly.",
+              "hints": [
+                "请",
+                "说话",
+                "安静地"
+              ]
+            },
+            {
+              "cn": "保持课桌干净。",
+              "en": "Keep your desk clean.",
+              "hints": [
+                "保留",
+                "你的；你们的",
+                "书桌",
+                "打扫；干净的"
+              ]
+            },
+            {
+              "cn": "请按顺序来。",
+              "en": "Take turns, please.",
+              "hints": [
+                "买下",
+                "轮流",
+                "请"
+              ]
+            },
+            {
+              "cn": "不要在图书馆吃东西。",
+              "en": "No eating in the library.",
+              "hints": [
+                "不；没有",
+                "吃",
+                "在……里",
+                "这个；那个",
+                "图书馆"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "keep",
+              "保持"
+            ],
+            [
+              "right",
+              "右边；右"
+            ],
+            [
+              "quietly",
+              "安静地；小声地"
+            ],
+            [
+              "talk",
+              "说话；讲话"
+            ],
+            [
+              "turn",
+              "顺序；轮流"
+            ],
+            [
+              "desk",
+              "书桌"
+            ],
+            [
+              "clean",
+              "干净的；打扫"
+            ],
+            [
+              "bamboo",
+              "竹子"
+            ],
+            [
+              "its",
+              "它的"
+            ],
+            [
+              "guide",
+              "指导；引导"
+            ],
+            [
+              "anything",
+              "任何事物"
+            ],
+            [
+              "else",
+              "另外；其他"
+            ],
+            [
+              "exhibition",
+              "展览"
+            ],
+            [
+              "say",
+              "说；讲"
+            ],
+            [
+              "sushi",
+              "寿司"
+            ],
+            [
+              "teach",
+              "教"
+            ],
+            [
+              "sure",
+              "当然"
+            ],
+            [
+              "Canadian",
+              "加拿大的"
+            ],
+            [
+              "Spanish",
+              "西班牙的"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

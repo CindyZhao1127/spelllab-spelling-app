@@ -1,0 +1,765 @@
+[
+  {
+    "id": "5a",
+    "name": "人教版 PEP 五年级上册（2026版·三年级起点）",
+    "gradeId": "g5",
+    "edition": "2024版 · 2026年秋启用",
+    "sources": [
+      "http://www.dzkbw.com/books/rjb/yingyu/pep5s_2026/",
+      "https://zy.21cnjy.com/26168697"
+    ],
+    "notes": "单元名采用电子课本网 pep5s_2026 正式目录。词汇沿用 21cnjy 26168697 的新版五上按单元词表，该资源单元名写作早期版本名（Different Friends / Feelings / My Week / Healthy Habits / Food and Plants / Nature and Weather），已按正式目录重命名，词组类词条（take care of、ice cream、go hiking 等）未收入 words。",
+    "units": [
+      {
+        "name": "Unit 1 Different friends",
+        "words": [
+          ["team", "队；组"],
+          ["player", "运动员；参赛选手"],
+          ["him", "他"],
+          ["lovely", "美丽的；优美的"],
+          ["clever", "聪明的；聪颖的"],
+          ["young", "幼小的；年轻的"],
+          ["hard-working", "工作努力的；辛勤的"],
+          ["science", "科学；自然科学"],
+          ["robot", "机器人"],
+          ["jump", "跳；跃"],
+          ["rope", "绳；粗绳"],
+          ["piano", "钢琴"],
+          ["chess", "国际象棋"],
+          ["front", "前部"],
+          ["easy", "容易的；轻易的"],
+          ["star", "明星"],
+          ["wonderful", "精彩的；绝妙的"],
+          ["Australia", "澳大利亚"]
+        ],
+        "sentences": [
+          {"cn": "他很聪明。", "en": "He is very clever."},
+          {"cn": "她工作努力吗？", "en": "Is she hard-working?"},
+          {"cn": "我们的队伍很棒。", "en": "Our team is wonderful."},
+          {"cn": "他会下国际象棋。", "en": "He can play chess."},
+          {"cn": "她年轻又可爱。", "en": "She is young and lovely."}
+        ]
+      },
+      {
+        "name": "Unit 2 My feelings",
+        "words": [
+          ["sad", "悲哀的；难过的"],
+          ["matter", "事情；问题"],
+          ["project", "项目；方案"],
+          ["centre", "中心"],
+          ["agree", "同意；赞成"],
+          ["finish", "完成；做好"],
+          ["Monday", "星期一"],
+          ["worried", "担心的；担忧的"],
+          ["both", "两者"],
+          ["excited", "激动的；兴奋的"],
+          ["wrong", "错误的"],
+          ["angry", "愤怒的；生气的"],
+          ["afraid", "担心；害怕"],
+          ["parent", "父亲；母亲"],
+          ["ask", "问；询问"],
+          ["move", "搬家；移动"],
+          ["yours", "你的；你们的"]
+        ],
+        "sentences": [
+          {"cn": "怎么了？", "en": "What's the matter?"},
+          {"cn": "我感到难过。", "en": "I feel sad."},
+          {"cn": "他很生气。", "en": "He is angry."},
+          {"cn": "我们俩都同意这个项目。", "en": "We both agree on the project."},
+          {"cn": "你很兴奋吗？", "en": "Are you excited?"}
+        ]
+      },
+      {
+        "name": "Unit 3 Work and play",
+        "words": [
+          ["Wednesday", "星期三"],
+          ["subject", "科目；学科"],
+          ["Monday", "星期一"],
+          ["Tuesday", "星期二"],
+          ["Friday", "星期五"],
+          ["because", "因为"],
+          ["Thursday", "星期四"],
+          ["start", "开始"],
+          ["usually", "通常地；经常地"],
+          ["weekend", "周末"],
+          ["sometimes", "有时；间或"],
+          ["Saturday", "星期六"],
+          ["Sunday", "星期日"],
+          ["lesson", "课；一节课"],
+          ["evening", "晚上；傍晚"],
+          ["answer", "答复；回答"],
+          ["ping-pong", "乒乓球"],
+          ["night", "夜；夜晚"],
+          ["visit", "看望；拜访；参观"],
+          ["grandparent", "祖父；祖母；外祖父；外祖母"]
+        ],
+        "sentences": [
+          {"cn": "你星期三有什么课？", "en": "What do you have on Wednesday?"},
+          {"cn": "你最喜欢什么科目？", "en": "What's your favourite subject?"},
+          {"cn": "我有时在周末看望祖父母。", "en": "I sometimes visit my grandparents."},
+          {"cn": "你晚上做什么？", "en": "What do you do in the evening?"},
+          {"cn": "你会打乒乓球吗？", "en": "Can you play ping-pong?"}
+        ]
+      },
+      {
+        "name": "Unit 4 Healthy habits",
+        "words": [
+          ["stay", "待；保持"],
+          ["should", "该；可以"],
+          ["flu", "流行性感冒；流感"],
+          ["else", "其他的；别的"],
+          ["exercise", "锻炼；训练"],
+          ["enough", "足够的；充足的"],
+          ["if", "如果；假若"],
+          ["habit", "习惯"],
+          ["show", "节目"],
+          ["phone", "电话；电话机"],
+          ["then", "那么；因此"],
+          ["rest", "休息；放松"],
+          ["check", "查看；查明"],
+          ["less", "较少的；更少的"],
+          ["brush", "刷净；刷亮"],
+          ["tooth", "牙；齿"],
+          ["twice", "两次；两遍"],
+          ["hour", "小时"],
+          ["free", "空闲的"]
+        ],
+        "sentences": [
+          {"cn": "你应该多锻炼。", "en": "You should exercise more."},
+          {"cn": "我应该做什么？", "en": "What should I do?"},
+          {"cn": "我得了流感。", "en": "I have the flu."},
+          {"cn": "别忘了刷牙。", "en": "Don't forget to brush your teeth."},
+          {"cn": "你有足够的睡眠吗？", "en": "Do you get enough sleep?"}
+        ]
+      },
+      {
+        "name": "Unit 5 Food we eat",
+        "words": [
+          ["hungry", "感到饿的"],
+          ["beef", "牛肉"],
+          ["little", "少许；一点"],
+          ["dumpling", "饺子；汤圆"],
+          ["tea", "茶叶；茶"],
+          ["hamburger", "汉堡包"],
+          ["Mrs", "太太；夫人"],
+          ["coconut", "椰子"],
+          ["interesting", "有趣的"],
+          ["seed", "种子；籽"],
+          ["pull", "拔出；抽出"],
+          ["stem", "茎；梗；柄"],
+          ["root", "根；根茎"],
+          ["lotus", "莲属植物"],
+          ["lake", "湖；湖泊"],
+          ["world", "世界；地球"],
+          ["round", "圆形的；球形的"],
+          ["different", "不同的"],
+          ["way", "方法；方式"]
+        ],
+        "sentences": [
+          {"cn": "你想吃什么？", "en": "What would you like to eat?"},
+          {"cn": "我想要一些饺子。", "en": "I'd like some dumplings."},
+          {"cn": "我饿了。", "en": "I am hungry."},
+          {"cn": "牛肉很美味。", "en": "The beef is delicious."},
+          {"cn": "种子长成植物。", "en": "The seed grows into a plant."}
+        ]
+      },
+      {
+        "name": "Unit 6 Nature and us",
+        "words": [
+          ["river", "河；江"],
+          ["nature", "自然界；大自然"],
+          ["waterfall", "瀑布"],
+          ["forest", "森林；林区"],
+          ["famous", "著名的；出名的"],
+          ["mountain", "高山；山岳"],
+          ["wind", "风；气流"],
+          ["trip", "旅行；出行"],
+          ["dangerous", "有危险的；不安全的"],
+          ["heavy", "程度大的；严重的"],
+          ["hotel", "旅馆；旅社"],
+          ["close", "关；关闭"],
+          ["umbrella", "伞；雨伞"],
+          ["raincoat", "雨衣"],
+          ["worry", "担心；担忧"],
+          ["fine", "晴朗的"],
+          ["fog", "雾"],
+          ["flood", "洪水；水灾"],
+          ["fire", "火；火灾"],
+          ["know", "知道；了解"],
+          ["before", "在……之前"],
+          ["bring", "带来；取来"]
+        ],
+        "sentences": [
+          {"cn": "森林里有一条河。", "en": "There is a river in the forest."},
+          {"cn": "这座山很高。", "en": "The mountain is very high."},
+          {"cn": "今天天气晴朗。", "en": "It is fine today."},
+          {"cn": "别忘了带雨伞。", "en": "Don't forget your umbrella."},
+          {"cn": "我们去看瀑布吧。", "en": "Let's go to the waterfall."}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "5b",
+    "name": "人教版 PEP 五年级下册（现行版·三年级起点）",
+    "gradeId": "g5",
+    "edition": "现行版（2013审定），2027春换新版",
+    "sources": [
+      "https://zy.21cnjy.com/19601552",
+      "https://www.21cnjy.com/d-11913581.shtml",
+      "http://www.manyfish.top/game/en_words/131086/Module-1_Unit-1-My-day.html",
+      "https://wendang.xuehi.cn/doc/ht0sgkceqp1awili9mwv0u1cnav7zrhh.html"
+    ],
+    "notes": "单元名按任务给定规格书写。现行 2013 审定版权威目录 Unit 6 为 Work quietly!，Unit 4 部分教辅作 When is the art show?，二者均为同一序数词/日期单元；词表与句型按现行版整理，已排除 2024 新版混杂内容。词组（eat breakfast、go swimming、take turns 等）未收入 words。",
+    "units": [
+      {
+        "name": "Unit 1 My day",
+        "words": [
+          ["when", "什么时候；何时"],
+          ["after", "在……之后"],
+          ["start", "开始"],
+          ["usually", "通常地；惯常地"],
+          ["Spain", "西班牙"],
+          ["late", "晚；迟"],
+          ["why", "为什么"],
+          ["shop", "去买东西；购物"],
+          ["work", "工作"],
+          ["last", "上一个的；刚过去的"],
+          ["sound", "听起来好像"],
+          ["also", "还；也"],
+          ["busy", "忙的"],
+          ["need", "需要"],
+          ["play", "戏剧；剧本"],
+          ["letter", "信"],
+          ["live", "居住"],
+          ["island", "岛"],
+          ["always", "总是；一直"],
+          ["cave", "山洞；洞穴"],
+          ["win", "获胜"],
+          ["exercise", "活动；运动"],
+          ["take", "学习；上课"],
+          ["dancing", "跳舞；舞蹈"]
+        ],
+        "sentences": [
+          {"cn": "你什么时候起床？", "en": "When do you get up?"},
+          {"cn": "我通常六点起床。", "en": "I usually get up at six o'clock."},
+          {"cn": "你什么时候吃晚饭？", "en": "When do you eat dinner?"},
+          {"cn": "我周末去购物。", "en": "I go shopping on the weekend."},
+          {"cn": "你为什么这么忙？", "en": "Why are you so busy today?"}
+        ]
+      },
+      {
+        "name": "Unit 2 My favourite season",
+        "words": [
+          ["spring", "春天"],
+          ["summer", "夏天"],
+          ["autumn", "秋天"],
+          ["winter", "冬天"],
+          ["season", "季节"],
+          ["picnic", "野餐"],
+          ["pick", "摘"],
+          ["snowman", "雪人"],
+          ["which", "哪一个"],
+          ["best", "最"],
+          ["snow", "雪"],
+          ["because", "因为"],
+          ["vacation", "假期"],
+          ["pink", "粉色"],
+          ["lovely", "可爱的"],
+          ["leaf", "叶子"],
+          ["fall", "落下"],
+          ["paint", "绘画"]
+        ],
+        "sentences": [
+          {"cn": "你最喜欢哪个季节？", "en": "Which season do you like best?"},
+          {"cn": "我最喜欢秋天。", "en": "I like autumn best."},
+          {"cn": "你为什么喜欢夏天？", "en": "Why do you like summer?"},
+          {"cn": "因为我可以去游泳。", "en": "Because I can go swimming."},
+          {"cn": "冬天我们可以堆雪人。", "en": "We can make a snowman in winter."}
+        ]
+      },
+      {
+        "name": "Unit 3 My school calendar",
+        "words": [
+          ["January", "一月"],
+          ["February", "二月"],
+          ["March", "三月"],
+          ["April", "四月"],
+          ["May", "五月"],
+          ["June", "六月"],
+          ["July", "七月"],
+          ["August", "八月"],
+          ["September", "九月"],
+          ["October", "十月"],
+          ["November", "十一月"],
+          ["December", "十二月"],
+          ["few", "不多；很少"],
+          ["thing", "事情"],
+          ["meet", "集会；运动会"],
+          ["Easter", "复活节"],
+          ["trip", "旅行"],
+          ["year", "年"],
+          ["plant", "种植"],
+          ["contest", "比赛；竞赛"],
+          ["holiday", "节日；假日"],
+          ["game", "游戏"],
+          ["chocolate", "巧克力"]
+        ],
+        "sentences": [
+          {"cn": "运动会是什么时候？", "en": "When is the sports meet?"},
+          {"cn": "在四月。", "en": "It is in April."},
+          {"cn": "你的生日在什么时候？", "en": "When is your birthday?"},
+          {"cn": "我们十月有一次学校旅行。", "en": "We have a school trip in October."},
+          {"cn": "圣诞节在十二月。", "en": "Christmas is in December."}
+        ]
+      },
+      {
+        "name": "Unit 4 When is Easter?",
+        "words": [
+          ["first", "第一"],
+          ["second", "第二"],
+          ["third", "第三"],
+          ["fourth", "第四"],
+          ["fifth", "第五"],
+          ["twelfth", "第十二"],
+          ["twentieth", "第二十"],
+          ["twenty-first", "第二十一"],
+          ["twenty-third", "第二十三"],
+          ["thirtieth", "第三十"],
+          ["special", "特殊的"],
+          ["fool", "蠢人；傻瓜"],
+          ["kitten", "小猫"],
+          ["diary", "日记"],
+          ["still", "仍然"],
+          ["noise", "噪音"],
+          ["fur", "动物皮毛"],
+          ["open", "开着的"],
+          ["walk", "行走"]
+        ],
+        "sentences": [
+          {"cn": "艺术节是什么时候？", "en": "When is the art show?"},
+          {"cn": "在五月一日。", "en": "It is on May first."},
+          {"cn": "今天几号？", "en": "What is the date today?"},
+          {"cn": "复活节在什么时候？", "en": "When is Easter?"},
+          {"cn": "这是特别的一天。", "en": "It is a special day."}
+        ]
+      },
+      {
+        "name": "Unit 5 Whose dog is it?",
+        "words": [
+          ["mine", "我的"],
+          ["yours", "你的；你们的"],
+          ["his", "他的"],
+          ["hers", "她的"],
+          ["theirs", "他们的"],
+          ["ours", "我们的"],
+          ["climbing", "攀登"],
+          ["eating", "吃"],
+          ["playing", "玩"],
+          ["jumping", "跳"],
+          ["drinking", "喝"],
+          ["sleeping", "睡觉"],
+          ["each", "每个"],
+          ["other", "其他"],
+          ["excited", "兴奋的"],
+          ["like", "像……那样"]
+        ],
+        "sentences": [
+          {"cn": "这是谁的狗？", "en": "Whose dog is it?"},
+          {"cn": "它是我的。", "en": "It is mine."},
+          {"cn": "这本书是你的吗？", "en": "Is this book yours?"},
+          {"cn": "这些是谁的？", "en": "Whose are these?"},
+          {"cn": "看，那只兔子在跳。", "en": "Look, the rabbit is jumping."}
+        ]
+      },
+      {
+        "name": "Unit 6 Work quickly",
+        "words": [
+          ["keep", "保持"],
+          ["right", "右边；右"],
+          ["quietly", "安静地；小声地"],
+          ["talk", "说话；讲话"],
+          ["turn", "顺序；轮流"],
+          ["desk", "书桌"],
+          ["clean", "干净的；打扫"],
+          ["bamboo", "竹子"],
+          ["its", "它的"],
+          ["guide", "指导；引导"],
+          ["anything", "任何事物"],
+          ["else", "另外；其他"],
+          ["exhibition", "展览"],
+          ["say", "说；讲"],
+          ["sushi", "寿司"],
+          ["teach", "教"],
+          ["sure", "当然"],
+          ["Canadian", "加拿大的"],
+          ["Spanish", "西班牙的"]
+        ],
+        "sentences": [
+          {"cn": "靠右走。", "en": "Keep to the right."},
+          {"cn": "请小声说话。", "en": "Please talk quietly."},
+          {"cn": "保持课桌干净。", "en": "Keep your desk clean."},
+          {"cn": "请按顺序来。", "en": "Take turns, please."},
+          {"cn": "不要在图书馆吃东西。", "en": "No eating in the library."}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "6a",
+    "name": "人教版 PEP 六年级上册（2026版·三年级起点）",
+    "gradeId": "g6",
+    "edition": "2024版 · 2026年秋启用",
+    "sources": [
+      "https://www.pep.com.cn/zslth/yyptzy/xypep/6s",
+      "http://www.dzkbw.com/books/rjb/yingyu/pep6s_2026/",
+      "https://zy.21cnjy.com/26168697",
+      "https://zy.21cnjy.com/26294287",
+      "https://zy.21cnjy.com/25994710"
+    ],
+    "notes": "Unit 1 正式名称经人教社官网 pep.com.cn 与电子课本网确认是 Amazing places；部分教辅及早期资料称 Amazing landmarks，本文件采用官方目录名。21cnjy 26168697 的六上词表 Unit 4 至 Unit 6 有 OCR 错乱与串单元，已依据单元知识清单 26294287 与 25994710 重新归位。专有词组（New Zealand、Eiffel Tower、pocket money 等）未收入 words。",
+    "units": [
+      {
+        "name": "Unit 1 Amazing places",
+        "words": [
+          ["was", "是；存在"],
+          ["kilometre", "千米；公里"],
+          ["gingerbread", "姜饼"],
+          ["go", "去；走"],
+          ["climb", "攀登；爬"],
+          ["send", "邮寄；发送"],
+          ["thousand", "一千"],
+          ["clay", "黏土；陶土"],
+          ["see", "看见"],
+          ["village", "村庄；村镇"],
+          ["eat", "吃"],
+          ["dry", "干的"],
+          ["take", "做；拿；取"],
+          ["view", "景色"],
+          ["inspiring", "鼓舞人心的"],
+          ["bamboo", "竹；竹子"],
+          ["pumpkin", "南瓜"],
+          ["restaurant", "餐馆；餐厅"],
+          ["airport", "机场"],
+          ["Paris", "巴黎"]
+        ],
+        "sentences": [
+          {"cn": "你周末过得怎么样？", "en": "How was your weekend?"},
+          {"cn": "非常棒！", "en": "It was great!"},
+          {"cn": "你去哪儿了？", "en": "Where did you go?"},
+          {"cn": "我去了西安。", "en": "I went to Xi'an."},
+          {"cn": "我爬了长城。", "en": "I climbed the Great Wall."}
+        ]
+      },
+      {
+        "name": "Unit 2 Getting together",
+        "words": [
+          ["paste", "粘贴"],
+          ["dress", "穿衣服"],
+          ["gala", "演出；庆典"],
+          ["marathon", "马拉松赛跑"],
+          ["as", "作为"],
+          ["race", "赛跑；速度竞赛"],
+          ["run", "跑；奔跑"],
+          ["cheer", "欢呼；加油"],
+          ["writer", "作家；作者"],
+          ["read", "阅读"],
+          ["make", "做；使出现"],
+          ["sing", "唱；演唱"],
+          ["wear", "穿；戴"],
+          ["yesterday", "昨天"],
+          ["notice", "通知"],
+          ["wake", "醒；醒来"],
+          ["later", "随后；后来"],
+          ["judge", "裁判"],
+          ["begin", "开始"],
+          ["win", "获胜"],
+          ["winner", "获胜者；成功者"],
+          ["ever", "以往任何时候"],
+          ["exciting", "令人激动的"]
+        ],
+        "sentences": [
+          {"cn": "你们去旅行了吗？", "en": "Did you take a trip?"},
+          {"cn": "是的，我们去了。", "en": "Yes, we did."},
+          {"cn": "你们吃月饼了吗？", "en": "Did you eat mooncakes?"},
+          {"cn": "不，我们没有。", "en": "No, we didn't."},
+          {"cn": "比赛很激动人心。", "en": "The race was exciting."}
+        ]
+      },
+      {
+        "name": "Unit 3 Healthy life",
+        "words": [
+          ["cold", "感冒"],
+          ["ill", "不舒服；有病"],
+          ["head", "头；头部"],
+          ["soon", "很快；马上"],
+          ["fever", "发烧；发热"],
+          ["cough", "咳嗽"],
+          ["better", "好转的；舒服些的"],
+          ["discuss", "讨论；商量"],
+          ["diet", "日常饮食"],
+          ["cry", "哭；哭泣"],
+          ["email", "电子邮件"],
+          ["call", "打电话"],
+          ["unhappy", "不开心的；难过的"],
+          ["glass", "一杯；玻璃"],
+          ["may", "也许；可能"],
+          ["add", "补充；增加"],
+          ["video", "视频；录像"],
+          ["another", "另一；不同的"]
+        ],
+        "sentences": [
+          {"cn": "你感觉怎么样？", "en": "How do you feel?"},
+          {"cn": "我觉得不舒服。", "en": "I feel ill."},
+          {"cn": "我头疼。", "en": "My head hurts."},
+          {"cn": "也许你应该去看医生。", "en": "Maybe you should see a doctor."},
+          {"cn": "祝你早日康复。", "en": "Get well soon."}
+        ]
+      },
+      {
+        "name": "Unit 4 Managing money well",
+        "words": [
+          ["money", "钱"],
+          ["schoolbag", "书包"],
+          ["goods", "商品"],
+          ["drink", "饮料"],
+          ["service", "服务"],
+          ["haircut", "理发；发型"],
+          ["microscope", "显微镜"],
+          ["manage", "管理"],
+          ["difficult", "困难的"],
+          ["lucky", "幸运的"],
+          ["sale", "特价；促销"],
+          ["sell", "出售；售卖"],
+          ["jar", "罐子"],
+          ["half", "一半"],
+          ["ticket", "票"]
+        ],
+        "sentences": [
+          {"cn": "你打算怎么花这笔钱？", "en": "How are you going to spend it?"},
+          {"cn": "我打算买一个书包。", "en": "I'm going to buy a schoolbag."},
+          {"cn": "我还想买一台显微镜。", "en": "I also want to buy a microscope."},
+          {"cn": "我还需要多存点钱。", "en": "I still need to save more."},
+          {"cn": "我们应该谨慎用钱。", "en": "We should be careful with money."}
+        ]
+      },
+      {
+        "name": "Unit 5 Exploring space",
+        "words": [
+          ["planet", "行星"],
+          ["satellite", "人造卫星"],
+          ["soil", "土壤"],
+          ["alien", "外星生物"],
+          ["sunrise", "日出"],
+          ["rover", "探测器"],
+          ["into", "朝；进入"],
+          ["month", "月；月份"],
+          ["earth", "地球"],
+          ["sky", "天空"],
+          ["daytime", "白天"],
+          ["cloud", "云"],
+          ["star", "恒星；星星"],
+          ["space", "太空；宇宙空间"],
+          ["ocean", "大海；海洋"],
+          ["marble", "玻璃弹珠"],
+          ["moon", "月球；月亮"],
+          ["taikonaut", "中国航天员"],
+          ["cloth", "布料"],
+          ["toothpaste", "牙膏"],
+          ["question", "问题"],
+          ["sunset", "日落"],
+          ["telescope", "望远镜"],
+          ["astronaut", "宇航员"]
+        ],
+        "sentences": [
+          {"cn": "天空中你能看见什么？", "en": "What can you see in the sky?"},
+          {"cn": "我们能看见太阳和云。", "en": "We can see the Sun and clouds."},
+          {"cn": "它看起来像一颗蓝色弹珠。", "en": "It looks like a big blue marble."},
+          {"cn": "火星上有水吗？", "en": "Is there any water on Mars?"},
+          {"cn": "我们如何探索太空？", "en": "How can we explore space?"}
+        ]
+      },
+      {
+        "name": "Unit 6 Energy, nature and us",
+        "words": [
+          ["power", "能量；电力"],
+          ["electricity", "电"],
+          ["solar", "太阳的"],
+          ["energy", "能源"],
+          ["source", "来源"],
+          ["type", "类型；种类"],
+          ["light", "照亮"],
+          ["heat", "热量；加热"],
+          ["top", "最高的；顶端"],
+          ["useful", "有用的"],
+          ["reuse", "重复使用"],
+          ["cool", "降温；冷却"],
+          ["resource", "资源"],
+          ["change", "改变"],
+          ["quick", "快速的"],
+          ["shower", "淋浴"],
+          ["reduce", "减少"],
+          ["drive", "驾驶；开车"],
+          ["own", "自己的"],
+          ["market", "集市；市场"],
+          ["bottle", "瓶子"],
+          ["dirty", "脏的"],
+          ["side", "一边；一面"],
+          ["unplug", "拔掉电源插头"],
+          ["difference", "差别；影响"]
+        ],
+        "sentences": [
+          {"cn": "流水可以发电。", "en": "Running water can make electricity."},
+          {"cn": "水来自哪里？", "en": "Where does water come from?"},
+          {"cn": "我们怎样节约能源？", "en": "How can we save energy?"},
+          {"cn": "我们可以缩短淋浴时间。", "en": "We can take quick showers."},
+          {"cn": "微小的改变能带来巨大影响。", "en": "Small changes can make a big difference."}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "6b",
+    "name": "人教版 PEP 六年级下册（现行版·三年级起点）",
+    "gradeId": "g6",
+    "edition": "现行版（2013审定），2027春换新版",
+    "sources": [
+      "https://zy.21cnjy.com/19601551",
+      "https://yyld.51jiaoxi.com/liuxia/rjbp_danci.html",
+      "https://baike.sogou.com/v75679929.htm"
+    ],
+    "notes": "该册只有 4 个教学单元加总复习，故只列 4 个单元。使用现行 2013 审定版词表，2027 年春换新版；已排除 2024 新版混杂内容。词组（had a cold、went camping、took pictures、go cycling、look up 等）未收入 words。",
+    "units": [
+      {
+        "name": "Unit 1 How tall are you?",
+        "words": [
+          ["younger", "更年轻的"],
+          ["older", "更年长的"],
+          ["taller", "更高的"],
+          ["shorter", "更矮的；更短的"],
+          ["longer", "更长的"],
+          ["thinner", "更瘦的"],
+          ["heavier", "更重的"],
+          ["bigger", "更大的"],
+          ["smaller", "更小的"],
+          ["stronger", "更强壮的"],
+          ["dinosaur", "恐龙"],
+          ["hall", "大厅；礼堂"],
+          ["metre", "米"],
+          ["than", "比"],
+          ["both", "两个都"],
+          ["kilogram", "千克；公斤"],
+          ["countryside", "乡村；农村"],
+          ["lower", "更低地"],
+          ["shadow", "阴影；影子"],
+          ["smarter", "更聪明的"],
+          ["become", "开始变得；变成"]
+        ],
+        "sentences": [
+          {"cn": "你有多高？", "en": "How tall are you?"},
+          {"cn": "我比你高。", "en": "I am taller than you."},
+          {"cn": "你有多重？", "en": "How heavy are you?"},
+          {"cn": "我比你更强壮。", "en": "I am stronger than you."},
+          {"cn": "你的脚比我的大。", "en": "Your feet are bigger than mine."}
+        ]
+      },
+      {
+        "name": "Unit 2 Last weekend",
+        "words": [
+          ["cleaned", "打扫"],
+          ["stayed", "停留；待"],
+          ["washed", "洗"],
+          ["watched", "看"],
+          ["had", "患病；有"],
+          ["slept", "睡觉"],
+          ["read", "读"],
+          ["saw", "看见"],
+          ["last", "上一个的"],
+          ["yesterday", "昨天"],
+          ["before", "在……之前"],
+          ["drank", "喝"],
+          ["show", "演出"],
+          ["magazine", "杂志"],
+          ["better", "更好的"],
+          ["faster", "更快的"],
+          ["hotel", "旅馆"],
+          ["fixed", "修理"],
+          ["broken", "破损的"],
+          ["lamp", "台灯"],
+          ["loud", "大声的"],
+          ["enjoy", "享受……的乐趣"],
+          ["stay", "暂住；停留"]
+        ],
+        "sentences": [
+          {"cn": "你上周末做了什么？", "en": "What did you do last weekend?"},
+          {"cn": "我打扫了房间。", "en": "I cleaned my room."},
+          {"cn": "你读书了吗？", "en": "Did you read a book?"},
+          {"cn": "是的，我读了。", "en": "Yes, I did."},
+          {"cn": "你昨天去哪儿了？", "en": "Where did you go yesterday?"}
+        ]
+      },
+      {
+        "name": "Unit 3 Where did you go?",
+        "words": [
+          ["went", "去"],
+          ["camp", "野营"],
+          ["fish", "钓鱼"],
+          ["rode", "骑"],
+          ["hurt", "受伤"],
+          ["ate", "吃"],
+          ["took", "拍照；拿"],
+          ["bought", "买"],
+          ["gift", "礼物"],
+          ["fell", "摔倒；落下"],
+          ["mule", "骡子"],
+          ["Turpan", "吐鲁番"],
+          ["could", "能"],
+          ["till", "直到"],
+          ["beach", "沙滩"],
+          ["basket", "篮子"],
+          ["part", "角色"],
+          ["licked", "舔"],
+          ["laughed", "笑"]
+        ],
+        "sentences": [
+          {"cn": "你假期去哪儿了？", "en": "Where did you go on your holiday?"},
+          {"cn": "我去了沙滩。", "en": "I went to the beach."},
+          {"cn": "你怎么去那儿的？", "en": "How did you go there?"},
+          {"cn": "你在那里做了什么？", "en": "What did you do there?"},
+          {"cn": "我拍了照片，还买了礼物。", "en": "I took pictures and bought gifts."}
+        ]
+      },
+      {
+        "name": "Unit 4 Then and now",
+        "words": [
+          ["grass", "草坪"],
+          ["gym", "体育馆"],
+          ["ago", "以前"],
+          ["cycling", "骑自行车运动"],
+          ["ice-skate", "滑冰"],
+          ["badminton", "羽毛球运动"],
+          ["star", "星"],
+          ["easy", "容易的"],
+          ["Internet", "互联网"],
+          ["different", "不同的"],
+          ["active", "活跃的"],
+          ["race", "赛跑"],
+          ["nothing", "没有什么"],
+          ["thought", "想"],
+          ["felt", "感觉"],
+          ["cheetah", "猎豹"],
+          ["trip", "绊倒"],
+          ["woke", "醒"],
+          ["dream", "梦"]
+        ],
+        "sentences": [
+          {"cn": "以前没有体育馆。", "en": "There was no gym before."},
+          {"cn": "现在有一座新体育馆。", "en": "There is a new gym now."},
+          {"cn": "以前我很安静。", "en": "I was quiet before."},
+          {"cn": "现在我很活跃。", "en": "Now I am very active."},
+          {"cn": "现在一切都不同了。", "en": "Everything is different now."}
+        ]
+      }
+    ]
+  }
+]

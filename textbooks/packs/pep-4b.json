@@ -1,0 +1,859 @@
+{
+  "format": "spelllab.textbook.v1",
+  "exportedAt": "2026-11-15T12:38:10Z",
+  "packs": [
+    {
+      "name": "人教版 PEP 四年级下册（2024版·三年级起点）",
+      "gradeId": "g4",
+      "gradeName": "小学四年级",
+      "bookId": "b_pep",
+      "bookName": "人教版 PEP（三年级起点）",
+      "units": [
+        {
+          "name": "Unit 1 Class rules",
+          "sentences": [
+            {
+              "cn": "上课别迟到。",
+              "en": "Don't be late for class.",
+              "hints": [
+                "不",
+                "是；成为",
+                "迟到",
+                "为；给",
+                "课"
+              ]
+            },
+            {
+              "cn": "保持教室整洁。",
+              "en": "Keep the classroom clean.",
+              "hints": [
+                "保留",
+                "这个；那个",
+                "教室",
+                "打扫；干净的"
+              ]
+            },
+            {
+              "cn": "举手发言。",
+              "en": "Put up your hand to speak.",
+              "hints": [
+                "放",
+                "向上",
+                "你的；你们的",
+                "手",
+                "到；向",
+                "说话"
+              ]
+            },
+            {
+              "cn": "放学后关灯。",
+              "en": "Turn off the lights after school.",
+              "hints": [
+                "顺序",
+                "关掉；离开",
+                "这个；那个",
+                "灯",
+                "在后面",
+                "学校"
+              ]
+            },
+            {
+              "cn": "今天谁值日？",
+              "en": "Who's on duty today?",
+              "hints": [
+                "是谁",
+                "在……上",
+                "职责",
+                "今天"
+              ]
+            },
+            {
+              "cn": "请遵守班级规则。",
+              "en": "Please follow the class rules.",
+              "hints": [
+                "请",
+                "遵循",
+                "这个；那个",
+                "课",
+                "规则"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "sorry",
+              "对不起"
+            ],
+            [
+              "late",
+              "迟到"
+            ],
+            [
+              "class",
+              "课；班级"
+            ],
+            [
+              "ready",
+              "准备好"
+            ],
+            [
+              "rule",
+              "规则"
+            ],
+            [
+              "classroom",
+              "教室"
+            ],
+            [
+              "light",
+              "灯"
+            ],
+            [
+              "blackboard",
+              "黑板"
+            ],
+            [
+              "desk",
+              "书桌"
+            ],
+            [
+              "chair",
+              "椅子"
+            ],
+            [
+              "tidy",
+              "整洁的"
+            ],
+            [
+              "music",
+              "音乐"
+            ],
+            [
+              "door",
+              "门"
+            ],
+            [
+              "window",
+              "窗"
+            ],
+            [
+              "fan",
+              "风扇"
+            ],
+            [
+              "when",
+              "什么时候"
+            ],
+            [
+              "understand",
+              "理解"
+            ],
+            [
+              "wall",
+              "墙"
+            ],
+            [
+              "newspaper",
+              "报纸"
+            ],
+            [
+              "workbook",
+              "练习册"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 2 Family rules",
+          "sentences": [
+            {
+              "cn": "我能看电视吗？",
+              "en": "Can I watch TV?",
+              "hints": [
+                "可以",
+                "我",
+                "看",
+                "电视"
+              ]
+            },
+            {
+              "cn": "你得先做家庭作业。",
+              "en": "You have to do your homework first.",
+              "hints": [
+                "你；你们",
+                "有",
+                "到；向",
+                "做；助动词",
+                "你的；你们的",
+                "家庭作业",
+                "首先"
+              ]
+            },
+            {
+              "cn": "别在客厅里跑。",
+              "en": "Don't run in the living room.",
+              "hints": [
+                "不",
+                "跑",
+                "在……里",
+                "这个；那个",
+                "生活；居住",
+                "房间"
+              ]
+            },
+            {
+              "cn": "别碰烫的东西。",
+              "en": "Don't touch hot things.",
+              "hints": [
+                "不",
+                "触摸",
+                "热的",
+                "东西"
+              ]
+            },
+            {
+              "cn": "她在书房吗？",
+              "en": "Is she in the study?",
+              "hints": [
+                "是",
+                "她",
+                "在……里",
+                "这个；那个",
+                "书房"
+              ]
+            },
+            {
+              "cn": "使用礼貌用语。",
+              "en": "Use kind words.",
+              "hints": [
+                "使用",
+                "友好的",
+                "单词"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "watch",
+              "看"
+            ],
+            [
+              "TV",
+              "电视"
+            ],
+            [
+              "homework",
+              "家庭作业"
+            ],
+            [
+              "first",
+              "首先"
+            ],
+            [
+              "wet",
+              "湿的"
+            ],
+            [
+              "run",
+              "跑"
+            ],
+            [
+              "safe",
+              "安全的"
+            ],
+            [
+              "word",
+              "单词"
+            ],
+            [
+              "wash",
+              "洗"
+            ],
+            [
+              "helpful",
+              "有帮助的"
+            ],
+            [
+              "loud",
+              "吵闹的"
+            ],
+            [
+              "sleep",
+              "睡觉"
+            ],
+            [
+              "bedroom",
+              "卧室"
+            ],
+            [
+              "kitchen",
+              "厨房"
+            ],
+            [
+              "study",
+              "书房"
+            ],
+            [
+              "bathroom",
+              "浴室"
+            ],
+            [
+              "think",
+              "思考"
+            ],
+            [
+              "work",
+              "工作"
+            ],
+            [
+              "hard",
+              "努力地"
+            ],
+            [
+              "follow",
+              "遵循"
+            ],
+            [
+              "feel",
+              "感到"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 3 Time for school",
+          "sentences": [
+            {
+              "cn": "几点了？",
+              "en": "What time is it?",
+              "hints": [
+                "什么",
+                "时间",
+                "是",
+                "它"
+              ]
+            },
+            {
+              "cn": "现在七点了。",
+              "en": "It's seven o'clock.",
+              "hints": [
+                "它是",
+                "七",
+                "点钟"
+              ]
+            },
+            {
+              "cn": "该吃早餐了。",
+              "en": "It's time for breakfast.",
+              "hints": [
+                "它是",
+                "时间",
+                "为；给",
+                "早餐"
+              ]
+            },
+            {
+              "cn": "该起床了。",
+              "en": "It's time to get up.",
+              "hints": [
+                "它是",
+                "时间",
+                "到；向",
+                "得到；到达",
+                "向上"
+              ]
+            },
+            {
+              "cn": "该上学了。",
+              "en": "It's time for school.",
+              "hints": [
+                "它是",
+                "时间",
+                "为；给",
+                "学校"
+              ]
+            },
+            {
+              "cn": "祝你一天愉快！",
+              "en": "Have a nice day!",
+              "hints": [
+                "有",
+                "一；一个",
+                "令人愉快的",
+                "天；日子"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "over",
+              "结束"
+            ],
+            [
+              "kid",
+              "小孩"
+            ],
+            [
+              "dinner",
+              "正餐"
+            ],
+            [
+              "art",
+              "美术"
+            ],
+            [
+              "lunch",
+              "午餐"
+            ],
+            [
+              "maths",
+              "数学"
+            ],
+            [
+              "want",
+              "想要"
+            ],
+            [
+              "clock",
+              "时钟"
+            ],
+            [
+              "just",
+              "只是"
+            ],
+            [
+              "minute",
+              "分钟"
+            ],
+            [
+              "time",
+              "时间"
+            ],
+            [
+              "breakfast",
+              "早餐"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 4 Going shopping",
+          "sentences": [
+            {
+              "cn": "我能帮忙吗？",
+              "en": "Can I help you?",
+              "hints": [
+                "可以",
+                "我",
+                "帮助",
+                "你；你们"
+              ]
+            },
+            {
+              "cn": "它多少钱？",
+              "en": "How much is it?",
+              "hints": [
+                "怎样；多么",
+                "许多",
+                "是",
+                "它"
+              ]
+            },
+            {
+              "cn": "它们多少钱？",
+              "en": "How much are they?",
+              "hints": [
+                "怎样；多么",
+                "许多",
+                "是",
+                "他们；它们"
+              ]
+            },
+            {
+              "cn": "那太贵了。",
+              "en": "That's too expensive.",
+              "hints": [
+                "那是",
+                "也；太",
+                "昂贵的"
+              ]
+            },
+            {
+              "cn": "我能试穿一下吗？",
+              "en": "Can I try it on?",
+              "hints": [
+                "可以",
+                "我",
+                "尝试",
+                "它",
+                "在……上"
+              ]
+            },
+            {
+              "cn": "我们买下它吧。",
+              "en": "Let's take it.",
+              "hints": [
+                "让我们",
+                "买下",
+                "它"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "trousers",
+              "裤子"
+            ],
+            [
+              "pair",
+              "一条；一副"
+            ],
+            [
+              "clothes",
+              "衣服"
+            ],
+            [
+              "those",
+              "那些"
+            ],
+            [
+              "shorts",
+              "短裤"
+            ],
+            [
+              "jacket",
+              "夹克衫"
+            ],
+            [
+              "skirt",
+              "裙子"
+            ],
+            [
+              "dear",
+              "亲爱的"
+            ],
+            [
+              "expensive",
+              "昂贵的"
+            ],
+            [
+              "take",
+              "买下"
+            ],
+            [
+              "cheap",
+              "便宜的"
+            ],
+            [
+              "shoe",
+              "鞋"
+            ],
+            [
+              "beautiful",
+              "美丽的"
+            ],
+            [
+              "hat",
+              "帽子"
+            ],
+            [
+              "sunglasses",
+              "太阳镜"
+            ],
+            [
+              "free",
+              "免费的"
+            ],
+            [
+              "large",
+              "大号的"
+            ],
+            [
+              "size",
+              "尺码"
+            ],
+            [
+              "list",
+              "清单"
+            ],
+            [
+              "any",
+              "任何的"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 5 Farms and us",
+          "sentences": [
+            {
+              "cn": "你的农场里有什么动物？",
+              "en": "What animals do you have on the farm?",
+              "hints": [
+                "什么",
+                "动物",
+                "做；助动词",
+                "你；你们",
+                "有",
+                "在……上",
+                "这个；那个",
+                "农场"
+              ]
+            },
+            {
+              "cn": "我有很多动物。",
+              "en": "I have a lot of animals.",
+              "hints": [
+                "我",
+                "有",
+                "一；一个",
+                "许多",
+                "……的",
+                "动物"
+              ]
+            },
+            {
+              "cn": "你有多少头奶牛？",
+              "en": "How many cows do you have?",
+              "hints": [
+                "怎样；多么",
+                "许多",
+                "奶牛",
+                "做；助动词",
+                "你；你们",
+                "有"
+              ]
+            },
+            {
+              "cn": "这些是什么？",
+              "en": "What are these?",
+              "hints": [
+                "什么",
+                "是",
+                "这些"
+              ]
+            },
+            {
+              "cn": "它们是新鲜的西红柿。",
+              "en": "They're fresh tomatoes.",
+              "hints": [
+                "他们是",
+                "新鲜的",
+                "西红柿"
+              ]
+            },
+            {
+              "cn": "这些蔬菜真新鲜。",
+              "en": "The vegetables are so fresh.",
+              "hints": [
+                "这个；那个",
+                "蔬菜",
+                "是",
+                "这么",
+                "新鲜的"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "cow",
+              "奶牛"
+            ],
+            [
+              "horse",
+              "马"
+            ],
+            [
+              "sheep",
+              "绵羊"
+            ],
+            [
+              "pig",
+              "猪"
+            ],
+            [
+              "chicken",
+              "鸡"
+            ],
+            [
+              "tomato",
+              "西红柿"
+            ],
+            [
+              "bee",
+              "蜜蜂"
+            ],
+            [
+              "mouse",
+              "老鼠"
+            ],
+            [
+              "carrot",
+              "胡萝卜"
+            ],
+            [
+              "potato",
+              "土豆"
+            ],
+            [
+              "can",
+              "金属罐"
+            ],
+            [
+              "farm",
+              "农场"
+            ],
+            [
+              "fresh",
+              "新鲜的"
+            ],
+            [
+              "food",
+              "食物"
+            ],
+            [
+              "grow",
+              "种植"
+            ],
+            [
+              "vegetable",
+              "蔬菜"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 6 On the farm",
+          "sentences": [
+            {
+              "cn": "我们喂鸡吧。",
+              "en": "Let's feed the chickens.",
+              "hints": [
+                "让我们",
+                "喂养",
+                "这个；那个",
+                "鸡"
+              ]
+            },
+            {
+              "cn": "能请你把蔬菜递给我吗？",
+              "en": "Can you please pass me the vegetables?",
+              "hints": [
+                "可以",
+                "你；你们",
+                "请",
+                "递",
+                "我",
+                "这个；那个",
+                "蔬菜"
+              ]
+            },
+            {
+              "cn": "你需要刀叉吗？",
+              "en": "Would you like a knife and fork?",
+              "hints": [
+                "会；愿意",
+                "你；你们",
+                "喜欢",
+                "一；一个",
+                "刀",
+                "和；与",
+                "餐叉"
+              ]
+            },
+            {
+              "cn": "我会用筷子。",
+              "en": "I can use chopsticks.",
+              "hints": [
+                "我",
+                "可以",
+                "使用",
+                "筷子"
+              ]
+            },
+            {
+              "cn": "别浪费食物。",
+              "en": "Don't waste food.",
+              "hints": [
+                "不",
+                "浪费",
+                "食物"
+              ]
+            },
+            {
+              "cn": "食物很美味！",
+              "en": "The food is delicious!",
+              "hints": [
+                "这个；那个",
+                "食物",
+                "是",
+                "美味的"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "feed",
+              "喂养"
+            ],
+            [
+              "pass",
+              "递"
+            ],
+            [
+              "pick",
+              "采摘"
+            ],
+            [
+              "milk",
+              "挤奶"
+            ],
+            [
+              "knife",
+              "刀"
+            ],
+            [
+              "fork",
+              "餐叉"
+            ],
+            [
+              "chopstick",
+              "筷子"
+            ],
+            [
+              "waste",
+              "浪费"
+            ],
+            [
+              "delicious",
+              "美味的"
+            ],
+            [
+              "bowl",
+              "碗"
+            ],
+            [
+              "spoon",
+              "勺"
+            ],
+            [
+              "supermarket",
+              "超市"
+            ],
+            [
+              "herself",
+              "她自己"
+            ],
+            [
+              "week",
+              "星期"
+            ],
+            [
+              "salad",
+              "沙拉"
+            ],
+            [
+              "ad",
+              "广告"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

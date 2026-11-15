@@ -1,0 +1,590 @@
+{
+  "format": "spelllab.textbook.v1",
+  "exportedAt": "2026-11-15T12:38:10Z",
+  "packs": [
+    {
+      "name": "人教版 PEP 六年级下册（现行版·三年级起点）",
+      "gradeId": "g6",
+      "gradeName": "小学六年级",
+      "bookId": "b_pep",
+      "bookName": "人教版 PEP（三年级起点）",
+      "units": [
+        {
+          "name": "Unit 1 How tall are you?",
+          "sentences": [
+            {
+              "cn": "你有多高？",
+              "en": "How tall are you?",
+              "hints": [
+                "怎样；多么",
+                "高的",
+                "是",
+                "你；你们"
+              ]
+            },
+            {
+              "cn": "我比你高。",
+              "en": "I am taller than you.",
+              "hints": [
+                "我",
+                "是",
+                "更高的",
+                "比",
+                "你；你们"
+              ]
+            },
+            {
+              "cn": "你有多重？",
+              "en": "How heavy are you?",
+              "hints": [
+                "怎样；多么",
+                "程度大的",
+                "是",
+                "你；你们"
+              ]
+            },
+            {
+              "cn": "我比你更强壮。",
+              "en": "I am stronger than you.",
+              "hints": [
+                "我",
+                "是",
+                "更强壮的",
+                "比",
+                "你；你们"
+              ]
+            },
+            {
+              "cn": "你的脚比我的大。",
+              "en": "Your feet are bigger than mine.",
+              "hints": [
+                "你的；你们的",
+                "脚",
+                "是",
+                "更大的",
+                "比",
+                "我的"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "younger",
+              "更年轻的"
+            ],
+            [
+              "older",
+              "更年长的"
+            ],
+            [
+              "taller",
+              "更高的"
+            ],
+            [
+              "shorter",
+              "更矮的；更短的"
+            ],
+            [
+              "longer",
+              "更长的"
+            ],
+            [
+              "thinner",
+              "更瘦的"
+            ],
+            [
+              "heavier",
+              "更重的"
+            ],
+            [
+              "bigger",
+              "更大的"
+            ],
+            [
+              "smaller",
+              "更小的"
+            ],
+            [
+              "stronger",
+              "更强壮的"
+            ],
+            [
+              "dinosaur",
+              "恐龙"
+            ],
+            [
+              "hall",
+              "大厅；礼堂"
+            ],
+            [
+              "metre",
+              "米"
+            ],
+            [
+              "than",
+              "比"
+            ],
+            [
+              "both",
+              "两个都"
+            ],
+            [
+              "kilogram",
+              "千克；公斤"
+            ],
+            [
+              "countryside",
+              "乡村；农村"
+            ],
+            [
+              "lower",
+              "更低地"
+            ],
+            [
+              "shadow",
+              "阴影；影子"
+            ],
+            [
+              "smarter",
+              "更聪明的"
+            ],
+            [
+              "become",
+              "开始变得；变成"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 2 Last weekend",
+          "sentences": [
+            {
+              "cn": "你上周末做了什么？",
+              "en": "What did you do last weekend?",
+              "hints": [
+                "什么",
+                "助动词（过去）",
+                "你；你们",
+                "做；助动词",
+                "上一个的",
+                "周末"
+              ]
+            },
+            {
+              "cn": "我打扫了房间。",
+              "en": "I cleaned my room.",
+              "hints": [
+                "我",
+                "打扫",
+                "我的",
+                "房间"
+              ]
+            },
+            {
+              "cn": "你读书了吗？",
+              "en": "Did you read a book?",
+              "hints": [
+                "助动词（过去）",
+                "你；你们",
+                "阅读",
+                "一；一个",
+                "书"
+              ]
+            },
+            {
+              "cn": "是的，我读了。",
+              "en": "Yes, I did.",
+              "hints": [
+                "是的",
+                "我",
+                "助动词（过去）"
+              ]
+            },
+            {
+              "cn": "你昨天去哪儿了？",
+              "en": "Where did you go yesterday?",
+              "hints": [
+                "哪里",
+                "助动词（过去）",
+                "你；你们",
+                "去",
+                "昨天"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "cleaned",
+              "打扫"
+            ],
+            [
+              "stayed",
+              "停留；待"
+            ],
+            [
+              "washed",
+              "洗"
+            ],
+            [
+              "watched",
+              "看"
+            ],
+            [
+              "had",
+              "患病；有"
+            ],
+            [
+              "slept",
+              "睡觉"
+            ],
+            [
+              "read",
+              "读"
+            ],
+            [
+              "saw",
+              "看见"
+            ],
+            [
+              "last",
+              "上一个的"
+            ],
+            [
+              "yesterday",
+              "昨天"
+            ],
+            [
+              "before",
+              "在……之前"
+            ],
+            [
+              "drank",
+              "喝"
+            ],
+            [
+              "show",
+              "演出"
+            ],
+            [
+              "magazine",
+              "杂志"
+            ],
+            [
+              "better",
+              "更好的"
+            ],
+            [
+              "faster",
+              "更快的"
+            ],
+            [
+              "hotel",
+              "旅馆"
+            ],
+            [
+              "fixed",
+              "修理"
+            ],
+            [
+              "broken",
+              "破损的"
+            ],
+            [
+              "lamp",
+              "台灯"
+            ],
+            [
+              "loud",
+              "大声的"
+            ],
+            [
+              "enjoy",
+              "享受……的乐趣"
+            ],
+            [
+              "stay",
+              "暂住；停留"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 3 Where did you go?",
+          "sentences": [
+            {
+              "cn": "你假期去哪儿了？",
+              "en": "Where did you go on your holiday?",
+              "hints": [
+                "哪里",
+                "助动词（过去）",
+                "你；你们",
+                "去",
+                "在……上",
+                "你的；你们的",
+                "节日"
+              ]
+            },
+            {
+              "cn": "我去了沙滩。",
+              "en": "I went to the beach.",
+              "hints": [
+                "我",
+                "去（过去）",
+                "到；向",
+                "这个；那个",
+                "沙滩"
+              ]
+            },
+            {
+              "cn": "你怎么去那儿的？",
+              "en": "How did you go there?",
+              "hints": [
+                "怎样；多么",
+                "助动词（过去）",
+                "你；你们",
+                "去",
+                "那里"
+              ]
+            },
+            {
+              "cn": "你在那里做了什么？",
+              "en": "What did you do there?",
+              "hints": [
+                "什么",
+                "助动词（过去）",
+                "你；你们",
+                "做；助动词",
+                "那里"
+              ]
+            },
+            {
+              "cn": "我拍了照片，还买了礼物。",
+              "en": "I took pictures and bought gifts.",
+              "hints": [
+                "我",
+                "拍照",
+                "图画",
+                "和；与",
+                "买",
+                "礼物"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "went",
+              "去"
+            ],
+            [
+              "camp",
+              "野营"
+            ],
+            [
+              "fish",
+              "钓鱼"
+            ],
+            [
+              "rode",
+              "骑"
+            ],
+            [
+              "hurt",
+              "受伤"
+            ],
+            [
+              "ate",
+              "吃"
+            ],
+            [
+              "took",
+              "拍照；拿"
+            ],
+            [
+              "bought",
+              "买"
+            ],
+            [
+              "gift",
+              "礼物"
+            ],
+            [
+              "fell",
+              "摔倒；落下"
+            ],
+            [
+              "mule",
+              "骡子"
+            ],
+            [
+              "Turpan",
+              "吐鲁番"
+            ],
+            [
+              "could",
+              "能"
+            ],
+            [
+              "till",
+              "直到"
+            ],
+            [
+              "beach",
+              "沙滩"
+            ],
+            [
+              "basket",
+              "篮子"
+            ],
+            [
+              "part",
+              "角色"
+            ],
+            [
+              "licked",
+              "舔"
+            ],
+            [
+              "laughed",
+              "笑"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 4 Then and now",
+          "sentences": [
+            {
+              "cn": "以前没有体育馆。",
+              "en": "There was no gym before.",
+              "hints": [
+                "那里",
+                "是（过去）",
+                "不；没有",
+                "体育馆",
+                "在……之前"
+              ]
+            },
+            {
+              "cn": "现在有一座新体育馆。",
+              "en": "There is a new gym now.",
+              "hints": [
+                "那里",
+                "是",
+                "一；一个",
+                "新的",
+                "体育馆",
+                "现在"
+              ]
+            },
+            {
+              "cn": "以前我很安静。",
+              "en": "I was quiet before.",
+              "hints": [
+                "我",
+                "是（过去）",
+                "文静的",
+                "在……之前"
+              ]
+            },
+            {
+              "cn": "现在我很活跃。",
+              "en": "Now I am very active.",
+              "hints": [
+                "现在",
+                "我",
+                "是",
+                "很；非常",
+                "活跃的"
+              ]
+            },
+            {
+              "cn": "现在一切都不同了。",
+              "en": "Everything is different now.",
+              "hints": [
+                "一切",
+                "是",
+                "不同的",
+                "现在"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "grass",
+              "草坪"
+            ],
+            [
+              "gym",
+              "体育馆"
+            ],
+            [
+              "ago",
+              "以前"
+            ],
+            [
+              "cycling",
+              "骑自行车运动"
+            ],
+            [
+              "ice-skate",
+              "滑冰"
+            ],
+            [
+              "badminton",
+              "羽毛球运动"
+            ],
+            [
+              "star",
+              "星"
+            ],
+            [
+              "easy",
+              "容易的"
+            ],
+            [
+              "Internet",
+              "互联网"
+            ],
+            [
+              "different",
+              "不同的"
+            ],
+            [
+              "active",
+              "活跃的"
+            ],
+            [
+              "race",
+              "赛跑"
+            ],
+            [
+              "nothing",
+              "没有什么"
+            ],
+            [
+              "thought",
+              "想"
+            ],
+            [
+              "felt",
+              "感觉"
+            ],
+            [
+              "cheetah",
+              "猎豹"
+            ],
+            [
+              "trip",
+              "绊倒"
+            ],
+            [
+              "woke",
+              "醒"
+            ],
+            [
+              "dream",
+              "梦"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

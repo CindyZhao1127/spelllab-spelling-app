@@ -1,0 +1,848 @@
+{
+  "format": "spelllab.textbook.v1",
+  "exportedAt": "2026-11-15T12:38:10Z",
+  "packs": [
+    {
+      "name": "人教版 PEP 四年级上册（2024版·三年级起点）",
+      "gradeId": "g4",
+      "gradeName": "小学四年级",
+      "bookId": "b_pep",
+      "bookName": "人教版 PEP（三年级起点）",
+      "units": [
+        {
+          "name": "Unit 1 Helping at home",
+          "sentences": [
+            {
+              "cn": "你妈妈是做什么工作的？",
+              "en": "What's your mother's job?",
+              "hints": [
+                "是什么",
+                "你的；你们的",
+                "妈妈的",
+                "工作"
+              ]
+            },
+            {
+              "cn": "她是一名医生。",
+              "en": "She's a doctor.",
+              "hints": [
+                "她是",
+                "一；一个",
+                "医生"
+              ]
+            },
+            {
+              "cn": "他是一名体育老师。",
+              "en": "He's a PE teacher.",
+              "hints": [
+                "他是",
+                "一；一个",
+                "体育",
+                "教师"
+              ]
+            },
+            {
+              "cn": "我们能为他们做什么？",
+              "en": "What can we do for them?",
+              "hints": [
+                "什么",
+                "可以",
+                "我们",
+                "做；助动词",
+                "为；给",
+                "它们"
+              ]
+            },
+            {
+              "cn": "我们能做些家务。",
+              "en": "We can do some chores.",
+              "hints": [
+                "我们",
+                "可以",
+                "做；助动词",
+                "一些",
+                "家务"
+              ]
+            },
+            {
+              "cn": "你能帮忙吗？",
+              "en": "Can you help?",
+              "hints": [
+                "可以",
+                "你；你们",
+                "帮助"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "PE",
+              "体育"
+            ],
+            [
+              "job",
+              "工作"
+            ],
+            [
+              "doctor",
+              "医生"
+            ],
+            [
+              "farmer",
+              "农民"
+            ],
+            [
+              "nurse",
+              "护士"
+            ],
+            [
+              "busy",
+              "忙碌的"
+            ],
+            [
+              "tired",
+              "疲倦的"
+            ],
+            [
+              "chore",
+              "家务"
+            ],
+            [
+              "cook",
+              "烹饪"
+            ],
+            [
+              "clean",
+              "打扫"
+            ],
+            [
+              "room",
+              "房间"
+            ],
+            [
+              "sweep",
+              "扫"
+            ],
+            [
+              "floor",
+              "地板"
+            ],
+            [
+              "together",
+              "一起"
+            ],
+            [
+              "people",
+              "人们"
+            ],
+            [
+              "child",
+              "小孩"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 2 My friends",
+          "sentences": [
+            {
+              "cn": "你的朋友叫什么名字？",
+              "en": "What's your friend's name?",
+              "hints": [
+                "是什么",
+                "你的；你们的",
+                "朋友的",
+                "名字"
+              ]
+            },
+            {
+              "cn": "他叫张鹏。",
+              "en": "His name is Zhang Peng.",
+              "hints": [
+                "他的",
+                "名字",
+                "是",
+                "张",
+                "鹏"
+              ]
+            },
+            {
+              "cn": "他又高又壮。",
+              "en": "He's tall and strong.",
+              "hints": [
+                "他是",
+                "高的",
+                "和；与",
+                "强壮的"
+              ]
+            },
+            {
+              "cn": "她有长头发。",
+              "en": "She has long hair.",
+              "hints": [
+                "她",
+                "有",
+                "长的",
+                "头发"
+              ]
+            },
+            {
+              "cn": "谁是你最好的朋友？",
+              "en": "Who's your best friend?",
+              "hints": [
+                "是谁",
+                "你的；你们的",
+                "最好的",
+                "朋友"
+              ]
+            },
+            {
+              "cn": "我们一起玩游戏。",
+              "en": "We play games together.",
+              "hints": [
+                "我们",
+                "玩耍",
+                "游戏",
+                "一起"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "his",
+              "他的"
+            ],
+            [
+              "strong",
+              "强壮的"
+            ],
+            [
+              "hair",
+              "头发"
+            ],
+            [
+              "also",
+              "也"
+            ],
+            [
+              "kind",
+              "友好的"
+            ],
+            [
+              "quiet",
+              "文静的"
+            ],
+            [
+              "best",
+              "最好的"
+            ],
+            [
+              "read",
+              "阅读"
+            ],
+            [
+              "Chinese",
+              "中文"
+            ],
+            [
+              "play",
+              "玩耍"
+            ],
+            [
+              "game",
+              "游戏"
+            ],
+            [
+              "football",
+              "足球"
+            ],
+            [
+              "basketball",
+              "篮球"
+            ],
+            [
+              "always",
+              "总是"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 3 Places we live in",
+          "sentences": [
+            {
+              "cn": "你住在哪里？",
+              "en": "Where do you live?",
+              "hints": [
+                "哪里",
+                "做；助动词",
+                "你；你们",
+                "居住"
+              ]
+            },
+            {
+              "cn": "我住在一个社区里。",
+              "en": "I live in a community.",
+              "hints": [
+                "我",
+                "居住",
+                "在……里",
+                "一；一个",
+                "社区"
+              ]
+            },
+            {
+              "cn": "你家附近有什么？",
+              "en": "What's near your home?",
+              "hints": [
+                "是什么",
+                "在附近",
+                "你的；你们的",
+                "家"
+              ]
+            },
+            {
+              "cn": "有一个图书馆。",
+              "en": "There's a library.",
+              "hints": [
+                "有",
+                "一；一个",
+                "图书馆"
+              ]
+            },
+            {
+              "cn": "公园里有一个游乐场。",
+              "en": "There is a playground in the park.",
+              "hints": [
+                "那里",
+                "是",
+                "一；一个",
+                "操场",
+                "在……里",
+                "这个；那个",
+                "公园"
+              ]
+            },
+            {
+              "cn": "我最喜欢的地方是公园。",
+              "en": "My favourite place is the park.",
+              "hints": [
+                "我的",
+                "最喜欢的",
+                "地方",
+                "是",
+                "这个；那个",
+                "公园"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "afternoon",
+              "下午"
+            ],
+            [
+              "there",
+              "在那里"
+            ],
+            [
+              "playground",
+              "操场"
+            ],
+            [
+              "park",
+              "公园"
+            ],
+            [
+              "over",
+              "在对面"
+            ],
+            [
+              "hospital",
+              "医院"
+            ],
+            [
+              "shop",
+              "商店"
+            ],
+            [
+              "toilet",
+              "卫生间"
+            ],
+            [
+              "library",
+              "图书馆"
+            ],
+            [
+              "sport",
+              "运动"
+            ],
+            [
+              "walk",
+              "散步"
+            ],
+            [
+              "community",
+              "社区"
+            ],
+            [
+              "favourite",
+              "最喜欢的"
+            ],
+            [
+              "place",
+              "地方"
+            ],
+            [
+              "photo",
+              "照片"
+            ],
+            [
+              "story",
+              "故事"
+            ],
+            [
+              "buy",
+              "购买"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 4 Helping in the community",
+          "sentences": [
+            {
+              "cn": "你爸爸是做什么工作的？",
+              "en": "What's your father's job?",
+              "hints": [
+                "是什么",
+                "你的；你们的",
+                "爸爸的",
+                "工作"
+              ]
+            },
+            {
+              "cn": "他是一名消防员。",
+              "en": "He's a firefighter.",
+              "hints": [
+                "他是",
+                "一；一个",
+                "消防员"
+              ]
+            },
+            {
+              "cn": "社区需要哪些工作？",
+              "en": "What jobs does a community need?",
+              "hints": [
+                "什么",
+                "工作",
+                "助动词",
+                "一；一个",
+                "社区",
+                "需要"
+              ]
+            },
+            {
+              "cn": "陈杰正在铺床。",
+              "en": "Chen Jie is making the bed.",
+              "hints": [
+                "陈",
+                "杰",
+                "是",
+                "制作",
+                "这个；那个",
+                "床"
+              ]
+            },
+            {
+              "cn": "他经常帮助别人。",
+              "en": "He often helps others.",
+              "hints": [
+                "他",
+                "经常",
+                "帮助",
+                "其他人"
+              ]
+            },
+            {
+              "cn": "她正在讲故事。",
+              "en": "She is telling stories.",
+              "hints": [
+                "她",
+                "是",
+                "告诉",
+                "故事"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "firefighter",
+              "消防员"
+            ],
+            [
+              "why",
+              "为什么"
+            ],
+            [
+              "driver",
+              "司机"
+            ],
+            [
+              "cleaner",
+              "清洁工"
+            ],
+            [
+              "now",
+              "现在"
+            ],
+            [
+              "old",
+              "年老的"
+            ],
+            [
+              "tell",
+              "讲述"
+            ],
+            [
+              "everyone",
+              "每人"
+            ],
+            [
+              "Ms",
+              "女士"
+            ],
+            [
+              "help",
+              "帮助"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 5 The weather and us",
+          "sentences": [
+            {
+              "cn": "今天天气怎么样？",
+              "en": "What's the weather like today?",
+              "hints": [
+                "是什么",
+                "这个；那个",
+                "天气",
+                "喜欢",
+                "今天"
+              ]
+            },
+            {
+              "cn": "天气凉爽又晴朗。",
+              "en": "It's cool and sunny.",
+              "hints": [
+                "它是",
+                "酷的",
+                "和；与",
+                "晴朗的"
+              ]
+            },
+            {
+              "cn": "天气晴朗，我们可以放风筝。",
+              "en": "It's sunny. We can fly a kite.",
+              "hints": [
+                "它是",
+                "晴朗的",
+                "我们",
+                "可以",
+                "飞",
+                "一；一个",
+                "风筝"
+              ]
+            },
+            {
+              "cn": "下雪天我们可以堆雪人。",
+              "en": "On snowy days, we can make a snowman.",
+              "hints": [
+                "在……上",
+                "多雪的",
+                "日子",
+                "我们",
+                "可以",
+                "做",
+                "一；一个",
+                "雪人"
+              ]
+            },
+            {
+              "cn": "下雨了，我们不能在公园踢足球。",
+              "en": "It's rainy. We can't play football.",
+              "hints": [
+                "它是",
+                "多雨的",
+                "我们",
+                "不能",
+                "玩耍",
+                "足球"
+              ]
+            },
+            {
+              "cn": "悉尼天气热吗？",
+              "en": "Is it hot in Sydney?",
+              "hints": [
+                "是",
+                "它",
+                "热的",
+                "在……里",
+                "悉尼"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "speak",
+              "说话"
+            ],
+            [
+              "weather",
+              "天气"
+            ],
+            [
+              "sunny",
+              "晴朗的"
+            ],
+            [
+              "hot",
+              "热的"
+            ],
+            [
+              "bad",
+              "坏的"
+            ],
+            [
+              "cold",
+              "冷的"
+            ],
+            [
+              "windy",
+              "多风的"
+            ],
+            [
+              "cloudy",
+              "多云的"
+            ],
+            [
+              "rainy",
+              "多雨的"
+            ],
+            [
+              "snowy",
+              "多雪的"
+            ],
+            [
+              "cool",
+              "凉爽的"
+            ],
+            [
+              "warm",
+              "温暖的"
+            ],
+            [
+              "tomorrow",
+              "明天"
+            ],
+            [
+              "rain",
+              "雨；下雨"
+            ],
+            [
+              "closed",
+              "关闭的"
+            ],
+            [
+              "film",
+              "电影"
+            ],
+            [
+              "idea",
+              "主意"
+            ],
+            [
+              "fly",
+              "飞"
+            ],
+            [
+              "kite",
+              "风筝"
+            ],
+            [
+              "snowman",
+              "雪人"
+            ],
+            [
+              "fun",
+              "乐趣"
+            ],
+            [
+              "their",
+              "他们的"
+            ],
+            [
+              "swim",
+              "游泳"
+            ],
+            [
+              "Sydney",
+              "悉尼"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 6 Changing for the seasons",
+          "sentences": [
+            {
+              "cn": "这是谁的毛衣？",
+              "en": "Whose sweater is this?",
+              "hints": [
+                "谁的",
+                "毛衣",
+                "是",
+                "这个"
+              ]
+            },
+            {
+              "cn": "这件毛衣是我的。",
+              "en": "This sweater is mine.",
+              "hints": [
+                "这个",
+                "毛衣",
+                "是",
+                "我的"
+              ]
+            },
+            {
+              "cn": "你最喜欢哪个季节？",
+              "en": "Which season do you like best?",
+              "hints": [
+                "哪一个",
+                "季节",
+                "做；助动词",
+                "你；你们",
+                "喜欢",
+                "最好的"
+              ]
+            },
+            {
+              "cn": "我最喜欢秋天。",
+              "en": "I like autumn best.",
+              "hints": [
+                "我",
+                "喜欢",
+                "秋天",
+                "最好的"
+              ]
+            },
+            {
+              "cn": "冬天我可以穿外套。",
+              "en": "I can wear a coat in winter.",
+              "hints": [
+                "我",
+                "可以",
+                "穿",
+                "一；一个",
+                "外套",
+                "在……里",
+                "冬天"
+              ]
+            },
+            {
+              "cn": "春天树叶变绿了。",
+              "en": "Leaves turn green in spring.",
+              "hints": [
+                "叶子",
+                "顺序",
+                "绿色",
+                "在……里",
+                "春天"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "whose",
+              "谁的"
+            ],
+            [
+              "sweater",
+              "毛衣"
+            ],
+            [
+              "sock",
+              "短袜"
+            ],
+            [
+              "mine",
+              "我的"
+            ],
+            [
+              "wear",
+              "穿；戴"
+            ],
+            [
+              "shirt",
+              "衬衫"
+            ],
+            [
+              "coat",
+              "外套"
+            ],
+            [
+              "dress",
+              "连衣裙"
+            ],
+            [
+              "which",
+              "哪一个"
+            ],
+            [
+              "season",
+              "季节"
+            ],
+            [
+              "winter",
+              "冬天"
+            ],
+            [
+              "snow",
+              "雪"
+            ],
+            [
+              "spring",
+              "春天"
+            ],
+            [
+              "summer",
+              "夏天"
+            ],
+            [
+              "autumn",
+              "秋天"
+            ],
+            [
+              "T-shirt",
+              "T恤衫"
+            ],
+            [
+              "fall",
+              "落下"
+            ],
+            [
+              "leaf",
+              "叶子"
+            ],
+            [
+              "glove",
+              "手套"
+            ],
+            [
+              "then",
+              "然后"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}
