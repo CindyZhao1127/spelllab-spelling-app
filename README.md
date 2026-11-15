@@ -37,7 +37,7 @@ python app.py          # Windows 也可双击 run.bat
 
 零第三方依赖：Python 标准库 `http.server` + `sqlite3` 提供本地服务与数据库，Edge/Chrome 的 `--app` 参数提供无地址栏的独立窗口；装了 `pywebview` 时加 `--pywebview` 可换原生 WebView 窗口。
 
-数据落在 `desktop/data/spelllab.db`，是普通 SQLite 文件，含 `state`（全量快照）与 `grades` / `books` / `packs` / `units` / `questions` / `words` / `vocab` / `progress` / `wrong` / `stats` 等规范表，可直接用 SQLite 工具查询。网页版导出的全库备份放进 `data/` 会在首次启动时自动导入。
+数据落在 `desktop/data/spelllab.db`，是普通 SQLite 文件，含 `state`（全量快照）与 `grades` / `books` / `packs` / `units` / `questions` / `words` / `vocab` / `progress` / `wrong` / `stats` 等规范表，可直接用 SQLite 工具查询。网页版导出的全库备份放进 `data/` 会在首次启动时自动导入。打包成 exe 后数据库在 exe 同目录的 `data/`，不会写进打包程序的临时解压目录。
 
 完整说明、参数、打包 exe 与迁移步骤见 [desktop/README.md](desktop/README.md)。
 

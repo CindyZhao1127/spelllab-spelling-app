@@ -1,25 +1,38 @@
 @echo off
-chcp 65001 >nul
+setlocal
 cd /d "%~dp0"
+
+rem Keep this file pure ASCII with CRLF line endings.
+rem cmd.exe misreads UTF-8 batch files when the console code page is switched.
 set "PY=%~dp0..\.venv\Scripts\python.exe"
-if not exist "%PY%" set "PY=python"
-echo 正在准备打包环境（首次需要联网安装 PyInstaller）...
+if not exist "%PY%" (
+  echo [SpellLab] Project venv not found: %~dp0..\.venv
+  echo [SpellLab] Create it from the project root with: python -m venv .venv
+  echo [SpellLab] Then run this batch file again. Do NOT use the Visual Studio Python 3.9.
+  pause
+  exit /b 1
+)
+
+echo [SpellLab] Python: "%PY%"
+echo [SpellLab] Installing / updating PyInstaller - network needed on first run...
 "%PY%" -m pip install --upgrade pyinstaller
 if errorlevel 1 (
-  echo PyInstaller 安装失败，请检查网络或手动执行 pip install pyinstaller
+  echo [SpellLab] PyInstaller install failed. Run manually:
+  echo     "%PY%" -m pip install pyinstaller
   pause
   exit /b 1
 )
-"%PY%" -m PyInstaller --noconfirm --onefile --windowed ^
-  --name SpellLab ^
-  --add-data "..\SpellLab.html;." ^
-  app.py
+
+echo [SpellLab] Building SpellLab.exe ...
+"%PY%" -m PyInstaller --noconfirm --onefile --windowed --name SpellLab --add-data "..\SpellLab.html;." app.py
 if errorlevel 1 (
-  echo 打包失败
+  echo [SpellLab] Build failed. See the PyInstaller output above.
   pause
   exit /b 1
 )
+
 echo.
-echo 完成：dist\SpellLab.exe
-echo 数据文件默认在 exe 同目录的 data\spelllab.db；若该目录不可写，会回退到 %%APPDATA%%\SpellLab\
+echo [SpellLab] Done: dist\SpellLab.exe
+echo [SpellLab] Database: data\spelllab.db next to the exe.
 pause
+exit /b 0

@@ -10,6 +10,7 @@ import hashlib
 import json
 import os
 import sqlite3
+import sys
 import threading
 import time
 from pathlib import Path
@@ -52,9 +53,20 @@ NORMALIZED_TABLES = [
 ]
 
 
+def program_dir() -> Path:
+    """返回程序所在目录。
+
+    源码运行时是 desktop/；PyInstaller 单文件打包后 __file__ 指向临时解压目录
+    _MEIxxxxxx（退出即被删除），必须改用 exe 自身所在目录，否则数据会丢失。
+    """
+    if getattr(sys, "frozen", False):
+        return Path(sys.executable).resolve().parent
+    return Path(__file__).resolve().parent
+
+
 def default_db_path() -> Path:
     """优先放在程序旁的 data/ 目录，方便直接看到 .db 文件；不可写时回退到 APPDATA。"""
-    base = Path(__file__).resolve().parent / "data"
+    base = program_dir() / "data"
     try:
         base.mkdir(parents=True, exist_ok=True)
         probe = base / ".writetest"

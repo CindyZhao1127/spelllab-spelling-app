@@ -6,7 +6,8 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from storage import NORMALIZED_TABLES, Store  # noqa: E402
+import storage  # noqa: E402
+from storage import NORMALIZED_TABLES, Store, default_db_path, program_dir  # noqa: E402
 
 
 def sample_state():
@@ -138,6 +139,24 @@ class StoreTest(unittest.TestCase):
 
     def test_all_tables_declared(self):
         self.assertEqual(len(NORMALIZED_TABLES), 10)
+
+    def test_source_db_path_is_next_to_module(self):
+        self.assertEqual(default_db_path().name, "spelllab.db")
+        self.assertEqual(default_db_path().parent.name, "data")
+        self.assertEqual(program_dir().resolve(), Path(storage.__file__).resolve().parent)
+
+    def test_frozen_db_path_is_next_to_exe_not_temp_dir(self):
+        """PyInstaller 单文件模式下 _MEIxxxx 是临时目录，退出即删，不能存数据。"""
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory() as tmp:
+            fake_exe = Path(tmp) / "SpellLab.exe"
+            with patch.object(storage.sys, "frozen", True, create=True), \
+                    patch.object(storage.sys, "executable", str(fake_exe), create=True):
+                path = default_db_path()
+            self.assertEqual(path.name, "spelllab.db")
+            self.assertEqual(path.parent.name, "data")
+            self.assertEqual(path.parent.parent.resolve(), Path(tmp).resolve())
+            self.assertNotIn("_MEI", str(path))
 
 
 if __name__ == "__main__":

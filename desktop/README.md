@@ -36,7 +36,7 @@ SpellLab 桌面版  v1.0.0
 
 ## 数据放在哪
 
-默认 `desktop/data/spelllab.db`（打包成 exe 后若目录不可写，自动回退到 `%APPDATA%\SpellLab\`）。这是**普通 SQLite 数据库文件**，可以直接用 DB Browser for SQLite、VS Code SQLite 插件或 `sqlite3` 命令行打开。
+默认 `desktop/data/spelllab.db`；打包成 exe 后是 **exe 同目录**的 `data/spelllab.db`（`dist/data/`），不会再落到 PyInstaller 的临时解压目录里。若程序所在目录不可写（例如装在 `C:\Program Files`），自动回退到 `%APPDATA%\SpellLab\`。这是**普通 SQLite 数据库文件**，可以直接用 DB Browser for SQLite、VS Code SQLite 插件或 `sqlite3` 命令行打开。
 
 | 表 | 内容 |
 |---|---|
@@ -98,7 +98,7 @@ python -m pip install pyinstaller
 python -m PyInstaller --noconfirm --onefile --windowed --name SpellLab --add-data "../SpellLab.html;." app.py
 ```
 
-产物在 `dist/SpellLab.exe`。`data/` 目录不需要打包，首次运行会自动创建。
+产物在 `dist/SpellLab.exe`。`data/` 目录不需要打包，首次运行会在 **exe 同目录**自动创建并保存 `spelllab.db`；升级 exe 时只要保留这个 `data/` 目录，学习记录就不会丢。
 
 ## 运行测试
 
@@ -114,3 +114,11 @@ python -m unittest discover -s tests -v
 - **想换台电脑用**：复制 `data/spelllab.db`（连同 `-wal` / `-shm` 若程序正在运行则先退出）到新机器的 `data/` 即可；更稳妥的做法是导出全库备份 JSON 再导入。
 - **杀毒/防火墙提示**：服务只监听本机回环地址，不联网；若被拦截，允许 `python.exe` 的本地连接即可。
 - **想用原生 WebView 窗口**：`pip install -r requirements-optional.txt` 后加 `--pywebview`。Windows 需要 WebView2 Runtime（Win10/11 一般已自带）。
+- **双击 `.bat` 报 `=python`、`'--upgrade' 不是内部或外部命令`、乱码中文或 `'oconfirm' 不是内部或外部命令`**：这是旧版批处理文件用了「UTF-8 中文 + `chcp 65001` + LF 换行」，cmd.exe 切换控制台代码页后会按字节重新读取文件，把命令行截断、拼接、串位造成的解析错乱。`=python` 并不是项目里缺失的文件，不需要创建它。仓库里的 `run.bat` / `build_exe.bat` 已改成**纯 ASCII 提示 + CRLF 换行 + 不切换代码页 + 不用 `^` 续行**，重新取这两个文件即可。手头只有旧副本时，绕开批处理直接用虚拟环境：
+  ```bat
+  cd /d C:\Users\zhaoj\IdeaProjects\spelllab-spelling-app\desktop
+  ..\.venv\Scripts\python.exe app.py
+  ..\.venv\Scripts\python.exe -m pip install pyinstaller
+  ..\.venv\Scripts\python.exe -m PyInstaller --noconfirm --onefile --windowed --name SpellLab --add-data "..\SpellLab.html;." app.py
+  ```
+- **报错里出现 `C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python39_64\python.exe`**：那是 Visual Studio 自带的 Python 3.9（本机 `py -3` 也指向它），不是本项目解释器，不要用它建虚拟环境或打包。项目统一用 `.venv\Scripts\python.exe`（Python 3.13.14）。换机器重建时在项目根目录执行 `"C:\Users\zhaoj\.workbuddy\binaries\python\versions\3.13.12\python.exe" -m venv .venv`，或装一个 Python 3.13 后用 `python -m venv .venv`；注意参数是 `-m venv`，不要写成 `=python`。

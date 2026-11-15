@@ -90,6 +90,34 @@ python -m venv .venv
 # Ran 17 tests ... OK
 ```
 
+## 批处理脚本报错排查
+
+双击 `desktop\run.bat` / `desktop\build_exe.bat` 若出现下面这些报错：
+
+```
+python.exe: can't open file '...\desktop\=python'
+'--upgrade' 不是内部或外部命令
+'栨墜鍔ㄦ墊琛?pip' 不是内部或外部命令
+'oconfirm' 不是内部或外部命令
+```
+
+原因是旧脚本为 **UTF-8 中文 + `chcp 65001` + LF 换行**：cmd.exe 切换代码页后按字节重读批处理文件，命令行被截断、拼接，`=python` / `--upgrade` / `oconfirm` 都是同一处错乱的碎片，并非项目里真有这些文件。现已改为**纯 ASCII 提示 + CRLF 换行 + 不切换代码页 + 单行命令**，重新取这两个 `.bat` 即可。
+
+另外，报错中的 `C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python39_64\python.exe` 是 Visual Studio 自带的 Python 3.9（本机 `py -3` 也指向它），**不是项目解释器**。请不要用它建 venv 或打包，统一用：
+
+```bat
+C:\Users\zhaoj\IdeaProjects\spelllab-spelling-app\.venv\Scripts\python.exe
+```
+
+在 IDEA 内置终端里最稳的兜底写法（不依赖 Python 插件、也不经过批处理解析）：
+
+```bat
+.\.venv\Scripts\python.exe desktop\app.py
+.\.venv\Scripts\python.exe -m unittest discover -s desktop/tests -v
+```
+
+External Tools 里务必用完整路径填 **Program**，**Arguments** 只填 `desktop\app.py`，不要把 `=python` 之类的赋值片段写进参数。
+
 ## 只想让当前 IDEA Community 安静地看代码
 
 把 `.idea/spelllab-spelling-app.iml` 的 `type="PYTHON_MODULE"` 改回 `JAVA_MODULE`，并把 `.idea/misc.xml` 的 `project-jdk-type` / `project-jdk-name` 改回 `JavaSDK` / `ms-17` 即可。项目文件、网页版和批处理启动方式都不受影响。
