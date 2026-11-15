@@ -423,6 +423,26 @@
   .word-chip button{color:#ffb3ba;font-size:11px;line-height:1}
   .file-input{font-size:10px;color:var(--muted);max-width:100%}
   .subtle{font-size:10px;color:var(--muted);line-height:1.6}
+
+  /* ---------- 本地数据库 ---------- */
+  .db-hero{border:1px solid rgba(139,123,255,.3);border-radius:14px;padding:12px;margin-bottom:10px;
+    background:linear-gradient(135deg,rgba(76,91,214,.24),rgba(139,123,255,.07))}
+  .db-engine{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:800;flex-wrap:wrap}
+  .db-engine .dot{width:9px;height:9px;border-radius:50%;background:#5ce2a0;box-shadow:0 0 0 4px rgba(92,226,160,.14);flex:none}
+  .db-engine .dot.warn{background:#ffcf6b;box-shadow:0 0 0 4px rgba(255,207,107,.14)}
+  .db-desc{font-size:10.5px;color:var(--muted);line-height:1.75;margin-top:7px}
+  .db-usage{height:7px;border-radius:99px;background:rgba(255,255,255,.09);overflow:hidden;margin:10px 0 5px}
+  .db-usage i{display:block;height:100%;background:linear-gradient(90deg,#5c7bff,#a98bff);border-radius:99px;transition:width .3s}
+  .kv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}
+  .kv{background:rgba(255,255,255,.055);border-radius:10px;padding:8px 9px;min-width:0}
+  .kv b{display:block;font-size:15px;font-weight:800}
+  .kv span{font-size:10px;color:var(--muted)}
+  .db-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;
+    border-bottom:1px dashed rgba(255,255,255,.1);font-size:11px}
+  .db-row:last-child{border-bottom:0}
+  .db-row .lbl{color:var(--muted);flex:none}
+  .db-row .val{font-weight:700;text-align:right;word-break:break-all}
+  .db-note{font-size:10px;color:var(--muted);line-height:1.75;margin-top:9px}
 </style>
 </head>
 <body>
@@ -454,6 +474,7 @@
     <span class="fb-info" id="filterInfo"></span>
     <button class="link-btn" id="btnManage">管理年级 / 教材</button>
     <button class="link-btn" id="btnLibrary">教材库</button>
+    <button class="link-btn" id="btnStorage">本地数据库</button>
   </div>
   <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
 
@@ -503,13 +524,14 @@
   <aside class="drawer" id="drawer">
     <button class="icon-btn drawer-close" id="drawerClose" aria-label="关闭"></button>
     <h2>学习面板</h2>
-    <div class="dsub">进度自动保存在这台设备上</div>
+    <div class="dsub">数据自动保存在本机 IndexedDB 数据库中</div>
 
     <div class="drawer-tabs" id="drawerTabs">
       <button data-tab="learn" id="tabLearn" class="active">学习</button>
       <button data-tab="vocab" id="tabVocab">生词本</button>
       <button data-tab="manage" id="tabManage">管理</button>
       <button data-tab="library" id="tabLibrary">教材库</button>
+      <button data-tab="storage" id="tabStorage">存储</button>
     </div>
 
     <div class="tab-page" id="pageLearn">
@@ -666,13 +688,63 @@
         <div class="subtle" style="margin-top:8px">导入教材包只追加教材；从备份恢复会覆盖当前全部数据，操作前请先导出备份。</div>
       </div>
     </div>
+
+    <div class="tab-page" id="pageStorage" hidden>
+      <div class="panel">
+        <h3>本地数据库</h3>
+        <div class="db-hero">
+          <div class="db-engine"><span class="dot" id="dbDot"></span><span id="dbEngine">检测中…</span></div>
+          <div class="db-desc" id="dbDesc"></div>
+          <div class="db-usage"><i id="dbUsageBar" style="width:0%"></i></div>
+          <div class="subtle" id="dbUsageText"></div>
+          <div class="kv-grid" id="dbCounts"></div>
+        </div>
+        <div id="dbRows"></div>
+        <div class="db-note">IndexedDB 是浏览器内置的事务型数据库，容量通常按磁盘剩余空间分配，远大于 localStorage 的约 5 MB。数据仍只保存在本机、不联网；旧版存档会自动迁移。</div>
+        <div class="btn-row tight" style="margin-top:10px">
+          <button class="mini-btn sm" id="dbRefresh">刷新状态</button>
+          <button class="mini-btn sm" id="dbPersist">申请持久化存储</button>
+          <button class="mini-btn sm" id="dbVacuum">立即写入数据库</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>同步到本地数据文件</h3>
+        <div class="panel-note">绑定一个真实的 .json 文件后，每次学习数据变化都会自动写回，可直接提交到 Git、放进网盘或拷到另一台电脑。需 Chrome / Edge 且由你点击授权。</div>
+        <div id="dbFileState"></div>
+        <div class="btn-row tight" style="margin-top:8px">
+          <button class="mini-btn primary sm" id="dbBindFile">绑定本地文件</button>
+          <button class="mini-btn sm" id="dbSyncFile">立即同步</button>
+          <button class="mini-btn danger sm" id="dbUnbindFile">解除绑定</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>导出与迁移</h3>
+        <div class="panel-note">全库备份含进度、错题、生词、教材与设置。SQLite 导出生成 .sql 脚本，在命令行执行 <code>sqlite3 spelllab.db &lt; spelllab-日期.sql</code> 即可得到可被外部工具查询的数据库文件。</div>
+        <div class="btn-row tight">
+          <button class="mini-btn sm" id="dbBackup">导出全库备份</button>
+          <button class="mini-btn sm" id="dbExportSQL">导出 SQLite .sql</button>
+        </div>
+        <div class="btn-row tight" style="margin-top:8px">
+          <button class="mini-btn sm" id="dbImportFile">从 JSON 备份恢复</button>
+          <input class="file-input" type="file" id="dbRestoreFile" accept=".json,application/json">
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>数据库维护</h3>
+        <div class="panel-note">清空数据库会重置本机全部学习数据并回到默认状态，不会删除你绑定的文件。操作前建议先导出备份。</div>
+        <div class="btn-row tight"><button class="mini-btn danger sm" id="dbWipe">清空本地数据库</button></div>
+      </div>
+    </div>
   </aside>
 </div>
 
 <script>
 /* =========================================================
    SpellLab · 单词句子拼写记忆
-   纯前端单文件应用，无需联网，进度保存在 localStorage
+   纯前端单文件应用，无需联网，数据保存在本机 IndexedDB（localStorage 作兼容镜像）
    音效由 Web Audio 实时合成，无需任何音频文件
    ========================================================= */
 
@@ -786,30 +858,187 @@ let chunkPhase = 0, chunkList = [], chunkIdx = 0, chunkTimer = null;
 let wordCur = null, letters = [], placed = [], wordSolved = false, wordAssisted = false, lastWord = '';
 let toastTimer = null;
 
-function loadState(){
+/* ---------------- 本地数据库：IndexedDB 主库 + localStorage 镜像 ---------------- */
+const DB_NAME='spelllab.db', DB_VER=1, DB_STORE='kv';
+const DB_KEY_MAIN='main', DB_KEY_FILE='fileHandle';
+const MIRROR_TS='spelllab.savedAt.v2';
+const STORE = {
+  mode:'local', db:null, ready:false, migrated:false, error:'',
+  mirror:'ok', mirrorBytes:0, lastMirror:0, savedAt:0,
+  timer:0, queued:false, writing:false,
+  fileHandle:null, fileName:'', fileState:'', fileLast:0, fileTimer:0,
+  usage:0, quota:0, persisted:false
+};
+
+function normalizeState(s){
   const fresh=()=>clone(DEFAULT_STATE);
-  try{
-    const raw = localStorage.getItem(KEY);
-    if(!raw) return fresh();
-    const s = JSON.parse(raw);
-    const out = Object.assign(fresh(), s, {
-      settings:Object.assign({},DEFAULT_STATE.settings,s.settings||{}),
-      stats:Object.assign({},DEFAULT_STATE.stats,s.stats||{}),
-      filter:Object.assign({},DEFAULT_STATE.filter,s.filter||{}),
-      customMeta:Object.assign({},DEFAULT_STATE.customMeta,s.customMeta||{})
-    });
-    ['custom','wrong','vocab','practiceSets','grades','books','textbooks'].forEach(k=>{
-      if(!Array.isArray(out[k])) out[k]=clone(DEFAULT_STATE[k]);
-    });
-    ['progress','wordStats','unitMeta'].forEach(k=>{
-      if(!out[k] || typeof out[k]!=='object' || Array.isArray(out[k])) out[k]={};
-    });
-    if(!out.grades.length) out.grades=clone(DEFAULT_GRADES);
-    if(!out.books.length) out.books=clone(DEFAULT_BOOKS);
-    return out;
-  }catch(e){ return fresh(); }
+  if(!s || typeof s!=='object') return fresh();
+  const out = Object.assign(fresh(), s, {
+    settings:Object.assign({},DEFAULT_STATE.settings,s.settings||{}),
+    stats:Object.assign({},DEFAULT_STATE.stats,s.stats||{}),
+    filter:Object.assign({},DEFAULT_STATE.filter,s.filter||{}),
+    customMeta:Object.assign({},DEFAULT_STATE.customMeta,s.customMeta||{})
+  });
+  ['custom','wrong','vocab','practiceSets','grades','books','textbooks'].forEach(k=>{
+    if(!Array.isArray(out[k])) out[k]=clone(DEFAULT_STATE[k]);
+  });
+  ['progress','wordStats','unitMeta'].forEach(k=>{
+    if(!out[k] || typeof out[k]!=='object' || Array.isArray(out[k])) out[k]={};
+  });
+  if(!out.grades.length) out.grades=clone(DEFAULT_GRADES);
+  if(!out.books.length) out.books=clone(DEFAULT_BOOKS);
+  return out;
 }
-function saveState(){ try{ localStorage.setItem(KEY,JSON.stringify(state)); }catch(e){} }
+function loadState(){
+  try{
+    const raw=localStorage.getItem(KEY);
+    return raw?normalizeState(JSON.parse(raw)):clone(DEFAULT_STATE);
+  }catch(e){ return clone(DEFAULT_STATE); }
+}
+function mirrorTimestamp(){
+  try{ return Number(localStorage.getItem(MIRROR_TS)||0)||0; }catch(e){ return 0; }
+}
+function writeMirror(force){
+  const now=Date.now();
+  if(STORE.mirror==='disabled' && !force) return false;
+  if(!force && STORE.mirrorBytes>600000 && now-STORE.lastMirror<800) return false;
+  let text;
+  try{ text=JSON.stringify(state); }catch(e){ return false; }
+  try{
+    localStorage.setItem(KEY,text);
+    localStorage.setItem(MIRROR_TS,String(STORE.savedAt||now));
+    STORE.mirrorBytes=text.length; STORE.lastMirror=now; STORE.mirror='ok';
+    return true;
+  }catch(e){
+    STORE.mirror='disabled';
+    try{ localStorage.removeItem(KEY); localStorage.removeItem(MIRROR_TS); }catch(_){}
+    return false;
+  }
+}
+function saveState(){
+  STORE.savedAt=Date.now();
+  writeMirror(false);
+  if(STORE.mode==='idb' && STORE.db) scheduleDBWrite();
+}
+function idbOpen(){
+  return new Promise((resolve,reject)=>{
+    if(typeof indexedDB==='undefined' || !indexedDB){ reject(new Error('IndexedDB 不可用')); return; }
+    let req;
+    try{ req=indexedDB.open(DB_NAME,DB_VER); }catch(e){ reject(e); return; }
+    req.onupgradeneeded=()=>{
+      try{
+        const db=req.result;
+        if(db.objectStoreNames && !db.objectStoreNames.contains(DB_STORE)) db.createObjectStore(DB_STORE);
+      }catch(e){}
+    };
+    req.onsuccess=()=>resolve(req.result);
+    req.onerror=()=>reject(req.error||new Error('打开数据库失败'));
+    req.onblocked=()=>reject(new Error('数据库被其他标签页占用'));
+  });
+}
+function idbCall(key,value,write){
+  return new Promise((resolve,reject)=>{
+    if(!STORE.db){ reject(new Error('数据库未就绪')); return; }
+    let req;
+    try{
+      const tx=STORE.db.transaction(DB_STORE,write?'readwrite':'readonly');
+      const os=tx.objectStore(DB_STORE);
+      req=write?os.put(value,key):os.get(key);
+    }catch(e){ reject(e); return; }
+    req.onsuccess=()=>resolve(req.result);
+    req.onerror=()=>reject(req.error||new Error('数据库读写失败'));
+  });
+}
+function dbRecord(ts){
+  return {format:'spelllab.db.v1',savedAt:ts||Date.now(),state:clone(state)};
+}
+function writeNow(){
+  if(STORE.mode!=='idb' || !STORE.db) return Promise.resolve(false);
+  return idbCall(DB_KEY_MAIN,dbRecord(STORE.savedAt),true).then(()=>{
+    STORE.error=''; scheduleFileSync(); return true;
+  }).catch(e=>{
+    STORE.error=String((e&&e.message)||e); return false;
+  });
+}
+function scheduleDBWrite(){
+  STORE.queued=true;
+  if(STORE.timer) return;
+  STORE.timer=setTimeout(()=>{
+    STORE.timer=0;
+    if(!STORE.queued) return;
+    STORE.queued=false;
+    writeNow().then(()=>renderStorage());
+  },220);
+}
+function flushStorage(){
+  writeMirror(true);
+  if(STORE.timer){ try{ clearTimeout(STORE.timer); }catch(e){} STORE.timer=0; }
+  if(STORE.mode==='idb'){ STORE.queued=false; writeNow(); }
+}
+function applyLoadedState(){
+  unitPos=0; qPos=0; wordCur=null;
+  sessionOrder={unitId:'',list:[]};
+  libSel={packId:'',unitId:'',qIdx:-1};
+  vocabSelected=new Set(); vocabQuery=''; vocabOnlyNew=false;
+  rollDay(); renderFilters(); renderHeader(); renderDrawer(); setMode(mode);
+}
+async function bootStorage(){
+  const mirrorTs=mirrorTimestamp();
+  let legacy=false;
+  try{ legacy=!!localStorage.getItem(KEY); }catch(e){}
+  try{
+    STORE.db=await idbOpen();
+    STORE.mode='idb';
+    const rec=await idbCall(DB_KEY_MAIN,null,false);
+    if(rec && rec.state){
+      if((rec.savedAt||0)>=mirrorTs){
+        state=normalizeState(rec.state);
+        STORE.savedAt=rec.savedAt||0;
+        applyLoadedState();
+      }else{
+        STORE.savedAt=mirrorTs;
+        await idbCall(DB_KEY_MAIN,dbRecord(mirrorTs),true);
+      }
+    }else{
+      STORE.savedAt=mirrorTs||Date.now();
+      await idbCall(DB_KEY_MAIN,dbRecord(STORE.savedAt),true);
+      STORE.migrated=legacy;
+    }
+    try{
+      const fh=await idbCall(DB_KEY_FILE,null,false);
+      if(fh && fh.handle){
+        STORE.fileHandle=fh.handle; STORE.fileName=fh.name||'spelllab-data.json'; STORE.fileState='prompt';
+      }
+    }catch(e){}
+  }catch(e){
+    STORE.mode='local'; STORE.error=String((e&&e.message)||e);
+  }
+  STORE.ready=true;
+  await refreshStorageInfo();
+  if(drawerTab==='storage') renderStorage();
+  if(STORE.migrated) toast('已将旧存档迁移到本地数据库','ok');
+}
+async function refreshStorageInfo(){
+  try{
+    const nav=(typeof navigator!=='undefined')?navigator:null;
+    if(nav && nav.storage && nav.storage.estimate){
+      const est=await nav.storage.estimate();
+      STORE.usage=Number(est.usage||0); STORE.quota=Number(est.quota||0);
+    }
+    if(nav && nav.storage && nav.storage.persisted) STORE.persisted=await nav.storage.persisted();
+  }catch(e){}
+}
+async function requestPersist(){
+  try{
+    if(typeof navigator==='undefined'||!navigator.storage||!navigator.storage.persist){
+      toast('当前浏览器不支持持久化存储授权','bad'); return false;
+    }
+    STORE.persisted=await navigator.storage.persist();
+    renderStorage();
+    toast(STORE.persisted?'已获持久化授权，浏览器不会自动清理数据':'未获得持久化授权，建议定期导出备份',STORE.persisted?'ok':'bad');
+    return STORE.persisted;
+  }catch(e){ toast('申请失败','bad'); return false; }
+}
 function nextId(pfx){
   state.seq=(Number(state.seq)||0)+1;
   return pfx+state.seq+Math.random().toString(36).slice(2,6);
@@ -2023,8 +2252,13 @@ function restoreBackup(text){
     toast('不是有效的全库备份文件','bad'); return false;
   }
   if(!confirm('从备份恢复会覆盖当前全部学习数据、教材包和设置，确定继续？')) return false;
-  try{ localStorage.setItem(KEY,JSON.stringify(s)); }catch(e){}
+  try{
+    localStorage.setItem(KEY,JSON.stringify(s));
+    localStorage.setItem(MIRROR_TS,String(Date.now()));
+  }catch(e){}
   state=loadState();
+  STORE.savedAt=Date.now();
+  if(STORE.mode==='idb') writeNow(); else writeMirror(true);
   libSel={packId:'',unitId:'',qIdx:-1};
   unitPos=0; qPos=0; wordCur=null; sessionOrder={unitId:'',list:[]};
   vocabSelected=new Set(); vocabQuery=''; vocabOnlyNew=false;
@@ -2033,22 +2267,24 @@ function restoreBackup(text){
   toast('已从备份恢复全部数据','ok');
   return true;
 }
-function emitJSON(filename,obj){
-  const text=JSON.stringify(obj,null,2);
-  $('packIO').value=text;
+function downloadText(filename,text,mime){
   try{
     if(typeof Blob==='undefined'||typeof URL==='undefined'||!URL.createObjectURL) throw new Error('unsupported');
-    const blob=new Blob([text],{type:'application/json;charset=utf-8'});
+    const blob=new Blob([text],{type:mime||'application/json;charset=utf-8'});
     const url=URL.createObjectURL(blob);
     const a=document.createElement('a');
     a.href=url; a.download=filename;
     if(document.body&&document.body.appendChild) document.body.appendChild(a);
     if(a.click) a.click();
     setTimeout(()=>{ try{ URL.revokeObjectURL(url); }catch(e){} if(a.remove) a.remove(); },0);
-    toast('已导出 '+filename+'（内容也已填入文本框）','ok');
-  }catch(e){
-    toast('浏览器未开放直接下载，JSON 已填入文本框，请复制保存','bad');
-  }
+    return true;
+  }catch(e){ return false; }
+}
+function emitJSON(filename,obj){
+  const text=JSON.stringify(obj,null,2);
+  $('packIO').value=text;
+  if(downloadText(filename,text,'application/json;charset=utf-8')) toast('已导出 '+filename+'（内容也已填入文本框）','ok');
+  else toast('浏览器未开放直接下载，JSON 已填入文本框，请复制保存','bad');
   return text;
 }
 function renderLibrary(){
@@ -2123,6 +2359,204 @@ function renderTbEditor(){
     '<div style="margin-top:8px">'+wordsHtml+'</div>';
 }
 
+/* ---------------- 本地数据库：状态页 / 文件同步 / SQLite 导出 ---------------- */
+function fmtBytes(n){
+  n=Number(n)||0;
+  if(n<1024) return n+' B';
+  if(n<1048576) return (n/1024).toFixed(1)+' KB';
+  if(n<1073741824) return (n/1048576).toFixed(1)+' MB';
+  return (n/1073741824).toFixed(2)+' GB';
+}
+function dbCounts(){
+  let questions=0,words=0;
+  BUILTIN_UNITS.forEach(u=>{ questions+=(u.sentences||[]).length; words+=(u.words||[]).length; });
+  questions+=(state.custom||[]).length;
+  (state.textbooks||[]).forEach(p=>(p.units||[]).forEach(u=>{
+    questions+=(u.sentences||[]).length; words+=(u.words||[]).length;
+  }));
+  (state.practiceSets||[]).forEach(s=>{
+    questions+=(s.sentences||[]).length; words+=(s.words||[]).length;
+  });
+  let bytes=0; try{ bytes=JSON.stringify(state).length*2; }catch(e){}
+  return {packs:(state.textbooks||[]).length,questions:questions,words:words,
+    vocab:(state.vocab||[]).length,wrong:(state.wrong||[]).length,
+    progress:Object.keys(state.progress||{}).length,bytes:bytes};
+}
+function kvBox(v,label){ return '<div class="kv"><b>'+esc(v)+'</b><span>'+esc(label)+'</span></div>'; }
+function dbRow(k,v){ return '<div class="db-row"><span class="lbl">'+esc(k)+'</span><span class="val">'+esc(v)+'</span></div>'; }
+function fsSupported(){
+  return typeof window!=='undefined' && typeof window.showSaveFilePicker==='function';
+}
+function renderDbFile(){
+  const el=$('dbFileState');
+  if(!fsSupported()){
+    el.innerHTML=dbRow('文件自动同步','此浏览器不支持（请用导出备份手动保存）');
+    return;
+  }
+  if(!STORE.fileHandle){ el.innerHTML=dbRow('状态','未绑定本地文件'); return; }
+  el.innerHTML=
+    dbRow('绑定文件',STORE.fileName||'spelllab-data.json')+
+    dbRow('授权状态',STORE.fileState==='granted'?'已授权 · 自动写回':'需点「立即同步」重新授权')+
+    dbRow('上次同步',STORE.fileLast?new Date(STORE.fileLast).toLocaleString('zh-CN'):'尚未同步');
+}
+function renderStorage(){
+  const c=dbCounts(), idb=STORE.mode==='idb';
+  $('dbDot').className='dot'+(idb?'':' warn');
+  $('dbEngine').textContent=idb?'IndexedDB · 本地事务型数据库':'localStorage · 兼容模式';
+  $('dbDesc').textContent=idb
+    ? '学习数据以事务写入浏览器本地数据库，容量按磁盘剩余空间分配；关闭页面、重启浏览器都不会丢，旧版存档会自动迁移。'
+    : '当前环境无法使用 IndexedDB（隐私模式或旧浏览器），已回退到 localStorage，容量约 5 MB，请定期导出备份。';
+  const pct=STORE.quota?Math.min(100,STORE.usage/STORE.quota*100):0;
+  $('dbUsageBar').style.width=(STORE.usage&&pct<1?1:pct).toFixed(2)+'%';
+  $('dbUsageText').textContent=STORE.quota
+    ? '站点已用 '+fmtBytes(STORE.usage)+' / 可用约 '+fmtBytes(STORE.quota)
+    : '本机数据约 '+fmtBytes(c.bytes)+'（浏览器未开放用量统计）';
+  $('dbCounts').innerHTML=
+    kvBox(c.packs,'教材包')+kvBox(c.questions,'题目')+kvBox(c.words,'单词')+
+    kvBox(c.vocab,'生词')+kvBox(c.wrong,'错题')+kvBox(c.progress,'进度记录');
+  $('dbRows').innerHTML=
+    dbRow('写入状态',STORE.error?('异常：'+STORE.error):(STORE.queued?'待写入':'已同步'))+
+    dbRow('最近保存',STORE.savedAt?new Date(STORE.savedAt).toLocaleString('zh-CN'):'尚未保存')+
+    dbRow('持久化授权',STORE.persisted?'已授予':'未申请 / 未授予')+
+    dbRow('旧存档迁移',STORE.migrated?'已完成':(idb?'无需迁移':'—'))+
+    dbRow('localStorage 镜像',STORE.mirror==='disabled'?'已停用（数据超过 5 MB）':'启用 · 双保险')+
+    dbRow('数据体积',fmtBytes(c.bytes)+'（JSON 估算）');
+  renderDbFile();
+}
+async function ensureFilePermission(silent){
+  const h=STORE.fileHandle; if(!h) return false;
+  try{
+    const opt={mode:'readwrite'};
+    const q=h.queryPermission?await h.queryPermission(opt):'granted';
+    if(q==='granted'){ STORE.fileState='granted'; return true; }
+    if(silent){ STORE.fileState='prompt'; return false; }
+    const r=h.requestPermission?await h.requestPermission(opt):'granted';
+    STORE.fileState=(r==='granted')?'granted':'prompt';
+    return r==='granted';
+  }catch(e){ STORE.fileState='prompt'; return false; }
+}
+async function writeDataFile(){
+  if(!(await ensureFilePermission(false))) return false;
+  try{
+    const w=await STORE.fileHandle.createWritable();
+    await w.write(JSON.stringify(backupPayload(),null,2));
+    await w.close();
+    STORE.fileLast=Date.now(); STORE.fileState='granted'; STORE.error='';
+    return true;
+  }catch(e){ STORE.error='文件写入失败：'+String((e&&e.message)||e); return false; }
+}
+function scheduleFileSync(){
+  if(!STORE.fileHandle || STORE.fileState!=='granted' || STORE.fileTimer) return;
+  STORE.fileTimer=setTimeout(()=>{
+    STORE.fileTimer=0;
+    writeDataFile().then(()=>{ if(drawerTab==='storage') renderStorage(); });
+  },900);
+}
+async function bindDataFile(){
+  if(!fsSupported()){ toast('当前浏览器不支持自动写本地文件，请用「导出全库备份」手动备份','bad'); return false; }
+  try{
+    const h=await window.showSaveFilePicker({
+      suggestedName:'spelllab-data.json',
+      types:[{description:'SpellLab 数据文件',accept:{'application/json':['.json']}}]
+    });
+    STORE.fileHandle=h; STORE.fileName=h.name||'spelllab-data.json'; STORE.fileState='granted';
+    try{ await idbCall(DB_KEY_FILE,{handle:h,name:STORE.fileName},true); }catch(e){}
+    const ok=await writeDataFile();
+    renderStorage();
+    toast(ok?('已绑定并写入 '+STORE.fileName):'已选文件，但写入失败','ok');
+    return ok;
+  }catch(e){
+    if(!e || e.name!=='AbortError') toast('绑定失败：'+String((e&&e.message)||e),'bad');
+    return false;
+  }
+}
+async function syncDataFile(){
+  if(!STORE.fileHandle){ toast('请先绑定一个本地文件','bad'); return false; }
+  const ok=await writeDataFile();
+  renderStorage(); toast(ok?('已同步到 '+STORE.fileName):'同步失败','ok');
+  return ok;
+}
+async function unbindDataFile(){
+  STORE.fileHandle=null; STORE.fileName=''; STORE.fileState=''; STORE.fileLast=0;
+  try{ await idbCall(DB_KEY_FILE,{handle:null,name:''},true); }catch(e){}
+  renderStorage(); toast('已解除文件绑定');
+}
+function readRestoreFile(e){
+  const f=e.target.files&&e.target.files[0]; if(!f) return;
+  const read=txt=>{ if(restoreBackup(String(txt||''))) $('packIO').value=''; };
+  if(f.text&&typeof f.text==='function') f.text().then(read).catch(()=>toast('文件读取失败','bad'));
+  else if(typeof FileReader!=='undefined'){
+    const fr=new FileReader();
+    fr.onload=()=>read(String(fr.result||''));
+    fr.onerror=()=>toast('文件读取失败','bad');
+    fr.readAsText(f,'utf-8');
+  }else toast('当前浏览器不支持读取本地文件，请粘贴 JSON 文本','bad');
+  e.target.value='';
+}
+async function wipeDatabase(){
+  if(!confirm('确定清空本地数据库里的全部学习数据？此操作不可恢复（建议先导出全库备份）。')) return;
+  state=clone(DEFAULT_STATE);
+  STORE.savedAt=Date.now(); STORE.mirror='ok'; STORE.mirrorBytes=0;
+  writeMirror(true);   // 用默认状态覆盖旧镜像，避免下次启动读到残留数据
+  try{ if(STORE.db) await idbCall(DB_KEY_MAIN,dbRecord(STORE.savedAt),true); }catch(e){}
+  applyLoadedState(); renderStorage(); toast('本地数据库已清空','ok');
+}
+function sqlEsc(v){ return "'"+String(v==null?'':v).replace(/'/g,"''")+"'"; }
+function sqlVals(arr){ return '('+arr.map(sqlEsc).join(',')+');'; }
+function exportSQLite(){
+  const L=[];
+  const add=s=>L.push(s);
+  add('-- SpellLab 本地数据导出 · '+new Date().toISOString());
+  add('-- 生成数据库文件：sqlite3 spelllab.db < spelllab-'+today()+'.sql');
+  add('BEGIN TRANSACTION;');
+  add('CREATE TABLE IF NOT EXISTS grades(id TEXT PRIMARY KEY,name TEXT);');
+  add('CREATE TABLE IF NOT EXISTS books(id TEXT PRIMARY KEY,name TEXT);');
+  add('CREATE TABLE IF NOT EXISTS packs(id TEXT PRIMARY KEY,name TEXT,grade_id TEXT,book_id TEXT,enabled INTEGER,created TEXT);');
+  add('CREATE TABLE IF NOT EXISTS units(id TEXT PRIMARY KEY,pack_id TEXT,name TEXT);');
+  add('CREATE TABLE IF NOT EXISTS questions(unit_id TEXT,seq INTEGER,cn TEXT,en TEXT,hints TEXT,chunks TEXT);');
+  add('CREATE TABLE IF NOT EXISTS words(unit_id TEXT,en TEXT,cn TEXT);');
+  add('CREATE TABLE IF NOT EXISTS vocab(id TEXT PRIMARY KEY,en TEXT,cn TEXT,source TEXT,grade_id TEXT,book_id TEXT,mastery INTEGER,ok INTEGER,bad INTEGER);');
+  add('CREATE TABLE IF NOT EXISTS progress(id TEXT PRIMARY KEY,mastery INTEGER,ok INTEGER,bad INTEGER);');
+  add('CREATE TABLE IF NOT EXISTS wrong(id TEXT PRIMARY KEY,unit_id TEXT,idx INTEGER,cn TEXT);');
+  add('CREATE TABLE IF NOT EXISTS stats(k TEXT PRIMARY KEY,v TEXT);');
+  ['questions','words','vocab','progress','wrong','stats','units','packs','books','grades']
+    .forEach(t=>add('DELETE FROM '+t+';'));
+  (state.grades||[]).forEach(g=>add('INSERT INTO grades VALUES'+sqlVals([g.id,g.name])));
+  (state.books||[]).forEach(b=>add('INSERT INTO books VALUES'+sqlVals([b.id,b.name])));
+  (state.textbooks||[]).forEach(p=>add('INSERT INTO packs VALUES'+
+    sqlVals([p.id,p.name,p.gradeId||'',p.bookId||'',p.enabled===false?0:1,p.created||''])));
+  const units=[],questions=[],words=[];
+  const pushUnit=(id,packId,name,sentences,wordList)=>{
+    units.push([id,packId,name]);
+    (sentences||[]).forEach((q,i)=>questions.push([id,i,q.cn||'',q.en||'',
+      JSON.stringify(q.hints||[]),JSON.stringify(q.chunks||[])]));
+    (wordList||[]).forEach(w=>{
+      const en=Array.isArray(w)?w[0]:(w&&w.en), cn=Array.isArray(w)?w[1]:(w&&w.cn);
+      words.push([id,en||'',cn||'']);
+    });
+  };
+  BUILTIN_UNITS.forEach(u=>pushUnit(u.id,'builtin',u.name,u.sentences,u.words));
+  if((state.custom||[]).length) pushUnit('custom','custom','我的题库 · 自定义',state.custom,collectCustomWords());
+  (state.textbooks||[]).forEach(p=>(p.units||[]).forEach(u=>
+    pushUnit('tb:'+p.id+':'+u.id,p.id,u.name,u.sentences,u.words)));
+  (state.practiceSets||[]).forEach(s=>
+    pushUnit('ps:'+s.id,'practice-sets','生词练习 · '+(s.name||''),s.sentences,s.words));
+  units.forEach(r=>add('INSERT INTO units VALUES'+sqlVals(r)));
+  questions.forEach(r=>add('INSERT INTO questions VALUES'+sqlVals(r)));
+  words.forEach(r=>add('INSERT INTO words VALUES'+sqlVals(r)));
+  (state.vocab||[]).forEach(v=>add('INSERT INTO vocab VALUES'+
+    sqlVals([v.id,v.en,v.cn,v.source||'',v.gradeId||'',v.bookId||'',v.m||0,v.ok||0,v.bad||0])));
+  Object.keys(state.progress||{}).forEach(k=>{
+    const p=state.progress[k]||{};
+    add('INSERT INTO progress VALUES'+sqlVals([k,p.m||0,p.ok||0,p.bad||0]));
+  });
+  (state.wrong||[]).forEach(w=>add('INSERT OR REPLACE INTO wrong VALUES'+
+    sqlVals([w.id,w.unitId||'',w.idx==null?0:w.idx,w.cn||''])));
+  Object.keys(state.stats||{}).forEach(k=>add('INSERT INTO stats VALUES'+sqlVals([k,state.stats[k]])));
+  add('COMMIT;');
+  return L.join('\n')+'\n';
+}
+
 /* ---------------- 学习面板 ---------------- */
 function renderDrawer(){
   const us=units();
@@ -2147,11 +2581,12 @@ function renderDrawer(){
   $('rateRange').value=state.settings.rate;
   $('rateVal').textContent=Number(state.settings.rate).toFixed(1);
   renderVocab(); renderSets(); renderManagement(); renderLibrary(); renderFilters();
+  if(drawerTab==='storage') renderStorage();
 }
 function box(v,label){ return '<div class="stat-box"><b>'+esc(v)+'</b><span>'+esc(label)+'</span></div>'; }
 function switchTab(t){
   drawerTab=t;
-  ['learn','vocab','manage','library'].forEach(k=>{
+  ['learn','vocab','manage','library','storage'].forEach(k=>{
     const cap=k[0].toUpperCase()+k.slice(1);
     $('page'+cap).hidden=(k!==t);
     $('tab'+cap).classList.toggle('active',k===t);
@@ -2159,6 +2594,7 @@ function switchTab(t){
   if(t==='vocab') renderVocab();
   if(t==='manage') renderManagement();
   if(t==='library') renderLibrary();
+  if(t==='storage') renderStorage();
 }
 function openDrawer(open,tab){
   $('drawer').classList.toggle('open',open);
@@ -2223,6 +2659,7 @@ function bind(){
   $('btnMenu').addEventListener('click',()=>openDrawer(true));
   $('btnManage').addEventListener('click',()=>openDrawer(true,'manage'));
   $('btnLibrary').addEventListener('click',()=>openDrawer(true,'library'));
+  $('btnStorage').addEventListener('click',()=>openDrawer(true,'storage'));
   $('drawerClose').addEventListener('click',()=>openDrawer(false));
   $('mask').addEventListener('click',()=>openDrawer(false));
   $('drawerTabs').addEventListener('click',e=>{
@@ -2312,6 +2749,7 @@ function bind(){
   $('resetAll').addEventListener('click',()=>{
     if(!confirm('确定重置全部学习进度、生词本、教材包和自定义题库？此操作不可恢复（建议先导出全库备份）。')) return;
     state=clone(DEFAULT_STATE); saveState();
+    if(STORE.mode==='idb') writeNow();
     unitPos=0; qPos=0; wordCur=null;
     vocabSelected=new Set(); vocabQuery=''; vocabOnlyNew=false;
     libSel={packId:'',unitId:'',qIdx:-1};
@@ -2470,6 +2908,26 @@ function bind(){
     e.target.value='';
   });
 
+  /* 本地数据库 */
+  $('dbRefresh').addEventListener('click',async()=>{ await refreshStorageInfo(); renderStorage(); toast('存储状态已刷新'); });
+  $('dbPersist').addEventListener('click',()=>requestPersist());
+  $('dbVacuum').addEventListener('click',async()=>{
+    writeMirror(true); const ok=await writeNow(); STORE.queued=false; renderStorage();
+    toast(ok?'已写入本地数据库':'已写入镜像（数据库不可用）',ok?'ok':'bad');
+  });
+  $('dbBindFile').addEventListener('click',()=>bindDataFile());
+  $('dbSyncFile').addEventListener('click',()=>syncDataFile());
+  $('dbUnbindFile').addEventListener('click',()=>unbindDataFile());
+  $('dbBackup').addEventListener('click',()=>emitJSON('spelllab-backup-'+today()+'.json',backupPayload()));
+  $('dbExportSQL').addEventListener('click',()=>{
+    const name='spelllab-'+today()+'.sql', text=exportSQLite();
+    if(downloadText(name,text,'text/plain;charset=utf-8')) toast('已导出 '+name+'（'+text.split('\n').length+' 行）','ok');
+    else toast('浏览器未开放直接下载','bad');
+  });
+  $('dbImportFile').addEventListener('click',()=>{ if($('dbRestoreFile').click) $('dbRestoreFile').click(); });
+  $('dbRestoreFile').addEventListener('change',readRestoreFile);
+  $('dbWipe').addEventListener('click',()=>wipeDatabase());
+
   document.addEventListener('keydown',e=>{
     if(mode!=='word') return;
     if(e.target.tagName==='TEXTAREA'||e.target.tagName==='INPUT') return;
@@ -2491,6 +2949,22 @@ switchTab('learn');
 renderSentence();
 renderDrawer();
 if('speechSynthesis' in window){ window.speechSynthesis.getVoices(); }
+bootStorage();
+if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
+  window.addEventListener('pagehide',flushStorage);
+  window.addEventListener('beforeunload',flushStorage);
+  window.addEventListener('storage',e=>{
+    if(!e || e.key!==KEY || !e.newValue) return;
+    try{
+      const ts=Number(localStorage.getItem(MIRROR_TS)||0)||0;
+      if(ts<=STORE.savedAt) return;   // 只接受比本页更新的写入
+      state=normalizeState(JSON.parse(e.newValue));
+      STORE.savedAt=ts;
+      applyLoadedState();
+      toast('已同步其他标签页的更新');
+    }catch(err){}
+  });
+}
 </script>
 </body>
 </html>
