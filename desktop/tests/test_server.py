@@ -1,0 +1,141 @@
+"""本地 HTTP 服务单元测试：启动真实服务并用 urllib 打接口。"""
+import json
+import sys
+import tempfile
+import threading
+import unittest
+import urllib.error
+import urllib.request
+from pathlib import Path
+
+DESKTOP_DIR = Path(__file__).resolve().parents[1]
+ROOT_DIR = DESKTOP_DIR.parent
+sys.path.insert(0, str(DESKTOP_DIR))
+import app  # noqa: E402
+from storage import Store  # noqa: E402
+
+
+class ServerTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.tmp = tempfile.TemporaryDirectory()
+        cls.store = Store(Path(cls.tmp.name) / "server.db")
+        cls.server = app.make_server(0, cls.store)
+        cls.port = cls.server.server_address[1]
+        cls.server.html_bytes = app.build_html(ROOT_DIR / "SpellLab.html", cls.port)
+        cls.thread = threading.Thread(
+            target=cls.server.serve_forever, kwargs={"poll_interval": 0.05}, daemon=True)
+        cls.thread.start()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.server.shutdown()
+        cls.server.server_close()
+        cls.tmp.cleanup()
+
+    def setUp(self):
+        # 服务用例共享一个实例，每个用例都从空库开始，避免顺序依赖
+        self.store.reset()
+
+    def call(self, path, payload=None, host=None, raw=False):
+        url = "http://127.0.0.1:%d%s" % (self.port, path)
+        headers = {}
+        data = None
+        if payload is not None:
+            data = payload if raw else json.dumps(payload, ensure_ascii=False)
+            data = data.encode("utf-8") if isinstance(data, str) else data
+            headers["Content-Type"] = "application/json"
+        if host:
+            headers["Host"] = host
+        req = urllib.request.Request(url, data=data, headers=headers,
+                                     method="POST" if data is not None else "GET")
+        try:
+            with urllib.request.urlopen(req, timeout=5) as resp:
+                body = resp.read()
+                return resp.status, body
+        except urllib.error.HTTPError as exc:
+            return exc.code, exc.read()
+
+    def jcall(self, path, payload=None, **kw):
+        status, body = self.call(path, payload, **kw)
+        return status, json.loads(body.decode("utf-8"))
+
+    def test_html_injects_desktop_marker(self):
+        status, body = self.call("/")
+        self.assertEqual(status, 200)
+        text = body.decode("utf-8")
+        self.assertIn("window.__SPELLLAB_DESKTOP__", text)
+        self.assertIn('"port"', text)
+        self.assertIn(str(self.port), text)
+        self.assertIn("SpellLab", text)
+        self.assertIn("</head>", text)
+
+    def test_ping(self):
+        status, data = self.jcall("/api/ping")
+        self.assertEqual(status, 200)
+        self.assertTrue(data["ok"])
+        self.assertTrue(data["desktop"])
+        self.assertIn("server.db", data["dbPath"])
+
+    def test_load_save_roundtrip(self):
+        status, empty = self.jcall("/api/load")
+        self.assertEqual(status, 200)
+        self.assertIsNone(empty["state"])
+
+        state = {
+            "stats": {"attempted": 12, "correct": 9},
+            "textbooks": [{"id": "p1", "name": "包", "units": [{
+                "id": "u1", "name": "Unit 1",
+                "sentences": [{"cn": "你好", "en": "Hello.", "hints": ["你好"]}],
+                "words": [["hello", "你好"]],
+            }]}],
+            "vocab": [{"id": "v1", "en": "hello", "cn": "你好", "m": 1}],
+        }
+        status, saved = self.jcall("/api/save", state)
+        self.assertEqual(status, 200)
+        self.assertTrue(saved["hash"])
+        status, loaded = self.jcall("/api/load")
+        self.assertEqual(loaded["state"]["stats"]["attempted"], 12)
+        self.assertEqual(loaded["savedAt"], saved["savedAt"])
+
+        status, info = self.jcall("/api/info")
+        self.assertEqual(info["counts"]["questions"], 1)
+        self.assertEqual(info["counts"]["vocab"], 1)
+        self.assertGreater(info["size"], 0)
+
+    def test_export_writes_file(self):
+        payload = {"format": "spelllab.backup.v1", "state": {"stats": {"attempted": 3}}}
+        status, data = self.jcall("/api/export", {
+            "text": json.dumps(payload, ensure_ascii=False),
+            "filename": "unit-test-backup.json",
+        })
+        self.assertEqual(status, 200)
+        self.assertTrue(data["ok"])
+        self.assertTrue(Path(data["path"]).is_file())
+        self.assertIn("unit-test-backup.json", data["path"])
+
+    def test_import_valid_and_invalid(self):
+        payload = {"format": "spelllab.backup.v1", "state": {"stats": {"attempted": 77}}}
+        status, data = self.jcall("/api/import", json.dumps(payload, ensure_ascii=False), raw=True)
+        self.assertEqual(status, 200)
+        self.assertTrue(data["ok"])
+        self.assertEqual(self.store.load()["state"]["stats"]["attempted"], 77)
+
+        status, bad = self.jcall("/api/import", "not-json", raw=True)
+        self.assertEqual(status, 400)
+        self.assertIn("error", bad)
+
+    def test_unknown_route_and_host_guard(self):
+        status, data = self.jcall("/api/nope")
+        self.assertEqual(status, 404)
+        self.assertIn("error", data)
+        status, data = self.jcall("/api/ping", host="evil.example.com")
+        self.assertEqual(status, 403)
+
+    def test_favicon(self):
+        status, _ = self.call("/favicon.ico")
+        self.assertEqual(status, 204)
+
+
+if __name__ == "__main__":
+    unittest.main()

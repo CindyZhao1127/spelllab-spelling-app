@@ -708,7 +708,7 @@
         </div>
       </div>
 
-      <div class="panel">
+      <div class="panel" id="dbFilePanel">
         <h3>同步到本地数据文件</h3>
         <div class="panel-note">绑定一个真实的 .json 文件后，每次学习数据变化都会自动写回，可直接提交到 Git、放进网盘或拷到另一台电脑。需 Chrome / Edge 且由你点击授权。</div>
         <div id="dbFileState"></div>
@@ -736,6 +736,21 @@
         <h3>数据库维护</h3>
         <div class="panel-note">清空数据库会重置本机全部学习数据并回到默认状态，不会删除你绑定的文件。操作前建议先导出备份。</div>
         <div class="btn-row tight"><button class="mini-btn danger sm" id="dbWipe">清空本地数据库</button></div>
+      </div>
+
+      <div class="panel" id="desktopPanel" hidden>
+        <h3>桌面版数据文件</h3>
+        <div class="panel-note">桌面版把全部数据写进一个 SQLite 文件，可用 DB Browser for SQLite、命令行 sqlite3 等工具直接打开查询；备份会自动存到 data/exports/。</div>
+        <div id="desktopDbInfo"></div>
+        <div class="btn-row tight" style="margin-top:8px">
+          <button class="mini-btn sm" id="dbOpenFolder">打开数据文件夹</button>
+          <button class="mini-btn sm" id="dbExportBackup">保存备份到磁盘</button>
+        </div>
+        <div class="btn-row tight" style="margin-top:8px">
+          <button class="mini-btn sm" id="dbImportBackup">从浏览器备份恢复</button>
+          <input class="file-input" type="file" id="desktopImportFile" accept=".json,application/json">
+        </div>
+        <div class="db-note">从网页版迁移：在网页版「存储」页导出全库备份，把文件放到 data/ 目录并命名为 spelllab-backup.json，桌面版首次启动会自动导入；也可在这里直接选择文件恢复。</div>
       </div>
     </div>
   </aside>
@@ -867,7 +882,32 @@ const STORE = {
   mirror:'ok', mirrorBytes:0, lastMirror:0, savedAt:0,
   timer:0, queued:false, writing:false,
   fileHandle:null, fileName:'', fileState:'', fileLast:0, fileTimer:0,
-  usage:0, quota:0, persisted:false
+  usage:0, quota:0, persisted:false,
+  dbPath:'', dbSize:0, dbCounts:null, desktopTimer:0
+};
+
+/* ---------------- 桌面版桥接（Python 本地服务） ----------------
+   桌面版由服务端注入 __SPELLLAB_DESKTOP__，此时改用 SQLite 读写；
+   浏览器直接打开时该标记不存在，完全走上面的 IndexedDB 逻辑。 */
+const DESKTOP = typeof window!=='undefined' &&
+  (!!window.__SPELLLAB_DESKTOP__ || !!(window.pywebview && window.pywebview.api));
+const DESKTOP_API = {
+  req(path,body){
+    if(typeof fetch!=='function') return Promise.reject(new Error('fetch 不可用'));
+    const opt = body===undefined ? {} : {
+      method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)
+    };
+    return fetch('/api/'+path,opt).then(r=>{
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      return r.json();
+    });
+  },
+  load(){ return this.req('load'); },
+  save(s){ return this.req('save',s); },
+  info(){ return this.req('info'); },
+  exportFile(text,filename){ return this.req('export',{text:text,filename:filename}); },
+  openFolder(){ return this.req('open-folder'); },
+  ping(){ return this.req('ping'); }
 };
 
 function normalizeState(s){
@@ -917,8 +957,12 @@ function writeMirror(force){
 }
 function saveState(){
   STORE.savedAt=Date.now();
-  writeMirror(false);
-  if(STORE.mode==='idb' && STORE.db) scheduleDBWrite();
+  if(DESKTOP){
+    if(STORE.mode==='sqlite') scheduleDesktopSave();
+  }else{
+    writeMirror(false);
+    if(STORE.mode==='idb' && STORE.db) scheduleDBWrite();
+  }
 }
 function idbOpen(){
   return new Promise((resolve,reject)=>{
@@ -971,6 +1015,14 @@ function scheduleDBWrite(){
   },220);
 }
 function flushStorage(){
+  if(DESKTOP){
+    if(STORE.desktopTimer){ try{ clearTimeout(STORE.desktopTimer); }catch(e){} STORE.desktopTimer=0; }
+    if(STORE.queued && STORE.mode==='sqlite'){
+      STORE.queued=false;
+      DESKTOP_API.save(clone(state)).catch(()=>{});
+    }
+    return;
+  }
   writeMirror(true);
   if(STORE.timer){ try{ clearTimeout(STORE.timer); }catch(e){} STORE.timer=0; }
   if(STORE.mode==='idb'){ STORE.queued=false; writeNow(); }
@@ -1017,6 +1069,46 @@ async function bootStorage(){
   await refreshStorageInfo();
   if(drawerTab==='storage') renderStorage();
   if(STORE.migrated) toast('已将旧存档迁移到本地数据库','ok');
+}
+function scheduleDesktopSave(){
+  STORE.queued=true;
+  if(STORE.desktopTimer) return;
+  STORE.desktopTimer=setTimeout(()=>{
+    STORE.desktopTimer=0;
+    if(!STORE.queued) return;
+    STORE.queued=false;
+    DESKTOP_API.save(clone(state)).then(r=>{
+      STORE.savedAt=r.savedAt||STORE.savedAt;
+      STORE.error='';
+      if(drawerTab==='storage') renderStorage();
+    }).catch(e=>{
+      STORE.error='SQLite 写入失败：'+String((e&&e.message)||e);
+    });
+  },220);
+}
+async function bootDesktop(){
+  STORE.mode='sqlite';
+  try{
+    const rec=await DESKTOP_API.load();
+    if(rec && rec.state){
+      state=normalizeState(rec.state);
+      STORE.savedAt=rec.savedAt||0;
+      applyLoadedState();
+    }else{
+      STORE.savedAt=Date.now();
+      await DESKTOP_API.save(clone(state));
+    }
+    const info=await DESKTOP_API.info();
+    STORE.dbPath=info.dbPath||'';
+    STORE.dbSize=info.size||0;
+    STORE.dbCounts=info.counts||null;
+    STORE.savedAt=info.savedAt||STORE.savedAt;
+  }catch(e){
+    STORE.mode='local';
+    STORE.error='本地服务不可用：'+String((e&&e.message)||e);
+  }
+  STORE.ready=true;
+  if(drawerTab==='storage') renderStorage();
 }
 async function refreshStorageInfo(){
   try{
@@ -2258,7 +2350,10 @@ function restoreBackup(text){
   }catch(e){}
   state=loadState();
   STORE.savedAt=Date.now();
-  if(STORE.mode==='idb') writeNow(); else writeMirror(true);
+  if(DESKTOP) DESKTOP_API.save(clone(state)).catch(e=>{
+    STORE.error='备份写入 SQLite 失败：'+String((e&&e.message)||e);
+  });
+  else if(STORE.mode==='idb') writeNow(); else writeMirror(true);
   libSel={packId:'',unitId:'',qIdx:-1};
   unitPos=0; qPos=0; wordCur=null; sessionOrder={unitId:'',list:[]};
   vocabSelected=new Set(); vocabQuery=''; vocabOnlyNew=false;
@@ -2399,28 +2494,58 @@ function renderDbFile(){
     dbRow('授权状态',STORE.fileState==='granted'?'已授权 · 自动写回':'需点「立即同步」重新授权')+
     dbRow('上次同步',STORE.fileLast?new Date(STORE.fileLast).toLocaleString('zh-CN'):'尚未同步');
 }
+function renderDesktopInfo(){
+  const counts=STORE.dbCounts||{};
+  const total=Object.keys(counts).reduce((n,k)=>n+(Number(counts[k])||0),0);
+  const meta=(typeof window!=='undefined' && window.__SPELLLAB_DESKTOP__)||{};
+  $('desktopDbInfo').innerHTML=
+    dbRow('SQLite 文件',STORE.dbPath||'读取中…')+
+    dbRow('文件大小',fmtBytes(STORE.dbSize))+
+    dbRow('规范化表记录',total+' 行 / '+Object.keys(counts).length+' 张表')+
+    dbRow('桌面服务',(meta.version||'')+' · 端口 '+(meta.port||'—'));
+}
 function renderStorage(){
-  const c=dbCounts(), idb=STORE.mode==='idb';
-  $('dbDot').className='dot'+(idb?'':' warn');
-  $('dbEngine').textContent=idb?'IndexedDB · 本地事务型数据库':'localStorage · 兼容模式';
-  $('dbDesc').textContent=idb
-    ? '学习数据以事务写入浏览器本地数据库，容量按磁盘剩余空间分配；关闭页面、重启浏览器都不会丢，旧版存档会自动迁移。'
-    : '当前环境无法使用 IndexedDB（隐私模式或旧浏览器），已回退到 localStorage，容量约 5 MB，请定期导出备份。';
-  const pct=STORE.quota?Math.min(100,STORE.usage/STORE.quota*100):0;
-  $('dbUsageBar').style.width=(STORE.usage&&pct<1?1:pct).toFixed(2)+'%';
-  $('dbUsageText').textContent=STORE.quota
-    ? '站点已用 '+fmtBytes(STORE.usage)+' / 可用约 '+fmtBytes(STORE.quota)
-    : '本机数据约 '+fmtBytes(c.bytes)+'（浏览器未开放用量统计）';
+  const c=dbCounts(), idb=STORE.mode==='idb', sqlite=DESKTOP && STORE.mode==='sqlite';
+  $('desktopPanel').hidden=!DESKTOP;
+  $('dbFilePanel').hidden=!!DESKTOP;
+  $('dbPersist').hidden=!!DESKTOP;
+  $('dbDot').className='dot'+((idb||sqlite)?'':' warn');
+  $('dbEngine').textContent=sqlite?'SQLite · 本地数据库文件'
+    :(idb?'IndexedDB · 本地事务型数据库':'localStorage · 兼容模式');
+  $('dbDesc').textContent=sqlite
+    ? '桌面版把每次改动写进独立的 .db 文件，可用任意 SQLite 工具直接查询；数据同时展开成年级 / 教材 / 单元 / 题目 / 生词等规范表。'
+    :(idb
+      ? '学习数据以事务写入浏览器本地数据库，容量按磁盘剩余空间分配；关闭页面、重启浏览器都不会丢，旧版存档会自动迁移。'
+      : '当前环境无法使用 IndexedDB（隐私模式或旧浏览器），已回退到 localStorage，容量约 5 MB，请定期导出备份。');
+  if(sqlite){
+    $('dbUsageBar').style.width=Math.min(100,Math.max(3,STORE.dbSize/(10*1048576)*100)).toFixed(2)+'%';
+    $('dbUsageText').textContent='数据库文件 '+fmtBytes(STORE.dbSize)+
+      (STORE.dbPath?(' · '+STORE.dbPath):'');
+  }else{
+    const pct=STORE.quota?Math.min(100,STORE.usage/STORE.quota*100):0;
+    $('dbUsageBar').style.width=(STORE.usage&&pct<1?1:pct).toFixed(2)+'%';
+    $('dbUsageText').textContent=STORE.quota
+      ? '站点已用 '+fmtBytes(STORE.usage)+' / 可用约 '+fmtBytes(STORE.quota)
+      : '本机数据约 '+fmtBytes(c.bytes)+'（浏览器未开放用量统计）';
+  }
   $('dbCounts').innerHTML=
     kvBox(c.packs,'教材包')+kvBox(c.questions,'题目')+kvBox(c.words,'单词')+
     kvBox(c.vocab,'生词')+kvBox(c.wrong,'错题')+kvBox(c.progress,'进度记录');
-  $('dbRows').innerHTML=
+  let rows=
     dbRow('写入状态',STORE.error?('异常：'+STORE.error):(STORE.queued?'待写入':'已同步'))+
-    dbRow('最近保存',STORE.savedAt?new Date(STORE.savedAt).toLocaleString('zh-CN'):'尚未保存')+
-    dbRow('持久化授权',STORE.persisted?'已授予':'未申请 / 未授予')+
-    dbRow('旧存档迁移',STORE.migrated?'已完成':(idb?'无需迁移':'—'))+
-    dbRow('localStorage 镜像',STORE.mirror==='disabled'?'已停用（数据超过 5 MB）':'启用 · 双保险')+
-    dbRow('数据体积',fmtBytes(c.bytes)+'（JSON 估算）');
+    dbRow('最近保存',STORE.savedAt?new Date(STORE.savedAt).toLocaleString('zh-CN'):'尚未保存');
+  if(sqlite){
+    rows+=dbRow('数据库文件',STORE.dbPath||'读取中…')+
+      dbRow('存储引擎','Python 标准库 sqlite3 · WAL 事务')+
+      dbRow('数据体积',fmtBytes(c.bytes)+'（JSON 估算）');
+    renderDesktopInfo();
+  }else{
+    rows+=dbRow('持久化授权',STORE.persisted?'已授予':'未申请 / 未授予')+
+      dbRow('旧存档迁移',STORE.migrated?'已完成':(idb?'无需迁移':'—'))+
+      dbRow('localStorage 镜像',STORE.mirror==='disabled'?'已停用（数据超过 5 MB）':'启用 · 双保险')+
+      dbRow('数据体积',fmtBytes(c.bytes)+'（JSON 估算）');
+  }
+  $('dbRows').innerHTML=rows;
   renderDbFile();
 }
 async function ensureFilePermission(silent){
@@ -2496,9 +2621,16 @@ function readRestoreFile(e){
 async function wipeDatabase(){
   if(!confirm('确定清空本地数据库里的全部学习数据？此操作不可恢复（建议先导出全库备份）。')) return;
   state=clone(DEFAULT_STATE);
-  STORE.savedAt=Date.now(); STORE.mirror='ok'; STORE.mirrorBytes=0;
-  writeMirror(true);   // 用默认状态覆盖旧镜像，避免下次启动读到残留数据
-  try{ if(STORE.db) await idbCall(DB_KEY_MAIN,dbRecord(STORE.savedAt),true); }catch(e){}
+  STORE.savedAt=Date.now(); STORE.mirror='ok'; STORE.mirrorBytes=0; STORE.queued=false;
+  if(DESKTOP){
+    try{
+      const r=await DESKTOP_API.save(clone(state));
+      STORE.savedAt=r.savedAt||STORE.savedAt; STORE.error='';
+    }catch(e){ STORE.error='清空失败：'+String((e&&e.message)||e); }
+  }else{
+    writeMirror(true);   // 用默认状态覆盖旧镜像，避免下次启动读到残留数据
+    try{ if(STORE.db) await idbCall(DB_KEY_MAIN,dbRecord(STORE.savedAt),true); }catch(e){}
+  }
   applyLoadedState(); renderStorage(); toast('本地数据库已清空','ok');
 }
 function sqlEsc(v){ return "'"+String(v==null?'':v).replace(/'/g,"''")+"'"; }
@@ -2909,10 +3041,29 @@ function bind(){
   });
 
   /* 本地数据库 */
-  $('dbRefresh').addEventListener('click',async()=>{ await refreshStorageInfo(); renderStorage(); toast('存储状态已刷新'); });
+  $('dbRefresh').addEventListener('click',async()=>{
+    if(DESKTOP){
+      try{
+        const info=await DESKTOP_API.info();
+        STORE.dbPath=info.dbPath||''; STORE.dbSize=info.size||0;
+        STORE.dbCounts=info.counts||null; STORE.savedAt=info.savedAt||STORE.savedAt;
+        STORE.error='';
+      }catch(e){ STORE.error='读取数据库信息失败：'+String((e&&e.message)||e); }
+    }else await refreshStorageInfo();
+    renderStorage(); toast('存储状态已刷新');
+  });
   $('dbPersist').addEventListener('click',()=>requestPersist());
   $('dbVacuum').addEventListener('click',async()=>{
-    writeMirror(true); const ok=await writeNow(); STORE.queued=false; renderStorage();
+    STORE.queued=false;
+    if(DESKTOP){
+      try{
+        const r=await DESKTOP_API.save(clone(state));
+        STORE.savedAt=r.savedAt||STORE.savedAt; STORE.error='';
+        toast('已写入 SQLite 数据库','ok');
+      }catch(e){ STORE.error='SQLite 写入失败：'+String((e&&e.message)||e); toast('写入失败','bad'); }
+      renderStorage(); return;
+    }
+    writeMirror(true); const ok=await writeNow(); renderStorage();
     toast(ok?'已写入本地数据库':'已写入镜像（数据库不可用）',ok?'ok':'bad');
   });
   $('dbBindFile').addEventListener('click',()=>bindDataFile());
@@ -2927,6 +3078,35 @@ function bind(){
   $('dbImportFile').addEventListener('click',()=>{ if($('dbRestoreFile').click) $('dbRestoreFile').click(); });
   $('dbRestoreFile').addEventListener('change',readRestoreFile);
   $('dbWipe').addEventListener('click',()=>wipeDatabase());
+
+  /* 桌面版专用：SQLite 数据文件夹 / 备份 / 从网页版迁移 */
+  $('dbOpenFolder').addEventListener('click',()=>{
+    DESKTOP_API.openFolder().then(()=>toast('已打开数据文件夹'))
+      .catch(e=>toast('打开失败：'+String((e&&e.message)||e),'bad'));
+  });
+  $('dbExportBackup').addEventListener('click',()=>{
+    const name='spelllab-backup-'+today()+'.json';
+    DESKTOP_API.exportFile(JSON.stringify(backupPayload(),null,2),name)
+      .then(r=>toast('备份已保存到 '+r.path,'ok'))
+      .catch(e=>toast('保存失败：'+String((e&&e.message)||e),'bad'));
+  });
+  $('dbImportBackup').addEventListener('click',()=>{
+    if($('desktopImportFile').click) $('desktopImportFile').click();
+  });
+  $('desktopImportFile').addEventListener('change',e=>{
+    const f=e.target.files&&e.target.files[0]; if(!f) return;
+    const read=txt=>{
+      if(restoreBackup(String(txt||''))){ saveState(); toast('已从备份恢复并写入 SQLite','ok'); }
+    };
+    if(f.text&&typeof f.text==='function') f.text().then(read).catch(()=>toast('文件读取失败','bad'));
+    else if(typeof FileReader!=='undefined'){
+      const fr=new FileReader();
+      fr.onload=()=>read(String(fr.result||''));
+      fr.onerror=()=>toast('文件读取失败','bad');
+      fr.readAsText(f,'utf-8');
+    }else toast('当前窗口不支持读取本地文件','bad');
+    e.target.value='';
+  });
 
   document.addEventListener('keydown',e=>{
     if(mode!=='word') return;
@@ -2949,11 +3129,11 @@ switchTab('learn');
 renderSentence();
 renderDrawer();
 if('speechSynthesis' in window){ window.speechSynthesis.getVoices(); }
-bootStorage();
+if(DESKTOP) bootDesktop(); else bootStorage();
 if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
   window.addEventListener('pagehide',flushStorage);
   window.addEventListener('beforeunload',flushStorage);
-  window.addEventListener('storage',e=>{
+  if(!DESKTOP) window.addEventListener('storage',e=>{
     if(!e || e.key!==KEY || !e.newValue) return;
     try{
       const ts=Number(localStorage.getItem(MIRROR_TS)||0)||0;

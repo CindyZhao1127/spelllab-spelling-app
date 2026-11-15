@@ -2,6 +2,8 @@
 
 一个**单文件、离线可用**的英语拼写练习网页应用。打开 `SpellLab.html` 即可使用，无需安装、无需联网、无需后端；所有学习数据保存在浏览器内置的 **IndexedDB 本地数据库**中，`localStorage` 作为兼容镜像与降级通道。
 
+同一份 `SpellLab.html` 也可以作为 **Python 桌面程序**运行：`desktop/app.py` 用标准库起本地服务 + 真实 SQLite 数据库文件，并用独立应用窗口呈现，零第三方依赖。详见 [desktop/README.md](desktop/README.md)。
+
 源自一张练习软件截图：看中文句子，按逐词中文提示把英文句子拼出来。在此基础上补齐了分步记忆、单词速记和一套教学/生词管理功能。
 
 ## 功能
@@ -25,6 +27,19 @@
 首次点击或按键后音效才会激活（浏览器自动播放策略）；朗读使用浏览器内置英文语音引擎，需要系统装有英文语音包。
 
 建议上手路径：管理页把年级/教材调成自己用的版本 → 教材库里建教材包与单元、录入课本句子 → 顶部筛选学习范围 → 生词本里导入当前单元单词或手动加词 → 勾选后生成练习集开练。数据要长期保存或换设备时，到「存储」页绑定一个本地 JSON 文件（或导出全库备份）。
+
+## 桌面版（Python，可选）
+
+```bash
+cd desktop
+python app.py          # Windows 也可双击 run.bat
+```
+
+零第三方依赖：Python 标准库 `http.server` + `sqlite3` 提供本地服务与数据库，Edge/Chrome 的 `--app` 参数提供无地址栏的独立窗口；装了 `pywebview` 时加 `--pywebview` 可换原生 WebView 窗口。
+
+数据落在 `desktop/data/spelllab.db`，是普通 SQLite 文件，含 `state`（全量快照）与 `grades` / `books` / `packs` / `units` / `questions` / `words` / `vocab` / `progress` / `wrong` / `stats` 等规范表，可直接用 SQLite 工具查询。网页版导出的全库备份放进 `data/` 会在首次启动时自动导入。
+
+完整说明、参数、打包 exe 与迁移步骤见 [desktop/README.md](desktop/README.md)。
 
 ## 教材包管理
 

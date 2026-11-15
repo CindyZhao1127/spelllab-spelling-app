@@ -1,0 +1,4 @@
+# 桌面版默认是零第三方依赖：Python 标准库即可运行。
+# 只有想用 --pywebview 原生 WebView 窗口时才需要：
+#   python -m pip install -r requirements-optional.txt
+pywebview>=5.0

@@ -12,3 +12,13 @@ desktop.ini
 *.swp
 *.tmp
 *.log
+
+# Python 桌面版：运行时数据与打包产物
+__pycache__/
+*.py[cod]
+desktop/data/
+desktop/build/
+desktop/dist/
+*.spec
+.venv/
+venv/
