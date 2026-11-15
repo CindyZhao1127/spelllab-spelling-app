@@ -93,23 +93,30 @@
     margin:0 auto;max-width:880px;
     font-size:clamp(27px,4.1vw,45px);font-weight:900;line-height:1.38;letter-spacing:1.5px;
     text-shadow:0 5px 22px rgba(0,0,0,.35);
+    overflow-wrap:anywhere;word-break:break-word;
   }
   .question-sub{margin-top:12px;font-size:13px;color:var(--muted)}
 
+  /* 整句按「每个单词的真实宽度」自动换行。词槽不能再写死 max-width，
+     否则长单词的字母格会溢出槽位、盖到相邻单词上（表现为单词重叠）。
+     现在词槽最多占满一行，超长单词只在自己的槽里折行，普通短词仍是单行。 */
   .slots{
     margin:clamp(28px,5vh,54px) auto 0;
     display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;
-    column-gap:var(--word-gap,22px);row-gap:var(--slot-row-gap,16px);max-width:940px;
+    column-gap:var(--word-gap,22px);row-gap:var(--slot-row-gap,16px);
+    max-width:min(940px,100%);width:100%;
   }
-  .slot{position:relative;display:flex;flex-direction:column;align-items:center;margin:8px 0 6px;min-width:62px;max-width:190px;flex:0 0 auto}
-  .slot-core{display:flex;flex-direction:column;align-items:center;width:max-content;max-width:100%}
+  .slot{position:relative;display:flex;flex-direction:column;align-items:center;
+    margin:8px 0 6px;min-width:62px;max-width:100%;flex:0 0 auto}
+  .slot-core{display:flex;flex-direction:column;align-items:center;
+    width:max-content;max-width:100%;min-width:0}
   .slot .answer{
-    height:1.35em;display:flex;align-items:center;justify-content:center;
+    height:1.35em;display:flex;align-items:center;justify-content:center;max-width:100%;
     font-size:clamp(25px,3.5vw,38px);font-weight:900;letter-spacing:.5px;line-height:1.2;
     color:#fff;text-shadow:0 3px 14px rgba(0,0,0,.28);
   }
   .slot input{
-    width:100%;min-width:1ch;padding:0;border:0;background:transparent;
+    width:100%;max-width:100%;min-width:1ch;padding:0;border:0;background:transparent;
     font:inherit;letter-spacing:inherit;color:inherit;text-align:center;
     caret-color:#c9bcff;
   }
@@ -121,7 +128,7 @@
   .slot.focus .line{background:#c3b6ff;box-shadow:0 0 14px rgba(160,140,255,.8);height:3px}
   /* 提示改为参与布局：中文意思再长也只在本词下方换行，不会压到相邻单词 */
   .slot .hint{
-    margin-top:9px;max-width:var(--hint-max,180px);width:max-content;
+    margin-top:9px;max-width:min(var(--hint-max,180px),100%);width:max-content;
     font-size:13px;color:#a5b0d8;line-height:1.4;text-align:center;
     white-space:normal;overflow-wrap:anywhere;pointer-events:none;
   }
@@ -142,12 +149,16 @@
   .slot.punct .line{background:rgba(226,232,255,.28)}
   .slot.punct .hint{display:none}
 
-  /* ---------- 字母格：按单词字母数显示小空格，整句横向排列自动换行 ---------- */
-  .slot.boxed{flex:0 0 auto}
-  .slot.boxed .answer{height:clamp(30px,3.6vw,40px);font-size:inherit;position:relative}
-  .slot.boxed .boxes{display:flex;flex-wrap:nowrap;align-items:center;justify-content:center;gap:4px}
+  /* ---------- 字母格：按单词字母数显示小空格，整句横向排列自动换行 ----------
+     短词仍是一个词一行；当某个单词比一整行还宽时，允许它只在自己这个
+     词槽内部折行，避免 10+ 字母的长单词溢出并把下一个单词盖住。 */
+  .slot.boxed{flex:0 0 auto;max-width:100%}
+  .slot.boxed .answer{min-height:clamp(30px,3.6vw,40px);height:auto;padding:2px 0;
+    font-size:inherit;position:relative;max-width:100%}
+  .slot.boxed .boxes{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
+    gap:4px;max-width:100%;width:100%}
   .lbox{
-    width:clamp(19px,2.2vw,27px);height:clamp(30px,3.6vw,40px);
+    width:clamp(19px,2.2vw,27px);height:clamp(30px,3.6vw,40px);flex:0 0 auto;
     border-radius:6px 6px 3px 3px;border-bottom:2px solid var(--line);
     background:rgba(255,255,255,.05);display:grid;place-items:center;
     font-size:clamp(17px,2.2vw,24px);font-weight:800;line-height:1;
@@ -192,7 +203,6 @@
     background:rgba(255,255,255,.12);color:#e8ecff}
   .modal-actions button:hover{background:rgba(255,255,255,.22)}
   .modal-actions button.primary{background:linear-gradient(135deg,#6a5cff,#4361ee);color:#fff}
-  .draw-result{text-align:center;font-size:24px;font-weight:900;color:#ffe39a;margin:14px 0 4px}
   .plan-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:10px}
   .plan-head b{font-size:30px;font-weight:900;color:#ffe39a}
   .prize-row{display:flex;gap:6px;align-items:center;margin-bottom:7px}
@@ -202,6 +212,70 @@
     font-size:11px;border-bottom:1px solid rgba(255,255,255,.06);color:var(--muted)}
   .ledger-item b{font-weight:800}
   .ledger-item b.plus{color:var(--ok)}.ledger-item b.minus{color:#ffb3ba}
+
+  /* ---------- 家长中心 / 转盘抽奖 ---------- */
+  .parent-chip,.wheel-chip{display:flex;align-items:center;gap:6px;padding:5px 12px;
+    border-radius:999px;font-size:11px;font-weight:800;white-space:nowrap}
+  .parent-chip{background:rgba(140,224,168,.14);border:1px solid rgba(140,224,168,.35);color:#b6f2cd}
+  .parent-chip:hover{background:rgba(140,224,168,.26)}
+  .parent-chip.unlocked{background:rgba(140,224,168,.32);box-shadow:0 0 0 1px rgba(140,224,168,.5)}
+  .wheel-chip{background:rgba(255,214,102,.14);border:1px solid rgba(255,214,102,.35);color:#ffe39a}
+  .wheel-chip:hover{background:rgba(255,214,102,.3);transform:translateY(-1px)}
+  .lock-badge{display:inline-block;margin-left:6px;padding:2px 8px;border-radius:999px;
+    font-size:10px;font-weight:800;background:rgba(255,122,134,.18);color:#ffb3ba;vertical-align:middle}
+  .lock-badge.on{background:rgba(140,224,168,.2);color:#b6f2cd}
+  .locked-box{padding:14px;border-radius:14px;background:rgba(255,255,255,.05);
+    border:1px dashed rgba(255,255,255,.2);text-align:center}
+  .locked-box .lock-title{font-size:13px;font-weight:800;color:#fff;margin-bottom:6px}
+  .locked-box .panel-note{margin:0 0 10px}
+  .locked-list{font-size:11px;color:#c3cbeb;line-height:1.9;text-align:left;margin-bottom:10px}
+  .locked-list span{display:inline-block;padding:2px 9px;margin:2px;border-radius:999px;
+    background:rgba(255,255,255,.08)}
+  .wheel-mask,.parent-mask{position:fixed;inset:0;background:rgba(5,8,26,.82);
+    z-index:80;display:grid;place-items:center;padding:16px}
+  .parent-mask{z-index:85}
+  .wheel-mask[hidden],.parent-mask[hidden]{display:none}
+  .wheel-dialog,.parent-dialog{width:min(430px,94vw);max-height:92vh;overflow:auto;
+    padding:20px;border-radius:22px;background:linear-gradient(160deg,#28305e,#171c3b);
+    border:1px solid rgba(255,255,255,.16);box-shadow:0 24px 70px rgba(0,0,0,.6);
+    animation:fade .25s ease}
+  .wheel-dialog h3,.parent-dialog h3{margin:0 0 8px;font-size:19px;font-weight:800;color:#fff}
+  .dialog-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .dialog-close{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.1);
+    color:#e8ecff;font-size:16px;line-height:1;padding:0;flex:none}
+  .dialog-close:hover{background:rgba(255,255,255,.22)}
+  .wheel-stage{position:relative;width:min(300px,72vw);aspect-ratio:1;margin:16px auto 10px}
+  .wheel-disc{position:absolute;inset:0;border-radius:50%;border:6px solid rgba(255,255,255,.24);
+    box-shadow:0 12px 40px rgba(0,0,0,.45),inset 0 0 0 2px rgba(255,255,255,.1);
+    transition:transform 4.2s cubic-bezier(.15,.72,.12,1);will-change:transform}
+  .wheel-label{position:absolute;left:50%;top:50%;width:88px;margin-left:-44px;margin-top:-9px;
+    font-size:11px;font-weight:800;color:#fff;text-align:center;line-height:18px;
+    text-shadow:0 1px 4px rgba(0,0,0,.8);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .wheel-pointer{position:absolute;left:50%;top:-8px;transform:translateX(-50%);z-index:3;
+    width:0;height:0;border-left:13px solid transparent;border-right:13px solid transparent;
+    border-top:26px solid #ffe39a;filter:drop-shadow(0 3px 6px rgba(0,0,0,.5))}
+  .wheel-hub{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;
+    width:74px;height:74px;border-radius:50%;display:grid;place-items:center;
+    background:linear-gradient(135deg,#2b3468,#171c3b);border:4px solid rgba(255,255,255,.4);
+    color:#ffe39a;font-weight:900;font-size:13px;box-shadow:0 4px 14px rgba(0,0,0,.45)}
+  .wheel-result{text-align:center;min-height:26px;margin:8px 0;font-size:14px;
+    font-weight:800;color:#c3cbeb}
+  .wheel-result.win{font-size:19px;color:#ffe39a}
+  .wheel-meta{display:flex;justify-content:center;gap:10px;font-size:11px;color:var(--muted);margin-bottom:8px}
+  .wheel-meta b{color:#ffe39a}
+  .wheel-list{max-height:130px;overflow:auto;margin:10px 0}
+  .wheel-actions,.parent-actions{display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end;margin-top:14px}
+  .wheel-actions button,.parent-actions button{padding:9px 18px;border-radius:999px;
+    font-size:13px;font-weight:700;background:rgba(255,255,255,.12);color:#e8ecff}
+  .wheel-actions button:hover,.parent-actions button:hover{background:rgba(255,255,255,.22)}
+  .wheel-actions button.primary,.parent-actions button.primary{
+    background:linear-gradient(135deg,#6a5cff,#4361ee);color:#fff}
+  .wheel-actions button:disabled{opacity:.45;cursor:default}
+  .parent-status{padding:10px 12px;border-radius:12px;margin:10px 0;
+    background:rgba(255,255,255,.06);font-size:12px;color:#c3cbeb}
+  .parent-dialog .field{width:100%;margin-bottom:9px}
+  .parent-label{display:block;font-size:11px;color:var(--muted);margin:8px 0 4px}
+  .parent-warn{font-size:11px;line-height:1.7;color:#ffb3ba;margin:8px 0}
 
   .feedback{min-height:24px;margin-top:4px;font-size:14px;font-weight:600;color:var(--muted)}
   .feedback.ok{color:var(--ok)}
@@ -377,12 +451,16 @@
     .course{max-width:62vw}
     .mode-switch{order:3;width:100%;margin-left:0}
     .mode-switch button{flex:1;padding:7px 6px;font-size:11px}
-    .top-right{margin-left:auto;gap:8px}
+    .top-right{margin-left:auto;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+    .parent-chip,.wheel-chip{padding:4px 8px;font-size:10px}
+    .parent-chip.unlocked{font-size:10px}
+    .wheel-stage{width:min(260px,72vw)}
+    .wheel-label{width:76px;margin-left:-38px;font-size:10px}
     .toolbar{bottom:12px;gap:1px;padding:6px}
     .toolbar .tb{width:36px;height:36px}
     .toolbar .tb-main{height:36px;padding:0 12px;font-size:12px}
     .slot{min-width:50px;margin-bottom:4px}
-    .slot .hint{font-size:12px;max-width:120px}
+    .slot .hint{font-size:12px;max-width:min(120px,100%)}
     .slots{column-gap:var(--word-gap,16px)}
     .lbox{width:clamp(17px,5vw,23px);height:clamp(27px,8vw,34px);font-size:clamp(15px,4.4vw,20px)}
     .tips{font-size:11px}
@@ -539,6 +617,8 @@
       <div class="stat"><b id="statStreak">0</b><span>连对</span></div>
       <div class="stat"><b id="statAcc">--</b><span>正确率</span></div>
       <button class="points-chip" id="btnPoints" title="学习计划与积分"><b id="statPoints">0</b><span>积分</span></button>
+      <button class="wheel-chip" id="btnWheel" title="打开转盘抽奖">转盘抽奖</button>
+      <button class="parent-chip" id="btnParent" title="家长中心：输入管理密码后可修改抽奖设置">家长</button>
       <button class="icon-btn" id="btnMenu" title="学习面板" aria-label="打开学习面板"></button>
     </div>
   </header>
@@ -640,7 +720,7 @@
         <div class="setting-row"><span>显示逐词中文提示</span><button class="switch" data-set="showHints" id="swHints"></button></div>
         <div class="setting-row"><span>按字母显示小空格</span><button class="switch" data-set="letterBoxes" id="swLetterBoxes"></button></div>
         <div class="setting-row"><span>预先露出字母 <b id="revealVal">0</b> 个</span><input class="rate" type="range" id="revealRange" min="0" max="3" step="1" value="0"></div>
-        <div class="subtle" style="margin-top:8px">小空格数量＝该单词的字母数，整句横向排列、放不下自动换行。露出的字母是提示，不用再输入。改动后当前题会重做。</div>
+        <div class="subtle" style="margin-top:8px">小空格数量＝该单词的字母数，整句按单词真实宽度横向排列、放不下自动换行；特别长的单词只在自己这一格内折行，不会盖住相邻单词。露出的字母是提示，不用再输入。改动后当前题会重做。</div>
         <div class="setting-row"><span>单词间距 <b id="gapVal">22</b> px</span><input class="rate" type="range" id="gapRange" min="10" max="44" step="2" value="22"></div>
         <div class="subtle" style="margin-top:8px">中文提示现在显示在各自单词的正下方，过长时自动换行、不会挤到相邻单词；加大间距后整句更易读。</div>
         <div class="setting-row"><span>按键 / 判定音效</span><button class="switch" data-set="sound" id="swSound"></button></div>
@@ -754,19 +834,28 @@
 
     <div class="tab-page" id="pageLottery" hidden>
       <div class="panel">
-        <h3>积分抽奖</h3>
+        <h3>积分抽奖 · 转盘</h3>
         <div class="plan-head"><div><b id="lotteryPoints">0</b> <span>分</span></div><span class="badge" id="lotteryCostTag">每次 10 分</span></div>
-        <div class="field-row"><input class="field" id="lotteryCost" type="number" min="1" max="999" value="10" placeholder="每次消耗积分"><button class="mini-btn primary sm" id="lotteryDraw">抽一次</button></div>
-        <div class="panel-note">概率按百分比填写，所有奖项概率之和需 ≤ 100%，剩余部分为「谢谢参与」。奖项名称与概率改完即自动保存，随时可改。</div>
+        <div class="panel-note">抽奖按钮已移到页面右上角（积分旁边），点「转盘抽奖」即可开始。每次消耗 <b id="lotteryCostText">10</b> 分，转盘停在哪个扇区就得到哪个奖项；奖项概率之和需 ≤ 100%，剩余部分为「谢谢参与」。</div>
       </div>
       <div class="panel">
-        <h3>奖项设置</h3>
-        <div id="prizeList"></div>
-        <div class="btn-row tight" style="margin-top:10px">
-          <button class="mini-btn sm" id="prizeAdd">添加奖项</button>
-          <button class="mini-btn danger sm" id="prizeReset">恢复默认</button>
+        <h3>奖项设置 <span class="lock-badge" id="prizeLockBadge">家长锁定</span></h3>
+        <div class="locked-box" id="prizeLocked" hidden>
+          <div class="lock-title">此项已由家长密码保护</div>
+          <div class="panel-note">孩子可以自由抽奖；修改奖项内容、中奖概率和每次消耗积分需要家长解锁。</div>
+          <div class="locked-list" id="prizeLockedList"></div>
+          <div class="btn-row tight" style="justify-content:center"><button class="mini-btn primary sm" id="prizeUnlock">家长解锁</button></div>
         </div>
-        <div class="panel-note" style="margin-top:8px" id="prizeSum"></div>
+        <div id="prizeEditor" hidden>
+          <div class="parent-label">每次抽奖消耗积分</div>
+          <div class="field-row"><input class="field" id="lotteryCost" type="number" min="1" max="999" value="10" placeholder="每次消耗积分"></div>
+          <div id="prizeList"></div>
+          <div class="btn-row tight" style="margin-top:10px">
+            <button class="mini-btn sm" id="prizeAdd">添加奖项</button>
+            <button class="mini-btn danger sm" id="prizeReset">恢复默认</button>
+          </div>
+          <div class="panel-note" style="margin-top:8px" id="prizeSum"></div>
+        </div>
       </div>
       <div class="panel"><h3>最近抽奖</h3><div id="lotteryLog"></div></div>
     </div>
@@ -918,6 +1007,53 @@
   </div>
 </div>
 
+<!-- 转盘抽奖：扇区按奖项概率分配，结果先按概率产生，再让转盘停到对应扇区 -->
+<div class="wheel-mask" id="wheelMask" hidden>
+  <div class="wheel-dialog" role="dialog" aria-modal="true">
+    <div class="dialog-head"><h3>积分转盘</h3><button class="dialog-close" id="btnWheelClose" aria-label="关闭">&times;</button></div>
+    <div class="wheel-meta"><span>当前积分 <b id="wheelPoints">0</b></span><span>每次消耗 <b id="wheelCost">10</b> 分</span></div>
+    <div class="wheel-stage">
+      <div class="wheel-disc" id="wheelDisc"></div>
+      <div class="wheel-hub">抽奖</div>
+      <div class="wheel-pointer"></div>
+    </div>
+    <div class="wheel-result" id="wheelResult">点「开始抽奖」转一次</div>
+    <div class="wheel-list" id="wheelList"></div>
+    <div class="wheel-actions">
+      <button class="primary" id="btnSpin">开始抽奖</button>
+      <button id="btnWheelDone">收起</button>
+    </div>
+  </div>
+</div>
+
+<!-- 家长中心：解锁后可改管理密码、修改受保护的抽奖设置 -->
+<div class="parent-mask" id="parentMask" hidden>
+  <div class="parent-dialog" role="dialog" aria-modal="true">
+    <div class="dialog-head"><h3>家长中心</h3><button class="dialog-close" id="btnParentClose" aria-label="关闭">&times;</button></div>
+    <div class="parent-status" id="parentStatus">家长模式未解锁</div>
+    <div id="parentLogin">
+      <label class="parent-label" for="parentPwd">管理密码</label>
+      <input class="field" id="parentPwd" type="password" autocomplete="off" placeholder="请输入管理密码">
+      <div class="panel-note" id="parentInitialHint">初始管理密码：<b>1234</b>。首次解锁后请立刻修改；每次重新打开程序都会重新锁定。</div>
+      <div class="parent-actions"><button class="primary" id="btnParentUnlock">解锁</button></div>
+    </div>
+    <div id="parentPanel" hidden>
+      <div class="panel-note">当前受家长密码保护：抽奖与奖项设置。孩子仍可自由练习和抽奖；保护范围在程序里可以按需扩展。</div>
+      <label class="parent-label" for="parentOld">原密码</label>
+      <input class="field" id="parentOld" type="password" autocomplete="off" placeholder="原管理密码">
+      <label class="parent-label" for="parentNew">新密码（4–32 位）</label>
+      <input class="field" id="parentNew" type="password" autocomplete="off" placeholder="新管理密码">
+      <label class="parent-label" for="parentNew2">确认新密码</label>
+      <input class="field" id="parentNew2" type="password" autocomplete="off" placeholder="再输入一次">
+      <div class="parent-warn">这是防止孩子误改设置的家长锁，不是加密级安全；请勿用本机数据保存敏感信息。</div>
+      <div class="parent-actions">
+        <button id="btnParentLock">立即锁定</button>
+        <button class="primary" id="btnParentChange">修改密码</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 /* =========================================================
    SpellLab · 单词句子拼写记忆
@@ -1033,6 +1169,35 @@ const DEFAULT_PLAN = {enabled:false,type:'units',target:3,reward:20,penalty:10,p
 const DEFAULT_LOTTERY = {cost:10,prizes:clone(DEFAULT_PRIZES),log:[]};
 const LEDGER_LIMIT = 200, LOTTERY_LOG_LIMIT = 100, SESSION_MAX_AGE = 7*24*3600*1000;
 
+/* ---------------- 家长密码 ----------------
+   初始管理密码是公开的默认值，用于防止孩子随手改设置；state 里只存
+   salt + 哈希，绝不保存明文。刷新或重启程序后家长模式自动重新锁定。 */
+const INITIAL_PARENT_PASSWORD = '1234';
+const DEFAULT_PARENT = {salt:'spelllab-parent-v1',hash:'',changed:false};
+function hashPassword(pwd,salt){
+  let a=0x811c9dc5,b=0x9e3779b9,c=0x85ebca6b,d=0xc2b2ae35;
+  const s=String(pwd==null?'':pwd)+'|'+String(salt||'');
+  for(let r=0;r<3;r++){
+    for(let i=0;i<s.length;i++){
+      const k=s.charCodeAt(i)+r*31;
+      a=Math.imul(a^k,16777619)>>>0;
+      b=Math.imul(b^((k<<5)&255),2246822519)>>>0;
+      c=(c+Math.imul(k+i,3266489917))>>>0;
+      d=(d^((d>>>13)+Math.imul(k,668265263)))>>>0;
+      a=(a^(a>>>16))>>>0; b=(b^(b>>>12))>>>0;
+      c=(c^(c>>>15))>>>0; d=(d^(d>>>11))>>>0;
+    }
+  }
+  return [a,b,c,d].map(x=>('00000000'+x.toString(16)).slice(-8)).join('');
+}
+/* 受家长密码保护的功能域。以后要保护别的配置，只需在这里加一项，
+   再把对应控件的事件处理包一层 guardParent('域名', fn) 即可。 */
+const PARENT_SCOPES = {
+  lottery:{label:'抽奖与奖项设置',hint:'奖项内容、中奖概率、每次消耗积分'}
+};
+let parentUnlocked = false;   // 只在内存里，刷新 / 重启即重新锁定
+let parentPending = null;
+
 /* ---------------- 状态 ---------------- */
 const KEY = 'spelllab.state.v1';
 const DEFAULT_STATE = {
@@ -1045,7 +1210,8 @@ const DEFAULT_STATE = {
   grades:DEFAULT_GRADES, books:DEFAULT_BOOKS, unitMeta:{},
   filter:{gradeId:'all',bookId:'all'},
   vocab:[], practiceSets:[], textbooks:[], seq:1,
-  session:null, plan:clone(DEFAULT_PLAN), lottery:clone(DEFAULT_LOTTERY)
+  session:null, plan:clone(DEFAULT_PLAN), lottery:clone(DEFAULT_LOTTERY),
+  parent:clone(DEFAULT_PARENT)
 };
 let state = loadState();
 let mode = 'sentence';
@@ -1145,6 +1311,12 @@ function normalizeState(s){
   if(!Array.isArray(out.lottery.log)) out.lottery.log=[];
   if(out.lottery.log.length>LOTTERY_LOG_LIMIT) out.lottery.log=out.lottery.log.slice(-LOTTERY_LOG_LIMIT);
   if(out.session && typeof out.session!=='object') out.session=null;
+  out.parent=Object.assign({},DEFAULT_PARENT,
+    (s.parent&&typeof s.parent==='object')?s.parent:{});
+  if(typeof out.parent.salt!=='string' || !out.parent.salt) out.parent.salt=DEFAULT_PARENT.salt;
+  out.parent.changed=!!out.parent.changed;
+  if(typeof out.parent.hash!=='string' || !/^[0-9a-f]{32}$/i.test(out.parent.hash))
+    out.parent.hash=hashPassword(INITIAL_PARENT_PASSWORD,out.parent.salt);
   const st=out.settings;
   st.wordGap=Math.max(10,Math.min(44,Number(st.wordGap)||22));
   st.speakDelayMs=Math.max(0,Math.min(600,Number(st.speakDelayMs)||0));
@@ -1154,10 +1326,12 @@ function normalizeState(s){
   return out;
 }
 function loadState(){
+  /* 空存档也要走 normalizeState：默认管理密码的哈希在这里生成，
+     否则全新安装时 state.parent.hash 为空，初始密码永远校验不过。 */
   try{
     const raw=localStorage.getItem(KEY);
-    return raw?normalizeState(JSON.parse(raw)):clone(DEFAULT_STATE);
-  }catch(e){ return clone(DEFAULT_STATE); }
+    return normalizeState(raw?JSON.parse(raw):clone(DEFAULT_STATE));
+  }catch(e){ return normalizeState(clone(DEFAULT_STATE)); }
 }
 function mirrorTimestamp(){
   try{ return Number(localStorage.getItem(MIRROR_TS)||0)||0; }catch(e){ return 0; }
@@ -1720,8 +1894,10 @@ function renderBoard(tokens, cn, label, tip, onComplete){
       el.innerHTML='<div class="slot-core"><div class="answer"><div class="boxes">'+boxesMarkup(t.word,given)+'</div>'+inputHtml+'</div><div class="line"></div></div>'+
                    '<div class="hint">'+esc(hint)+'</div>';
     }else{
+      /* 整词输入框也按内容给宽度，但不再卡死 210px；超长单词由
+         .slot[max-width:100%] + .boxes[flex-wrap:wrap] 收在自身词槽内。 */
       const width=Math.max(t.word.length*1.2,hint.length*1.4,3.2);
-      el.style.minWidth=Math.min(width*20,210)+'px';
+      el.style.minWidth='min('+Math.round(Math.min(width*20,320))+'px,100%)';
       el.innerHTML='<div class="slot-core"><div class="answer">'+inputHtml+'</div><div class="line"></div></div>'+
                    '<div class="hint">'+esc(hint)+'</div>';
     }
@@ -3090,7 +3266,8 @@ function exportSQLite(){
     p.id||'',p.name||'',p.prob||0])));
   (lot.log||[]).forEach(x=>add('INSERT INTO lottery_log VALUES'+sqlVals([
     x.t||0,x.cost||0,x.prize||''])));
-  [['plan',plan],['lottery',lot],['session',state.session||{}]].forEach(([k,v])=>
+  [['plan',plan],['lottery',lot],['session',state.session||{}],
+   ['parent',state.parent||{}]].forEach(([k,v])=>
     add('INSERT OR REPLACE INTO app_meta VALUES'+sqlVals([k,JSON.stringify(v)])));
   add('COMMIT;');
   return L.join('\n')+'\n';
@@ -3342,13 +3519,170 @@ function savePlanForm(){
   saveState(true); renderDrawer(); toast('学习计划已保存','ok');
 }
 
+/* ---------------- 家长中心 / 可扩展的密码保护 ---------------- */
+function parentHashOk(pwd){
+  return hashPassword(pwd,state.parent.salt)===state.parent.hash;
+}
+function parentIsInitial(){ return !state.parent.changed; }
+function guardParent(scope,fn){
+  /* 新增保护域时这里不用改：在 PARENT_SCOPES 注册 + 调用处包一层即可 */
+  if(!PARENT_SCOPES[scope] || parentUnlocked){ if(typeof fn==='function') fn(); return true; }
+  openParentCenter(fn);
+  return false;
+}
+function openParentCenter(onUnlocked){
+  parentPending=(typeof onUnlocked==='function')?onUnlocked:null;
+  renderParentCenter();
+  $('parentMask').hidden=false;
+  if(!parentUnlocked){ $('parentPwd').value=''; try{ $('parentPwd').focus(); }catch(e){} }
+}
+function hideParentCenter(){ $('parentMask').hidden=true; parentPending=null; }
+function renderParentCenter(){
+  $('parentLogin').hidden=parentUnlocked;
+  $('parentPanel').hidden=!parentUnlocked;
+  $('parentInitialHint').hidden=!parentIsInitial();
+  $('parentStatus').textContent=(parentUnlocked?'家长模式已解锁':'家长模式未解锁')+
+    ' · 当前保护：'+PARENT_SCOPES.lottery.label;
+  renderParentChip();
+}
+function renderParentChip(){
+  const b=$('btnParent'); if(!b) return;
+  b.textContent=parentUnlocked?'家长 · 已解锁':'家长';
+  b.classList.toggle('unlocked',parentUnlocked);
+}
+function unlockParent(){
+  if(!parentHashOk($('parentPwd').value)){
+    toast('管理密码不对，请重试','bad'); $('parentPwd').value=''; return;
+  }
+  parentUnlocked=true;
+  $('parentPwd').value='';
+  renderParentCenter(); renderDrawer(); renderLottery();
+  toast('家长模式已解锁','ok');
+  const pending=parentPending; parentPending=null;
+  if(typeof pending==='function'){ try{ pending(); }catch(e){} }
+  /* 从「改奖项」等操作触发的解锁，完成后直接回到界面；
+     主动打开家长中心的则留在弹层里，方便立刻把初始密码改掉。 */
+  if(pending) hideParentCenter(); else renderParentCenter();
+}
+function lockParent(){
+  parentUnlocked=false; parentPending=null;
+  ['parentOld','parentNew','parentNew2'].forEach(id=>{ $(id).value=''; });
+  renderParentCenter(); renderDrawer(); renderLottery();
+  hideParentCenter(); toast('已退出家长模式');
+}
+function changeParentPassword(){
+  if(!parentUnlocked){ toast('请先解锁家长模式','bad'); return; }
+  if(!parentHashOk($('parentOld').value)){ toast('原密码不正确','bad'); return; }
+  const n1=String($('parentNew').value||''), n2=String($('parentNew2').value||'');
+  if(n1.length<4 || n1.length>32){ toast('新密码需 4–32 位','bad'); return; }
+  if(n1!==n2){ toast('两次输入的新密码不一致','bad'); return; }
+  state.parent.salt='s'+Date.now().toString(36)+Math.random().toString(36).slice(2,10);
+  state.parent.hash=hashPassword(n1,state.parent.salt);
+  state.parent.changed=true;
+  saveState(true);
+  ['parentOld','parentNew','parentNew2'].forEach(id=>{ $(id).value=''; });
+  renderParentCenter(); renderLottery();
+  toast('管理密码已更新','ok');
+}
+
+/* ---------------- 积分抽奖 · 转盘 ----------------
+   扇区角度按奖项概率分配，结果先按现有概率逻辑同步产生（便于回归测试），
+   再让转盘停到对应扇区；「谢谢参与」占剩余概率。 */
+const WHEEL_COLORS=['#ff7a86','#ffb45c','#ffd166','#8ce0a8','#5fd0d8',
+  '#7aa5ff','#b18cff','#f18ad8','#98a6c9'];
+let wheelSegs=[], wheelRotation=0, wheelSpinning=false;
+function wheelSegments(){
+  const prizes=Array.isArray(state.lottery.prizes)?state.lottery.prizes:[];
+  const segs=prizes.map((p,i)=>({name:String(p.name||('奖项'+(i+1))),
+    prob:Math.max(0,Math.min(100,Number(p.prob)||0)),
+    color:WHEEL_COLORS[i%WHEEL_COLORS.length],index:i}));
+  const sum=segs.reduce((a,s)=>a+s.prob,0);
+  if(sum<100) segs.push({name:'谢谢参与',prob:100-sum,color:'#5a648c',index:-1});
+  return segs.filter(s=>s.prob>0);
+}
+function renderWheel(){
+  wheelSegs=wheelSegments();
+  const total=wheelSegs.reduce((a,s)=>a+s.prob,0)||100;
+  const radius=(typeof innerWidth!=='undefined' && innerWidth<=640)?88:108;
+  let acc=0; const stops=[], labels=[], rows=[];
+  wheelSegs.forEach(s=>{
+    const start=acc/total*360, end=(acc+s.prob)/total*360; acc+=s.prob;
+    const mid=(start+end)/2;
+    s.start=start; s.end=end; s.mid=mid;
+    stops.push(s.color+' '+start.toFixed(2)+'deg '+end.toFixed(2)+'deg');
+    labels.push('<span class="wheel-label" style="transform:rotate('+mid.toFixed(2)+
+      'deg) translateY(-'+radius+'px) rotate('+(-mid).toFixed(2)+'deg)">'+esc(s.name)+'</span>');
+    rows.push('<div class="ledger-item"><span>'+esc(s.name)+'</span><b>'+
+      (Math.round(s.prob*10)/10)+'%</b></div>');
+  });
+  $('wheelDisc').style.background='conic-gradient(from -90deg,'+stops.join(',')+')';
+  $('wheelDisc').innerHTML=labels.join('');
+  $('wheelList').innerHTML=rows.join('');
+  return wheelSegs;
+}
+function openWheel(){
+  if(wheelSpinning) return;
+  renderWheel();
+  $('wheelPoints').textContent=Number(state.plan.points)||0;
+  $('wheelCost').textContent=Math.max(1,Number(state.lottery.cost)||10);
+  $('wheelResult').textContent='点「开始抽奖」转一次';
+  $('wheelResult').className='wheel-result';
+  $('btnSpin').textContent='开始抽奖';
+  $('wheelMask').hidden=false;
+}
+function closeWheel(){ if(!wheelSpinning) $('wheelMask').hidden=true; }
+function spinWheel(){
+  if(wheelSpinning) return null;
+  const res=drawLottery();
+  if(!res) return null;                 // 积分不足 / 概率错误，已由 drawLottery 提示
+  if(!wheelSegs.length) renderWheel();
+  let target=wheelSegs.findIndex(s=>s.index===res.index);
+  if(target<0) target=wheelSegs.length-1;
+  const seg=wheelSegs[target]||{start:0,end:360,mid:180};
+  const landing=seg.start+(0.2+Math.random()*0.6)*(seg.end-seg.start);
+  /* 指针固定在 12 点：要让 landing 角度的扇区停在指针处，圆盘的
+     「绝对角度」必须 ≡ -landing (mod 360)。连抽时先减掉上一次的落点，
+     否则第二次会叠加上一次的偏移，指针停错扇区。 */
+  const current=((wheelRotation%360)+360)%360;
+  const want=((360-landing)%360+360)%360;
+  const delta=((want-current)%360+360)%360;
+  wheelRotation += 360*5 + delta;
+  $('wheelDisc').style.transform='rotate('+wheelRotation.toFixed(2)+'deg)';
+  wheelSpinning=true;
+  $('btnSpin').disabled=true;
+  $('wheelResult').textContent='转动中…';
+  $('wheelResult').className='wheel-result';
+  $('wheelPoints').textContent=res.points;
+  if(typeof setTimeout==='function') setTimeout(()=>finishSpin(res),4300);
+  return res;
+}
+function finishSpin(res){
+  wheelSpinning=false;
+  $('btnSpin').disabled=false;
+  $('btnSpin').textContent='再抽一次';
+  $('wheelResult').textContent=(res.index>=0?'恭喜抽中：':'本次结果：')+res.prize;
+  $('wheelResult').className='wheel-result win';
+  renderPoints(); renderDrawer();
+}
+
 /* ---------------- 积分抽奖 ---------------- */
 function renderLottery(){
   const L=state.lottery, points=Number(state.plan.points)||0;
+  const cost=Math.max(1,Number(L.cost)||10);
   $('lotteryPoints').textContent=points;
-  $('lotteryCost').value=Number(L.cost)||10;
-  $('lotteryCostTag').textContent='每次 '+(Number(L.cost)||10)+' 分';
+  $('lotteryCost').value=cost;
+  $('lotteryCostTag').textContent='每次 '+cost+' 分';
+  $('lotteryCostText').textContent=cost;
+  /* 未解锁时只展示只读奖项，编辑器整体隐藏；所有写操作再经 guardParent 兜底 */
+  const locked=!parentUnlocked;
+  $('prizeLocked').hidden=!locked;
+  $('prizeEditor').hidden=locked;
+  $('prizeLockBadge').textContent=locked?'家长锁定':'已解锁';
+  $('prizeLockBadge').classList.toggle('on',!locked);
   const prizes=Array.isArray(L.prizes)?L.prizes:[];
+  $('prizeLockedList').innerHTML=prizes.length?prizes.map(p=>
+    '<span>'+esc(p.name||'奖项')+' · '+(Number(p.prob)||0)+'%</span>').join(''):
+    '<span>暂无奖项</span>';
   $('prizeList').innerHTML=prizes.length?prizes.map(p=>
     '<div class="prize-row">'+
       '<input class="field" data-prize-name="'+esc(p.id)+'" value="'+esc(p.name)+'" placeholder="奖项内容">'+
@@ -3384,10 +3718,10 @@ function drawLottery(){
   const L=state.lottery, cost=Math.max(1,Number(L.cost)||10);
   L.cost=cost;
   const points=Number(state.plan.points)||0;
-  if(points<cost){ toast('积分不足，还差 '+(cost-points)+' 分','bad'); return; }
+  if(points<cost){ toast('积分不足，还差 '+(cost-points)+' 分','bad'); return null; }
   const prizes=Array.isArray(L.prizes)?L.prizes:[];
   const total=prizes.reduce((a,p)=>a+(Number(p.prob)||0),0);
-  if(total>100){ toast('奖项概率合计超过 100%，请先调整','bad'); return; }
+  if(total>100){ toast('奖项概率合计超过 100%，请先调整','bad'); return null; }
   addPoints(-cost,'积分抽奖');
   const r=Math.random()*100;
   let acc=0, win=null;
@@ -3400,10 +3734,9 @@ function drawLottery(){
   L.log.push({t:Date.now(),cost:cost,prize:name});
   if(L.log.length>LOTTERY_LOG_LIMIT) L.log.splice(0,L.log.length-LOTTERY_LOG_LIMIT);
   saveState(true); renderDrawer();
-  showModal({title:win?'恭喜中奖！':'再接再厉',
-    text:'本次消耗 '+cost+' 分，当前剩余 '+(Number(state.plan.points)||0)+' 分。',
-    result:'<div class="draw-result">'+esc(name)+'</div>',
-    actions:[{label:'再抽一次',primary:true,onClick:drawLottery},{label:'收起'}]});
+  /* 结果同步返回给转盘（也方便回归测试）；界面不再弹旧的结果对话框 */
+  return {prize:name,index:win?prizes.indexOf(win):-1,cost:cost,
+    points:Number(state.plan.points)||0};
 }
 
 /* ---------------- 单元完成后的去向 ---------------- */
@@ -3634,12 +3967,29 @@ function bind(){
     const b=e.target.closest('button[data-tab]'); if(b) switchTab(b.dataset.tab);
   });
   $('btnPoints').addEventListener('click',()=>openDrawer(true,'plan'));
+  $('btnWheel').addEventListener('click',openWheel);
+  $('btnParent').addEventListener('click',()=>openParentCenter());
   $('scStar').addEventListener('click',starQuestionWords);
   $('modalMask').addEventListener('click',e=>{
     if(modalDismissible && e.target===$('modalMask')){ hideModal(); sessionSuspended=false; snapshotSession(); }
   });
+  /* 转盘 / 家长弹层 */
+  $('btnWheelClose').addEventListener('click',closeWheel);
+  $('btnWheelDone').addEventListener('click',closeWheel);
+  $('btnSpin').addEventListener('click',spinWheel);
+  $('wheelMask').addEventListener('click',e=>{ if(e.target===$('wheelMask')) closeWheel(); });
+  $('btnParentClose').addEventListener('click',hideParentCenter);
+  $('btnParentUnlock').addEventListener('click',unlockParent);
+  $('btnParentLock').addEventListener('click',lockParent);
+  $('btnParentChange').addEventListener('click',changeParentPassword);
+  $('parentMask').addEventListener('click',e=>{ if(e.target===$('parentMask')) hideParentCenter(); });
+  $('parentPwd').addEventListener('keydown',e=>{ if(e.key==='Enter') unlockParent(); });
+  $('prizeUnlock').addEventListener('click',()=>openParentCenter());
   document.addEventListener('keydown',e=>{
-    if(e.key==='Escape' && modalDismissible && !$('modalMask').hidden){
+    if(e.key!=='Escape') return;
+    if(!$('parentMask').hidden){ hideParentCenter(); return; }
+    if(!$('wheelMask').hidden){ closeWheel(); return; }
+    if(modalDismissible && !$('modalMask').hidden){
       hideModal(); sessionSuspended=false; snapshotSession();
     }
   });
@@ -3669,22 +4019,25 @@ function bind(){
   });
   $('planSave').addEventListener('click',savePlanForm);
 
-  /* 抽奖：奖项随时可改 */
+  /* 抽奖设置：所有写操作都过 guardParent('lottery')。
+     以后要保护其它设置，在 PARENT_SCOPES 注册新域并照此包一层即可。 */
   $('lotteryCost').addEventListener('change',e=>{
-    state.lottery.cost=Math.max(1,Math.min(999,Number(e.target.value)||10));
-    saveState(); renderLottery();
+    const v=e.target.value;
+    guardParent('lottery',()=>{
+      state.lottery.cost=Math.max(1,Math.min(999,Number(v)||10));
+      saveState(); renderLottery();
+    });
   });
-  $('lotteryDraw').addEventListener('click',drawLottery);
-  $('prizeAdd').addEventListener('click',addPrize);
-  $('prizeReset').addEventListener('click',resetPrizes);
+  $('prizeAdd').addEventListener('click',()=>guardParent('lottery',addPrize));
+  $('prizeReset').addEventListener('click',()=>guardParent('lottery',resetPrizes));
   $('prizeList').addEventListener('click',e=>{
     const b=e.target.closest('button[data-prize-del]');
-    if(b) delPrize(b.dataset.prizeDel);
+    if(b){ const id=b.dataset.prizeDel; guardParent('lottery',()=>delPrize(id)); }
   });
   $('prizeList').addEventListener('change',e=>{
-    const t=e.target, d=t.dataset||{};
-    if(d.prizeName!=null) updatePrizeField(d.prizeName,'name',t.value);
-    else if(d.prizeProb!=null) updatePrizeField(d.prizeProb,'prob',t.value);
+    const t=e.target, d=t.dataset||{}, v=t.value;
+    if(d.prizeName!=null) guardParent('lottery',()=>updatePrizeField(d.prizeName,'name',v));
+    else if(d.prizeProb!=null) guardParent('lottery',()=>updatePrizeField(d.prizeProb,'prob',v));
   });
 
   $('gradeFilter').addEventListener('change',e=>setFilter('gradeId',e.target.value));

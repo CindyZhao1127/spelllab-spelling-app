@@ -279,7 +279,8 @@ class Store:
                          (int(item.get("t") or 0), int(item.get("cost") or 0),
                           _s(item.get("prize"))))
         for key, val in (("plan", plan), ("lottery", lottery),
-                         ("session", state.get("session") or {})):
+                         ("session", state.get("session") or {}),
+                         ("parent", state.get("parent") or {})):
             conn.execute("INSERT OR REPLACE INTO app_meta VALUES(?,?)", (key, _j(val)))
 
     def info(self) -> dict:

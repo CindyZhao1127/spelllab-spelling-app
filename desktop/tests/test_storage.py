@@ -51,6 +51,8 @@ def sample_state():
         "lottery": {"cost": 10, "prizes": [{"id": "p1", "name": "小贴纸", "prob": 10}],
                     "log": [{"t": 1763200020000, "cost": 10, "prize": "小贴纸"}]},
         "session": {"mode": "sentence", "unitId": "u6", "qPos": 2, "draft": ["It"]},
+        # 家长密码只存 salt + 哈希，样例里也不应出现明文密码
+        "parent": {"salt": "test-salt", "hash": "a" * 32, "changed": True},
     }
 
 
@@ -98,7 +100,7 @@ class StoreTest(unittest.TestCase):
         self.assertEqual(counts["plan_ledger"], 1)
         self.assertEqual(counts["prizes"], 1)
         self.assertEqual(counts["lottery_log"], 1)
-        self.assertEqual(counts["app_meta"], 3)
+        self.assertEqual(counts["app_meta"], 4)
 
         import sqlite3
         conn = sqlite3.connect(str(self.path))
@@ -120,6 +122,10 @@ class StoreTest(unittest.TestCase):
                              ("小贴纸",))
             self.assertEqual(json.loads(
                 conn.execute("SELECT v FROM app_meta WHERE k='session'").fetchone()[0])["qPos"], 2)
+            parent = json.loads(
+                conn.execute("SELECT v FROM app_meta WHERE k='parent'").fetchone()[0])
+            self.assertEqual(parent["hash"], "a" * 32)
+            self.assertEqual(parent["changed"], True)
         finally:
             conn.close()
 

@@ -533,6 +533,154 @@ function fireScheduled(){
     return 'showModal / hideModal';
   });
 
+  /* ---------------- 家长用户 / 转盘 / 长词折行 ---------------- */
+  check('顶部抽奖入口与家长中心控件齐全', () => {
+    ['btnWheel','btnParent','wheelMask','wheelDisc','btnSpin',
+     'parentMask','parentPwd','btnParentUnlock','btnParentChange','btnParentLock',
+     'prizeUnlock','prizeLocked','prizeEditor'].forEach(id => {
+      assert(new RegExp('id="' + id + '"').test(html), '缺控件 ' + id);
+    });
+    assert(!/id="lotteryDraw"/.test(html), '侧栏旧的「抽一次」按钮未移除');
+    assert(!/id="lotteryOpenWheel"/.test(html), '侧栏仍留有抽奖按钮，未真正挪到顶部');
+    assert(/class="wheel-hub"/.test(html) && /class="wheel-pointer"/.test(html),
+      '转盘指针 / 中心圆缺失');
+    return '顶部入口 + 家长中心 + 转盘弹层';
+  });
+
+  check('家长密码只存哈希，初始密码 1234 可用', () => {
+    const o = JSON.parse(run(`JSON.stringify({
+      h:state.parent.hash, s:state.parent.salt, c:state.parent.changed,
+      ok:parentHashOk('1234'), bad:parentHashOk('9999'),
+      old:normalizeState({stats:{attempted:3}}).parent.hash
+    })`));
+    assert(/^[0-9a-f]{32}$/.test(o.h), '密码哈希格式不对: ' + o.h);
+    assert(/^[0-9a-f]{32}$/.test(o.old), '旧存档未补默认密码哈希');
+    assert(JSON.stringify(o).indexOf('1234') < 0, 'state 里出现明文密码');
+    assert(o.ok === true && o.bad === false, '初始密码校验不对');
+    assert(run('typeof hashPassword') === 'function', '缺哈希函数');
+    return 'salt + 32 位哈希，明文不落盘';
+  });
+
+  check('修改管理密码：旧密码失效、新密码生效且立即写盘', () => {
+    const before = fetchCalls.filter(c => c.path === 'save').length;
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      parentUnlocked=true;
+      $('parentOld').value='1234'; $('parentNew').value='abcd'; $('parentNew2').value='abcd';
+      changeParentPassword();
+      const out={changed:state.parent.changed,old:parentHashOk('1234'),
+        fresh:parentHashOk('abcd'),salt:state.parent.salt!=='spelllab-parent-v1'};
+      state.parent.salt='spelllab-parent-v1';
+      state.parent.hash=hashPassword('1234',state.parent.salt);
+      state.parent.changed=false; parentUnlocked=false;
+      return out;})())`));
+    assert(o.changed && !o.old && o.fresh && o.salt, JSON.stringify(o));
+    assert(fetchCalls.filter(c => c.path === 'save').length > before, '改密码未立即写盘');
+    return '旧密码失效 / 新 salt / 立即落盘';
+  });
+
+  check('guardParent 可扩展：未解锁先弹家长中心，解锁后执行待办', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      parentUnlocked=false; parentPending=null;
+      let done=0;
+      const r1=guardParent('lottery',()=>{done++;});
+      const opened=!$('parentMask').hidden;
+      $('parentPwd').value='1234'; unlockParent();
+      const out={r1:r1,opened:opened,done:done,unlocked:parentUnlocked,
+        closed:$('parentMask').hidden,scopes:Object.keys(PARENT_SCOPES)};
+      parentUnlocked=false; parentPending=null;
+      return out;})())`));
+    assert(o.r1 === false && o.opened === true, '未解锁未打开家长中心');
+    assert(o.done === 1 && o.unlocked === true, '解锁后未执行待办操作');
+    assert(o.closed === true, '解锁后弹层未关闭');
+    assert(o.scopes.indexOf('lottery') >= 0, 'PARENT_SCOPES 缺 lottery 域');
+    assert(run("PARENT_SCOPES.lottery.label.indexOf('抽奖')>=0") === true,
+      '保护域缺少中文说明');
+    return 'PARENT_SCOPES 注册 + 待办重放';
+  });
+
+  check('抽奖设置：未解锁只读、解锁后才出现编辑器', () => {
+    const a = JSON.parse(run(`JSON.stringify((function(){
+      parentUnlocked=false; renderLottery();
+      return {lockedHidden:$('prizeLocked').hidden,editorHidden:$('prizeEditor').hidden,
+        badge:$('prizeLockBadge').textContent,
+        list:$('prizeLockedList').innerHTML.indexOf('%')>=0};})())`));
+    assert(a.lockedHidden === false && a.editorHidden === true, JSON.stringify(a));
+    assert(a.list === true, '未展示只读奖项列表');
+    const b = JSON.parse(run(`JSON.stringify((function(){
+      parentUnlocked=true; renderLottery();
+      const out={lockedHidden:$('prizeLocked').hidden,editorHidden:$('prizeEditor').hidden};
+      parentUnlocked=false; renderLottery(); return out;})())`));
+    assert(b.lockedHidden === true && b.editorHidden === false, JSON.stringify(b));
+    return '锁定只读 / 解锁可编辑';
+  });
+
+  check('转盘扇区按概率分配并补齐「谢谢参与」', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      state.lottery.prizes=[{id:'a',name:'贴纸',prob:25},{id:'b',name:'绘本',prob:15}];
+      const segs=wheelSegments(); renderWheel();
+      const out={n:segs.length,last:segs[segs.length-1].name,
+        remain:segs[segs.length-1].prob,sum:segs.reduce((a,s)=>a+s.prob,0),
+        bg:$('wheelDisc').style.background,
+        labels:$('wheelDisc').innerHTML.split('wheel-label').length-1,
+        rows:$('wheelList').innerHTML.split('ledger-item').length-1};
+      state.lottery.prizes=clone(DEFAULT_PRIZES);
+      return out;})())`));
+    assert(o.n === 3 && o.last === '谢谢参与' && o.remain === 60, JSON.stringify(o));
+    assert(o.sum === 100, '概率总和不为 100');
+    assert(String(o.bg).indexOf('conic-gradient') === 0, '未生成扇形渐变');
+    assert(o.labels === 3 && o.rows === 3, '扇区标签 / 列表数量不对');
+    return '25% / 15% / 60% 谢谢参与';
+  });
+
+  check('转盘 spinWheel 同步产生结果并转到对应扇区', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      state.lottery.prizes=[{id:'a',name:'一等奖',prob:100}];
+      state.lottery.cost=10; state.plan.points=50; state.lottery.log=[];
+      openWheel();
+      const res=spinWheel();
+      const out={points:state.plan.points,log:state.lottery.log.length,
+        prize:res&&res.prize,index:res&&res.index,
+        transform:$('wheelDisc').style.transform,spinning:wheelSpinning,
+        during:$('wheelResult').textContent};
+      finishSpin(res);
+      out.after=wheelSpinning; out.final=$('wheelResult').textContent;
+      closeWheel();
+      state.lottery.prizes=clone(DEFAULT_PRIZES);
+      return out;})())`));
+    assert(o.points === 40 && o.log === 1, '扣分或记录不对: ' + JSON.stringify(o));
+    assert(o.prize === '一等奖' && o.index === 0, '抽奖结果不对');
+    assert(String(o.transform).indexOf('rotate(') === 0, '转盘未旋转');
+    assert(o.spinning === true && o.after === false, '旋转状态未复位');
+    assert(o.during === '转动中…' && o.final.indexOf('一等奖') >= 0, '结果文案不对');
+    return '扣 10 分 / 记录 1 条 / 转到一等奖';
+  });
+
+  check('连抽两次，指针仍停在第二次结果对应的扇区', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      state.lottery.prizes=[{id:'a',name:'A',prob:20},{id:'b',name:'B',prob:20}];
+      state.lottery.cost=1; state.plan.points=100;
+      wheelRotation=0; wheelSpinning=false;
+      openWheel();
+      const r1=spinWheel(); finishSpin(r1);
+      const r2=spinWheel(); finishSpin(r2);
+      const seg=wheelSegs.find(s=>s.index===r2.index)||wheelSegs[wheelSegs.length-1];
+      const pointing=(((-wheelRotation)%360)+360)%360;
+      const out={idx:r2.index,start:seg.start,end:seg.end,pointing:pointing};
+      closeWheel(); state.lottery.prizes=clone(DEFAULT_PRIZES);
+      return out;})())`));
+    assert(o.pointing >= o.start - 0.01 && o.pointing <= o.end + 0.01,
+      '指针没落在结果扇区: ' + JSON.stringify(o));
+    return '第 2 次仍准确停在 ' + o.idx + ' 号扇区';
+  });
+
+  check('全库导出含家长密码哈希、不含明文', () => {
+    const sql = run('exportSQLite()');
+    assert(sql.indexOf("VALUES('parent'") >= 0, 'app_meta 缺 parent');
+    assert(sql.indexOf('hash') >= 0, '导出缺哈希字段');
+    assert(sql.indexOf('1234') < 0, '导出里出现明文密码');
+    return 'app_meta 四份 JSON，密码只以哈希出现';
+  });
+
   const failed = results.filter(r => r[1] === 'FAIL');
   results.forEach(r => console.log('[' + r[1] + ']   ' + r[0] + (r[2] ? '  -> ' + r[2] : '')));
   console.log('\n合计 ' + results.length + ' 项，失败 ' + failed.length + ' 项');

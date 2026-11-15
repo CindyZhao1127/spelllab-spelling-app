@@ -114,12 +114,30 @@ function check(name, fn){
 }
 const SAMPLE = "renderBoard(tokenize('The weather is sunny.',['这','天气','是','晴朗的'],'天气晴朗。'),'天气晴朗。','标签','提示',null)";
 
-check('CSS：整句横向排列并自动换行', () => {
+check('CSS：整句按真实宽度换行，超长单词只在本词槽内折行', () => {
   assert(/\.slots\{[^}]*flex-wrap:wrap/.test(css), '.slots 未设置 flex-wrap:wrap');
-  assert(/\.slot\.boxed\{flex:0 0 auto\}/.test(css), '字母格词槽未禁止压缩，换行会被挤坏');
-  assert(/\.slot\.boxed \.boxes\{[^}]*flex-wrap:nowrap/.test(css), '单词内部不应被拆到两行');
+  assert(/\.slot\{[^}]*max-width:100%/.test(css), '词槽未改成 max-width:100%');
+  assert(!/\.slot\{[^}]*max-width:190px/.test(css), '词槽 190px 硬上限未移除，长词会盖住相邻词');
+  assert(/\.slot\.boxed \.boxes\{[^}]*flex-wrap:wrap/.test(css), '超长单词无法在自身词槽内折行');
+  assert(/\.slot\.boxed \.answer\{[^}]*min-height/.test(css), '折行后答案区高度未自适应');
+  assert(/\.question-cn\{[\s\S]*?overflow-wrap:anywhere/.test(css), '长题干未允许换行');
   assert(/@media\(max-width:640px\)[\s\S]*?\.lbox\{/.test(css), '缺窄屏格子尺寸适配');
-  return 'wrap / flex:0 0 auto / nowrap / 窄屏适配';
+  return 'wrap / max-width:100% / boxes wrap / 高度自适应 / 题干换行';
+});
+
+check('20 字母长单词仍生成完整字母格且不写死宽度', () => {
+  const o = JSON.parse(run(`JSON.stringify((function(){
+    state.settings.letterBoxes=true;
+    renderBoard(tokenize('The weather is internationalization.',
+      ['这','天气','是','国际化'],'国际化。'),'国际化。','标签','提示',null);
+    let max=0, idx=-1;
+    slots.forEach((s,i)=>{ if(!s) return;
+      const n=s.querySelectorAll('.lbox').length; if(n>max){ max=n; idx=i; } });
+    return {max:max,minWidth:(idx>=0?(slots[idx].style.minWidth||''):'x')};
+  })())`));
+  assert(o.max >= 20, '长单词字母格数量不对: ' + o.max);
+  assert(!o.minWidth, '字母格模式仍设置了固定 minWidth: ' + o.minWidth);
+  return '最长词 ' + o.max + ' 格，无固定宽度';
 });
 
 check('默认开启字母格、露出 0 个字母', () => {
