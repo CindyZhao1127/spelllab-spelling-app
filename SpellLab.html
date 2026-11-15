@@ -398,6 +398,31 @@
   .set-item .si-name{font-size:12px;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .set-item .si-meta{font-size:10px;color:var(--muted);margin-top:3px}
   .count-pill{font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(139,123,255,.2);color:#cdc4ff;white-space:nowrap}
+
+  /* ---------- 教材库 ---------- */
+  .tb-card{border:1px solid rgba(255,255,255,.09);border-radius:12px;padding:10px;margin-bottom:8px;background:rgba(255,255,255,.04)}
+  .tb-card.off{opacity:.5}
+  .tb-head{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .tb-title{flex:1;min-width:130px;font-size:12px;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .tb-meta{font-size:10px;color:var(--muted);margin-top:4px;line-height:1.6}
+  .tb-units{margin-top:9px;border-top:1px dashed rgba(255,255,255,.12);padding-top:8px}
+  .tb-unit{display:flex;align-items:center;gap:6px;padding:6px 7px;border-radius:9px;background:rgba(255,255,255,.05);margin-bottom:5px;font-size:11px}
+  .tb-unit.sel{background:rgba(139,123,255,.16);box-shadow:inset 0 0 0 1px rgba(139,123,255,.4)}
+  .tb-unit .u-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer}
+  .tb-unit .u-count{font-size:10px;color:var(--muted);white-space:nowrap}
+  .tb-editor{margin-top:10px;padding:10px;border-radius:11px;background:rgba(0,0,0,.18);border:1px solid rgba(139,123,255,.24)}
+  .tb-editor h4{font-size:12px;font-weight:800;margin:0 0 9px}
+  .editor-row{display:flex;gap:6px;margin-bottom:7px;flex-wrap:wrap}
+  .editor-row .field{flex:1;min-width:130px}
+  textarea.field{min-height:66px;resize:vertical;line-height:1.6}
+  .q-item{display:flex;align-items:flex-start;gap:7px;padding:7px 8px;border-radius:9px;background:rgba(0,0,0,.16);margin-bottom:5px;font-size:11px}
+  .q-item .q-main{flex:1;min-width:0}
+  .q-cn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .q-en{color:#a7b6ef;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .word-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 7px;border-radius:999px;background:rgba(255,255,255,.08);font-size:10px;margin:0 4px 5px 0}
+  .word-chip button{color:#ffb3ba;font-size:11px;line-height:1}
+  .file-input{font-size:10px;color:var(--muted);max-width:100%}
+  .subtle{font-size:10px;color:var(--muted);line-height:1.6}
 </style>
 </head>
 <body>
@@ -428,6 +453,7 @@
     <label>教材 <span class="sel"><select id="bookFilter" aria-label="选择教材版本"></select></span></label>
     <span class="fb-info" id="filterInfo"></span>
     <button class="link-btn" id="btnManage">管理年级 / 教材</button>
+    <button class="link-btn" id="btnLibrary">教材库</button>
   </div>
   <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
 
@@ -483,6 +509,7 @@
       <button data-tab="learn" id="tabLearn" class="active">学习</button>
       <button data-tab="vocab" id="tabVocab">生词本</button>
       <button data-tab="manage" id="tabManage">管理</button>
+      <button data-tab="library" id="tabLibrary">教材库</button>
     </div>
 
     <div class="tab-page" id="pageLearn">
@@ -600,6 +627,45 @@
         <button class="mini-btn danger" id="resetAll">重置全部学习数据</button>
       </div>
     </div>
+
+    <div class="tab-page" id="pageLibrary" hidden>
+      <div class="panel">
+        <h3>新建教材包</h3>
+        <div class="panel-note">一个教材包 = 一册书，下面可包含任意多个单元；每个单元有独立的句子与单词表，会自动成为课程单元。教材保存在本机，导出 JSON 后可提交到 Git 管版本或分享给别人。</div>
+        <div class="field-row"><input class="field" id="tbName" placeholder="如 人教版 PEP 四年级上册"></div>
+        <div class="field-row">
+          <span class="sel"><select id="tbGrade"></select></span>
+          <span class="sel"><select id="tbBook"></select></span>
+          <button class="mini-btn primary sm" id="tbCreate">创建教材包</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>我的教材包 <span class="count-pill" id="tbCount">0</span></h3>
+        <div id="tbList"></div>
+      </div>
+
+      <div class="panel">
+        <h3>单元内容编辑 <span class="count-pill" id="tbEditTitle">未选择</span></h3>
+        <div id="tbEditor"></div>
+      </div>
+
+      <div class="panel">
+        <h3>导入教材包 / 数据备份</h3>
+        <div class="panel-note">粘贴教材包 JSON 或选择 .json 文件导入；导出的教材包可提交到 Git 管理版本。「全库备份」含进度、错题、生词和全部教材。</div>
+        <textarea class="field" id="packIO" placeholder="在此粘贴 JSON；导出时内容也会显示在这里，方便复制"></textarea>
+        <div class="btn-row tight" style="margin-top:8px">
+          <button class="mini-btn primary sm" id="packImport">导入 JSON</button>
+          <input class="file-input" type="file" id="packFile" accept=".json,application/json">
+        </div>
+        <div class="btn-row tight" style="margin-top:8px">
+          <button class="mini-btn sm" id="packExportAll">导出全部教材包</button>
+          <button class="mini-btn sm" id="backupAll">导出全库备份</button>
+          <button class="mini-btn danger sm" id="restoreAll">从备份恢复</button>
+        </div>
+        <div class="subtle" style="margin-top:8px">导入教材包只追加教材；从备份恢复会覆盖当前全部数据，操作前请先导出备份。</div>
+      </div>
+    </div>
   </aside>
 </div>
 
@@ -708,7 +774,7 @@ const DEFAULT_STATE = {
   custom:[], customMeta:{gradeId:'g4',bookId:'b_hj'},
   grades:DEFAULT_GRADES, books:DEFAULT_BOOKS, unitMeta:{},
   filter:{gradeId:'all',bookId:'all'},
-  vocab:[], practiceSets:[], seq:1
+  vocab:[], practiceSets:[], textbooks:[], seq:1
 };
 let state = loadState();
 let mode = 'sentence';
@@ -732,7 +798,7 @@ function loadState(){
       filter:Object.assign({},DEFAULT_STATE.filter,s.filter||{}),
       customMeta:Object.assign({},DEFAULT_STATE.customMeta,s.customMeta||{})
     });
-    ['custom','wrong','vocab','practiceSets','grades','books'].forEach(k=>{
+    ['custom','wrong','vocab','practiceSets','grades','books','textbooks'].forEach(k=>{
       if(!Array.isArray(out[k])) out[k]=clone(DEFAULT_STATE[k]);
     });
     ['progress','wordStats','unitMeta'].forEach(k=>{
@@ -772,6 +838,17 @@ function allUnits(){
       id:'ps:'+s.id, name:'生词练习 · '+s.name, book:'来自生词本 · '+(s.words||[]).length+' 个词',
       gradeId:s.gradeId||'g4', bookId:s.bookId||'b_hj',
       sentences:s.sentences||[], words:s.words||[], practiceSetId:s.id
+    });
+  });
+  (state.textbooks||[]).forEach(tb=>{
+    if(!tb || tb.enabled===false) return;
+    (tb.units||[]).forEach(tu=>{
+      if(!tu || !(tu.sentences||[]).length) return;
+      base.push({
+        id:'tb:'+tb.id+':'+tu.id, name:tu.name||'未命名单元', book:tb.name||'教材包',
+        gradeId:tb.gradeId||'g4', bookId:tb.bookId||'b_hj',
+        sentences:tu.sentences, words:tu.words||[], packId:tb.id, tuId:tu.id
+      });
     });
   });
   return base.map(u=>{
@@ -1698,6 +1775,354 @@ function renderSets(){
   ).join(''):'<div class="empty">还没有练习集，勾选生词后点「生成练习集」</div>';
 }
 
+/* ---------------- 教材库：教材包 / 单元 / 题目 ---------------- */
+let libSel={packId:'',unitId:'',qIdx:-1};
+function tbPacks(){ return Array.isArray(state.textbooks)?state.textbooks:(state.textbooks=[]); }
+function tbPack(id){ return tbPacks().find(p=>p.id===id)||null; }
+function tbUnit(pack,id){ return pack?(pack.units||[]).find(u=>u.id===id)||null:null; }
+function tbActiveUnit(){ return tbUnit(tbPack(libSel.packId),libSel.unitId); }
+function tbCounts(pack){
+  let sentences=0,words=0;
+  (pack.units||[]).forEach(u=>{ sentences+=(u.sentences||[]).length; words+=(u.words||[]).length; });
+  return {units:(pack.units||[]).length,sentences:sentences,words:words};
+}
+function refreshLibrary(){
+  sessionOrder={unitId:'',list:[]};
+  qPos=0; wordCur=null;
+  unitPos=Math.min(unitPos,Math.max(0,units().length-1));
+  renderFilters(); renderDrawer(); renderHeader(); setMode(mode);
+}
+function makePack(name,gradeId,bookId){
+  const n=String(name||'').trim();
+  if(!n){ toast('请填写教材包名称','bad'); return null; }
+  const p={id:nextId('tb'),name:n,gradeId:gradeId||'g4',bookId:bookId||'b_hj',
+           enabled:true,created:today(),units:[]};
+  tbPacks().push(p); saveState();
+  libSel={packId:p.id,unitId:'',qIdx:-1};
+  refreshLibrary(); toast('已创建教材包「'+n+'」','ok');
+  return p;
+}
+function removePack(id){
+  const p=tbPack(id); if(!p) return;
+  const c=tbCounts(p);
+  if(!confirm('删除教材包「'+p.name+'」？含 '+c.units+' 单元 / '+c.sentences+' 题，不可恢复（建议先导出）。')) return;
+  const prefix='tb:'+id+':';
+  Object.keys(state.unitMeta||{}).forEach(k=>{ if(k.indexOf(prefix)===0) delete state.unitMeta[k]; });
+  state.wrong=(state.wrong||[]).filter(w=>String(w.unitId||'').indexOf(prefix)!==0);
+  state.textbooks=tbPacks().filter(x=>x.id!==id);
+  if(libSel.packId===id) libSel={packId:'',unitId:'',qIdx:-1};
+  saveState(); refreshLibrary(); toast('教材包已删除');
+}
+function togglePack(id){
+  const p=tbPack(id); if(!p) return;
+  p.enabled=p.enabled===false;
+  saveState(); refreshLibrary();
+  toast(p.enabled?'已启用「'+p.name+'」':'已停用「'+p.name+'」');
+}
+function addUnit(packId,name){
+  const p=tbPack(packId); if(!p) return null;
+  let n=String(name||'').trim();
+  if(!n){
+    const v=prompt('新单元名称','Unit '+((p.units||[]).length+1));
+    if(v==null) return null;
+    n=String(v).trim()||('Unit '+((p.units||[]).length+1));
+  }
+  if(!Array.isArray(p.units)) p.units=[];
+  const u={id:nextId('tu'),name:n,sentences:[],words:[]};
+  p.units.push(u); saveState();
+  libSel={packId:packId,unitId:u.id,qIdx:-1};
+  refreshLibrary(); toast('已添加单元「'+n+'」','ok');
+  return u;
+}
+function renameUnit(packId,unitId,name){
+  const u=tbUnit(tbPack(packId),unitId); if(!u) return;
+  let n=name;
+  if(n==null){ n=prompt('修改单元名称',u.name); if(n==null) return; }
+  n=String(n).trim(); if(!n) return;
+  u.name=n; saveState(); refreshLibrary(); toast('单元已改名','ok');
+}
+function removeUnit(packId,unitId){
+  const p=tbPack(packId), u=tbUnit(p,unitId); if(!p||!u) return;
+  if(!confirm('删除单元「'+u.name+'」？含 '+(u.sentences||[]).length+' 题 / '+(u.words||[]).length+' 词。')) return;
+  p.units=(p.units||[]).filter(x=>x.id!==unitId);
+  delete state.unitMeta['tb:'+packId+':'+unitId];
+  if(libSel.unitId===unitId) libSel={packId:packId,unitId:'',qIdx:-1};
+  saveState(); refreshLibrary(); toast('单元已删除');
+}
+/* 题目格式与「自定义题库」一致；chunks 可留空，留空时由 buildChunks 自动均分 */
+function validateQuestion(cn,en,hintsRaw,chunksRaw){
+  cn=String(cn||'').trim(); en=String(en||'').trim();
+  const hints=String(hintsRaw||'').split(/[,，、]/).map(x=>x.trim()).filter(Boolean);
+  if(!cn||!en) return {error:'中文和英文都要填写'};
+  if(!/^[A-Za-z][A-Za-z\s'.,!?-]*$/.test(en)) return {error:'英文句子含不支持的字符'};
+  const wordCount=tokenize(en,[],cn).filter(t=>!t.punct).length;
+  if(hints.length!==wordCount) return {error:'英文有 '+wordCount+' 个单词，但提示有 '+hints.length+' 个'};
+  const q={cn:cn,en:en,hints:hints};
+  const cr=String(chunksRaw||'').trim();
+  if(cr){
+    const chunks=cr.split(/[,，]/).map(part=>{
+      const m=String(part).trim().match(/^(.*?)[:：](\d+)$/);
+      return m?[m[1].trim(),Number(m[2])]:null;
+    });
+    if(chunks.some(c=>!c||!c[0]||!(c[1]>0))) return {error:'短语拆分格式应为「短语中文:词数」'};
+    const sum=chunks.reduce((a,c)=>a+c[1],0);
+    if(sum!==wordCount) return {error:'短语词数之和 '+sum+' 与单词数 '+wordCount+' 不一致'};
+    q.chunks=chunks;
+  }
+  return {q:q};
+}
+function saveQuestion(){
+  const u=tbActiveUnit();
+  if(!u){ toast('请先选择一个单元','bad'); return null; }
+  const v=validateQuestion($('qCn').value,$('qEn').value,$('qHints').value,$('qChunks').value);
+  if(v.error){ toast(v.error,'bad'); return null; }
+  if(!Array.isArray(u.sentences)) u.sentences=[];
+  if(libSel.qIdx>=0 && u.sentences[libSel.qIdx]) u.sentences[libSel.qIdx]=v.q;
+  else u.sentences.push(v.q);
+  libSel.qIdx=-1;
+  saveState(); refreshLibrary(); toast('题目已保存','ok');
+  return v.q;
+}
+function editQuestion(i){
+  const u=tbActiveUnit(); if(!u||!u.sentences[i]) return;
+  libSel.qIdx=i; renderTbEditor();
+}
+function removeQuestion(i){
+  const u=tbActiveUnit(); if(!u||!u.sentences[i]) return;
+  u.sentences.splice(i,1);
+  if(libSel.qIdx===i) libSel.qIdx=-1;
+  saveState(); refreshLibrary(); toast('题目已删除');
+}
+function tbBulkQuestions(){
+  const u=tbActiveUnit(); if(!u){ toast('请先选择一个单元','bad'); return 0; }
+  const r=parseCustom($('qBulk').value);
+  if(r.errors.length){ toast(r.errors[0],'bad'); return 0; }
+  if(!r.out.length){ toast('没有解析到题目','bad'); return 0; }
+  if(!Array.isArray(u.sentences)) u.sentences=[];
+  u.sentences=u.sentences.concat(r.out.map(q=>clone(q)));
+  saveState(); $('qBulk').value='';
+  refreshLibrary(); toast('已添加 '+r.out.length+' 道题','ok');
+  return r.out.length;
+}
+function parseWordList(text){
+  const out=[],seen=new Set();
+  String(text||'').split(/\r?\n/).forEach(line=>{
+    const s=line.trim(); if(!s||s.startsWith('#')) return;
+    const parts=s.split(/[,，|:\t]/).map(x=>x.trim()).filter(Boolean);
+    if(parts.length<2) return;
+    const en=parts[0],cn=parts.slice(1).join(' ');
+    if(!/^[A-Za-z][A-Za-z'-]*$/.test(en)) return;
+    const k=en.toLowerCase();
+    if(seen.has(k)) return;
+    seen.add(k); out.push([en,cn]);
+  });
+  return out;
+}
+function tbBulkWords(){
+  const u=tbActiveUnit(); if(!u){ toast('请先选择一个单元','bad'); return 0; }
+  const list=parseWordList($('wBulk').value);
+  if(!list.length){ toast('没有解析到单词，格式应为每行「英文,中文」','bad'); return 0; }
+  if(!Array.isArray(u.words)) u.words=[];
+  const seen=new Set(u.words.map(w=>String(w[0]).toLowerCase()));
+  let added=0;
+  list.forEach(w=>{ if(!seen.has(w[0].toLowerCase())){ u.words.push(w); seen.add(w[0].toLowerCase()); added++; } });
+  saveState(); $('wBulk').value='';
+  refreshLibrary(); toast('新增 '+added+' 个单词','ok');
+  return added;
+}
+function removeWord(i){
+  const u=tbActiveUnit(); if(!u||!u.words[i]) return;
+  u.words.splice(i,1); saveState(); refreshLibrary(); toast('单词已移除');
+}
+/* 教材包 JSON：可提交到 Git 做版本管理，也可发给别人导入 */
+function packExportPayload(packs){
+  return {
+    format:'spelllab.textbook.v1', exportedAt:new Date().toISOString(),
+    packs:packs.map(p=>({
+      name:p.name, gradeId:p.gradeId, bookId:p.bookId,
+      gradeName:gradeName(p.gradeId), bookName:bookName(p.bookId),
+      units:(p.units||[]).map(u=>({
+        name:u.name,
+        sentences:(u.sentences||[]).map(q=>clone(q)),
+        words:(u.words||[]).map(w=>w.slice())
+      }))
+    }))
+  };
+}
+function normalizeImportedPack(raw){
+  if(!raw||typeof raw!=='object') return null;
+  const name=String(raw.name||'').trim();
+  if(!name||!Array.isArray(raw.units)) return null;
+  const ensureCat=(kind,id,label)=>{
+    const list=kind==='grade'?state.grades:state.books;
+    if(!id||id==='none') return 'none';
+    if(list.some(x=>x.id===id)) return id;
+    const n=String(label||'').trim();
+    if(!n||n==='未分类') return 'none';
+    const same=list.find(x=>x.name===n);
+    if(same) return same.id;
+    const item={id:nextId(kind==='grade'?'g':'b'),name:n};
+    list.push(item); return item.id;
+  };
+  const units=(raw.units||[]).map(ru=>{
+    if(!ru||typeof ru!=='object') return null;
+    const sentences=[];
+    (Array.isArray(ru.sentences)?ru.sentences:[]).forEach(q=>{
+      const chunksRaw=q&&Array.isArray(q.chunks)?q.chunks.map(c=>c[0]+':'+c[1]).join(','):'';
+      const v=validateQuestion(q&&q.cn,q&&q.en,q&&Array.isArray(q.hints)?q.hints.join(','):'',chunksRaw);
+      if(v.q) sentences.push(v.q);
+    });
+    const words=[],seen=new Set();
+    (Array.isArray(ru.words)?ru.words:[]).forEach(w=>{
+      const en=Array.isArray(w)?String(w[0]||'').trim():String(w&&w.en||'').trim();
+      const cn=Array.isArray(w)?String(w[1]||''):String(w&&w.cn||'');
+      if(/^[A-Za-z][A-Za-z'-]*$/.test(en)&&!seen.has(en.toLowerCase())){
+        seen.add(en.toLowerCase()); words.push([en,cn]);
+      }
+    });
+    return {id:nextId('tu'),name:String(ru.name||'').trim()||'未命名单元',sentences:sentences,words:words};
+  }).filter(Boolean);
+  return {
+    id:nextId('tb'), name:name,
+    gradeId:ensureCat('grade',raw.gradeId,raw.gradeName),
+    bookId:ensureCat('book',raw.bookId,raw.bookName),
+    enabled:true, created:today(), units:units
+  };
+}
+function parsePackJSON(text){
+  let data;
+  try{ data=JSON.parse(String(text||'').trim()); }
+  catch(e){ return {packs:[],error:'JSON 解析失败：'+e.message}; }
+  if(data&&data.format==='spelllab.backup.v1') return {packs:[],error:'这是全库备份，请点「从备份恢复」'};
+  const raws=Array.isArray(data)?data
+    :(data&&Array.isArray(data.packs)?data.packs
+    :(data&&Array.isArray(data.units)?[data]:[]));
+  if(!raws.length) return {packs:[],error:'没找到教材包（需要 packs 数组或含 units 的包对象）'};
+  const packs=raws.map(normalizeImportedPack).filter(Boolean);
+  return packs.length?{packs:packs,error:''}:{packs:[],error:'教材包内容为空或格式不符合要求'};
+}
+function importPackText(text){
+  const r=parsePackJSON(text);
+  if(r.error){ toast(r.error,'bad'); return 0; }
+  state.textbooks=tbPacks().concat(r.packs);
+  saveState();
+  libSel={packId:r.packs[0].id,unitId:(r.packs[0].units[0]||{}).id||'',qIdx:-1};
+  $('packIO').value='';
+  refreshLibrary(); toast('已导入 '+r.packs.length+' 个教材包','ok');
+  return r.packs.length;
+}
+function backupPayload(){
+  return {format:'spelllab.backup.v1',exportedAt:new Date().toISOString(),state:clone(state)};
+}
+function restoreBackup(text){
+  let data;
+  try{ data=JSON.parse(String(text||'').trim()); }
+  catch(e){ toast('备份 JSON 解析失败','bad'); return false; }
+  const s=data&&data.state;
+  if(!data||data.format!=='spelllab.backup.v1'||!s||typeof s!=='object'){
+    toast('不是有效的全库备份文件','bad'); return false;
+  }
+  if(!confirm('从备份恢复会覆盖当前全部学习数据、教材包和设置，确定继续？')) return false;
+  try{ localStorage.setItem(KEY,JSON.stringify(s)); }catch(e){}
+  state=loadState();
+  libSel={packId:'',unitId:'',qIdx:-1};
+  unitPos=0; qPos=0; wordCur=null; sessionOrder={unitId:'',list:[]};
+  vocabSelected=new Set(); vocabQuery=''; vocabOnlyNew=false;
+  $('packIO').value='';
+  renderFilters(); renderDrawer(); setMode(mode);
+  toast('已从备份恢复全部数据','ok');
+  return true;
+}
+function emitJSON(filename,obj){
+  const text=JSON.stringify(obj,null,2);
+  $('packIO').value=text;
+  try{
+    if(typeof Blob==='undefined'||typeof URL==='undefined'||!URL.createObjectURL) throw new Error('unsupported');
+    const blob=new Blob([text],{type:'application/json;charset=utf-8'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url; a.download=filename;
+    if(document.body&&document.body.appendChild) document.body.appendChild(a);
+    if(a.click) a.click();
+    setTimeout(()=>{ try{ URL.revokeObjectURL(url); }catch(e){} if(a.remove) a.remove(); },0);
+    toast('已导出 '+filename+'（内容也已填入文本框）','ok');
+  }catch(e){
+    toast('浏览器未开放直接下载，JSON 已填入文本框，请复制保存','bad');
+  }
+  return text;
+}
+function renderLibrary(){
+  const gs=state.grades||[],bs=state.books||[],sc=activeScopeIds();
+  $('tbGrade').innerHTML='<option value="none">未分类</option>'+gs.map(g=>'<option value="'+esc(g.id)+'">'+esc(g.name)+'</option>').join('');
+  $('tbBook').innerHTML='<option value="none">未分类</option>'+bs.map(b=>'<option value="'+esc(b.id)+'">'+esc(b.name)+'</option>').join('');
+  $('tbGrade').value=gs.some(x=>x.id===sc.gradeId)?sc.gradeId:'none';
+  $('tbBook').value=bs.some(x=>x.id===sc.bookId)?sc.bookId:'none';
+  const packs=tbPacks();
+  $('tbCount').textContent=packs.length;
+  $('tbList').innerHTML=packs.length?packs.map(p=>{
+    const c=tbCounts(p);
+    const rows=(p.units||[]).map(u=>
+      '<div class="tb-unit'+(libSel.packId===p.id&&libSel.unitId===u.id?' sel':'')+'">'+
+        '<span class="u-name" data-tb-open="'+esc(p.id)+'" data-tb-unit="'+esc(u.id)+'">'+esc(u.name)+'</span>'+
+        '<span class="u-count">'+(u.sentences||[]).length+'题 / '+(u.words||[]).length+'词</span>'+
+        '<button class="mini-icon" data-tb-rename="'+esc(p.id)+'" data-tb-unit="'+esc(u.id)+'" title="改名">'+icon('edit')+'</button>'+
+        '<button class="mini-icon danger" data-tb-delunit="'+esc(p.id)+'" data-tb-unit="'+esc(u.id)+'" title="删除">'+icon('trash')+'</button>'+
+      '</div>'
+    ).join('')||'<div class="empty">还没有单元，点「加单元」开始</div>';
+    return '<div class="tb-card'+(p.enabled===false?' off':'')+'">'+
+      '<div class="tb-head"><span class="tb-title">'+esc(p.name)+'</span>'+
+        '<span class="count-pill">'+(p.enabled===false?'已停用':'使用中')+'</span></div>'+
+      '<div class="tb-meta">'+esc(gradeName(p.gradeId))+' · '+esc(bookName(p.bookId))+
+        ' · '+c.units+' 单元 / '+c.sentences+' 题 / '+c.words+' 词 · 创建于 '+esc(p.created||'-')+'</div>'+
+      '<div class="btn-row tight" style="margin-top:8px">'+
+        '<button class="mini-btn sm" data-tb-addunit="'+esc(p.id)+'">加单元</button>'+
+        '<button class="mini-btn sm" data-tb-toggle="'+esc(p.id)+'">'+(p.enabled===false?'启用':'停用')+'</button>'+
+        '<button class="mini-btn sm" data-tb-export="'+esc(p.id)+'">导出此包</button>'+
+        '<button class="mini-btn sm danger" data-tb-delpack="'+esc(p.id)+'">删除包</button>'+
+      '</div><div class="tb-units">'+rows+'</div></div>';
+  }).join(''):'<div class="empty">还没有教材包。上方可以新建，下方可以粘贴 JSON 导入。</div>';
+  renderTbEditor();
+}
+function renderTbEditor(){
+  const p=tbPack(libSel.packId),u=tbUnit(p,libSel.unitId);
+  if(!p||!u){
+    $('tbEditTitle').textContent='未选择';
+    $('tbEditor').innerHTML='<div class="empty">在上方教材包里点单元名称，即可编辑它的句子和单词表。</div>';
+    return;
+  }
+  $('tbEditTitle').textContent=p.name+' / '+u.name;
+  const editing=libSel.qIdx>=0?(u.sentences||[])[libSel.qIdx]:null;
+  const qHtml=(u.sentences||[]).map((q,i)=>
+    '<div class="q-item"><div class="q-main"><div class="q-cn">'+esc(q.cn)+'</div>'+
+      '<div class="q-en">'+esc(q.en)+'</div><div class="subtle">'+(q.hints||[]).length+' 个提示 · '+
+      (q.chunks?'手动拆成 '+(q.chunks||[]).length+' 个短语':'自动分短语')+'</div></div>'+
+      '<button class="mini-icon" data-tb-editq="'+i+'" title="编辑">'+icon('edit')+'</button>'+
+      '<button class="mini-icon danger" data-tb-delq="'+i+'" title="删除">'+icon('trash')+'</button></div>'
+  ).join('')||'<div class="empty">还没有题目，用下面的表单添加</div>';
+  const wordsHtml=(u.words||[]).map((w,i)=>
+    '<span class="word-chip">'+esc(w[0])+' · '+esc(w[1]||'')+' <button data-tb-delword="'+i+'" title="移除">×</button></span>'
+  ).join('')||'<div class="empty">还没有单词</div>';
+  $('tbEditor').innerHTML=
+    '<h4>'+esc(u.name)+' · '+(u.sentences||[]).length+' 题 / '+(u.words||[]).length+' 词</h4>'+
+    '<div class="editor-row"><input class="field" id="tbUnitName" value="'+esc(u.name)+'">'+
+      '<button class="mini-btn sm" id="tbRenameUnit">改名</button></div>'+
+    '<div class="subtle" style="margin-bottom:8px">提示数量必须等于英文单词数。短语拆分可留空，留空时自动均分；格式「短语中文:词数」用逗号隔开。</div>'+
+    qHtml+'<div class="hr"></div>'+
+    '<div class="editor-row"><input class="field" id="qCn" placeholder="中文句子" value="'+esc(editing?editing.cn:'')+'"></div>'+
+    '<div class="editor-row"><input class="field" id="qEn" placeholder="English sentence" value="'+esc(editing?editing.en:'')+'"></div>'+
+    '<div class="editor-row"><input class="field" id="qHints" placeholder="逐词中文提示，用逗号分隔" value="'+esc(editing?(editing.hints||[]).join(','):'')+'"></div>'+
+    '<div class="editor-row"><input class="field" id="qChunks" placeholder="短语拆分（可留空）" value="'+esc(editing&&editing.chunks?editing.chunks.map(c=>c[0]+':'+c[1]).join(','):'')+'"></div>'+
+    '<div class="btn-row tight"><button class="mini-btn primary sm" id="qSave">'+(editing?'保存修改':'添加题目')+'</button>'+
+      (editing?'<button class="mini-btn sm" id="qCancel">取消编辑</button>':'')+'</div>'+
+    '<div class="hr"></div><div class="subtle" style="margin-bottom:6px">批量粘贴题目（每行：中文 | 英文 | 提示1,提示2,...）</div>'+
+    '<textarea class="field" id="qBulk" placeholder="今天很冷。| It is cold today. | 它,是,冷的,今天"></textarea>'+
+    '<div class="btn-row tight" style="margin-top:7px"><button class="mini-btn sm" id="qBulkAdd">批量添加题目</button></div>'+
+    '<div class="hr"></div><div class="subtle" style="margin-bottom:6px">单词表（每行：英文,中文，重复词自动跳过）</div>'+
+    '<textarea class="field" id="wBulk" placeholder="weather,天气"></textarea>'+
+    '<div class="btn-row tight" style="margin-top:7px"><button class="mini-btn sm" id="wBulkAdd">导入单词表</button></div>'+
+    '<div style="margin-top:8px">'+wordsHtml+'</div>';
+}
+
 /* ---------------- 学习面板 ---------------- */
 function renderDrawer(){
   const us=units();
@@ -1721,18 +2146,19 @@ function renderDrawer(){
   $('volVal').textContent=Math.round(vol*100);
   $('rateRange').value=state.settings.rate;
   $('rateVal').textContent=Number(state.settings.rate).toFixed(1);
-  renderVocab(); renderSets(); renderManagement(); renderFilters();
+  renderVocab(); renderSets(); renderManagement(); renderLibrary(); renderFilters();
 }
 function box(v,label){ return '<div class="stat-box"><b>'+esc(v)+'</b><span>'+esc(label)+'</span></div>'; }
 function switchTab(t){
   drawerTab=t;
-  ['learn','vocab','manage'].forEach(k=>{
+  ['learn','vocab','manage','library'].forEach(k=>{
     const cap=k[0].toUpperCase()+k.slice(1);
     $('page'+cap).hidden=(k!==t);
     $('tab'+cap).classList.toggle('active',k===t);
   });
   if(t==='vocab') renderVocab();
   if(t==='manage') renderManagement();
+  if(t==='library') renderLibrary();
 }
 function openDrawer(open,tab){
   $('drawer').classList.toggle('open',open);
@@ -1796,6 +2222,7 @@ function bind(){
   });
   $('btnMenu').addEventListener('click',()=>openDrawer(true));
   $('btnManage').addEventListener('click',()=>openDrawer(true,'manage'));
+  $('btnLibrary').addEventListener('click',()=>openDrawer(true,'library'));
   $('drawerClose').addEventListener('click',()=>openDrawer(false));
   $('mask').addEventListener('click',()=>openDrawer(false));
   $('drawerTabs').addEventListener('click',e=>{
@@ -1883,10 +2310,11 @@ function bind(){
     renderDrawer(); setMode(mode); toast('已清空自定义题库');
   });
   $('resetAll').addEventListener('click',()=>{
-    if(!confirm('确定重置全部学习进度、生词本、课程归属和自定义题库？此操作不可恢复。')) return;
+    if(!confirm('确定重置全部学习进度、生词本、教材包和自定义题库？此操作不可恢复（建议先导出全库备份）。')) return;
     state=clone(DEFAULT_STATE); saveState();
     unitPos=0; qPos=0; wordCur=null;
     vocabSelected=new Set(); vocabQuery=''; vocabOnlyNew=false;
+    libSel={packId:'',unitId:'',qIdx:-1};
     sessionOrder={unitId:'',list:[]};
     switchTab('learn'); renderFilters(); renderDrawer(); setMode(mode); toast('学习数据已重置');
   });
@@ -1969,6 +2397,77 @@ function bind(){
     const b=e.target.closest&&e.target.closest('button'); if(!b) return;
     if(b.dataset.setStart) startPracticeSet(b.dataset.setStart);
     else if(b.dataset.setDel) deletePracticeSet(b.dataset.setDel);
+  });
+
+  /* 教材库 */
+  $('tbCreate').addEventListener('click',()=>{
+    if(makePack($('tbName').value,$('tbGrade').value,$('tbBook').value)) $('tbName').value='';
+  });
+  $('tbName').addEventListener('keydown',e=>{
+    if(e.key==='Enter' && makePack($('tbName').value,$('tbGrade').value,$('tbBook').value)) $('tbName').value='';
+  });
+  $('tbList').addEventListener('click',e=>{
+    const b=e.target.closest&&e.target.closest('button');
+    const row=e.target.closest&&e.target.closest('[data-tb-unit]');
+    const unitId=row?row.dataset.tbUnit:'';
+    if(b){
+      const d=b.dataset;
+      if(d.tbAddunit) addUnit(d.tbAddunit,'');
+      else if(d.tbToggle) togglePack(d.tbToggle);
+      else if(d.tbDelpack) removePack(d.tbDelpack);
+      else if(d.tbRename) renameUnit(d.tbRename,unitId);
+      else if(d.tbDelunit) removeUnit(d.tbDelunit,unitId);
+      else if(d.tbExport){
+        const p=tbPack(d.tbExport);
+        if(p) emitJSON('spelllab-'+p.name.replace(/[\\/:*?"<>|]/g,'_')+'.json',packExportPayload([p]));
+      }
+      return;
+    }
+    const opener=e.target.closest&&e.target.closest('[data-tb-open]');
+    if(opener){
+      libSel={packId:opener.dataset.tbOpen,unitId:opener.dataset.tbUnit||'',qIdx:-1};
+      renderLibrary();
+    }
+  });
+  $('tbEditor').addEventListener('click',e=>{
+    const b=e.target.closest&&e.target.closest('button'); if(!b) return;
+    const d=b.dataset;
+    if(d.tbEditq!=null) editQuestion(Number(d.tbEditq));
+    else if(d.tbDelq!=null) removeQuestion(Number(d.tbDelq));
+    else if(d.tbDelword!=null) removeWord(Number(d.tbDelword));
+    else switch(b.id){
+      case 'tbRenameUnit': renameUnit(libSel.packId,libSel.unitId,$('tbUnitName').value); break;
+      case 'qSave': saveQuestion(); break;
+      case 'qCancel': libSel.qIdx=-1; renderTbEditor(); break;
+      case 'qBulkAdd': tbBulkQuestions(); break;
+      case 'wBulkAdd': tbBulkWords(); break;
+    }
+  });
+  $('packImport').addEventListener('click',()=>importPackText($('packIO').value));
+  $('packExportAll').addEventListener('click',()=>{
+    if(!tbPacks().length){ toast('还没有教材包可导出','bad'); return; }
+    emitJSON('spelllab-textbooks.json',packExportPayload(tbPacks()));
+  });
+  $('backupAll').addEventListener('click',()=>emitJSON('spelllab-backup-'+today()+'.json',backupPayload()));
+  $('restoreAll').addEventListener('click',()=>{
+    if(!$('packIO').value.trim()){ toast('请先把备份 JSON 粘贴到文本框，或选择文件','bad'); return; }
+    restoreBackup($('packIO').value);
+  });
+  $('packFile').addEventListener('change',e=>{
+    const f=e.target.files&&e.target.files[0]; if(!f) return;
+    const read=txt=>{
+      $('packIO').value=String(txt||'');
+      const r=parsePackJSON($('packIO').value);
+      if(r.error) toast(r.error,'bad'); else importPackText($('packIO').value);
+    };
+    if(f.text&&typeof f.text==='function'){ f.text().then(read).catch(()=>toast('文件读取失败','bad')); }
+    else if(typeof FileReader!=='undefined'){
+      const fr=new FileReader();
+      fr.onload=()=>read(String(fr.result||''));
+      fr.onerror=()=>toast('文件读取失败','bad');
+      fr.readAsText(f,'utf-8');
+    } else { toast('当前浏览器不支持读取本地文件，请粘贴 JSON 文本','bad'); }
+    e.target.value='';
   });
 
   document.addEventListener('keydown',e=>{
