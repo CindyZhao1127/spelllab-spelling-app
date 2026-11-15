@@ -139,6 +139,29 @@
   .slot.punct .line{background:rgba(226,232,255,.28)}
   .slot.punct .hint{display:none}
 
+  /* ---------- 字母格：按单词字母数显示小空格，整句横向排列自动换行 ---------- */
+  .slot.boxed{flex:0 0 auto}
+  .slot.boxed .answer{height:clamp(30px,3.6vw,40px);font-size:inherit;position:relative}
+  .slot.boxed .boxes{display:flex;flex-wrap:nowrap;align-items:center;justify-content:center;gap:4px}
+  .lbox{
+    width:clamp(19px,2.2vw,27px);height:clamp(30px,3.6vw,40px);
+    border-radius:6px 6px 3px 3px;border-bottom:2px solid var(--line);
+    background:rgba(255,255,255,.05);display:grid;place-items:center;
+    font-size:clamp(17px,2.2vw,24px);font-weight:800;line-height:1;
+    color:#fff;transition:.15s;user-select:none;
+  }
+  .lbox.given{color:#c3b6ff;border-bottom-color:rgba(183,168,255,.7);background:rgba(139,123,255,.14)}
+  .lbox.current{border-bottom-color:#c3b6ff;box-shadow:0 0 12px rgba(160,140,255,.55);background:rgba(139,123,255,.2)}
+  .slot.correct .lbox{color:var(--ok);border-bottom-color:rgba(92,226,160,.75)}
+  .slot.assisted .lbox{color:#ffd782}
+  .slot.wrong .lbox{color:var(--err);border-bottom-color:var(--err)}
+  .slot.boxed input{
+    position:absolute;left:0;top:0;width:100%;height:100%;
+    opacity:0;z-index:2;cursor:text;font-size:16px;letter-spacing:0;
+  }
+  .slot.boxed .line{background:rgba(226,232,255,.18)}
+  .slot.boxed.focus .line{background:#c3b6ff;box-shadow:0 0 14px rgba(160,140,255,.8);height:3px}
+
   .feedback{min-height:24px;margin-top:4px;font-size:14px;font-weight:600;color:var(--muted)}
   .feedback.ok{color:var(--ok)}
   .feedback.bad{color:var(--err)}
@@ -310,6 +333,7 @@
     .toolbar .tb-main{height:36px;padding:0 12px;font-size:12px}
     .slot{min-width:50px;margin-bottom:26px}
     .slot .hint{font-size:12px}
+    .lbox{width:clamp(17px,5vw,23px);height:clamp(27px,8vw,34px);font-size:clamp(15px,4.4vw,20px)}
     .tips{font-size:11px}
     .chunk-card{width:min(200px,84vw);min-height:126px}
     .filter-bar{padding:8px 14px 0;gap:6px;font-size:11px}
@@ -554,6 +578,9 @@
       <div class="panel">
         <h3>练习设置</h3>
         <div class="setting-row"><span>显示逐词中文提示</span><button class="switch" data-set="showHints" id="swHints"></button></div>
+        <div class="setting-row"><span>按字母显示小空格</span><button class="switch" data-set="letterBoxes" id="swLetterBoxes"></button></div>
+        <div class="setting-row"><span>预先露出字母 <b id="revealVal">0</b> 个</span><input class="rate" type="range" id="revealRange" min="0" max="3" step="1" value="0"></div>
+        <div class="subtle" style="margin-top:8px">小空格数量＝该单词的字母数，整句横向排列、放不下自动换行。露出的字母是提示，不用再输入。改动后当前题会重做。</div>
         <div class="setting-row"><span>按键 / 判定音效</span><button class="switch" data-set="sound" id="swSound"></button></div>
         <div class="setting-row"><span>音效音量 <b id="volVal">35</b></span><input class="rate" type="range" id="volRange" min="0" max="100" step="5" value="35"></div>
         <div class="setting-row"><span>答对后自动朗读</span><button class="switch" data-set="autoSpeak" id="swSpeak"></button></div>
@@ -857,7 +884,7 @@ const KEY = 'spelllab.state.v1';
 const DEFAULT_STATE = {
   progress:{}, wrong:[], wordStats:{},
   stats:{attempted:0,correct:0,streak:0,best:0,today:'',todayDone:0,todayRight:0,wordRight:0},
-  settings:{showHints:true,autoSpeak:false,ignoreCase:true,smart:true,rate:0.9,sound:true,volume:0.35},
+  settings:{showHints:true,autoSpeak:false,ignoreCase:true,smart:true,rate:0.9,sound:true,volume:0.35,letterBoxes:true,revealLetters:0},
   custom:[], customMeta:{gradeId:'g4',bookId:'b_hj'},
   grades:DEFAULT_GRADES, books:DEFAULT_BOOKS, unitMeta:{},
   filter:{gradeId:'all',bookId:'all'},
@@ -1370,6 +1397,35 @@ function renderToolbars(){
 function tb(id,ic,title,cls){ return '<button class="tb '+(cls||'')+'" id="'+id+'" title="'+title+'" aria-label="'+title+'">'+icon(ic)+'</button>'; }
 
 /* ---------------- 拼写板（句子 / 短语 / 整句共用） ---------------- */
+function boxesOn(){ return !!state.settings.letterBoxes; }
+function revealCount(word){
+  if(!boxesOn()) return 0;
+  const n=Math.max(0,Math.min(3,Number(state.settings.revealLetters)||0));
+  return Math.min(n,Math.max(0,String(word).length-1));  /* 至少留一个字母给用户 */
+}
+function slotGiven(i){ const s=slots[i]; return s?Number(s.dataset.given||0):0; }
+function boxesMarkup(word,given){
+  let out='';
+  for(let j=0;j<word.length;j++){
+    const g=j<given;
+    out+='<span class="lbox'+(g?' given':'')+'">'+(g?esc(word[j]):'')+'</span>';
+  }
+  return out;
+}
+function paintBoxes(i){
+  const slot=slots[i]; if(!slot||!slot.classList.contains('boxed')) return;
+  const word=curTokens[i].word, given=Number(slot.dataset.given)||0;
+  const typed=String(draft[i]||'');
+  const input=slot.querySelector('input');
+  const bs=slot.querySelectorAll('.lbox');
+  if(!bs.length) return;
+  for(let j=0;j<bs.length;j++){
+    const b=bs[j], ch=j<given?word[j]:(typed[j-given]||'');
+    b.textContent=ch||'';
+    b.classList.toggle('filled',!!ch);
+    b.classList.toggle('current',!input.readOnly && j===given+typed.length);
+  }
+}
 function renderBoard(tokens, cn, label, tip, onComplete){
   draft=[]; slots=[]; assisted=false; solved=false;
   curTokens=tokens; boardOnComplete=onComplete;
@@ -1384,6 +1440,7 @@ function renderBoard(tokens, cn, label, tip, onComplete){
   $('chunkProgress').hidden=true;
   renderPhaseBar();
   const box=$('slots'); box.innerHTML='';
+  const useBoxes=boxesOn();
 
   tokens.forEach((t,i)=>{
     const el=document.createElement('div');
@@ -1393,10 +1450,20 @@ function renderBoard(tokens, cn, label, tip, onComplete){
       el.innerHTML='<div class="answer">'+esc(t.word)+'</div><div class="line"></div>';
       box.appendChild(el); slots.push(null); draft.push(t.word); return;
     }
-    const width=Math.max(t.word.length*1.2,hint.length*1.4,3.2);
-    el.style.minWidth=Math.min(width*20,210)+'px';
-    el.innerHTML='<div class="answer"><input type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="text" aria-label="'+esc(hint)+'"></div>'+
-                 '<div class="line"></div><div class="hint">'+esc(hint)+'</div>';
+    const given=revealCount(t.word);
+    const inputHtml='<input type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="text" aria-label="'+esc(hint)+'">';
+    el.dataset.given=String(given);
+    el.dataset.givenText=t.word.slice(0,given);
+    if(useBoxes){
+      el.classList.add('boxed');
+      el.innerHTML='<div class="answer"><div class="boxes">'+boxesMarkup(t.word,given)+'</div>'+inputHtml+'</div>'+
+                   '<div class="line"></div><div class="hint">'+esc(hint)+'</div>';
+    }else{
+      const width=Math.max(t.word.length*1.2,hint.length*1.4,3.2);
+      el.style.minWidth=Math.min(width*20,210)+'px';
+      el.innerHTML='<div class="answer">'+inputHtml+'</div>'+
+                   '<div class="line"></div><div class="hint">'+esc(hint)+'</div>';
+    }
     const input=el.querySelector('input');
     input.dataset.i=i;
     input.addEventListener('input',onSlotInput);
@@ -1409,6 +1476,7 @@ function renderBoard(tokens, cn, label, tip, onComplete){
     box.appendChild(el);
     slots.push(el); draft.push('');
   });
+  if(useBoxes) slots.forEach((s,i)=>{ if(s) paintBoxes(i); });
   renderHeader();
   updateChunkMain();
   const first=box.querySelector('input');
@@ -1416,22 +1484,27 @@ function renderBoard(tokens, cn, label, tip, onComplete){
 }
 function renderSentence(){
   const cq=currentQuestion();
+  const tip=boxesOn()
+    ? '点击字母格逐字输入 · 输满自动判定 · 空格/回车确认 · Tab 跳到下一个词'
+    : '点击横线输入单词 · 空格/回车确认 · 输满字母自动判定 · Tab 跳到下一个空';
   renderBoard(tokenize(cq.q.en,cq.q.hints,cq.q.cn), cq.q.cn,
-    '看中文 · 按词义提示拼出英文',
-    '点击横线输入单词 · 空格/回车确认 · 输满字母自动判定 · Tab 跳到下一个空',
-    finishQuestion);
+    '看中文 · 按词义提示拼出英文', tip, finishQuestion);
 }
 function onSlotInput(e){
   const input=e.target, i=Number(input.dataset.i);
   const oldLen=String(draft[i]||'').length;
-  const clean=input.value.replace(/[^A-Za-z'-]/g,'');
+  const given=slotGiven(i);
+  const need=curTokens[i].word.length-given;
+  let clean=input.value.replace(/[^A-Za-z'-]/g,'');
+  if(clean.length>need) clean=clean.slice(0,need);
   if(clean!==input.value) input.value=clean;
   if(clean.length>oldLen) SFX.key(); else if(clean.length<oldLen) SFX.del();
   draft[i]=clean;
   const slot=slots[i];
   slot.classList.remove('wrong');
   slot.querySelectorAll('.answer').forEach(a=>a.style.color='');
-  if(clean.length===curTokens[i].word.length) commitSlot(i);
+  paintBoxes(i);
+  if(clean.length===need) commitSlot(i);
 }
 function onSlotKey(e){
   const i=Number(e.target.dataset.i);
@@ -1468,12 +1541,15 @@ function commitSlot(i,fromCheck){
   const slot=slots[i]; if(!slot) return false;
   const input=slot.querySelector('input');
   if(input.readOnly) return true;
-  const val=input.value.trim();
-  if(!val){ if(!fromCheck){ toast('先输入这个单词','bad'); } return false; }
   const answer=curTokens[i].word;
+  const given=slotGiven(i);
+  const typed=input.value.trim();
+  if(!typed){ if(!fromCheck){ toast('先输入这个单词','bad'); } return false; }
+  const val=answer.slice(0,given)+typed;
   if(equal(val,answer)){
-    input.value=answer; input.readOnly=true; draft[i]=answer;
+    input.value=answer.slice(given); input.readOnly=true; draft[i]=answer.slice(given);
     slot.classList.remove('wrong'); slot.classList.add('correct');
+    paintBoxes(i);
     const done=allCorrect();
     if(!done) SFX.correct();
     const n=nextEditable(i);
@@ -1555,17 +1631,27 @@ function hintCurrent(){
   if(i<0 || !slots[i]){ toast('本题已经全部填完'); return; }
   const slot=slots[i], answer=curTokens[i].word, input=slot.querySelector('input');
   const hintEl=slot.querySelector('.hint');
+  const given=slotGiven(i);
   if(!slot.dataset.hintLevel){
     slot.dataset.hintLevel='1';
     slot.dataset.origHint=hintEl.textContent;
-    hintEl.textContent=answer[0]+' ' + Array(answer.length-1).fill('_').join(' ')+'（'+answer.length+'个字母）';
-    SFX.flip();
-    toast('提示：首字母是 '+answer[0].toUpperCase());
+    if(boxesOn()){
+      const next=answer[given]||answer[0];
+      const left=answer.length-given-String(draft[i]||'').length;
+      hintEl.textContent='下一个字母：'+next.toUpperCase()+' · 还差 '+left+' 个字母';
+      SFX.flip();
+      toast('提示：下一个字母是 '+next.toUpperCase());
+    }else{
+      hintEl.textContent=answer[0]+' ' + Array(answer.length-1).fill('_').join(' ')+'（'+answer.length+'个字母）';
+      SFX.flip();
+      toast('提示：首字母是 '+answer[0].toUpperCase());
+    }
   }else{
     slot.dataset.hintLevel='2';
-    input.value=answer; draft[i]=answer; input.readOnly=true;
+    input.value=answer.slice(given); draft[i]=answer.slice(given); input.readOnly=true;
     slot.classList.add('correct','assisted');
     slot.classList.remove('wrong');
+    paintBoxes(i);
     hintEl.textContent=slot.dataset.origHint||'';
     assisted=true;
     toast('已显示完整答案（本题不计入掌握）');
@@ -2704,12 +2790,15 @@ function renderDrawer(){
   $('wrongList').innerHTML=state.wrong.length?state.wrong.slice().reverse().slice(0,12).map(w=>
     '<div class="wrong-item"><button data-wrong="'+esc(w.id)+'">'+esc(w.cn)+'</button><span style="color:var(--muted)">去练习</span></div>'
   ).join(''):'<div class="empty">还没有错题，保持住！</div>';
-  [['swHints','showHints'],['swSpeak','autoSpeak'],['swCase','ignoreCase'],['swSmart','smart'],['swSound','sound']].forEach(([el,k])=>{
+  [['swHints','showHints'],['swSpeak','autoSpeak'],['swCase','ignoreCase'],['swSmart','smart'],['swSound','sound'],['swLetterBoxes','letterBoxes']].forEach(([el,k])=>{
     $(el).classList.toggle('on',!!state.settings[k]);
   });
   const vol=typeof state.settings.volume==='number'?state.settings.volume:0.35;
   $('volRange').value=Math.round(vol*100);
   $('volVal').textContent=Math.round(vol*100);
+  const reveal=Math.max(0,Math.min(3,Number(state.settings.revealLetters)||0));
+  $('revealRange').value=reveal;
+  $('revealVal').textContent=reveal;
   $('rateRange').value=state.settings.rate;
   $('rateVal').textContent=Number(state.settings.rate).toFixed(1);
   renderVocab(); renderSets(); renderManagement(); renderLibrary(); renderFilters();
@@ -2736,12 +2825,18 @@ function openDrawer(open,tab){
 function setSetting(k,v){
   state.settings[k]=v; saveState(); renderDrawer();
   if(k==='showHints'){ $('stage').classList.toggle('hide-hints',!v); $('sHints').classList.toggle('on',v); }
+  if(k==='letterBoxes') refreshBoardSettings();
   if(k==='smart' && mode!=='word'){
     const curIdx=currentQuestion().idx;
     sessionOrder={unitId:'',list:[]};
     qPos=Math.max(0,order().indexOf(curIdx));
     renderHeader();
   }
+}
+function refreshBoardSettings(){
+  if(mode==='word') return;
+  if(mode==='chunk'){ chunkReset(); toast('字母格设置已更新，当前步骤已重做'); return; }
+  renderSentence(); toast('字母格设置已更新，本题已重做');
 }
 
 /* ---------------- 自定义题库 ---------------- */
@@ -2867,6 +2962,12 @@ function bind(){
     $('volVal').textContent=e.target.value;
     saveState(); SFX.key();
   });
+  $('revealRange').addEventListener('input',e=>{
+    state.settings.revealLetters=Number(e.target.value);
+    $('revealVal').textContent=e.target.value;
+    saveState();
+  });
+  $('revealRange').addEventListener('change',()=>refreshBoardSettings());
   $('doImport').addEventListener('click',doImport);
   $('fillExample').addEventListener('click',()=>{
     $('importText').value='今天很冷。| It is cold today. | 它,是,冷的,今天\n我喜欢下雪天。| I like snowy days. | 我,喜欢,下雪的,日子\n外面在刮风吗？| Is it windy outside? | 是,它,有风的,外面';
