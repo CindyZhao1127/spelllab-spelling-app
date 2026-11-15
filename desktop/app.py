@@ -15,10 +15,12 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import shutil
 import socket
 import subprocess
 import sys
 import threading
+import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
@@ -189,6 +191,25 @@ def make_server(port: int, store: Store):
     return server
 
 
+def make_profile_dir(data_dir: Path, port: int) -> Path:
+    """每次启动用独立的浏览器用户目录。
+
+    Edge/Chrome 在 --user-data-dir 已有实例时，会把新窗口请求转交给旧实例，
+    自己立刻退出；若只依赖 proc.wait()，服务会被误关，窗口随后显示"无法访问"。
+    独立目录可保证启动进程就是窗口进程，wait() 才对应真实的窗口生命周期。
+    """
+    root = data_dir / "browser-profiles"
+    root.mkdir(parents=True, exist_ok=True)
+    cutoff = time.time() - 3 * 24 * 3600
+    for old in root.glob("profile-*"):
+        try:
+            if old.is_dir() and old.stat().st_mtime < cutoff:
+                shutil.rmtree(old, ignore_errors=True)
+        except OSError:
+            pass
+    return root / ("profile-%d-%d" % (port, os.getpid()))
+
+
 def find_browser() -> str:
     candidates = [
         r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
@@ -268,6 +289,7 @@ def main(argv=None):
     print("  关闭窗口或按 Ctrl+C 结束程序")
     print("=" * 58, flush=True)
 
+    profile_dir = None
     try:
         if args.pywebview:
             try:
@@ -285,17 +307,28 @@ def main(argv=None):
             while True:
                 threading.Event().wait(3600)
         else:
-            proc = open_app_window(url, store.db_path.parent / "browser-profile")
+            profile_dir = make_profile_dir(store.db_path.parent, port)
+            proc = open_app_window(url, profile_dir)
             if proc is None:
                 while True:
                     threading.Event().wait(3600)
             else:
+                started = time.monotonic()
                 proc.wait()
+                if time.monotonic() - started < 2.0:
+                    # 正常窗口会一直存活；秒退说明浏览器复用了已有实例或启动异常，
+                    # 此时绝不能关服务，否则窗口会立刻变成"连接被拒绝"。
+                    print("  浏览器窗口由已有实例接管，服务保持运行。", flush=True)
+                    print("  需要停止时请结束本程序进程。", flush=True)
+                    while True:
+                        threading.Event().wait(3600)
     except KeyboardInterrupt:
         pass
     finally:
         server.shutdown()
         server.server_close()
+        if profile_dir is not None:
+            shutil.rmtree(profile_dir, ignore_errors=True)
         print("  已退出，数据保存在 " + str(store.db_path))
 
 

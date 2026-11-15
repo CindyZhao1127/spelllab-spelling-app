@@ -1,9 +1,11 @@
 """本地 HTTP 服务单元测试：启动真实服务并用 urllib 打接口。"""
 import json
+import os
 import socket
 import sys
 import tempfile
 import threading
+import time
 import unittest
 import urllib.error
 import urllib.request
@@ -93,6 +95,18 @@ class ServerTest(unittest.TestCase):
             blocker.close()
             tmp.cleanup()
 
+    def test_occupied_port_is_not_reported_as_our_service(self):
+        """端口探测必须区分"被别人占用"与"空闲"。"""
+        self.assertFalse(app.port_in_use(0))
+        blocker = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        blocker.bind(("127.0.0.1", 0))
+        blocker.listen(1)
+        occupied = blocker.getsockname()[1]
+        try:
+            self.assertTrue(app.port_in_use(occupied))
+        finally:
+            blocker.close()
+
     def test_html_injects_desktop_marker(self):
         status, body = self.call("/")
         self.assertEqual(status, 200)
@@ -168,6 +182,31 @@ class ServerTest(unittest.TestCase):
     def test_favicon(self):
         status, _ = self.call("/favicon.ico")
         self.assertEqual(status, 204)
+
+
+class ProfileDirTest(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.root = Path(self.tmp.name)
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def test_profile_is_unique_per_port_and_process(self):
+        first = app.make_profile_dir(self.root, 8790)
+        second = app.make_profile_dir(self.root, 8792)
+        self.assertNotEqual(first, second)
+        self.assertTrue(first.parent.is_dir())
+        self.assertTrue(first.name.startswith("profile-8790-"))
+        self.assertIn(str(os.getpid()), first.name)
+
+    def test_stale_profiles_are_pruned(self):
+        stale = self.root / "browser-profiles" / "profile-8790-1"
+        stale.mkdir(parents=True)
+        old = time.time() - 4 * 24 * 3600
+        os.utime(stale, (old, old))
+        app.make_profile_dir(self.root, 8790)
+        self.assertFalse(stale.exists())
 
 
 if __name__ == "__main__":
