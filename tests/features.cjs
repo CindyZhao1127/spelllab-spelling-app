@@ -785,6 +785,103 @@ function fireScheduled(){
     return '120% → 警告条 + 按钮与中心圆禁用';
   });
 
+  /* ---------------- 扇区 / 标签 / 指针 / 结果的角度基准必须一致 ---------------- */
+  check('盘面扇区起点为 12 点，与标签和指针同一角度基准', () => {
+    assert(html.indexOf('conic-gradient(from 0deg,') >= 0,
+      '扇区渐变未使用 from 0deg');
+    assert(!/conic-gradient\(from -90deg/.test(html),
+      '盘面扇区仍被逆时针旋转 90°，会与标签和指针错开一个象限');
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      state.lottery.prizes=[{id:'a',name:'A',prob:25},{id:'b',name:'B',prob:15}];
+      renderWheel();
+      return {bg:$('wheelDisc').style.background,
+        first:wheelSegs[0].start,mids:wheelSegs.map(s=>s.mid),
+        labels:$('wheelDisc').innerHTML};})())`));
+    assert(String(o.bg).indexOf('conic-gradient(from 0deg,') === 0,
+      '运行时渐变起点不对: ' + String(o.bg).slice(0, 60));
+    assert(o.first === 0, '第一个扇区不是从 0°(12 点) 开始');
+    // 每个标签的 transform 是 rotate(mid) ... rotate(-mid) 的负值不参与匹配
+    const angles = (o.labels.match(/rotate\(([\d.]+)deg\)/g) || [])
+      .map(x => Number(x.match(/([\d.]+)deg/)[1]));
+    assert(angles.length === o.mids.length,
+      '标签角度数量与扇区不符: ' + JSON.stringify([angles, o.mids]));
+    o.mids.forEach((m, i) => {
+      assert(Math.abs(angles[i] - m) < 0.02,
+        '第 ' + i + ' 个标签角度 ' + angles[i] + ' 与扇区中点 ' + m + ' 不一致');
+    });
+    return 'from 0deg + 首扇区 0° + 标签角度 == 扇区中点';
+  });
+
+  check('结果名称 / 下标 / 颜色与指针所停扇区完全一致（连抽 5 次）', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      state.lottery.prizes=[{id:'a',name:'一等奖',prob:20},
+        {id:'b',name:'二等奖',prob:20},{id:'c',name:'三等奖',prob:10}];
+      state.lottery.cost=1; state.plan.points=200;
+      wheelRotation=0; wheelSpinning=false; openWheel();
+      const out=[];
+      for(let i=0;i<5;i++){
+        const r=spinWheel(); finishSpin(r);
+        const pointing=(((-wheelRotation)%360)+360)%360;
+        const seg=wheelSegs.find(s=>s.index===r.index);
+        out.push({prize:r.prize,index:r.index,color:r.color,
+          segName:seg&&seg.name,segColor:seg&&seg.color,
+          start:seg&&seg.start,end:seg&&seg.end,pointing:pointing});
+      }
+      closeWheel(); state.lottery.prizes=clone(DEFAULT_PRIZES);
+      return out;})())`));
+    o.forEach((x, i) => {
+      assert(x.segName, '第 ' + (i + 1) + ' 次结果找不到对应扇区');
+      assert(x.prize === x.segName,
+        '第 ' + (i + 1) + ' 次结果名与扇区名不符: ' + JSON.stringify(x));
+      assert(x.color === x.segColor,
+        '第 ' + (i + 1) + ' 次结果颜色与扇区颜色不符: ' + JSON.stringify(x));
+      assert(x.pointing >= x.start - 0.02 && x.pointing <= x.end + 0.02,
+        '第 ' + (i + 1) + ' 次指针没停在结果扇区: ' + JSON.stringify(x));
+    });
+    return '5 次连抽：名称 / 颜色 / 落点全部对齐';
+  });
+
+  check('结果卡片色点与图例高亮指向同一扇区', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      state.lottery.prizes=[{id:'a',name:'特等奖',prob:100}];
+      state.lottery.cost=1; state.plan.points=50;
+      wheelRotation=0; wheelSpinning=false; openWheel();
+      const r=spinWheel(); finishSpin(r);
+      const out={prize:r.prize,color:r.color,
+        dot:$('wheelPrizeDot').style.background,
+        name:$('wheelPrizeName').textContent,
+        list:$('wheelList').innerHTML,
+        hits:($('wheelList').innerHTML.match(/ledger-item hit/g)||[]).length};
+      closeWheel(); state.lottery.prizes=clone(DEFAULT_PRIZES);
+      return out;})())`));
+    assert(o.prize === '特等奖' && o.name === '特等奖', '结果名称不对');
+    assert(o.dot === o.color, '结果色点不是命中扇区颜色: ' + JSON.stringify(o));
+    assert(o.hits === 1 && o.list.indexOf('data-seg="0"') >= 0,
+      '图例未高亮命中扇区: ' + JSON.stringify(o));
+    return '色点 = 扇区色 + 图例恰好高亮 1 行';
+  });
+
+  check('「谢谢参与」也落在自己的灰色扇区，不串到别的奖', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      state.lottery.prizes=[{id:'a',name:'唯一奖',prob:0}];
+      state.lottery.cost=1; state.plan.points=50;
+      wheelRotation=0; wheelSpinning=false; openWheel();
+      const r=spinWheel(); finishSpin(r);
+      const seg=wheelSegs.find(s=>s.index===r.index);
+      const out={prize:r.prize,index:r.index,segName:seg&&seg.name,
+        color:r.color,segColor:seg&&seg.color,
+        pointing:(((-wheelRotation)%360)+360)%360,
+        start:seg&&seg.start,end:seg&&seg.end};
+      closeWheel(); state.lottery.prizes=clone(DEFAULT_PRIZES);
+      return out;})())`));
+    assert(o.prize === '谢谢参与' && o.index === -1, JSON.stringify(o));
+    assert(o.segName === '谢谢参与' && o.color === o.segColor,
+      '谢谢参与没有对应到灰色扇区: ' + JSON.stringify(o));
+    assert(o.pointing >= o.start - 0.02 && o.pointing <= o.end + 0.02,
+      '指针没停在谢谢参与扇区: ' + JSON.stringify(o));
+    return '0% 奖项时指针停在整圈灰色扇区';
+  });
+
   check('全库导出含家长密码哈希、不含明文', () => {
     const sql = run('exportSQLite()');
     assert(sql.indexOf("VALUES('parent'") >= 0, 'app_meta 缺 parent');

@@ -310,6 +310,12 @@
   .wheel-prize.show{display:block}
   .wheel-prize small{display:block;font-size:10px;color:#ffe39a;letter-spacing:3px}
   .wheel-prize b{display:block;font-size:21px;color:#fff;margin-top:4px;overflow-wrap:anywhere}
+  /* 结果卡片上的色点 = 指针所停扇区的颜色；图例同步高亮，方便核对对应关系 */
+  .wheel-prize .hit-dot{display:inline-block;width:13px;height:13px;border-radius:50%;
+    margin-right:8px;vertical-align:middle;background:#ffe39a;
+    box-shadow:0 0 0 3px rgba(255,255,255,.28),0 0 12px rgba(255,255,255,.35)}
+  .wheel-list .ledger-item.hit{background:rgba(255,214,102,.24);
+    box-shadow:inset 0 0 0 1px rgba(255,214,102,.7);color:#fff}
   @keyframes prizePop{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
   .wheel-warn{display:none;margin:8px 0 0;padding:9px 12px;border-radius:10px;
     background:rgba(255,122,134,.15);border:1px solid rgba(255,122,134,.45);
@@ -1089,7 +1095,7 @@
       <div class="wheel-pointer"></div>
     </div>
     <div class="wheel-result" id="wheelResult">点「开始抽奖」或中心圆转一次</div>
-    <div class="wheel-prize" id="wheelPrize"><small id="wheelPrizeTag">本次结果</small><b id="wheelPrizeName"></b></div>
+    <div class="wheel-prize" id="wheelPrize"><small id="wheelPrizeTag">本次结果</small><b><i class="hit-dot" id="wheelPrizeDot"></i><span id="wheelPrizeName"></span></b></div>
     <div class="wheel-warn" id="wheelWarn"></div>
     <div class="wheel-list" id="wheelList"></div>
     <div class="wheel-actions">
@@ -3677,6 +3683,8 @@ const WHEEL_COLORS=['#ff9aa8','#ffc785','#ffe28a','#a8e6b8','#8fdcf0',
   '#a9b8ff','#d5aaff','#ffa9d8','#c6d0e8'];
 const WHEEL_THANKS='#6b769e';
 let wheelSegs=[], wheelRotation=0, wheelSpinning=false, wheelInvalid=false, wheelTotal=0;
+/* 最近一次中奖的扇区下标，用来在图例里高亮命中行（-99 表示无） */
+let wheelHit=-99;
 
 function prizeTotal(){
   return (Array.isArray(state.lottery.prizes)?state.lottery.prizes:[])
@@ -3726,7 +3734,8 @@ function renderWheel(){
     labels.push('<span class="wheel-label'+((end-start)<24?' tight':'')+
       '" style="transform:rotate('+mid.toFixed(2)+'deg) translateY(-'+radius+
       'px) rotate('+(-mid).toFixed(2)+'deg)">'+esc(shortWheelName(s.name))+'</span>');
-    rows.push('<div class="ledger-item"><i style="background:'+s.color+'"></i><span>'+
+    rows.push('<div class="ledger-item'+(s.index===wheelHit?' hit':'')+
+      '" data-seg="'+s.index+'"><i style="background:'+s.color+'"></i><span>'+
       esc(s.name)+'</span><b>'+(Math.round(s.prob*10)/10)+'%</b></div>');
   });
   /* 0% 的奖项不占扇区，但保留在图例里，免得家长以为奖项被删了 */
@@ -3736,7 +3745,12 @@ function renderWheel(){
       WHEEL_COLORS[i%WHEEL_COLORS.length]+'"></i><span>'+esc(p.name||('奖项'+(i+1)))+
       '</span><b>0%</b></div>');
   });
-  $('wheelDisc').style.background='conic-gradient(from -90deg,'+
+  /* 角度基准必须是 0° = 12 点：CSS conic-gradient 的弧线默认就从正上方
+     开始顺时针增加；这里若写成 from -90deg，会把整盘扇区逆时针挪 90°，
+     而标签 rotate(mid)、12 点指针、spinWheel() 的落点仍按 0°=12 点计算，
+     于是颜色扇区 / 盘面文字 / 指针 / 抽奖结果会整体错开一个象限。
+     改角度时务必四者一起改。 */
+  $('wheelDisc').style.background='conic-gradient(from 0deg,'+
     (stops.length?stops.join(','):WHEEL_THANKS+' 0deg 360deg')+')';
   $('wheelDisc').innerHTML=labels.join('');
   $('wheelList').innerHTML=rows.join('');
@@ -3770,6 +3784,7 @@ function syncWheelButtons(){
 }
 function openWheel(){
   if(wheelSpinning) return;
+  wheelHit=-99;
   resetWheelAngle();
   renderWheel();
   $('wheelResult').textContent='点「开始抽奖」或中心圆转一次';
@@ -3784,7 +3799,9 @@ function spinWheel(){
   if(wheelSpinning) return null;
   const res=drawLottery();
   if(!res) return null;                 // 积分不足 / 概率错误，已由 drawLottery 提示
-  if(!wheelSegs.length) renderWheel();
+  /* 每次转动前按当前奖项重画盘面：既保证扇区与奖项同步，也清掉上次高亮。
+     只重画 background / 标签，transform 保持不变，落点仍按同一套扇区算。 */
+  wheelHit=-99; renderWheel();
   let target=wheelSegs.findIndex(s=>s.index===res.index);
   if(target<0) target=wheelSegs.length-1;
   const seg=wheelSegs[target]||{start:0,end:360,mid:180};
@@ -3808,14 +3825,19 @@ function spinWheel(){
   return res;
 }
 function finishSpin(res){
-  res=res||{prize:'谢谢参与',index:-1,points:Number(state.plan.points)||0};
+  res=res||{prize:'谢谢参与',index:-1,color:WHEEL_THANKS,
+    points:Number(state.plan.points)||0};
   wheelSpinning=false;
+  /* 高亮图例中真正被指针指到的那个扇区；renderWheel 只重画 background
+     与标签，不触碰 transform，圆盘仍停在结果角度。 */
+  wheelHit=res.index; renderWheel();
   syncWheelButtons();
   $('btnSpin').textContent='再抽一次';
   $('wheelResult').textContent=(res.index>=0?'恭喜抽中：':'本次结果：')+res.prize;
   $('wheelResult').className='wheel-result win';
   $('wheelPrizeTag').textContent=res.index>=0?'恭喜抽中':'本次结果';
   $('wheelPrizeName').textContent=res.prize;
+  $('wheelPrizeDot').style.background=res.color||WHEEL_THANKS;
   $('wheelPrize').classList.add('show');
   renderPoints(); renderDrawer();
 }
@@ -3860,6 +3882,7 @@ function renderLottery(){
 function lotteryChanged(){
   renderLottery();
   if($('wheelMask').hidden || wheelSpinning) return;
+  wheelHit=-99;
   resetWheelAngle();
   renderWheel();
   syncWheelButtons();
@@ -3899,23 +3922,26 @@ function drawLottery(){
   L.cost=cost;
   const points=Number(state.plan.points)||0;
   if(points<cost){ toast('积分不足，还差 '+(cost-points)+' 分','bad'); return null; }
-  const prizes=Array.isArray(L.prizes)?L.prizes:[];
-  const total=prizes.reduce((a,p)=>a+(Number(p.prob)||0),0);
-  if(total>100){ toast('奖项概率合计超过 100%，请先调整','bad'); return null; }
-  addPoints(-cost,'积分抽奖');
-  const r=Math.random()*100;
-  let acc=0, win=null;
-  for(let k=0;k<prizes.length;k++){
-    acc+=Number(prizes[k].prob)||0;
-    if(r<acc){ win=prizes[k]; break; }
+  /* 抽奖与盘面共用 wheelSegments()：结果的名称、下标、颜色都来自指针
+     真正能停到的那个扇区，避免两套概率逻辑各自漂移后「奖项对不上分区」。 */
+  const segs=wheelSegments();
+  if(wheelTotal>100){ toast('奖项概率合计超过 100%，请先调整','bad'); return null; }
+  const total=segs.reduce((a,s)=>a+s.prob,0)||100;
+  const r=Math.random()*total;
+  let acc=0, hit=segs[segs.length-1]||
+    {name:'谢谢参与',index:-1,color:WHEEL_THANKS};
+  for(let k=0;k<segs.length;k++){
+    acc+=segs[k].prob;
+    if(r<acc){ hit=segs[k]; break; }
   }
-  const name=win?win.name:'谢谢参与';
+  addPoints(-cost,'积分抽奖');
+  const name=hit.name;
   if(!Array.isArray(L.log)) L.log=[];
   L.log.push({t:Date.now(),cost:cost,prize:name});
   if(L.log.length>LOTTERY_LOG_LIMIT) L.log.splice(0,L.log.length-LOTTERY_LOG_LIMIT);
   saveState(true); renderDrawer();
   /* 结果同步返回给转盘（也方便回归测试）；界面不再弹旧的结果对话框 */
-  return {prize:name,index:win?prizes.indexOf(win):-1,cost:cost,
+  return {prize:name,index:hit.index,color:hit.color,cost:cost,
     points:Number(state.plan.points)||0};
 }
 
