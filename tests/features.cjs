@@ -673,6 +673,118 @@ function fireScheduled(){
     return '第 2 次仍准确停在 ' + o.idx + ' 号扇区';
   });
 
+  /* ---------------- 转盘重做：视觉结构 + 改奖项后的显示一致性 ---------------- */
+  check('新转盘视觉结构齐全', () => {
+    ['wheel-lights','wheel-frame','wheel-hub','wheel-pointer','wheel-prize','wheel-warn',
+     'wheelHub','wheelPrizeName','wheelPrizeTag','wheelResult'].forEach(k => {
+      assert(html.indexOf(k) >= 0, '缺视觉元素 ' + k);
+    });
+    assert(html.indexOf('@keyframes wheelTwinkle') >= 0, '缺灯环闪烁动画');
+    assert(html.indexOf('repeating-conic-gradient') >= 0, '缺金色灯环');
+    assert(html.indexOf('.wheel-list .ledger-item i') >= 0, '缺彩色图例圆点');
+    assert(html.indexOf('resetWheelAngle') >= 0 && html.indexOf('lotteryChanged') >= 0,
+      '缺角度复位 / 改动同步');
+    return '灯环 + 外框 + 图例 + 结果卡片 + 警告条';
+  });
+
+  check('改奖项后转盘扇区、图例立即刷新且角度复位', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      parentUnlocked=true; wheelSpinning=false;
+      state.lottery.prizes=[{id:'a',name:'贴纸',prob:25},{id:'b',name:'绘本',prob:15}];
+      openWheel();
+      wheelRotation=1234; $('wheelDisc').style.transform='rotate(1234deg)';
+      updatePrizeField('a','name','超级大奖');
+      const out={rot:wheelRotation,tr:$('wheelDisc').style.transform,
+        segs:wheelSegs.map(s=>s.name),list:$('wheelList').innerHTML,
+        labels:$('wheelDisc').innerHTML,result:$('wheelResult').textContent};
+      closeWheel(); parentUnlocked=false;
+      state.lottery.prizes=clone(DEFAULT_PRIZES);
+      return out;})())`));
+    assert(o.rot === 0 && o.tr === 'rotate(0deg)', '圆盘角度未复位: ' + JSON.stringify([o.rot,o.tr]));
+    assert(o.segs.indexOf('超级大奖') >= 0, '扇区名称未刷新');
+    assert(o.list.indexOf('超级大奖') >= 0 && o.labels.indexOf('超级大奖') >= 0,
+      '图例 / 盘面标签未刷新');
+    assert(o.result.indexOf('已重置') >= 0, '未提示转盘已重置');
+    return '角度归零 + 扇区/图例/提示同步';
+  });
+
+  check('编辑与新增奖项时概率自动收敛到 100% 以内', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      parentUnlocked=true; wheelSpinning=false; $('wheelMask').hidden=true;
+      state.lottery.prizes=[{id:'a',name:'A',prob:80},{id:'b',name:'B',prob:20}];
+      addPrize();
+      const afterAdd=prizeTotal();
+      updatePrizeField('a','prob','200');
+      const out={afterAdd:afterAdd,total:prizeTotal(),a:state.lottery.prizes[0].prob,
+        newP:state.lottery.prizes[2].prob,sumText:$('prizeSum').textContent,
+        warn:$('prizeSum').classList.contains('warn')};
+      parentUnlocked=false; state.lottery.prizes=clone(DEFAULT_PRIZES);
+      return out;})())`));
+    assert(o.afterAdd === 100 && o.total === 100, '总概率溢出: ' + JSON.stringify(o));
+    assert(o.a === 80 && o.newP === 0, '单项概率不对: ' + JSON.stringify(o));
+    assert(o.warn === false && o.sumText.indexOf('100%') >= 0, '汇总显示不对: ' + o.sumText);
+    return '新增自动 0% + 输入 200% 截到 80%';
+  });
+
+  check('旧存档 / 备份中超过 100% 的概率加载时自动收敛', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      const s=normalizeState({lottery:{cost:10,prizes:[
+        {id:'a',name:'A',prob:90},{id:'b',name:'B',prob:90}],log:[]}});
+      return {a:s.lottery.prizes[0].prob,b:s.lottery.prizes[1].prob,
+        total:s.lottery.prizes.reduce((x,p)=>x+p.prob,0)};})())`));
+    assert(o.total === 100 && o.a === 90 && o.b === 10, JSON.stringify(o));
+    return '90% + 90% → 90% + 10%';
+  });
+
+  check('0% 奖项保留在禁用图例里，不占扇区', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      state.lottery.prizes=[{id:'a',name:'停用的奖',prob:0},{id:'b',name:'贴纸',prob:30}];
+      renderWheel();
+      const out={segs:wheelSegs.length,names:wheelSegs.map(s=>s.name),
+        rows:$('wheelList').innerHTML.split('ledger-item').length-1,
+        off:$('wheelList').innerHTML.indexOf('停用的奖')>=0,
+        zero:$('wheelList').innerHTML.indexOf('0%')>=0};
+      state.lottery.prizes=clone(DEFAULT_PRIZES); return out;})())`));
+    assert(o.segs === 2 && o.names[1] === '谢谢参与', JSON.stringify(o));
+    assert(o.rows === 3 && o.off && o.zero, '0% 奖项未保留: ' + JSON.stringify(o));
+    return '2 个扇区 + 3 行图例（含 0% 项）';
+  });
+
+  check('长奖项名生成短标签，窄扇区隐藏盘面文字', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      state.lottery.prizes=[
+        {id:'a',name:'一张超级无敌大奖券',prob:5},
+        {id:'b',name:'internationalization',prob:5},
+        {id:'c',name:'谢谢惠顾再来一次哦',prob:5}];
+      renderWheel();
+      const h=$('wheelDisc').innerHTML;
+      const out={short:shortWheelName('一张超级无敌大奖券'),
+        en:shortWheelName('internationalization'),
+        tight:(h.match(/wheel-label tight/g)||[]).length,
+        full:h.indexOf('internationalization')>=0};
+      state.lottery.prizes=clone(DEFAULT_PRIZES); return out;})())`));
+    assert(o.short.length <= 6 && o.en.length <= 10, JSON.stringify(o));
+    assert(o.tight === 3 && o.full === false, '窄扇区仍显示长名称: ' + JSON.stringify(o));
+    return '短名 + tight 隐藏 + 完整名留在图例';
+  });
+
+  check('概率非法时转盘显示警告并禁用抽奖', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      state.lottery.prizes=[{id:'a',name:'A',prob:80},{id:'b',name:'B',prob:40}];
+      state.plan.points=100;
+      renderWheel(); syncWheelButtons();
+      const out={invalid:wheelInvalid,total:wheelTotal,
+        warn:$('wheelWarn').classList.contains('show'),
+        text:$('wheelWarn').textContent,
+        disabled:$('btnSpin').disabled,hub:$('wheelHub').classList.contains('off')};
+      state.lottery.prizes=clone(DEFAULT_PRIZES); wheelInvalid=false;
+      return out;})())`));
+    assert(o.invalid === true && o.total === 120, JSON.stringify(o));
+    assert(o.warn && o.text.indexOf('120%') >= 0 && o.disabled && o.hub,
+      '未提示或未禁用: ' + JSON.stringify(o));
+    return '120% → 警告条 + 按钮与中心圆禁用';
+  });
+
   check('全库导出含家长密码哈希、不含明文', () => {
     const sql = run('exportSQLite()');
     assert(sql.indexOf("VALUES('parent'") >= 0, 'app_meta 缺 parent');

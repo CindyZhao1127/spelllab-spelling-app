@@ -207,7 +207,10 @@
   .plan-head b{font-size:30px;font-weight:900;color:#ffe39a}
   .prize-row{display:flex;gap:6px;align-items:center;margin-bottom:7px}
   .prize-row .field{flex:1;min-width:0}
-  .prize-row .prob{width:76px;flex:none}
+  .prize-row .prob{width:64px;flex:none;text-align:center}
+  .prize-row .unit{font-size:11px;color:var(--muted);flex:none}
+  .panel-note.warn{color:#ffb3ba;font-weight:800;background:rgba(255,122,134,.12);
+    border:1px solid rgba(255,122,134,.4)}
   .ledger-item{display:flex;justify-content:space-between;gap:8px;padding:7px 0;
     font-size:11px;border-bottom:1px solid rgba(255,255,255,.06);color:var(--muted)}
   .ledger-item b{font-weight:800}
@@ -231,46 +234,109 @@
   .locked-list{font-size:11px;color:#c3cbeb;line-height:1.9;text-align:left;margin-bottom:10px}
   .locked-list span{display:inline-block;padding:2px 9px;margin:2px;border-radius:999px;
     background:rgba(255,255,255,.08)}
-  .wheel-mask,.parent-mask{position:fixed;inset:0;background:rgba(5,8,26,.82);
-    z-index:80;display:grid;place-items:center;padding:16px}
+  .wheel-mask,.parent-mask{position:fixed;inset:0;background:rgba(5,8,26,.86);
+    backdrop-filter:blur(5px);z-index:80;display:grid;place-items:center;padding:16px}
   .parent-mask{z-index:85}
   .wheel-mask[hidden],.parent-mask[hidden]{display:none}
   .wheel-dialog,.parent-dialog{width:min(430px,94vw);max-height:92vh;overflow:auto;
     padding:20px;border-radius:22px;background:linear-gradient(160deg,#28305e,#171c3b);
     border:1px solid rgba(255,255,255,.16);box-shadow:0 24px 70px rgba(0,0,0,.6);
     animation:fade .25s ease}
+  /* 幸运转盘：金色灯环 + 糖果色扇区 + 独立图例，奖项再多也不糊成一团 */
+  .wheel-dialog{width:min(470px,94vw);padding:22px 22px 18px;
+    background:radial-gradient(circle at 50% -12%,rgba(255,214,102,.18),transparent 56%),
+               linear-gradient(165deg,#2a3266,#151a38 72%)}
+  .wheel-dialog .dialog-head{justify-content:center;position:relative}
+  .wheel-dialog .dialog-close{position:absolute;right:0;top:0}
+  .wheel-dialog h3{font-size:21px;letter-spacing:1px;text-align:center}
   .wheel-dialog h3,.parent-dialog h3{margin:0 0 8px;font-size:19px;font-weight:800;color:#fff}
+  .wheel-dialog h3{font-size:21px;letter-spacing:1px}
   .dialog-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
   .dialog-close{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.1);
     color:#e8ecff;font-size:16px;line-height:1;padding:0;flex:none}
   .dialog-close:hover{background:rgba(255,255,255,.22)}
-  .wheel-stage{position:relative;width:min(300px,72vw);aspect-ratio:1;margin:16px auto 10px}
-  .wheel-disc{position:absolute;inset:0;border-radius:50%;border:6px solid rgba(255,255,255,.24);
-    box-shadow:0 12px 40px rgba(0,0,0,.45),inset 0 0 0 2px rgba(255,255,255,.1);
-    transition:transform 4.2s cubic-bezier(.15,.72,.12,1);will-change:transform}
-  .wheel-label{position:absolute;left:50%;top:50%;width:88px;margin-left:-44px;margin-top:-9px;
-    font-size:11px;font-weight:800;color:#fff;text-align:center;line-height:18px;
-    text-shadow:0 1px 4px rgba(0,0,0,.8);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .wheel-pointer{position:absolute;left:50%;top:-8px;transform:translateX(-50%);z-index:3;
-    width:0;height:0;border-left:13px solid transparent;border-right:13px solid transparent;
-    border-top:26px solid #ffe39a;filter:drop-shadow(0 3px 6px rgba(0,0,0,.5))}
-  .wheel-hub{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;
-    width:74px;height:74px;border-radius:50%;display:grid;place-items:center;
-    background:linear-gradient(135deg,#2b3468,#171c3b);border:4px solid rgba(255,255,255,.4);
-    color:#ffe39a;font-weight:900;font-size:13px;box-shadow:0 4px 14px rgba(0,0,0,.45)}
-  .wheel-result{text-align:center;min-height:26px;margin:8px 0;font-size:14px;
-    font-weight:800;color:#c3cbeb}
-  .wheel-result.win{font-size:19px;color:#ffe39a}
-  .wheel-meta{display:flex;justify-content:center;gap:10px;font-size:11px;color:var(--muted);margin-bottom:8px}
-  .wheel-meta b{color:#ffe39a}
-  .wheel-list{max-height:130px;overflow:auto;margin:10px 0}
+  .wheel-meta{display:flex;justify-content:center;gap:8px;margin:10px 0 2px}
+  .wheel-meta span{font-size:11px;color:#aab4dc;padding:5px 12px;border-radius:999px;
+    background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1)}
+  .wheel-meta b{color:#ffe39a;font-size:13px;margin-left:4px}
+  .wheel-stage{position:relative;width:min(320px,74vw);aspect-ratio:1;margin:20px auto 6px;
+    border-radius:50%;filter:drop-shadow(0 16px 30px rgba(0,0,0,.5))}
+  .wheel-lights{position:absolute;inset:-13px;border-radius:50%;pointer-events:none;
+    background:repeating-conic-gradient(from 0deg,
+      rgba(255,236,172,.95) 0deg 2deg,transparent 2deg 15deg);
+    -webkit-mask:radial-gradient(circle,transparent 0 46%,#000 47% 50%,transparent 51%);
+    mask:radial-gradient(circle,transparent 0 46%,#000 47% 50%,transparent 51%);
+    animation:wheelTwinkle 1.5s ease-in-out infinite alternate}
+  @keyframes wheelTwinkle{from{opacity:.5}to{opacity:1}}
+  .wheel-frame{position:absolute;inset:-7px;border-radius:50%;pointer-events:none;
+    border:3px solid rgba(255,214,102,.5);
+    box-shadow:0 0 0 6px rgba(20,25,54,.95),0 0 0 8px rgba(255,255,255,.12),
+               inset 0 0 26px rgba(255,214,102,.2)}
+  .wheel-disc{position:absolute;inset:0;border-radius:50%;overflow:hidden;
+    border:4px solid rgba(255,255,255,.3);background:#4a5488;
+    box-shadow:inset 0 0 0 2px rgba(255,255,255,.16),inset 0 0 42px rgba(0,0,0,.3);
+    transition:transform 4.2s cubic-bezier(.12,.72,.1,1);will-change:transform}
+  .wheel-disc::after{content:'';position:absolute;inset:0;border-radius:50%;pointer-events:none;
+    background:radial-gradient(circle at 32% 24%,rgba(255,255,255,.26),transparent 46%),
+               radial-gradient(circle at 50% 50%,transparent 58%,rgba(0,0,0,.22) 100%)}
+  .wheel-label{position:absolute;left:50%;top:50%;width:96px;margin-left:-48px;margin-top:-11px;
+    padding:0 5px;border-radius:999px;background:rgba(255,255,255,.88);
+    font-size:11px;font-weight:900;color:#2a2f52;text-align:center;line-height:22px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    box-shadow:0 2px 7px rgba(0,0,0,.25)}
+  .wheel-label.tight{display:none}
+  .wheel-pointer{position:absolute;left:50%;top:-18px;transform:translateX(-50%);z-index:4;
+    width:28px;height:40px;background:linear-gradient(180deg,#fff7d9,#ffce5b 55%,#e7912a);
+    clip-path:polygon(50% 100%,0 0,100% 0);filter:drop-shadow(0 4px 6px rgba(0,0,0,.5))}
+  .wheel-pointer::before{content:'';position:absolute;left:50%;top:-5px;transform:translateX(-50%);
+    width:14px;height:14px;border-radius:50%;background:#fff7d9;box-shadow:0 2px 5px rgba(0,0,0,.4)}
+  .wheel-hub{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;
+    width:82px;height:82px;border-radius:50%;display:grid;place-items:center;cursor:pointer;
+    background:radial-gradient(circle at 34% 26%,#fff6cf,#ffd166 52%,#e99a2d 100%);
+    border:4px solid #fff8e0;color:#4a2c05;font-weight:900;font-size:15px;letter-spacing:1px;
+    box-shadow:0 0 0 4px rgba(16,20,45,.35),0 6px 18px rgba(0,0,0,.4),0 0 26px rgba(255,207,92,.5);
+    animation:hubGlow 2s ease-in-out infinite;user-select:none}
+  @keyframes hubGlow{50%{box-shadow:0 0 0 4px rgba(16,20,45,.35),
+    0 6px 18px rgba(0,0,0,.4),0 0 40px rgba(255,207,92,.85)}}
+  .wheel-hub:active{transform:translate(-50%,-50%) scale(.94)}
+  .wheel-hub.off{filter:grayscale(.55);opacity:.6;cursor:default}
+  .wheel-result{text-align:center;min-height:22px;margin:9px 0 2px;font-size:12px;
+    font-weight:700;color:#aab4dc}
+  .wheel-result.win{color:#ffe39a}
+  .wheel-prize{display:none;margin:6px auto 0;padding:12px 16px;border-radius:16px;max-width:320px;
+    background:linear-gradient(135deg,rgba(255,214,102,.24),rgba(255,140,180,.18));
+    border:1px solid rgba(255,214,102,.5);box-shadow:0 8px 26px rgba(0,0,0,.32);
+    animation:prizePop .4s cubic-bezier(.2,1.4,.4,1)}
+  .wheel-prize.show{display:block}
+  .wheel-prize small{display:block;font-size:10px;color:#ffe39a;letter-spacing:3px}
+  .wheel-prize b{display:block;font-size:21px;color:#fff;margin-top:4px;overflow-wrap:anywhere}
+  @keyframes prizePop{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+  .wheel-warn{display:none;margin:8px 0 0;padding:9px 12px;border-radius:10px;
+    background:rgba(255,122,134,.15);border:1px solid rgba(255,122,134,.45);
+    color:#ffc2ca;font-size:11px;line-height:1.6;text-align:center}
+  .wheel-warn.show{display:block}
+  .wheel-list{max-height:132px;overflow:auto;margin:9px 0 2px;
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 8px}
+  .wheel-list .ledger-item{display:flex;align-items:center;gap:7px;min-width:0;
+    padding:7px 9px;border:0;border-radius:10px;background:rgba(255,255,255,.06);
+    font-size:11px;color:#dfe5ff}
+  .wheel-list .ledger-item.off{opacity:.42}
+  .wheel-list .ledger-item i{width:10px;height:10px;border-radius:50%;flex:none;
+    box-shadow:0 0 0 2px rgba(255,255,255,.16)}
+  .wheel-list .ledger-item span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .wheel-list .ledger-item b{color:#ffe39a;font-size:11px;flex:none}
   .wheel-actions,.parent-actions{display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end;margin-top:14px}
+  .wheel-actions{justify-content:center}
   .wheel-actions button,.parent-actions button{padding:9px 18px;border-radius:999px;
     font-size:13px;font-weight:700;background:rgba(255,255,255,.12);color:#e8ecff}
   .wheel-actions button:hover,.parent-actions button:hover{background:rgba(255,255,255,.22)}
   .wheel-actions button.primary,.parent-actions button.primary{
     background:linear-gradient(135deg,#6a5cff,#4361ee);color:#fff}
   .wheel-actions button:disabled{opacity:.45;cursor:default}
+  .wheel-actions #btnSpin{padding:11px 30px;font-size:14px;font-weight:900;letter-spacing:1px;
+    background:linear-gradient(135deg,#ffd977,#ff9f43);color:#4a2c05;
+    box-shadow:0 6px 18px rgba(255,159,67,.32)}
+  .wheel-actions #btnSpin:disabled{filter:grayscale(.6);opacity:.5;box-shadow:none}
   .parent-status{padding:10px 12px;border-radius:12px;margin:10px 0;
     background:rgba(255,255,255,.06);font-size:12px;color:#c3cbeb}
   .parent-dialog .field{width:100%;margin-bottom:9px}
@@ -454,8 +520,11 @@
     .top-right{margin-left:auto;gap:8px;flex-wrap:wrap;justify-content:flex-end}
     .parent-chip,.wheel-chip{padding:4px 8px;font-size:10px}
     .parent-chip.unlocked{font-size:10px}
-    .wheel-stage{width:min(260px,72vw)}
-    .wheel-label{width:76px;margin-left:-38px;font-size:10px}
+    .wheel-stage{width:min(262px,70vw);margin:16px auto 4px}
+    .wheel-label{width:80px;margin-left:-40px;font-size:10px}
+    .wheel-hub{width:70px;height:70px;font-size:13px}
+    .wheel-list{grid-template-columns:1fr;max-height:110px}
+    .wheel-dialog{padding:18px 16px 14px}
     .toolbar{bottom:12px;gap:1px;padding:6px}
     .toolbar .tb{width:36px;height:36px}
     .toolbar .tb-main{height:36px;padding:0 12px;font-size:12px}
@@ -1007,17 +1076,21 @@
   </div>
 </div>
 
-<!-- 转盘抽奖：扇区按奖项概率分配，结果先按概率产生，再让转盘停到对应扇区 -->
+<!-- 幸运转盘：扇区按奖项概率分配，结果先按概率产生，再让转盘停到对应扇区 -->
 <div class="wheel-mask" id="wheelMask" hidden>
   <div class="wheel-dialog" role="dialog" aria-modal="true">
-    <div class="dialog-head"><h3>积分转盘</h3><button class="dialog-close" id="btnWheelClose" aria-label="关闭">&times;</button></div>
+    <div class="dialog-head"><h3>幸运转盘</h3><button class="dialog-close" id="btnWheelClose" aria-label="关闭">&times;</button></div>
     <div class="wheel-meta"><span>当前积分 <b id="wheelPoints">0</b></span><span>每次消耗 <b id="wheelCost">10</b> 分</span></div>
     <div class="wheel-stage">
+      <div class="wheel-lights"></div>
+      <div class="wheel-frame"></div>
       <div class="wheel-disc" id="wheelDisc"></div>
-      <div class="wheel-hub">抽奖</div>
+      <div class="wheel-hub" id="wheelHub" role="button" title="点这里也能抽一次">抽奖</div>
       <div class="wheel-pointer"></div>
     </div>
-    <div class="wheel-result" id="wheelResult">点「开始抽奖」转一次</div>
+    <div class="wheel-result" id="wheelResult">点「开始抽奖」或中心圆转一次</div>
+    <div class="wheel-prize" id="wheelPrize"><small id="wheelPrizeTag">本次结果</small><b id="wheelPrizeName"></b></div>
+    <div class="wheel-warn" id="wheelWarn"></div>
     <div class="wheel-list" id="wheelList"></div>
     <div class="wheel-actions">
       <button class="primary" id="btnSpin">开始抽奖</button>
@@ -1308,6 +1381,18 @@ function normalizeState(s){
   if(!out.plan.results || typeof out.plan.results!=='object' || Array.isArray(out.plan.results)) out.plan.results={};
   if(out.plan.ledger.length>LEDGER_LIMIT) out.plan.ledger=out.plan.ledger.slice(-LEDGER_LIMIT);
   if(!Array.isArray(out.lottery.prizes) || !out.lottery.prizes.length) out.lottery.prizes=clone(DEFAULT_PRIZES);
+  /* 旧存档 / 导入的备份里概率可能超过 100%，加载时收敛，
+     否则转盘会把扇区重新归一化铺满整圈，看起来全是奖却抽不了。 */
+  let pacc=0;
+  out.lottery.prizes.forEach((p,i)=>{
+    if(!p || typeof p!=='object'){
+      out.lottery.prizes[i]={id:'p'+(i+1),name:'奖项'+(i+1),prob:0}; return;
+    }
+    if(!p.id) p.id='p'+(i+1);
+    p.name=String(p.name||('奖项'+(i+1))).slice(0,40);
+    const v=Math.max(0,Math.min(100,Number(p.prob)||0));
+    p.prob=Math.min(v,Math.max(0,100-pacc)); pacc+=p.prob;
+  });
   if(!Array.isArray(out.lottery.log)) out.lottery.log=[];
   if(out.lottery.log.length>LOTTERY_LOG_LIMIT) out.lottery.log=out.lottery.log.slice(-LOTTERY_LOG_LIMIT);
   if(out.session && typeof out.session!=='object') out.session=null;
@@ -3588,46 +3673,110 @@ function changeParentPassword(){
 /* ---------------- 积分抽奖 · 转盘 ----------------
    扇区角度按奖项概率分配，结果先按现有概率逻辑同步产生（便于回归测试），
    再让转盘停到对应扇区；「谢谢参与」占剩余概率。 */
-const WHEEL_COLORS=['#ff7a86','#ffb45c','#ffd166','#8ce0a8','#5fd0d8',
-  '#7aa5ff','#b18cff','#f18ad8','#98a6c9'];
-let wheelSegs=[], wheelRotation=0, wheelSpinning=false;
+const WHEEL_COLORS=['#ff9aa8','#ffc785','#ffe28a','#a8e6b8','#8fdcf0',
+  '#a9b8ff','#d5aaff','#ffa9d8','#c6d0e8'];
+const WHEEL_THANKS='#6b769e';
+let wheelSegs=[], wheelRotation=0, wheelSpinning=false, wheelInvalid=false, wheelTotal=0;
+
+function prizeTotal(){
+  return (Array.isArray(state.lottery.prizes)?state.lottery.prizes:[])
+    .reduce((a,p)=>a+(Number(p.prob)||0),0);
+}
+/* 单项概率上限＝100 - 其它项之和。编辑时就收敛，避免溢出后转盘把扇区
+   重新归一化铺满整圈（看着「全是奖」），抽奖却被拒绝。 */
+function prizeProbCap(prizes,id,value){
+  const others=prizes.filter(x=>x.id!==id).reduce((a,x)=>a+(Number(x.prob)||0),0);
+  const want=Math.max(0,Math.min(100,Number(value)||0));
+  return Math.min(want,Math.max(0,100-others));
+}
+function shortWheelName(name){
+  const s=String(name==null?'':name).trim();
+  const limit=/[\u3400-\u9fff]/.test(s)?5:9;
+  return s.length>limit?s.slice(0,limit)+'…':s;
+}
 function wheelSegments(){
   const prizes=Array.isArray(state.lottery.prizes)?state.lottery.prizes:[];
-  const segs=prizes.map((p,i)=>({name:String(p.name||('奖项'+(i+1))),
+  const raw=prizes.map((p,i)=>({
+    name:String(p.name||('奖项'+(i+1))).trim()||('奖项'+(i+1)),
     prob:Math.max(0,Math.min(100,Number(p.prob)||0)),
     color:WHEEL_COLORS[i%WHEEL_COLORS.length],index:i}));
-  const sum=segs.reduce((a,s)=>a+s.prob,0);
-  if(sum<100) segs.push({name:'谢谢参与',prob:100-sum,color:'#5a648c',index:-1});
-  return segs.filter(s=>s.prob>0);
+  wheelTotal=raw.reduce((a,s)=>a+s.prob,0);
+  wheelInvalid=wheelTotal>100;
+  const scale=wheelInvalid?100/wheelTotal:1;
+  const segs=raw.filter(s=>s.prob>0).map(s=>({name:s.name,prob:s.prob*scale,
+    color:s.color,index:s.index}));
+  if(wheelTotal<100) segs.push({name:'谢谢参与',prob:100-wheelTotal,
+    color:WHEEL_THANKS,index:-1});
+  return segs;
 }
 function renderWheel(){
   wheelSegs=wheelSegments();
+  const radius=(typeof innerWidth!=='undefined' && innerWidth<=640)?92:112;
   const total=wheelSegs.reduce((a,s)=>a+s.prob,0)||100;
-  const radius=(typeof innerWidth!=='undefined' && innerWidth<=640)?88:108;
   let acc=0; const stops=[], labels=[], rows=[];
   wheelSegs.forEach(s=>{
     const start=acc/total*360, end=(acc+s.prob)/total*360; acc+=s.prob;
     const mid=(start+end)/2;
     s.start=start; s.end=end; s.mid=mid;
-    stops.push(s.color+' '+start.toFixed(2)+'deg '+end.toFixed(2)+'deg');
-    labels.push('<span class="wheel-label" style="transform:rotate('+mid.toFixed(2)+
-      'deg) translateY(-'+radius+'px) rotate('+(-mid).toFixed(2)+'deg)">'+esc(s.name)+'</span>');
-    rows.push('<div class="ledger-item"><span>'+esc(s.name)+'</span><b>'+
-      (Math.round(s.prob*10)/10)+'%</b></div>');
+    /* 每扇区尾部留一道细白线，扇区再多也能看清边界 */
+    const gap=Math.min(.7,(end-start)/8);
+    stops.push(s.color+' '+start.toFixed(2)+'deg '+(end-gap).toFixed(2)+'deg',
+      'rgba(255,255,255,.5) '+(end-gap).toFixed(2)+'deg '+end.toFixed(2)+'deg');
+    /* 窄扇区不画盘面文字，完整名称放下方图例，避免互相压字 */
+    labels.push('<span class="wheel-label'+((end-start)<24?' tight':'')+
+      '" style="transform:rotate('+mid.toFixed(2)+'deg) translateY(-'+radius+
+      'px) rotate('+(-mid).toFixed(2)+'deg)">'+esc(shortWheelName(s.name))+'</span>');
+    rows.push('<div class="ledger-item"><i style="background:'+s.color+'"></i><span>'+
+      esc(s.name)+'</span><b>'+(Math.round(s.prob*10)/10)+'%</b></div>');
   });
-  $('wheelDisc').style.background='conic-gradient(from -90deg,'+stops.join(',')+')';
+  /* 0% 的奖项不占扇区，但保留在图例里，免得家长以为奖项被删了 */
+  const prizes=Array.isArray(state.lottery.prizes)?state.lottery.prizes:[];
+  prizes.forEach((p,i)=>{ if((Number(p.prob)||0)>0) return;
+    rows.push('<div class="ledger-item off"><i style="background:'+
+      WHEEL_COLORS[i%WHEEL_COLORS.length]+'"></i><span>'+esc(p.name||('奖项'+(i+1)))+
+      '</span><b>0%</b></div>');
+  });
+  $('wheelDisc').style.background='conic-gradient(from -90deg,'+
+    (stops.length?stops.join(','):WHEEL_THANKS+' 0deg 360deg')+')';
   $('wheelDisc').innerHTML=labels.join('');
   $('wheelList').innerHTML=rows.join('');
   return wheelSegs;
 }
+/* 关掉再打开、或改过奖项后，圆盘必须回到 0°，否则新扇区会叠在旧落点上：
+   标签歪斜、指针指到的奖项和实际结果对不上。复位时临时关掉过渡动画。 */
+function resetWheelAngle(){
+  if(wheelSpinning) return false;
+  wheelRotation=0;
+  const d=$('wheelDisc');
+  try{
+    d.style.transition='none';
+    d.style.transform='rotate(0deg)';
+    if(d.offsetWidth!==undefined) void d.offsetWidth;
+    d.style.transition='';
+  }catch(e){ d.style.transform='rotate(0deg)'; }
+  return true;
+}
+function syncWheelButtons(){
+  const points=Number(state.plan.points)||0;
+  const cost=Math.max(1,Number(state.lottery.cost)||10);
+  const disabled=wheelSpinning||wheelInvalid||points<cost;
+  $('btnSpin').disabled=disabled;
+  $('wheelHub').classList.toggle('off',disabled);
+  $('wheelWarn').classList.toggle('show',wheelInvalid);
+  $('wheelWarn').textContent=wheelInvalid?
+    '奖项概率合计 '+wheelTotal+'%，超过 100%。请家长解锁后在「抽奖」页调整，暂时不能抽奖。':'';
+  $('wheelPoints').textContent=points;
+  $('wheelCost').textContent=cost;
+}
 function openWheel(){
   if(wheelSpinning) return;
+  resetWheelAngle();
   renderWheel();
-  $('wheelPoints').textContent=Number(state.plan.points)||0;
-  $('wheelCost').textContent=Math.max(1,Number(state.lottery.cost)||10);
-  $('wheelResult').textContent='点「开始抽奖」转一次';
+  $('wheelResult').textContent='点「开始抽奖」或中心圆转一次';
   $('wheelResult').className='wheel-result';
+  $('wheelPrize').classList.remove('show');
   $('btnSpin').textContent='开始抽奖';
+  syncWheelButtons();
   $('wheelMask').hidden=false;
 }
 function closeWheel(){ if(!wheelSpinning) $('wheelMask').hidden=true; }
@@ -3650,18 +3799,24 @@ function spinWheel(){
   $('wheelDisc').style.transform='rotate('+wheelRotation.toFixed(2)+'deg)';
   wheelSpinning=true;
   $('btnSpin').disabled=true;
+  $('wheelHub').classList.add('off');
   $('wheelResult').textContent='转动中…';
   $('wheelResult').className='wheel-result';
+  $('wheelPrize').classList.remove('show');
   $('wheelPoints').textContent=res.points;
   if(typeof setTimeout==='function') setTimeout(()=>finishSpin(res),4300);
   return res;
 }
 function finishSpin(res){
+  res=res||{prize:'谢谢参与',index:-1,points:Number(state.plan.points)||0};
   wheelSpinning=false;
-  $('btnSpin').disabled=false;
+  syncWheelButtons();
   $('btnSpin').textContent='再抽一次';
   $('wheelResult').textContent=(res.index>=0?'恭喜抽中：':'本次结果：')+res.prize;
   $('wheelResult').className='wheel-result win';
+  $('wheelPrizeTag').textContent=res.index>=0?'恭喜抽中':'本次结果';
+  $('wheelPrizeName').textContent=res.prize;
+  $('wheelPrize').classList.add('show');
   renderPoints(); renderDrawer();
 }
 
@@ -3687,32 +3842,57 @@ function renderLottery(){
     '<div class="prize-row">'+
       '<input class="field" data-prize-name="'+esc(p.id)+'" value="'+esc(p.name)+'" placeholder="奖项内容">'+
       '<input class="field prob" type="number" min="0" max="100" step="1" data-prize-prob="'+esc(p.id)+'" value="'+(Number(p.prob)||0)+'" aria-label="中奖概率 %">'+
+      '<span class="unit">%</span>'+
       '<button class="mini-btn danger sm" data-prize-del="'+esc(p.id)+'">删</button>'+
     '</div>').join(''):'<div class="empty">还没有奖项，点「添加奖项」新建一个。</div>';
-  const sum=prizes.reduce((a,p)=>a+(Number(p.prob)||0),0);
-  $('prizeSum').textContent='当前总中奖概率 '+sum+'%（剩余 '+Math.max(0,100-sum)+'% 为「谢谢参与」）'+(sum>100?' · 超过 100%，请调低':'');
+  const sum=prizeTotal(), over=sum>100;
+  $('prizeSum').textContent=over?
+    '⚠ 概率合计 '+sum+'%，超过 100%，转盘暂时不能抽奖，请调低某一项。':
+    '当前总中奖概率 '+sum+'%（剩余 '+(100-sum)+'% 为「谢谢参与」）';
+  $('prizeSum').classList.toggle('warn',over);
   const log=(L.log||[]).slice(-12).reverse();
   $('lotteryLog').innerHTML=log.length?log.map(x=>
     '<div class="ledger-item"><span>'+esc(new Date(x.t).toLocaleString('zh-CN'))+'</span><b>'+esc(x.prize||'谢谢参与')+'</b></div>'
   ).join(''):'<div class="empty">还没有抽奖记录。</div>';
 }
+/* 奖项 / 消耗积分一变，侧栏和已打开的转盘一起刷新；转盘还要复位角度，
+   否则新扇区会叠在上一次的落点上。抽奖进行中不打断动画。 */
+function lotteryChanged(){
+  renderLottery();
+  if($('wheelMask').hidden || wheelSpinning) return;
+  resetWheelAngle();
+  renderWheel();
+  syncWheelButtons();
+  $('wheelResult').textContent='奖项已更新，转盘已重置';
+  $('wheelResult').className='wheel-result';
+  $('wheelPrize').classList.remove('show');
+  $('btnSpin').textContent='开始抽奖';
+}
 function updatePrizeField(id,field,value){
-  const p=(state.lottery.prizes||[]).find(x=>x.id===id); if(!p) return;
-  if(field==='name') p.name=String(value).slice(0,40);
-  else p.prob=Math.max(0,Math.min(100,Number(value)||0));
-  saveState(); renderLottery();
+  const prizes=Array.isArray(state.lottery.prizes)?state.lottery.prizes:[];
+  const p=prizes.find(x=>x.id===id); if(!p) return;
+  if(field==='name'){
+    p.name=String(value).trim().slice(0,40)||('奖项'+(prizes.indexOf(p)+1));
+  }else{
+    const want=Math.max(0,Math.min(100,Number(value)||0));
+    p.prob=prizeProbCap(prizes,id,value);
+    if(want>p.prob) toast('所有奖项概率合计不能超过 100%，已调整为 '+p.prob+'%','bad');
+  }
+  saveState(); lotteryChanged();
 }
 function addPrize(){
   if(!Array.isArray(state.lottery.prizes)) state.lottery.prizes=[];
-  state.lottery.prizes.push({id:nextId('p'),name:'新奖项',prob:5});
-  saveState(); renderLottery();
+  const rest=Math.max(0,100-prizeTotal());
+  state.lottery.prizes.push({id:nextId('p'),name:'新奖项',prob:Math.min(5,rest)});
+  if(rest<=0) toast('概率已满 100%，新奖项暂设为 0%','bad');
+  saveState(); lotteryChanged();
 }
 function delPrize(id){
   state.lottery.prizes=(state.lottery.prizes||[]).filter(x=>x.id!==id);
-  saveState(); renderLottery();
+  saveState(); lotteryChanged();
 }
 function resetPrizes(){
-  state.lottery.prizes=clone(DEFAULT_PRIZES); saveState(); renderLottery(); toast('已恢复默认奖项');
+  state.lottery.prizes=clone(DEFAULT_PRIZES); saveState(); lotteryChanged(); toast('已恢复默认奖项');
 }
 function drawLottery(){
   const L=state.lottery, cost=Math.max(1,Number(L.cost)||10);
@@ -3977,6 +4157,7 @@ function bind(){
   $('btnWheelClose').addEventListener('click',closeWheel);
   $('btnWheelDone').addEventListener('click',closeWheel);
   $('btnSpin').addEventListener('click',spinWheel);
+  $('wheelHub').addEventListener('click',spinWheel);
   $('wheelMask').addEventListener('click',e=>{ if(e.target===$('wheelMask')) closeWheel(); });
   $('btnParentClose').addEventListener('click',hideParentCenter);
   $('btnParentUnlock').addEventListener('click',unlockParent);
@@ -4025,7 +4206,7 @@ function bind(){
     const v=e.target.value;
     guardParent('lottery',()=>{
       state.lottery.cost=Math.max(1,Math.min(999,Number(v)||10));
-      saveState(); renderLottery();
+      saveState(); lotteryChanged();
     });
   });
   $('prizeAdd').addEventListener('click',()=>guardParent('lottery',addPrize));
