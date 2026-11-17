@@ -651,7 +651,7 @@ function fireScheduled(){
     assert(o.prize === '一等奖' && o.index === 0, '抽奖结果不对');
     assert(String(o.transform).indexOf('rotate(') === 0, '转盘未旋转');
     assert(o.spinning === true && o.after === false, '旋转状态未复位');
-    assert(o.during === '转动中…' && o.final.indexOf('一等奖') >= 0, '结果文案不对');
+    assert(o.during === '正在开盒…' && o.final.indexOf('一等奖') >= 0, '结果文案不对');
     return '扣 10 分 / 记录 1 条 / 转到一等奖';
   });
 
@@ -671,6 +671,30 @@ function fireScheduled(){
     assert(o.pointing >= o.start - 0.01 && o.pointing <= o.end + 0.01,
       '指针没落在结果扇区: ' + JSON.stringify(o));
     return '第 2 次仍准确停在 ' + o.idx + ' 号扇区';
+  });
+
+  check('惊喜盲盒视觉结构与开盒状态机齐全', () => {
+    ['boxScene','boxRays','boxBurst','mysteryBox','box-lid','box-body','box-bow',
+     'box-ribbon','box-shadow','box-stars','legacy-wheel'].forEach(k => {
+      assert(html.indexOf(k) >= 0, '缺盲盒元素 ' + k);
+    });
+    assert(html.indexOf('@keyframes boxShake') >= 0, '缺晃动动画');
+    assert(html.indexOf('@keyframes burstFly') >= 0, '缺彩带迸发动画');
+    assert(html.indexOf('@keyframes boxFloat') >= 0, '缺漂浮动画');
+    assert(html.indexOf(".box-scene.reveal .box-lid") >= 0, '缺掀盖状态');
+    assert(html.indexOf("$('mysteryBox').addEventListener('click',spinWheel)") >= 0,
+      '点盒子未接抽奖');
+    // 开盒状态机：openWheel 复位 → spinWheel 进入 opening → finishSpin 进入 reveal
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      state.lottery.prizes=[{id:'a',name:'奖',prob:100}]; state.plan.points=50;
+      openWheel(); const a=$('boxScene').className;
+      const r=spinWheel(); const b=$('boxScene').className;
+      finishSpin(r); const c=$('boxScene').className;
+      closeWheel(); state.lottery.prizes=clone(DEFAULT_PRIZES);
+      return {a:a,b:b,c:c};})())`));
+    assert(o.a === 'box-scene' && o.b === 'box-scene opening' && o.c === 'box-scene reveal',
+      '开盒状态机不对: ' + JSON.stringify(o));
+    return '漂浮 + 晃动 + 掀盖 + 彩带 + 状态机复位/开盒/揭晓';
   });
 
   /* ---------------- 转盘重做：视觉结构 + 改奖项后的显示一致性 ---------------- */

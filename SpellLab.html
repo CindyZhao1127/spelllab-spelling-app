@@ -343,6 +343,89 @@
     background:linear-gradient(135deg,#ffd977,#ff9f43);color:#4a2c05;
     box-shadow:0 6px 18px rgba(255,159,67,.32)}
   .wheel-actions #btnSpin:disabled{filter:grayscale(.6);opacity:.5;box-shadow:none}
+
+  /* ---------- 惊喜盲盒：开盖动画 + 光芒 + 彩带 ---------- */
+  /* 旧转盘仅作逻辑兼容层保留，不显示 */
+  .legacy-wheel{display:none}
+  .box-scene{position:absolute;inset:0;display:grid;place-items:center}
+  /* 背景光芒：缓慢旋转，开盒时放大显现 */
+  .box-rays{position:absolute;width:250px;height:250px;border-radius:50%;pointer-events:none;
+    background:repeating-conic-gradient(from 0deg,rgba(255,226,140,.9) 0deg 8deg,transparent 8deg 23deg);
+    -webkit-mask:radial-gradient(circle,transparent 0 24%,#000 30% 50%,transparent 52%);
+    mask:radial-gradient(circle,transparent 0 24%,#000 30% 50%,transparent 52%);
+    opacity:0;transform:scale(.5);transition:opacity .5s ease,transform .7s cubic-bezier(.2,1.4,.4,1);
+    animation:raysSpin 16s linear infinite}
+  @keyframes raysSpin{from{rotate:0deg}to{rotate:360deg}}
+  .box-scene.reveal .box-rays{opacity:.9;transform:scale(1)}
+  /* 环绕闪烁的小星星 */
+  .box-stars{position:absolute;inset:0;pointer-events:none}
+  .box-stars i{position:absolute;width:15px;height:15px;opacity:.7;
+    background:#fff2b8;filter:drop-shadow(0 0 6px rgba(255,226,140,.9));
+    clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+    animation:starTwinkle 2.4s ease-in-out infinite}
+  .box-stars i:nth-child(1){left:6%;top:22%;animation-delay:0s}
+  .box-stars i:nth-child(2){left:20%;top:6%;animation-delay:.4s;font-size:12px}
+  .box-stars i:nth-child(3){left:80%;top:12%;animation-delay:.8s}
+  .box-stars i:nth-child(4){left:90%;top:48%;animation-delay:1.2s}
+  .box-stars i:nth-child(5){left:12%;top:74%;animation-delay:1.6s}
+  .box-stars i:nth-child(6){left:74%;top:82%;animation-delay:2s}
+  @keyframes starTwinkle{0%,100%{opacity:.25;transform:scale(.7)}50%{opacity:1;transform:scale(1.25)}}
+  /* 盲盒本体 */
+  .mystery-box{position:relative;width:150px;height:140px;cursor:pointer;
+    animation:boxFloat 2.8s ease-in-out infinite;filter:drop-shadow(0 14px 16px rgba(0,0,0,.45))}
+  @keyframes boxFloat{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-11px) rotate(1.5deg)}}
+  .mystery-box:focus-visible{outline:3px solid #ffe39a;outline-offset:6px;border-radius:16px}
+  .box-shadow{position:absolute;left:50%;bottom:-14px;transform:translateX(-50%);
+    width:150px;height:18px;border-radius:50%;background:rgba(0,0,0,.4);filter:blur(6px)}
+  .box-body{position:absolute;left:8px;bottom:0;width:134px;height:92px;border-radius:12px 12px 18px 18px;
+    background:linear-gradient(150deg,#ff9dbb,#ff6b8b 48%,#e23f6d);
+    border:2px solid rgba(255,255,255,.42);
+    box-shadow:inset -12px -8px 20px rgba(0,0,0,.18),inset 10px 8px 18px rgba(255,255,255,.28)}
+  .box-ribbon{position:absolute;left:50%;top:0;transform:translateX(-50%);width:22px;height:100%;
+    background:linear-gradient(90deg,rgba(255,255,255,.2),rgba(255,238,176,.95),rgba(255,255,255,.2))}
+  .box-mark{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);z-index:2;
+    font-size:42px;font-weight:900;color:#fff8dc;text-shadow:0 3px 8px rgba(0,0,0,.3)}
+  .box-lid{position:absolute;left:0;top:20px;width:150px;height:40px;border-radius:12px;z-index:3;
+    background:linear-gradient(150deg,#ffd979,#ffb347);
+    border:2px solid rgba(255,255,255,.5);
+    box-shadow:0 6px 0 rgba(178,88,18,.35),inset 0 3px 9px rgba(255,255,255,.55);
+    transform-origin:50% 100%;transition:transform .55s cubic-bezier(.3,1.3,.5,1),opacity .55s}
+  .box-bow{position:absolute;left:50%;top:-23px;transform:translateX(-50%);font-size:32px;
+    filter:drop-shadow(0 3px 4px rgba(0,0,0,.25))}
+  /* 开盒过程：先晃动，再掀盖 */
+  .box-scene.opening .mystery-box{animation:boxShake .55s ease-in-out}
+  @keyframes boxShake{0%,100%{transform:translateX(0) rotate(0)}
+    20%{transform:translateX(-8px) rotate(-5deg)}40%{transform:translateX(8px) rotate(5deg)}
+    60%{transform:translateX(-6px) rotate(-4deg)}80%{transform:translateX(6px) rotate(4deg)}}
+  .box-scene.reveal .mystery-box{animation:none}
+  .box-scene.reveal .box-lid{transform:translateY(-118px) rotate(-34deg) scale(.85);opacity:0}
+  .box-scene.reveal .box-body{animation:boxPop .5s cubic-bezier(.2,1.5,.4,1)}
+  @keyframes boxPop{0%{transform:scale(1)}45%{transform:scale(1.12,.86)}100%{transform:scale(1)}}
+  /* 彩带粒子：从盒心向四周迸发 */
+  .box-burst{position:absolute;inset:0;pointer-events:none}
+  .box-burst i{position:absolute;left:50%;top:50%;width:9px;height:14px;border-radius:3px;opacity:0;
+    background:var(--c,#ffd166)}
+  .box-burst i:nth-child(1){--r:0deg;--c:#ffd166}
+  .box-burst i:nth-child(2){--r:30deg;--c:#ff8fb1}
+  .box-burst i:nth-child(3){--r:60deg;--c:#8fe3c0}
+  .box-burst i:nth-child(4){--r:90deg;--c:#ffd166}
+  .box-burst i:nth-child(5){--r:120deg;--c:#a9b8ff}
+  .box-burst i:nth-child(6){--r:150deg;--c:#ff8fb1}
+  .box-burst i:nth-child(7){--r:180deg;--c:#ffd166}
+  .box-burst i:nth-child(8){--r:210deg;--c:#8fe3c0}
+  .box-burst i:nth-child(9){--r:240deg;--c:#a9b8ff}
+  .box-burst i:nth-child(10){--r:270deg;--c:#ff8fb1}
+  .box-burst i:nth-child(11){--r:300deg;--c:#ffd166}
+  .box-burst i:nth-child(12){--r:330deg;--c:#8fe3c0}
+  .box-scene.reveal .box-burst i{animation:burstFly .95s ease-out forwards;animation-delay:calc(var(--r) / 400)}
+  @keyframes burstFly{
+    0%{opacity:1;transform:translate(-50%,-50%) rotate(var(--r)) translateY(0) scale(.5)}
+    75%{opacity:1}
+    100%{opacity:0;transform:translate(-50%,-50%) rotate(var(--r)) translateY(-150px) scale(1.1)}}
+  @media (prefers-reduced-motion:reduce){
+    .mystery-box,.box-stars i,.box-rays{animation:none}
+    .box-scene.reveal .box-burst i{animation:none}
+  }
   .parent-status{padding:10px 12px;border-radius:12px;margin:10px 0;
     background:rgba(255,255,255,.06);font-size:12px;color:#c3cbeb}
   .parent-dialog .field{width:100%;margin-bottom:9px}
@@ -1121,7 +1204,9 @@
 
 /* 轻提示 */
 #td-root .toast {
-  position: absolute; left: 50%; bottom: 30px; transform: translate(-50%, 20px);
+  /* 必须显式 top:auto：外层 .toast 定义了 top:88px，若这里只设 bottom，
+     绝对定位元素会同时被 top/bottom 拉满，撑成一条深色竖条挡住游戏内容 */
+  position: absolute; top: auto; left: 50%; bottom: 30px; transform: translate(-50%, 20px);
   background: #343a40; color: #fff; padding: 11px 24px; border-radius: 999px;
   font-size: 15px; font-weight: 700; opacity: 0; pointer-events: none;
   transition: opacity .25s, transform .25s; z-index: 50; box-shadow: var(--shadow);
@@ -1236,7 +1321,7 @@ body.td-typing #typingView { height: 100%; }
       <div class="stat"><b id="statStreak">0</b><span>连对</span></div>
       <div class="stat"><b id="statAcc">--</b><span>正确率</span></div>
       <button class="points-chip" id="btnPoints" title="学习计划与积分"><b id="statPoints">0</b><span>积分</span></button>
-      <button class="wheel-chip" id="btnWheel" title="打开转盘抽奖">转盘抽奖</button>
+      <button class="wheel-chip" id="btnWheel" title="打开惊喜盲盒">🎁 抽盲盒</button>
       <button class="parent-chip" id="btnParent" title="家长中心：输入管理密码后可修改抽奖设置">家长</button>
       <button class="icon-btn" id="btnMenu" title="学习面板" aria-label="打开学习面板"></button>
     </div>
@@ -1778,9 +1863,9 @@ body.td-typing #typingView { height: 100%; }
 
     <div class="tab-page" id="pageLottery" hidden>
       <div class="panel">
-        <h3>积分抽奖 · 转盘</h3>
+        <h3>积分抽奖 · 惊喜盲盒</h3>
         <div class="plan-head"><div><b id="lotteryPoints">0</b> <span>分</span></div><span class="badge" id="lotteryCostTag">每次 10 分</span></div>
-        <div class="panel-note">抽奖按钮已移到页面右上角（积分旁边），点「转盘抽奖」即可开始。每次消耗 <b id="lotteryCostText">10</b> 分，转盘停在哪个扇区就得到哪个奖项；奖项概率之和需 ≤ 100%，剩余部分为「谢谢参与」。</div>
+        <div class="panel-note">抽奖按钮已移到页面右上角（积分旁边），点「🎁 抽盲盒」即可开盒。每次消耗 <b id="lotteryCostText">10</b> 分，按奖项概率揭晓结果；奖项概率之和需 ≤ 100%，剩余部分为「谢谢参与」。</div>
       </div>
       <div class="panel">
         <h3>奖项设置 <span class="lock-badge" id="prizeLockBadge">家长锁定</span></h3>
@@ -1951,19 +2036,33 @@ body.td-typing #typingView { height: 100%; }
   </div>
 </div>
 
-<!-- 幸运转盘：扇区按奖项概率分配，结果先按概率产生，再让转盘停到对应扇区 -->
+<!-- 惊喜盲盒：结果仍按奖项概率同步产生，再播放开盒动画揭晓；抽奖逻辑与转盘兼容 -->
 <div class="wheel-mask" id="wheelMask" hidden>
   <div class="wheel-dialog" role="dialog" aria-modal="true">
-    <div class="dialog-head"><h3>幸运转盘</h3><button class="dialog-close" id="btnWheelClose" aria-label="关闭">&times;</button></div>
+    <div class="dialog-head"><h3>惊喜盲盒</h3><button class="dialog-close" id="btnWheelClose" aria-label="关闭">&times;</button></div>
     <div class="wheel-meta"><span>当前积分 <b id="wheelPoints">0</b></span><span>每次消耗 <b id="wheelCost">10</b> 分</span></div>
     <div class="wheel-stage">
-      <div class="wheel-lights"></div>
-      <div class="wheel-frame"></div>
-      <div class="wheel-disc" id="wheelDisc"></div>
-      <div class="wheel-hub" id="wheelHub" role="button" title="点这里也能抽一次">抽奖</div>
-      <div class="wheel-pointer"></div>
+      <!-- 盲盒视觉主体 -->
+      <div class="box-scene" id="boxScene">
+        <div class="box-rays" id="boxRays"></div>
+        <div class="box-stars"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="mystery-box" id="mysteryBox" role="button" tabindex="0" title="点盒子抽一次">
+          <div class="box-lid"><span class="box-bow">🎀</span></div>
+          <div class="box-body"><span class="box-mark">?</span><span class="box-ribbon"></span></div>
+          <div class="box-shadow"></div>
+        </div>
+        <div class="box-burst" id="boxBurst"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+      <!-- 兼容层：旧转盘 DOM 保留但隐藏，供原有概率/旋转回归测试使用 -->
+      <div class="legacy-wheel" aria-hidden="true">
+        <div class="wheel-lights"></div>
+        <div class="wheel-frame"></div>
+        <div class="wheel-disc" id="wheelDisc"></div>
+        <div class="wheel-hub" id="wheelHub">抽奖</div>
+        <div class="wheel-pointer"></div>
+      </div>
     </div>
-    <div class="wheel-result" id="wheelResult">点「开始抽奖」或中心圆转一次</div>
+    <div class="wheel-result" id="wheelResult">点「开始抽奖」或点盒子，揭晓惊喜</div>
     <div class="wheel-prize" id="wheelPrize"><small id="wheelPrizeTag">本次结果</small><b><i class="hit-dot" id="wheelPrizeDot"></i><span id="wheelPrizeName"></span></b></div>
     <div class="wheel-warn" id="wheelWarn"></div>
     <div class="wheel-list" id="wheelList"></div>
@@ -4679,10 +4778,12 @@ function openWheel(){
   wheelHit=-99;
   resetWheelAngle();
   renderWheel();
-  $('wheelResult').textContent='点「开始抽奖」或中心圆转一次';
+  $('wheelResult').textContent='点「开始抽奖」或点盒子，揭晓惊喜';
   $('wheelResult').className='wheel-result';
   $('wheelPrize').classList.remove('show');
   $('btnSpin').textContent='开始抽奖';
+  /* 盲盒每次打开都从盖好的初始态开始 */
+  const scene=$('boxScene'); if(scene) scene.className='box-scene';
   syncWheelButtons();
   $('wheelMask').hidden=false;
 }
@@ -4709,10 +4810,18 @@ function spinWheel(){
   wheelSpinning=true;
   $('btnSpin').disabled=true;
   $('wheelHub').classList.add('off');
-  $('wheelResult').textContent='转动中…';
+  $('wheelResult').textContent='正在开盒…';
   $('wheelResult').className='wheel-result';
   $('wheelPrize').classList.remove('show');
   $('wheelPoints').textContent=res.points;
+  /* 盲盒动画：先晃动盒子，短暂后掀盖 + 光芒 + 彩带迸发 */
+  const scene=$('boxScene');
+  if(scene){
+    scene.className='box-scene opening';
+    if(typeof setTimeout==='function'){
+      setTimeout(()=>{ if(wheelSpinning) scene.className='box-scene reveal'; },520);
+    }
+  }
   if(typeof setTimeout==='function') setTimeout(()=>finishSpin(res),4300);
   return res;
 }
@@ -4731,6 +4840,7 @@ function finishSpin(res){
   $('wheelPrizeName').textContent=res.prize;
   $('wheelPrizeDot').style.background=res.color||WHEEL_THANKS;
   $('wheelPrize').classList.add('show');
+  const scene=$('boxScene'); if(scene) scene.className='box-scene reveal';
   renderPoints(); renderDrawer();
 }
 
@@ -4761,7 +4871,7 @@ function renderLottery(){
     '</div>').join(''):'<div class="empty">还没有奖项，点「添加奖项」新建一个。</div>';
   const sum=prizeTotal(), over=sum>100;
   $('prizeSum').textContent=over?
-    '⚠ 概率合计 '+sum+'%，超过 100%，转盘暂时不能抽奖，请调低某一项。':
+    '⚠ 概率合计 '+sum+'%，超过 100%，盲盒暂时不能抽，请调低某一项。':
     '当前总中奖概率 '+sum+'%（剩余 '+(100-sum)+'% 为「谢谢参与」）';
   $('prizeSum').classList.toggle('warn',over);
   const log=(L.log||[]).slice(-12).reverse();
@@ -4778,7 +4888,7 @@ function lotteryChanged(){
   resetWheelAngle();
   renderWheel();
   syncWheelButtons();
-  $('wheelResult').textContent='奖项已更新，转盘已重置';
+  $('wheelResult').textContent='奖项已更新，盲盒已重置';
   $('wheelResult').className='wheel-result';
   $('wheelPrize').classList.remove('show');
   $('btnSpin').textContent='开始抽奖';
@@ -5082,11 +5192,15 @@ function bind(){
   $('modalMask').addEventListener('click',e=>{
     if(modalDismissible && e.target===$('modalMask')){ hideModal(); sessionSuspended=false; snapshotSession(); }
   });
-  /* 转盘 / 家长弹层 */
+  /* 盲盒 / 家长弹层 */
   $('btnWheelClose').addEventListener('click',closeWheel);
   $('btnWheelDone').addEventListener('click',closeWheel);
   $('btnSpin').addEventListener('click',spinWheel);
   $('wheelHub').addEventListener('click',spinWheel);
+  $('mysteryBox').addEventListener('click',spinWheel);
+  $('mysteryBox').addEventListener('keydown',e=>{
+    if(e.key==='Enter'||e.key===' '){ e.preventDefault(); spinWheel(); }
+  });
   $('wheelMask').addEventListener('click',e=>{ if(e.target===$('wheelMask')) closeWheel(); });
   $('btnParentClose').addEventListener('click',hideParentCenter);
   $('btnParentUnlock').addEventListener('click',unlockParent);

@@ -96,6 +96,13 @@ check('启动脚本无异常', () => {
   vm.runInContext(code, sandbox);
   return '首题：' + run('currentQuestion().q.cn');
 });
+check('打字 toast 重置 top 避免被拉成竖条', () => {
+  // 回归：外层 .toast 有 top:88px，打字模块必须显式 top:auto，
+  // 否则绝对定位元素同时受 top/bottom 约束，被撑成深色宽竖条遮挡游戏
+  const ok = /#td-root\s+\.toast\s*\{[^}]*\btop\s*:\s*auto\b/.test(html);
+  if (!ok) throw new Error('#td-root .toast 缺少 top:auto');
+  return 'top:auto 已设置';
+});
 check('打字词源接入当前教材词表', () => run(`
   (function(){
     if (typeof window.TypingDuck === 'undefined' || typeof window.TypingDuck.setWordProvider !== 'function') return 'no provider API';
