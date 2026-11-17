@@ -906,6 +906,73 @@ function fireScheduled(){
     return '0% 奖项时指针停在整圈灰色扇区';
   });
 
+  check('盲盒揭晓后隐藏未拆盒子、中央直接显示奖品文字', () => {
+    assert(html.indexOf('boxPrizeReveal') >= 0, '缺奖品文字节点');
+    assert(html.indexOf('.box-scene.reveal .mystery-box{animation:none;opacity:0') >= 0,
+      'reveal 态未隐去盒子本体');
+    assert(html.indexOf('.box-scene.reveal .box-prize-reveal{opacity:1') >= 0,
+      'reveal 态未显示奖品文字');
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      state.lottery.prizes=[{id:'a',name:'免写一次作业',prob:100}];
+      state.lottery.cost=1; state.plan.points=50;
+      openWheel();
+      const before=$('boxPrizeName').textContent;
+      const r=spinWheel();
+      const during=$('boxPrizeName').textContent;
+      finishSpin(r);
+      const out={before:before,during:during,after:$('boxPrizeName').textContent,
+        tag:$('boxPrizeTag').textContent,note:$('boxPrizeNote').textContent,
+        scene:$('boxScene').className};
+      openWheel(); out.reset=$('boxPrizeName').textContent;
+      closeWheel(); state.lottery.prizes=clone(DEFAULT_PRIZES);
+      return out;})())`));
+    assert(o.before === '' && o.during === '免写一次作业' && o.after === '免写一次作业',
+      '奖品文字未在开盒时写入: ' + JSON.stringify(o));
+    assert(o.scene === 'box-scene reveal' && o.tag.indexOf('恭喜抽中') >= 0,
+      '揭晓态/标签不对: ' + JSON.stringify(o));
+    assert(o.reset === '', '再次打开未清空上次奖品');
+    return '开盒即写入奖品 · 揭晓只留文字 · 重开清空';
+  });
+
+  check('打字游戏每局固定兑换 1 积分（与星星数无关）', () => {
+    assert(html.indexOf('var pts = 1;') >= 0, '未改为固定 1 分');
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      const p0=Number(state.plan.points)||0, n0=state.plan.ledger.length;
+      window.TypingDuck.onFinish({mode:'word',stars:3,score:999});
+      const p1=Number(state.plan.points)||0;
+      window.TypingDuck.onFinish({mode:'abc',stars:1,score:10});
+      return {d1:p1-p0,d2:(Number(state.plan.points)||0)-p1,n:state.plan.ledger.length-n0};})())`));
+    assert(o.d1 === 1 && o.d2 === 1 && o.n === 2, '兑换积分不对: ' + JSON.stringify(o));
+    return '三星 / 一星均 +1 · 各记 1 条流水';
+  });
+
+  check('复习回车：提交后再回车直接下一题，听写同理', () => {
+    assert(html.indexOf("else if(srPhase==='answered'){ srIdx++; srNextCard(); }") >= 0,
+      '复习未接 answered 回车');
+    assert(html.indexOf("else if(dcPhase==='answered') dcAdvance(false);") >= 0,
+      '听写未接 answered 回车');
+    assert(html.indexOf("if($('growthView').hidden) return;") >= 0,
+      '文档级兜底缺可见性守卫');
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      memo().srs={};
+      srQueue=[{en:'cat',cn:'猫'},{en:'dog',cn:'狗'}]; srIdx=0; srRight=0;
+      srCurrent=srQueue[0]; srPhase='ask';
+      srNextCard(); $('srInput').value='cat';
+      const ev1={key:'Enter',preventDefault(){},stopPropagation(){}};
+      $('srInput').listeners.keydown[0](ev1);
+      const after1={phase:srPhase,idx:srIdx,disabled:$('srInput').disabled};
+      const ev2={key:'Enter',preventDefault(){},stopPropagation(){}};
+      $('srInput').listeners.keydown[0](ev2);
+      const after2={phase:srPhase,idx:srIdx,en:srCurrent.en,
+        empty:$('srInput').value==='',enabled:!$('srInput').disabled};
+      return {after1:after1,after2:after2};})())`));
+    assert(o.after1.phase === 'answered' && o.after1.idx === 0 && o.after1.disabled,
+      '第一次回车未提交: ' + JSON.stringify(o));
+    assert(o.after2.idx === 1 && o.after2.phase === 'ask' && o.after2.en === 'dog' &&
+      o.after2.empty && o.after2.enabled, '第二次回车未进入下一题: ' + JSON.stringify(o));
+    return '第 1 次提交锁定 · 第 2 次切到 dog';
+  });
+
   check('全库导出含家长密码哈希、不含明文', () => {
     const sql = run('exportSQLite()');
     assert(sql.indexOf("VALUES('parent'") >= 0, 'app_meta 缺 parent');

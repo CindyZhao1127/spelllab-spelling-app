@@ -397,9 +397,22 @@
   @keyframes boxShake{0%,100%{transform:translateX(0) rotate(0)}
     20%{transform:translateX(-8px) rotate(-5deg)}40%{transform:translateX(8px) rotate(5deg)}
     60%{transform:translateX(-6px) rotate(-4deg)}80%{transform:translateX(6px) rotate(4deg)}}
-  .box-scene.reveal .mystery-box{animation:none}
+  .box-scene.reveal .mystery-box{animation:none;opacity:0;transform:scale(.6);pointer-events:none;
+    transition:opacity .3s ease,transform .45s ease}
   .box-scene.reveal .box-lid{transform:translateY(-118px) rotate(-34deg) scale(.85);opacity:0}
   .box-scene.reveal .box-body{animation:boxPop .5s cubic-bezier(.2,1.5,.4,1)}
+  /* 揭晓后不再显示未拆的盒子，场景中央直接呈现奖品文字 */
+  .box-prize-reveal{position:absolute;left:50%;top:50%;z-index:6;
+    width:min(88%,330px);transform:translate(-50%,-42%) scale(.7);opacity:0;pointer-events:none;
+    text-align:center;transition:opacity .35s ease,transform .5s cubic-bezier(.2,1.5,.4,1)}
+  .box-scene.reveal .box-prize-reveal{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  .box-prize-reveal .bpr-tag{display:block;font-size:12px;letter-spacing:4px;color:#ffe39a;margin-bottom:8px}
+  .box-prize-reveal .bpr-name{display:block;font-size:30px;font-weight:900;line-height:1.35;color:#fff;
+    text-shadow:0 3px 18px rgba(0,0,0,.5),0 0 26px rgba(255,214,102,.45);overflow-wrap:anywhere;
+    padding:14px 16px;border-radius:18px;
+    background:linear-gradient(135deg,rgba(255,214,102,.24),rgba(255,140,180,.2));
+    border:1px solid rgba(255,226,140,.6);box-shadow:0 12px 34px rgba(0,0,0,.38)}
+  .box-prize-reveal .bpr-note{display:block;font-size:11px;color:#c3cbeb;margin-top:9px}
   @keyframes boxPop{0%{transform:scale(1)}45%{transform:scale(1.12,.86)}100%{transform:scale(1)}}
   /* 彩带粒子：从盒心向四周迸发 */
   .box-burst{position:absolute;inset:0;pointer-events:none}
@@ -1626,7 +1639,7 @@ body.td-typing #typingView { height: 100%; }
           </div>
           <div class="gprogress"><i id="srBar" style="width:0%"></i></div>
           <div class="gprompt" id="srPrompt" hidden></div>
-          <input class="gfield" id="srInput" placeholder="输入你记得的英文，回车提交" hidden autocomplete="off" spellcheck="false">
+          <input class="gfield" id="srInput" placeholder="输入英文，回车提交 / 再回车下一题" hidden autocomplete="off" spellcheck="false">
           <div class="gfeedback" id="srFeedback"></div>
           <div class="grow" id="srActions" hidden>
             <button class="primary" id="srShow">显示答案</button>
@@ -1656,7 +1669,7 @@ body.td-typing #typingView { height: 100%; }
           </div>
           <div class="gprogress"><i id="dcBar" style="width:0%"></i></div>
           <div class="gprompt" id="dcPrompt" hidden></div>
-          <input class="gfield" id="dcInput" placeholder="听到什么就写什么，回车提交" hidden autocomplete="off" spellcheck="false">
+          <input class="gfield" id="dcInput" placeholder="听到什么写什么，回车提交 / 再回车下一题" hidden autocomplete="off" spellcheck="false">
           <div class="gfeedback" id="dcFeedback"></div>
           <div class="grow" id="dcActions" hidden>
             <button class="primary" id="dcNext">下一个 →</button>
@@ -2050,6 +2063,11 @@ body.td-typing #typingView { height: 100%; }
           <div class="box-lid"><span class="box-bow">🎀</span></div>
           <div class="box-body"><span class="box-mark">?</span><span class="box-ribbon"></span></div>
           <div class="box-shadow"></div>
+        </div>
+        <div class="box-prize-reveal" id="boxPrizeReveal" aria-live="polite">
+          <span class="bpr-tag" id="boxPrizeTag">恭喜抽中</span>
+          <b class="bpr-name" id="boxPrizeName"></b>
+          <span class="bpr-note" id="boxPrizeNote"></span>
         </div>
         <div class="box-burst" id="boxBurst"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
       </div>
@@ -4790,6 +4808,9 @@ function openWheel(){
   $('btnSpin').textContent='开始抽奖';
   /* 盲盒每次打开都从盖好的初始态开始 */
   const scene=$('boxScene'); if(scene) scene.className='box-scene';
+  if($('boxPrizeName')) $('boxPrizeName').textContent='';
+  if($('boxPrizeTag')) $('boxPrizeTag').textContent='恭喜抽中';
+  if($('boxPrizeNote')) $('boxPrizeNote').textContent='';
   syncWheelButtons();
   $('wheelMask').hidden=false;
 }
@@ -4820,6 +4841,10 @@ function spinWheel(){
   $('wheelResult').className='wheel-result';
   $('wheelPrize').classList.remove('show');
   $('wheelPoints').textContent=res.points;
+  /* 结果文字先写好：揭晓时盒子隐去，中央直接显示奖品，不再停留未拆的红包 */
+  if($('boxPrizeName')) $('boxPrizeName').textContent=res.prize||'谢谢参与';
+  if($('boxPrizeTag')) $('boxPrizeTag').textContent=res.index>=0?'🎉 恭喜抽中':'本次结果';
+  if($('boxPrizeNote')) $('boxPrizeNote').textContent=res.index>=0?'奖励已为你记下':'别灰心，再来一次';
   /* 盲盒动画：先晃动盒子，短暂后掀盖 + 光芒 + 彩带迸发 */
   const scene=$('boxScene');
   if(scene){
@@ -4846,6 +4871,9 @@ function finishSpin(res){
   $('wheelPrizeName').textContent=res.prize;
   $('wheelPrizeDot').style.background=res.color||WHEEL_THANKS;
   $('wheelPrize').classList.add('show');
+  if($('boxPrizeName')) $('boxPrizeName').textContent=res.prize||'谢谢参与';
+  if($('boxPrizeTag')) $('boxPrizeTag').textContent=res.index>=0?'🎉 恭喜抽中':'本次结果';
+  if($('boxPrizeNote')) $('boxPrizeNote').textContent=res.index>=0?'奖励已为你记下':'别灰心，再来一次';
   const scene=$('boxScene'); if(scene) scene.className='box-scene reveal';
   renderPoints(); renderDrawer();
 }
@@ -5620,7 +5648,12 @@ function bind(){
         $('srFeedback').textContent=''; srRenderList(); saveState(true); toast('复习计划已清空','ok');
       }}]});
   });
-  $('srInput').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); srSubmit(); } });
+  $('srInput').addEventListener('keydown',e=>{
+    if(e.key!=='Enter'||e.isComposing) return;
+    e.preventDefault(); if(e.stopPropagation) e.stopPropagation();
+    if(srPhase==='ask') srSubmit();
+    else if(srPhase==='answered'){ srIdx++; srNextCard(); }
+  });
   $('srShow').addEventListener('click',()=>{
     if(!srCurrent) return;
     srEnroll(srCurrent.en,srCurrent.cn,false,true);
@@ -5638,9 +5671,31 @@ function bind(){
 
   $('dcStart').addEventListener('click',dcStart);
   $('dcSpeak').addEventListener('click',()=>{ if(dcCurrent) speak(dcCurrent.en); });
-  $('dcInput').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); dcSubmit(); } });
+  $('dcInput').addEventListener('keydown',e=>{
+    if(e.key!=='Enter'||e.isComposing) return;
+    e.preventDefault(); if(e.stopPropagation) e.stopPropagation();
+    if(dcPhase==='ask') dcSubmit();
+    else if(dcPhase==='answered') dcAdvance(false);
+  });
   $('dcNext').addEventListener('click',()=>dcAdvance(false));
   $('dcSkip').addEventListener('click',()=>dcAdvance(true));
+
+  /* 答完后输入框会被 disabled，键盘事件不再落到它身上：
+     用文档级兜底让「答完再按回车」直接进入下一题，复习/听写都适用。 */
+  document.addEventListener('keydown',e=>{
+    if(e.key!=='Enter'||e.repeat||e.isComposing) return;
+    if($('growthView').hidden) return;
+    if(!$('wheelMask').hidden||!$('parentMask').hidden||!$('modalMask').hidden) return;
+    if(typeof window.TypingDuck!=='undefined'&&typeof window.TypingDuck.isActive==='function'&&window.TypingDuck.isActive()) return;
+    const t=e.target, tag=t&&t.tagName;
+    if(tag==='BUTTON'||tag==='TEXTAREA'||(tag==='INPUT'&&t.id!=='srInput'&&t.id!=='dcInput')) return;
+    if(growthTab==='review'&&srPhase==='answered'&&srCurrent&&!$('srInput').hidden){
+      e.preventDefault(); srIdx++; srNextCard(); return;
+    }
+    if(growthTab==='dict'&&dcPhase==='answered'&&dcCurrent&&!$('dcInput').hidden){
+      e.preventDefault(); dcAdvance(false);
+    }
+  });
 
   $('mapToggle').addEventListener('click',()=>{ memo().mapUnlockAll=!memo().mapUnlockAll; saveState(); mapRender(); });
   $('mapGrid').addEventListener('click',e=>{
@@ -5718,6 +5773,9 @@ function srNextCard(){
     srRenderList(); renderHeader(); renderDrawer(); saveState(true); return;
   }
   srCurrent=srQueue[srIdx];
+  /* 新的一题必须回到 ask，否则上一题的 answered 状态会残留，
+     导致下一题无论点按钮还是回车都无法提交 */
+  srPhase='ask';
   $('srPrompt').hidden=false; $('srPrompt').innerHTML='中文提示：<b>'+esc(srCurrent.cn||srCurrent.en)+'</b>';
   $('srInput').hidden=false; $('srInput').disabled=false; $('srInput').value='';
   $('srActions').hidden=true; $('srFeedback').textContent=''; $('srFeedback').className='gfeedback';
@@ -7054,8 +7112,9 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
 (function(){
   var MODE_CN = { whack:'打地鼠', abc:'字母连打', word:'单词练习', pinyin:'拼音练习', weak:'错键专项', listen:'听音打字', pk:'亲子PK', learn:'认识字母' };
   window.TypingDuck.onFinish = function(r){
-    var pts = (Number(r.stars)||0) * 2;
-    if (pts > 0) { addPoints(pts, '打字练习·' + (MODE_CN[r.mode] || '认识字母')); }
+    /* 每局固定 1 分，与星星数脱钩 */
+    var pts = 1;
+    addPoints(pts, '打字练习·' + (MODE_CN[r.mode] || '认识字母'));
     var el = document.getElementById('td-resultDetail');
     if (el) { el.innerHTML += '<br>✨ 积分 <b>+' + pts + '</b> 已存入 SpellLab'; }
   };
