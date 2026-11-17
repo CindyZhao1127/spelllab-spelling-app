@@ -5047,6 +5047,8 @@ function setMode(m){
   var prev = mode;
   mode=m;
   clearTimeout(chunkTimer);
+  // 切模式时收起学习面板与遮罩，避免深色抽屉盖住新视图（打字模式尤其明显）
+  if($('drawer') && $('drawer').classList.contains('open')) openDrawer(false);
   renderHeader();
   if(m==='typing'){
     if(typeof window.TypingDuck!=='undefined') window.TypingDuck.enter();
@@ -6853,7 +6855,9 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
   }
 
   window.TypingDuck = {
-    enter: function(){ showGameScreen(); },
+    // 进入打字模式先回主菜单，让孩子看到小鸭和游戏卡片再选，
+    // 而不是直接落到一块空白的游戏舞台上
+    enter: function(){ goMenu(); },
     leave: function(){ goMenu(); },
     isTypingMode: function () { return !!(G && G.active); }
   };

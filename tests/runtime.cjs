@@ -96,6 +96,26 @@ check('启动脚本无异常', () => {
   vm.runInContext(code, sandbox);
   return '首题：' + run('currentQuestion().q.cn');
 });
+check('切模式自动收起抽屉与遮罩', () => run(`
+  (function(){
+    openDrawer(true,'learn');
+    const wasOpen = $('drawer').classList.contains('open') && $('mask').classList.contains('show');
+    setMode('typing');
+    const closed = !$('drawer').classList.contains('open') && !$('mask').classList.contains('show');
+    return JSON.stringify({wasOpen:wasOpen, closedAfterSwitch:closed});
+  })()
+`));
+check('打字 enter 回到主菜单而非空白舞台', () => run(`
+  (function(){
+    setMode('typing');
+    if (typeof window.TypingDuck === 'undefined') return 'no TypingDuck';
+    window.TypingDuck.enter();
+    return JSON.stringify({
+      menu: $('td-screenMenu') ? $('td-screenMenu').classList.contains('active') : 'n/a',
+      cards: document.querySelectorAll('#td-modeGrid .mode-card').length
+    });
+  })()
+`));
 check('句子题渲染词槽', () => run('renderSentence(); slots.filter(Boolean).length') + ' 个可填词槽');
 check('逐词中文提示数量', () => run('curTokens.filter(t=>!t.punct).map(t=>t.hint).join("/")'));
 check('正确拼完整句 -> 判定完成', () => run(`
