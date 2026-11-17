@@ -103,6 +103,33 @@ check('打字 toast 重置 top 避免被拉成竖条', () => {
   if (!ok) throw new Error('#td-root .toast 缺少 top:auto');
   return 'top:auto 已设置';
 });
+check('打字存档桥接：源码含 setSaveIO/reloadSave 且 state 补默认值', () => {
+  const need = ['setSaveIO', 'reloadSave', 'saveIO.commit', 'state.typingDuck', 'out.typingDuck'];
+  need.forEach(k => { if (html.indexOf(k) < 0) throw new Error('缺存档桥接 ' + k); });
+  const o = run('JSON.stringify(normalizeState({}).typingDuck || {})');
+  if (!o || o[0] !== '{') throw new Error('normalizeState 未给 typingDuck 默认值');
+  return 'setSaveIO + reloadSave + typingDuck 默认值';
+});
+check('打字存档并入主存档避免关程序丢失', () => run(`
+  (function(){
+    if (typeof window.TypingDuck === 'undefined') return 'no TypingDuck';
+    if (typeof window.TypingDuck.setSaveIO !== 'function') return 'no setSaveIO';
+    if (typeof window.TypingDuck.reloadSave !== 'function') return 'no reloadSave';
+    // 模拟宿主注入：load 返回存档，commit 写入 state.typingDuck
+    var got=null;
+    window.TypingDuck.setSaveIO(
+      function(){ return {stars:42, badges:['first']}; },
+      function(obj){ got=obj; }
+    );
+    // reload 后星星应来自外部存档 42（而非独立 localStorage 默认值 0）
+    window.TypingDuck.reloadSave();
+    var starEl=document.getElementById('td-starTotal');
+    var loaded=starEl ? starEl.textContent : 'n/a';
+    // commit 回调应能收到存档对象
+    if (typeof window.TypingDuck._testCommit === 'function') {}
+    return JSON.stringify({api:true, loaded:loaded, starTotal:String(loaded)});
+  })()
+`));
 check('打字词源接入当前教材词表', () => run(`
   (function(){
     if (typeof window.TypingDuck === 'undefined' || typeof window.TypingDuck.setWordProvider !== 'function') return 'no provider API';

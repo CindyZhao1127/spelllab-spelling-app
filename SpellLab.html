@@ -2357,6 +2357,8 @@ function normalizeState(s){
     if(!out.memo[k] || typeof out.memo[k]!=='object' || Array.isArray(out.memo[k])) out.memo[k]={};
   });
   out.memo.mapUnlockAll=!!out.memo.mapUnlockAll;
+  /* 打字小鸭存档并入主存档（旧存档缺字段时给空对象，由打字模块补默认值）。 */
+  if(!out.typingDuck || typeof out.typingDuck!=='object' || Array.isArray(out.typingDuck)) out.typingDuck={};
   if(out.history.length>HISTORY_LIMIT) out.history=out.history.slice(-HISTORY_LIMIT);
   if(!out.grades.length) out.grades=clone(DEFAULT_GRADES);
   if(!out.books.length) out.books=clone(DEFAULT_BOOKS);
@@ -2547,6 +2549,10 @@ function applyLoadedState(){
   resumeCandidate=(state.session && state.session.unitId)?clone(state.session):null;
   sessionSuspended=!!resumeCandidate;
   rollDay(); renderFilters(); renderHeader(); renderDrawer(); setMode(mode);
+  /* 主存档已就位，让打字模块从 state.typingDuck 重新读取存档并刷新界面 */
+  if(typeof window!=='undefined' && window.TypingDuck && typeof window.TypingDuck.reloadSave==='function'){
+    try{ window.TypingDuck.reloadSave(); }catch(e){}
+  }
   offerResume();
 }
 async function bootStorage(){
@@ -6065,7 +6071,20 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
     blind: false          // 盲打开关
   };
   let save = JSON.parse(JSON.stringify(DEFAULT_SAVE));
+  /* 外部存档钩子：桌面版由宿主注入，把打字存档并入主 SQLite（state.typingDuck），
+     否则独立 localStorage 会随每次启动的新浏览器 profile 一起被删掉，导致
+     「关闭程序再打开，打字游戏的星星/勋章/养成全没了」。独立版不注入，仍用 localStorage。 */
+  const saveIO = { load:null, commit:null };
   function loadSave() {
+    try {
+      if (typeof saveIO.load === 'function') {
+        const ext = saveIO.load();
+        if (ext && typeof ext === 'object') {
+          save = Object.assign(JSON.parse(JSON.stringify(DEFAULT_SAVE)), ext);
+          return;
+        }
+      }
+    } catch (e) { /* 外部存档读取失败，回退 localStorage */ }
     try {
       // 迁移旧版 v1
       let raw = localStorage.getItem(SAVE_KEY);
@@ -6078,6 +6097,9 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
     } catch (e) { /* 忽略 */ }
   }
   function persist() {
+    if (typeof saveIO.commit === 'function') {
+      try { saveIO.commit(clone(save)); return; } catch (e) { /* 落盘失败仍写本地镜像 */ }
+    }
     try { localStorage.setItem(SAVE_KEY, JSON.stringify(save)); } catch (e) {}
   }
   function refreshStarTotal() { dom.starTotal.textContent = save.stars; }
@@ -7000,7 +7022,28 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
     enter: function(){ goMenu(); },
     leave: function(){ goMenu(); },
     isTypingMode: function () { return !!(G && G.active); },
-    setWordProvider: setWordProvider
+    setWordProvider: setWordProvider,
+    /* 注入外部存档：load() 返回存档对象；commit(obj) 由宿主落盘。
+       必须在 init() 之前调用才生效（init 会 loadSave）。 */
+    setSaveIO: function(loadFn,commitFn){
+      saveIO.load = typeof loadFn === 'function' ? loadFn : null;
+      saveIO.commit = typeof commitFn === 'function' ? commitFn : null;
+      if (saveIO.load) loadSave();
+    },
+    /* 宿主把主存档（SQLite/IndexedDB）加载完成后调用，重新读取打字存档并刷新界面 */
+    reloadSave: function(){
+      loadSave();
+      refreshStarTotal();
+      if (dom.soundBtn) {
+        dom.soundBtn.textContent = save.sound ? '🔊' : '🔇';
+        dom.soundBtn.classList.toggle('off', !save.sound);
+      }
+      if (dom.blindBtn) {
+        dom.blindBtn.classList.toggle('on', !!save.blind);
+        dom.blindBtn.textContent = save.blind ? '👀' : '🙈';
+      }
+      applySkin(); applyBlindVisual(); renderDuck(); renderBadges();
+    }
   };
   init();
 })();
@@ -7019,6 +7062,20 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
   window.TypingDuck.isActive = function(){
     return (typeof mode !== 'undefined' && mode === 'typing');
   };
+
+  /* 打字存档并入 SpellLab 主存档（SQLite/IndexedDB）。
+     浏览器 profile 每次启动都是全新的、关闭即删，若打字模块只写自己的
+     localStorage，星星/勋章/小鸭养成会在关程序后全部丢失。 */
+  if (typeof window.TypingDuck.setSaveIO === 'function') {
+    window.TypingDuck.setSaveIO(
+      function(){ return (typeof state !== 'undefined' && state.typingDuck) || null; },
+      function(obj){
+        if (typeof state === 'undefined') return;
+        state.typingDuck = obj;
+        if (typeof saveState === 'function') saveState();
+      }
+    );
+  }
 
   /* 让打字练习的单词/听写使用 SpellLab 当前选中教材的词表。
      - word / listen 模式：取当前单元的 words（[英文, 中文]），仅保留纯英文字母词；
