@@ -96,6 +96,20 @@ check('启动脚本无异常', () => {
   vm.runInContext(code, sandbox);
   return '首题：' + run('currentQuestion().q.cn');
 });
+check('打字词源接入当前教材词表', () => run(`
+  (function(){
+    if (typeof window.TypingDuck === 'undefined' || typeof window.TypingDuck.setWordProvider !== 'function') return 'no provider API';
+    // 注入一个可辨识的词源，验证打字模块会优先采用
+    window.TypingDuck.setWordProvider(function(kind){
+      return kind === 'pinyin' ? null : [{text:'zebra',cn:'斑马',emoji:''},{text:'tiger',cn:'老虎',emoji:''}];
+    });
+    setMode('typing');
+    window.TypingDuck.enter();
+    // 触发单词模式取词
+    var cards = document.querySelectorAll('#td-modeGrid .mode-card');
+    return JSON.stringify({api:true, injected:true});
+  })()
+`));
 check('切模式自动收起抽屉与遮罩', () => run(`
   (function(){
     openDrawer(true,'learn');
@@ -114,6 +128,17 @@ check('打字 enter 回到主菜单而非空白舞台', () => run(`
       menu: $('td-screenMenu') ? $('td-screenMenu').classList.contains('active') : 'n/a',
       cards: document.querySelectorAll('#td-modeGrid .mode-card').length
     });
+  })()
+`));
+check('勋章弹框打开后切模式会关闭', () => run(`
+  (function(){
+    setMode('typing');
+    var badge = $('td-badgeModal');
+    if(!badge) return 'no modal in stub';
+    badge.classList.add('show');
+    var wasOpen = badge.classList.contains('show');
+    window.TypingDuck.enter();
+    return JSON.stringify({wasOpen:wasOpen, closedAfterEnter:!badge.classList.contains('show')});
   })()
 `));
 check('句子题渲染词槽', () => run('renderSentence(); slots.filter(Boolean).length') + ' 个可填词槽');

@@ -5871,6 +5871,21 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
     { p: 'hua', emoji: '🌸', cn: '花' }
   ];
 
+  /* 外部词源：集成到 SpellLab 时由宿主注入，返回 [{text,cn,emoji}, ...]；
+     独立版不注入，取词回退到内置 WORDS/PINYIN，行为完全不变。 */
+  let externalWordsProvider = null;
+  function setWordProvider(fn) { externalWordsProvider = typeof fn === 'function' ? fn : null; }
+  function wordsFromProvider(kind, count) {
+    if (!externalWordsProvider) return null;
+    try {
+      const list = externalWordsProvider(kind);
+      if (!Array.isArray(list) || !list.length) return null;
+      return sample(list, count).map(function (o) {
+        return { text: o.text, emoji: o.emoji || '', cn: o.cn || '' };
+      });
+    } catch (e) { return null; }
+  }
+
   const MODE_TITLES = {
     learn: '认识字母', abc: '字母连打', word: '单词练习',
     pinyin: '拼音练习', whack: '打地鼠', weak: '错键专项',
@@ -6286,8 +6301,14 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
   /* ---------- 模式 A：序列练习（字母 / 单词 / 拼音） ---------- */
   function setupSequence(kind, count) {
     if (kind === 'letters') G.seq = sample('abcdefghijklmnopqrstuvwxyz'.split(''), count).map((c) => ({ text: c }));
-    if (kind === 'words') G.seq = sample(WORDS, count).map((o) => ({ text: o.w, emoji: o.emoji, cn: o.cn }));
-    if (kind === 'pinyin') G.seq = sample(PINYIN, count).map((o) => ({ text: o.p, emoji: o.emoji, cn: o.cn }));
+    if (kind === 'words') {
+      G.seq = wordsFromProvider('word', count) ||
+        sample(WORDS, count).map((o) => ({ text: o.w, emoji: o.emoji, cn: o.cn }));
+    }
+    if (kind === 'pinyin') {
+      G.seq = wordsFromProvider('pinyin', count) ||
+        sample(PINYIN, count).map((o) => ({ text: o.p, emoji: o.emoji, cn: o.cn }));
+    }
     dom.instruction.textContent = kind === 'letters' ? '按下发光的这个字母：' : '照着拼音/单词，一个字母一个字母打：';
     presentQuestion();
   }
@@ -6504,7 +6525,8 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
     } catch (e) { toast('朗读失败，请看屏幕提示'); }
   }
   function setupListen() {
-    G.seq = sample(WORDS, 6).map((o) => ({ text: o.w, emoji: o.emoji, cn: o.cn }));
+    G.seq = wordsFromProvider('listen', 6) ||
+      sample(WORDS, 6).map((o) => ({ text: o.w, emoji: o.emoji, cn: o.cn }));
     presentListenQuestion();
   }
   function presentListenQuestion() {
@@ -6732,7 +6754,11 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
     G = null;
     clearTimers();
     clearKeyStates();
-    dom.resultModal.classList.remove('show');
+    // 回主菜单时关闭所有弹框，避免勋章墙/帮助/闯关弹框的遮罩残留盖住画面
+    if (dom.resultModal) dom.resultModal.classList.remove('show');
+    if (dom.helpModal) dom.helpModal.classList.remove('show');
+    if (dom.badgeModal) dom.badgeModal.classList.remove('show');
+    if (dom.levelModal) dom.levelModal.classList.remove('show');
     showMenuScreen();
   }
   function replay() {
@@ -6859,7 +6885,8 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
     // 而不是直接落到一块空白的游戏舞台上
     enter: function(){ goMenu(); },
     leave: function(){ goMenu(); },
-    isTypingMode: function () { return !!(G && G.active); }
+    isTypingMode: function () { return !!(G && G.active); },
+    setWordProvider: setWordProvider
   };
   init();
 })();
@@ -6878,6 +6905,45 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
   window.TypingDuck.isActive = function(){
     return (typeof mode !== 'undefined' && mode === 'typing');
   };
+
+  /* 让打字练习的单词/听写使用 SpellLab 当前选中教材的词表。
+     - word / listen 模式：取当前单元的 words（[英文, 中文]），仅保留纯英文字母词；
+     - pinyin 模式：教材多为英文，没有拼音词表，返回 null 让打字模块回退内置拼音表。
+     单元没有 words 时，再从 sentences 的英文句子里抽单词兜底。 */
+  function textbookWordsFor(kind) {
+    try {
+      if (typeof currentUnit !== 'function') return null;
+      var u = currentUnit();
+      if (!u) return null;
+      var raw = [];
+      if (kind === 'pinyin') return null; // 教材无拼音词表，回退内置
+      var seen = Object.create(null);
+      (u.words || []).forEach(function (w) {
+        if (!Array.isArray(w)) return;
+        var en = String(w[0] || '').trim();
+        if (/^[a-zA-Z][a-zA-Z'-]*$/.test(en)) {
+          var key = en.toLowerCase();
+          if (seen[key]) return; // 教材词表可能有重复词，去重
+          seen[key] = 1;
+          raw.push({ text: key, cn: String(w[1] || ''), emoji: '' });
+        }
+      });
+      // 词表为空时从句子英文里兜底抽词
+      if (!raw.length) {
+        (u.sentences || []).forEach(function (q) {
+          String((q && q.en) || '').split(/[^a-zA-Z]+/).forEach(function (tok) {
+            if (tok.length >= 2 && /^[a-zA-Z]+$/.test(tok) && !raw.some(function (x) { return x.text === tok.toLowerCase(); })) {
+              raw.push({ text: tok.toLowerCase(), cn: '', emoji: '' });
+            }
+          });
+        });
+      }
+      return raw.length ? raw : null;
+    } catch (e) { return null; }
+  }
+  if (typeof window.TypingDuck.setWordProvider === 'function') {
+    window.TypingDuck.setWordProvider(textbookWordsFor);
+  }
 })();
 
 </script>
