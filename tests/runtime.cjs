@@ -172,7 +172,8 @@ check('DOM id 引用无缺失', () => {
   const refs = [...new Set([...code.matchAll(/\$\('([A-Za-z0-9_-]+)'\)/g)].map(m => m[1]))];
   const dynamic = new Set(['sPrev','sSpeak','sHints','sHint','sReset','sCheck','sNext','sMenu','wSpeak','wStar','wShuffle','wAnswer','wNext','wMenu','cPrev','cSpeak','cHint','cReset','cCheck','cNext','cMenu',
     // 打字小鸭集成模块：$() 内部自动加 td- 前缀，这些名字对应 td-xxx 实际 id
-    'screenMenu','screenGame','starTotal','soundBtn','gameTitle','scoreVal','comboVal','accVal','stageInstruction','targetDisplay','progressText','keyboard','handHint','handHintDot','handHintText','resultModal','resultEmoji','resultTitle','resultStars','resultDetail','helpModal','legend','modeGrid','backBtn','brandHome','againBtn','menuBtn','helpBtn','helpCloseBtn']);
+    'screenMenu','screenGame','starTotal','soundBtn','gameTitle','scoreVal','comboVal','accVal','stageInstruction','targetDisplay','progressText','keyboard','handHint','handHintDot','handHintText','resultModal','resultEmoji','resultTitle','resultStars','resultDetail','helpModal','legend','modeGrid','backBtn','brandHome','againBtn','menuBtn','helpBtn','helpCloseBtn',
+    'skinBtn','blindBtn','heroDuck','streakVal','checkinTip','duckStage','duckInfo','feedBtn','badgeBtn','badgeCount','levelBtn','badgeModal','badgeGrid','badgeCloseBtn','levelModal','levelList','levelCloseBtn','toast','app','root','screenMenu']);
   const missing = refs.filter(r => !staticIds.has(r) && !dynamic.has(r));
   if(missing.length) throw new Error('缺失 id: ' + missing.join(','));
   return refs.length + ' 个引用，动态按钮 ' + dynamic.size + ' 个';

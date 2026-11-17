@@ -673,7 +673,7 @@
   .db-note{font-size:10px;color:var(--muted);line-height:1.75;margin-top:9px}
 
 /* ============ 打字小鸭 · 样式 ============ */
-#td-root {
+#td-root{
   --bg1: #fff7e6;
   --bg2: #ffe9c7;
   --ink: #4a3b2c;
@@ -695,11 +695,11 @@
   --f-th: #adb5bd;
 }
 
-#td-root * { box-sizing: border-box; margin: 0; padding: 0; }
+#td-root *{ box-sizing: border-box; margin: 0; padding: 0; }
 
-#td-root { height: 100%; }
+#td-root{ height: 100%; }
 
-#td-root {
+#td-root{
   font-family: var(--font);
   color: var(--ink);
   background: linear-gradient(135deg, var(--bg1), var(--bg2));
@@ -708,10 +708,10 @@
   -webkit-user-select: none;
 }
 
-#td-root .td-app {
+#td-root {
   position: relative;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   padding: 14px 26px 10px;
@@ -751,23 +751,23 @@
 #td-root .screen.active { display: flex; }
 
 /* ---------- 主菜单 ---------- */
-#td-root #screenMenu { align-items: center; justify-content: center; gap: 22px; }
+#td-root #screenMenu { align-items: center; justify-content: flex-start; gap: 14px; overflow-y: auto; padding: 8px 12px 16px; }
 #td-root .menu-hero { text-align: center; }
-#td-root .hero-duck { font-size: 76px; line-height: 1; animation: td-bob 2.4s ease-in-out infinite; }
-#td-root .menu-hero h1 { font-size: 38px; margin: 8px 0 6px; color: #d9480f; }
-#td-root .menu-hero p { font-size: 17px; color: var(--ink-soft); }
+#td-root .hero-duck { font-size: 58px; line-height: 1; animation: bob 2.4s ease-in-out infinite; }
+#td-root .menu-hero h1 { font-size: 30px; margin: 6px 0 4px; color: #d9480f; }
+#td-root .menu-hero p { font-size: 15px; color: var(--ink-soft); }
 #td-root .mode-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
-  width: min(920px, 100%);
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  width: min(1040px, 100%);
 }
 #td-root .mode-card {
   border: none; border-radius: var(--radius); cursor: pointer;
   padding: 20px 18px; display: flex; flex-direction: column; align-items: center;
   gap: 8px; box-shadow: var(--shadow); color: #fff;
   transition: transform .18s cubic-bezier(.2,.9,.3,1.2), box-shadow .18s;
-  min-height: 158px;
+  min-height: 132px; padding: 16px 12px;
 }
 #td-root .mode-card:hover { transform: translateY(-8px) scale(1.03); box-shadow: 0 16px 28px rgba(0,0,0,.18); }
 #td-root .mode-card:active { transform: translateY(-2px) scale(.99); }
@@ -822,7 +822,7 @@
   padding: 10px 34px; border-radius: 28px;
   text-shadow: 0 4px 0 rgba(0,0,0,.12);
   box-shadow: 0 10px 0 #e0a800, var(--shadow);
-  animation: td-popin .3s cubic-bezier(.2,.9,.3,1.3);
+  animation: popin .3s cubic-bezier(.2,.9,.3,1.3);
 }
 #td-root .big-letter.upper { text-transform: uppercase; }
 #td-root .word-letters { display: flex; gap: 8px; }
@@ -842,8 +842,8 @@
   position: absolute; top: 42%; left: 50%; transform: translate(-50%,-50%);
   font-size: 74px; font-weight: 900; pointer-events: none; opacity: 0;
 }
-#td-root .feedback.show-good { color: #2f9e44; animation: td-fbGood .6s ease-out; }
-#td-root .feedback.show-bad  { color: #fa5252; animation: td-fbBad .5s ease-out; }
+#td-root .feedback.show-good { color: #2f9e44; animation: fbGood .6s ease-out; }
+#td-root .feedback.show-bad  { color: #fa5252; animation: fbBad .5s ease-out; }
 
 /* 进度条独立成组件，位于舞台与键盘之间，与地鼠/字母完全分离 */
 #td-root .progress-section {
@@ -914,15 +914,15 @@
 #td-root .key.pressed { transform: translateY(5px); box-shadow: 0 0 0 var(--kc), 0 2px 4px rgba(0,0,0,.15); }
 #td-root .key.target {
   background: #fff9db;
-  animation: td-keyGlow 1s ease-in-out infinite;
+  animation: keyGlow 1s ease-in-out infinite;
   z-index: 2;
 }
 #td-root .key.target::before {
   content: ''; position: absolute; inset: -5px; border-radius: 16px;
-  border: 3px solid #ffb703; animation: td-ringPulse 1s ease-in-out infinite;
+  border: 3px solid #ffb703; animation: ringPulse 1s ease-in-out infinite;
 }
 #td-root .key.correct { background: #d3f9d8 !important; box-shadow: 0 5px 0 #51cf66, 0 0 0 4px #b2f2bb; }
-#td-root .key.wrong { background: #ffe3e3 !important; animation: td-shake .35s; }
+#td-root .key.wrong { background: #ffe3e3 !important; animation: shake .35s; }
 #td-root .key.space { width: 380px; height: 44px; font-size: 16px; --kc: #adb5bd; color: #868e96; }
 #td-root .key.space::after { display: none; }
 #td-root .fp-lp { --kc: var(--f-lp); }
@@ -963,7 +963,7 @@
 #td-root .modal-card {
   background: #fff; border-radius: 28px; padding: 30px 38px; text-align: center;
   box-shadow: 0 20px 50px rgba(0,0,0,.25); min-width: 380px; max-width: 560px;
-  animation: td-popin .35s cubic-bezier(.2,.9,.3,1.2);
+  animation: popin .35s cubic-bezier(.2,.9,.3,1.2);
 }
 #td-root .result-emoji { font-size: 72px; }
 #td-root .modal-card h2 { font-size: 30px; color: #d9480f; margin: 6px 0 14px; }
@@ -992,13 +992,13 @@
 #td-root .help-card .modal-btns { justify-content: center; }
 
 /* ---------- 动画 ---------- */
-@keyframes td-bob { 0%,100%{transform:translateY(0) rotate(-3deg)} 50%{transform:translateY(-8px) rotate(3deg)} }
-@keyframes td-popin { from{transform:scale(.6);opacity:0} to{transform:scale(1);opacity:1} }
-@keyframes td-keyGlow { 0%,100%{box-shadow:0 5px 0 var(--kc),0 0 0 0 rgba(255,183,3,.5)} 50%{box-shadow:0 5px 0 var(--kc),0 0 0 8px rgba(255,183,3,0)} }
-@keyframes td-ringPulse { 0%,100%{opacity:1} 50%{opacity:.35} }
-@keyframes td-shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
-@keyframes td-fbGood { 0%{opacity:0;transform:translate(-50%,-30%) scale(.5)} 30%{opacity:1;transform:translate(-50%,-60%) scale(1.15)} 100%{opacity:0;transform:translate(-50%,-120%) scale(1)} }
-@keyframes td-fbBad { 0%{opacity:0;transform:translate(-50%,-50%) scale(.6)} 30%{opacity:1;transform:translate(-50%,-50%) scale(1)} 100%{opacity:0;transform:translate(-50%,-50%) scale(.9)} }
+@keyframes bob { 0%,100%{transform:translateY(0) rotate(-3deg)} 50%{transform:translateY(-8px) rotate(3deg)} }
+@keyframes popin { from{transform:scale(.6);opacity:0} to{transform:scale(1);opacity:1} }
+@keyframes keyGlow { 0%,100%{box-shadow:0 5px 0 var(--kc),0 0 0 0 rgba(255,183,3,.5)} 50%{box-shadow:0 5px 0 var(--kc),0 0 0 8px rgba(255,183,3,0)} }
+@keyframes ringPulse { 0%,100%{opacity:1} 50%{opacity:.35} }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+@keyframes fbGood { 0%{opacity:0;transform:translate(-50%,-30%) scale(.5)} 30%{opacity:1;transform:translate(-50%,-60%) scale(1.15)} 100%{opacity:0;transform:translate(-50%,-120%) scale(1)} }
+@keyframes fbBad { 0%{opacity:0;transform:translate(-50%,-50%) scale(.6)} 30%{opacity:1;transform:translate(-50%,-50%) scale(1)} 100%{opacity:0;transform:translate(-50%,-50%) scale(.9)} }
 
 /* ---------- 小屏适配 ---------- */
 @media (max-width: 1000px) {
@@ -1008,16 +1008,153 @@
   #td-root .big-letter { font-size: 74px; }
 }
 
+/* ================= 新增功能样式 ================= */
+#td-root .card-orange { background: linear-gradient(145deg,#ffa94d,#f76707); }
+#td-root .card-teal   { background: linear-gradient(145deg,#38d9a9,#0ca678); }
+#td-root .card-red    { background: linear-gradient(145deg,#ff8787,#e03131); }
+
+/* 成长面板 */
+#td-root .home-row {
+  display: grid; grid-template-columns: 1fr 1.15fr 1fr; gap: 14px;
+  width: min(1040px, 100%);
+}
+#td-root .home-card {
+  background: rgba(255,255,255,.82); border-radius: 18px; padding: 12px 16px;
+  box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 4px;
+  border: 2px solid rgba(255,255,255,.9);
+}
+#td-root .hc-title { font-size: 14px; font-weight: 800; color: #e8590c; }
+#td-root .hc-main { font-size: 20px; font-weight: 900; color: #343a40; }
+#td-root .hc-main b { color: #f76707; font-size: 26px; }
+#td-root .hc-sub { font-size: 12px; color: var(--ink-soft); }
+#td-root .duck-card { align-items: center; text-align: center; }
+#td-root .duck-stage {
+  font-size: 52px; line-height: 1.1; animation: bob 2.8s ease-in-out infinite;
+  filter: drop-shadow(0 4px 3px rgba(0,0,0,.12));
+}
+#td-root .mini-btn {
+  border: none; border-radius: 999px; cursor: pointer;
+  background: linear-gradient(145deg,#ffd43b,#fab005); color: #5f3dc4;
+  font-family: var(--font); font-weight: 900; font-size: 13px;
+  padding: 7px 14px; box-shadow: 0 3px 0 #e8a100; margin-top: 4px;
+  transition: transform .15s, box-shadow .15s;
+}
+#td-root .mini-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 0 #e8a100; }
+#td-root .mini-btn:active { transform: translateY(1px); box-shadow: 0 1px 0 #e8a100; }
+#td-root .mini-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+#td-root .quick-card { justify-content: center; gap: 10px; }
+#td-root .mini-btn.wide { width: 100%; font-size: 14px; padding: 10px 12px; }
+
+/* 盲打按钮 */
+#td-root .blind-btn { margin-left: 6px; }
+#td-root .blind-btn.on { background: linear-gradient(145deg,#b197fc,#845ef7); color: #fff; }
+#td-root .keyboard.blind .key:not(.target) {
+  color: transparent;
+}
+#td-root .keyboard.blind .key:not(.target)::after {
+  content: '?'; color: rgba(255,255,255,.85); font-size: 22px;
+}
+
+/* 听音打字 */
+#td-root .listen-play {
+  border: none; border-radius: 50%; width: 92px; height: 92px; cursor: pointer;
+  background: linear-gradient(145deg,#38d9a9,#0ca678); color: #fff;
+  font-size: 44px; box-shadow: 0 8px 0 #087f5b, var(--shadow);
+  transition: transform .15s;
+}
+#td-root .listen-play:hover { transform: scale(1.08); }
+#td-root .listen-play:active { transform: translateY(4px); box-shadow: 0 4px 0 #087f5b; }
+#td-root .listen-mask { letter-spacing: 6px; }
+#td-root .wl.masked { color: #adb5bd; }
+
+/* PK 横幅 */
+#td-root .pk-banner {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 16px; border-radius: 999px; font-weight: 900; font-size: 15px;
+  background: linear-gradient(145deg,#ffd43b,#fab005); color: #5f3dc4;
+  box-shadow: var(--shadow); margin-right: 6px;
+}
+#td-root .pk-banner.p2 { background: linear-gradient(145deg,#b197fc,#845ef7); color: #fff; }
+#td-root .listen-wrap { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+#td-root .listen-wrap .word-meaning { display: inline; }
+#td-root .pk-done {
+  font-size: 15px; font-weight: 800; color: #495057; background: #fff;
+  padding: 8px 18px; border-radius: 14px; box-shadow: var(--shadow);
+}
+
+/* 勋章墙 */
+#td-root .wide-card { width: min(720px, 92vw); text-align: center; }
+#td-root .badge-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+  margin: 18px 0 22px;
+}
+#td-root .badge-item {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 12px 6px; border-radius: 14px; background: #f8f9fa;
+  border: 2px dashed #dee2e6;
+}
+#td-root .badge-item.unlocked {
+  background: linear-gradient(145deg,#fff9db,#ffec99);
+  border: 2px solid #ffd43b;
+}
+#td-root .badge-ico { font-size: 36px; filter: grayscale(1); opacity: .35; }
+#td-root .badge-item.unlocked .badge-ico { filter: none; opacity: 1; animation: popin .4s; }
+#td-root .badge-name { font-size: 13px; font-weight: 800; color: #495057; }
+#td-root .badge-desc { font-size: 11px; color: var(--ink-soft); line-height: 1.3; }
+
+/* 闯关地图 */
+#td-root .level-list { display: flex; flex-direction: column; gap: 10px; margin: 18px 0 22px; }
+#td-root .level-item {
+  display: flex; align-items: center; gap: 14px; text-align: left;
+  padding: 12px 16px; border-radius: 14px; border: 2px solid #dee2e6;
+  background: #f8f9fa; cursor: pointer; transition: transform .15s;
+}
+#td-root .level-item.unlocked { background: linear-gradient(145deg,#e6fcf5,#c3fae8); border-color: #38d9a9; }
+#td-root .level-item.cleared { background: linear-gradient(145deg,#fff9db,#ffec99); border-color: #ffd43b; }
+#td-root .level-item.locked { opacity: .55; cursor: not-allowed; }
+#td-root .level-item:not(.locked):hover { transform: translateX(4px); }
+#td-root .level-ico { font-size: 30px; }
+#td-root .level-info { flex: 1; }
+#td-root .level-name { font-size: 15px; font-weight: 800; color: #343a40; }
+#td-root .level-desc { font-size: 12px; color: var(--ink-soft); }
+#td-root .level-state { font-size: 13px; font-weight: 800; color: #f76707; }
+
+/* 轻提示 */
+#td-root .toast {
+  position: absolute; left: 50%; bottom: 30px; transform: translate(-50%, 20px);
+  background: #343a40; color: #fff; padding: 11px 24px; border-radius: 999px;
+  font-size: 15px; font-weight: 700; opacity: 0; pointer-events: none;
+  transition: opacity .25s, transform .25s; z-index: 50; box-shadow: var(--shadow);
+  max-width: 80vw; text-align: center;
+}
+#td-root .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* 主题皮肤 */
+#td-root.skin-forest {
+  background: linear-gradient(160deg,#d3f9d8,#b2f2bb 45%,#8ce99a);
+}
+#td-root.skin-night {
+  background: linear-gradient(160deg,#5c7cfa,#7048e8 50%,#9775fa);
+}
+#td-root.skin-night .mode-card, #td-root.skin-night .home-card { color: #212529; }
+#td-root.skin-sunset {
+  background: linear-gradient(160deg,#ffd8a8,#ffa8a8 50%,#fcc2d7);
+}
+
+@media (max-width: 1000px) {
+  #td-root .mode-grid { grid-template-columns: repeat(2, 1fr); }
+  #td-root .home-row { grid-template-columns: 1fr; }
+  #td-root .badge-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
 
 /* ---------- 集成到 SpellLab 的适配 ---------- */
 #typingView { width: 100%; max-width: 1180px; height: 100%; align-items: stretch; }
 #typingView #td-root { width: 100%; height: 100%; min-height: 600px; }
 #typingView #td-root .td-app { min-height: 600px; }
 /* 打字模式时 SpellLab 主区上下留白收紧，给游戏更多高度 */
-body.td-typing main { padding: 6px 12px; }
-body.td-typing .app { padding-bottom: 16px; }
-body.td-typing .filter-bar { display: none; }
-body.td-typing .progress-wrap { display: none; }
+body.td-typing main { padding-top: 6px; padding-bottom: 6px; }
+body.td-typing #typingView { height: 100%; }
 
 </style>
 </head>
@@ -1114,6 +1251,7 @@ body.td-typing .progress-wrap { display: none; }
           <span class="star-ico">⭐</span>
           <span id="td-starTotal">0</span>
         </div>
+        <button class="icon-btn" id="td-skinBtn" title="切换主题皮肤">🎨</button>
         <button class="icon-btn" id="td-soundBtn" title="声音开关">🔊</button>
         <button class="icon-btn" id="td-helpBtn" title="键位帮助">❓</button>
       </div>
@@ -1122,10 +1260,30 @@ body.td-typing .progress-wrap { display: none; }
     <!-- 主菜单 -->
     <section id="td-screenMenu" class="screen active">
       <div class="menu-hero">
-        <div class="hero-duck">🦆</div>
+        <div class="hero-duck" id="td-heroDuck">🦆</div>
         <h1>一起来练习打字吧！</h1>
         <p>选一个游戏，用小手指点亮的按键打字，看看你能拿几颗星 ⭐</p>
       </div>
+
+      <!-- 成长面板：打卡 / 小鸭养成 / 快捷入口 -->
+      <div class="home-row">
+        <div class="home-card checkin-card">
+          <div class="hc-title">📅 每日打卡</div>
+          <div class="hc-main">连续 <b id="td-streakVal">1</b> 天</div>
+          <div class="hc-sub" id="td-checkinTip">今天已打卡，明天见！</div>
+        </div>
+        <div class="home-card duck-card">
+          <div class="hc-title">🦆 我的小鸭</div>
+          <div class="duck-stage" id="td-duckStage">🥚</div>
+          <div class="hc-sub" id="td-duckInfo">Lv.1 鸭蛋 · 喂 3⭐ 长大</div>
+          <button class="mini-btn" id="td-feedBtn">喂食 3⭐</button>
+        </div>
+        <div class="home-card quick-card">
+          <button class="mini-btn wide" id="td-badgeBtn">🏅 勋章墙 (<span id="td-badgeCount">0</span>/8)</button>
+          <button class="mini-btn wide" id="td-levelBtn">🗺️ 键位闯关</button>
+        </div>
+      </div>
+
       <div class="mode-grid" id="td-modeGrid">
         <button class="mode-card card-yellow" data-mode="learn">
           <span class="card-emoji">🔤</span>
@@ -1152,6 +1310,21 @@ body.td-typing .progress-wrap { display: none; }
           <span class="card-title">打地鼠</span>
           <span class="card-desc">字母冒出来，快按对应键打掉它</span>
         </button>
+        <button class="mode-card card-orange" data-mode="weak">
+          <span class="card-emoji">💪</span>
+          <span class="card-title">错键专项</span>
+          <span class="card-desc">专练你最容易按错的几个键</span>
+        </button>
+        <button class="mode-card card-teal" data-mode="listen">
+          <span class="card-emoji">👂</span>
+          <span class="card-title">听音打字</span>
+          <span class="card-desc">听英文读音，把听到的单词打出来</span>
+        </button>
+        <button class="mode-card card-red" data-mode="pk">
+          <span class="card-emoji">🏆</span>
+          <span class="card-title">亲子 PK</span>
+          <span class="card-desc">和爸爸妈妈轮流打，比谁分高</span>
+        </button>
       </div>
       <div class="menu-tip">
         <span>💡 小提示：</span>每个按键都有颜色，颜色代表该用哪根手指。看看下面的键盘吧！
@@ -1168,6 +1341,7 @@ body.td-typing .progress-wrap { display: none; }
           <div class="stat"><span class="stat-label">连击</span><span class="stat-val" id="td-comboVal">🔥0</span></div>
           <div class="stat"><span class="stat-label">正确</span><span class="stat-val" id="td-accVal">100%</span></div>
         </div>
+        <button class="icon-btn blind-btn" id="td-blindBtn" title="盲打挑战：藏起按键字母">🙈</button>
       </div>
 
       <!-- 游戏舞台：由 JS 填充具体内容 -->
@@ -1247,6 +1421,34 @@ body.td-typing .progress-wrap { display: none; }
         </div>
       </div>
     </div>
+
+    <!-- 勋章墙弹窗 -->
+    <div class="modal-mask" id="td-badgeModal">
+      <div class="modal-card wide-card">
+        <h2>🏅 我的勋章墙</h2>
+        <p class="help-lead">达成小目标就能解锁勋章，集齐 8 枚超厉害！</p>
+        <div class="badge-grid" id="td-badgeGrid"></div>
+        <div class="modal-btns">
+          <button class="btn btn-primary" id="td-badgeCloseBtn">好的</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 闯关地图弹窗 -->
+    <div class="modal-mask" id="td-levelModal">
+      <div class="modal-card wide-card">
+        <h2>🗺️ 键位闯关地图</h2>
+        <p class="help-lead">从基准键出发，一关一关解锁整个键盘！</p>
+        <div class="level-list" id="td-levelList"></div>
+        <div class="modal-btns">
+          <button class="btn btn-primary" id="td-levelCloseBtn">关闭</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 轻提示 -->
+    <div class="toast" id="td-toast"></div>
+  
       </div></div>
     </section>
   </main>
@@ -5203,8 +5405,29 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
 
   const MODE_TITLES = {
     learn: '认识字母', abc: '字母连打', word: '单词练习',
-    pinyin: '拼音练习', whack: '打地鼠'
+    pinyin: '拼音练习', whack: '打地鼠', weak: '错键专项',
+    listen: '听音打字', pk: '亲子 PK'
   };
+
+  /* ---------- 勋章定义 ---------- */
+  const BADGES = [
+    { id: 'first3', ico: '🌟', name: '初次闪耀', desc: '第一次拿到三颗星' },
+    { id: 'combo10', ico: '🔥', name: '连击达人', desc: '连击达到 10 次' },
+    { id: 'week7', ico: '📅', name: '坚持一周', desc: '连续打卡 7 天' },
+    { id: 'duck5', ico: '🦆', name: '小鸭长大', desc: '把小鸭养到 5 级' },
+    { id: 'weak10', ico: '💪', name: '攻克弱项', desc: '做对 10 个错键专项' },
+    { id: 'pkwin', ico: '🏆', name: 'PK 冠军', desc: '赢一次亲子对战' },
+    { id: 'perfect', ico: '🎯', name: '零失误', desc: '一局全程零错误' },
+    { id: 'star100', ico: '💯', name: '星星大户', desc: '累计攒够 100 颗星' }
+  ];
+
+  /* ---------- 闯关关卡定义 ---------- */
+  const LEVELS = [
+    { id: 1, name: '第一关 · 基准键', desc: '左手 ASDF，右手 JKL', keys: 'asdfjkl' },
+    { id: 2, name: '第二关 · 上排键', desc: '打出上排 QWERTYUIOP', keys: 'qwertyuiop' },
+    { id: 3, name: '第三关 · 下排键', desc: '打出下排 ZXCVBNM', keys: 'zxcvbnm' },
+    { id: 4, name: '第四关 · 全键盘', desc: '26 个字母大挑战', keys: 'abcdefghijklmnopqrstuvwxyz' }
+  ];
 
   /* ---------- DOM ---------- */
   const $ = (id) => document.getElementById('td-' + id);
@@ -5219,23 +5442,188 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
     handHint: $('handHint'), handHintDot: $('handHintDot'), handHintText: $('handHintText'),
     resultModal: $('resultModal'), resultEmoji: $('resultEmoji'),
     resultTitle: $('resultTitle'), resultStars: $('resultStars'), resultDetail: $('resultDetail'),
-    helpModal: $('helpModal')
+    helpModal: $('helpModal'),
+    // 新增功能 DOM
+    skinBtn: $('skinBtn'), blindBtn: $('blindBtn'),
+    heroDuck: $('heroDuck'), streakVal: $('streakVal'), checkinTip: $('checkinTip'),
+    duckStage: $('duckStage'), duckInfo: $('duckInfo'), feedBtn: $('feedBtn'),
+    badgeBtn: $('badgeBtn'), badgeCount: $('badgeCount'), levelBtn: $('levelBtn'),
+    badgeModal: $('badgeModal'), badgeGrid: $('badgeGrid'), badgeCloseBtn: $('badgeCloseBtn'),
+    levelModal: $('levelModal'), levelList: $('levelList'), levelCloseBtn: $('levelCloseBtn'),
+    toast: $('toast')
   };
   const keyEls = {};
 
   /* ---------- 存档 ---------- */
-  const SAVE_KEY = 'typingDuck.save.v1';
-  let save = { stars: 0, best: {}, sound: true };
+  const SAVE_KEY = 'typingDuck.save.v2';
+  const DEFAULT_SAVE = {
+    stars: 0, best: {}, sound: true,
+    wrongKeys: {},        // 错键统计：{ a: 3, b: 5 }
+    checkin: { last: '', streak: 0, total: 0 },
+    duck: { exp: 0 },     // 小鸭成长值，每 3 点升 1 级（上限 5）
+    badges: [],           // 已解锁勋章 id
+    weakCorrect: 0,       // 错键专项累计答对数
+    pkWin: 0,             // PK 胜场
+    skin: 0,              // 当前皮肤索引
+    blind: false          // 盲打开关
+  };
+  let save = JSON.parse(JSON.stringify(DEFAULT_SAVE));
   function loadSave() {
     try {
-      const raw = localStorage.getItem(SAVE_KEY);
-      if (raw) save = Object.assign(save, JSON.parse(raw));
+      // 迁移旧版 v1
+      let raw = localStorage.getItem(SAVE_KEY);
+      if (!raw) {
+        const old = localStorage.getItem('typingDuck.save.v1');
+        if (old) { const o = JSON.parse(old); save.stars = o.stars || 0; save.best = o.best || {}; save.sound = o.sound !== false; }
+      } else {
+        save = Object.assign(JSON.parse(JSON.stringify(DEFAULT_SAVE)), JSON.parse(raw));
+      }
     } catch (e) { /* 忽略 */ }
   }
   function persist() {
     try { localStorage.setItem(SAVE_KEY, JSON.stringify(save)); } catch (e) {}
   }
   function refreshStarTotal() { dom.starTotal.textContent = save.stars; }
+
+  /* ---------- 通用工具 ---------- */
+  function todayStr() {
+    const d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+  function daysBetween(a, b) {
+    const pa = a.split('-').map(Number), pb = b.split('-').map(Number);
+    const da = Date.UTC(pa[0], pa[1] - 1, pa[2]), db = Date.UTC(pb[0], pb[1] - 1, pb[2]);
+    return Math.round((db - da) / 86400000);
+  }
+  let toastTimer = null;
+  function toast(msg) {
+    if (!dom.toast) return;
+    dom.toast.textContent = msg;
+    dom.toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => dom.toast.classList.remove('show'), 2200);
+  }
+
+  /* ---------- 打卡 ---------- */
+  function doCheckin() {
+    const today = todayStr();
+    const c = save.checkin;
+    if (c.last === today) return false;
+    const gap = c.last ? daysBetween(c.last, today) : 999;
+    c.streak = (gap === 1) ? c.streak + 1 : 1;
+    c.total += 1;
+    c.last = today;
+    persist();
+    return true;
+  }
+
+  /* ---------- 小鸭成长 ---------- */
+  function duckLevel() { return Math.min(5, 1 + Math.floor((save.duck.exp || 0) / 3)); }
+  const DUCK_STAGES = ['🥚', '🐣', '🐤', '🦕', '🦆'];
+  const DUCK_NAMES = ['鸭蛋', '破壳', '小鸭', '幼鸭', '神气鸭'];
+  const DUCK_COST = 3;
+  function renderDuck() {
+    if (!dom.duckStage) return;
+    const lv = duckLevel();
+    dom.duckStage.textContent = DUCK_STAGES[lv - 1];
+    dom.heroDuck.textContent = DUCK_STAGES[lv - 1];
+    dom.duckInfo.textContent = lv >= 5
+      ? `Lv.${lv} ${DUCK_NAMES[lv-1]} · 已长大啦！`
+      : `Lv.${lv} ${DUCK_NAMES[lv-1]} · 喂 ${DUCK_COST}⭐ 长大`;
+    if (dom.feedBtn) dom.feedBtn.disabled = lv >= 5 || save.stars < DUCK_COST;
+  }
+  function feedDuck() {
+    const lv = duckLevel();
+    if (lv >= 5) { toast('小鸭已经完全长大啦！🦆'); return; }
+    if (save.stars < DUCK_COST) { toast('星星不够，再玩几局攒星星吧 ⭐'); return; }
+    save.stars -= DUCK_COST;
+    save.duck.exp = (save.duck.exp || 0) + 1;
+    persist();
+    refreshStarTotal();
+    renderDuck();
+    SFX.good();
+    const nl = duckLevel();
+    if (nl > lv) { toast(`小鸭升级到 Lv.${nl} ${DUCK_NAMES[nl-1]}！`); SFX.star(); checkBadge('duck5'); }
+    else toast('小鸭吃得好开心！🥚');
+  }
+
+  /* ---------- 勋章 ---------- */
+  function checkBadge(id) {
+    if (save.badges.indexOf(id) >= 0) return;
+    const b = BADGES.find((x) => x.id === id);
+    if (!b) return;
+    save.badges.push(id);
+    persist();
+    renderBadges();
+    toast(`解锁勋章 ${b.ico} ${b.name}！`);
+    SFX.star();
+  }
+  function renderBadges() {
+    if (!dom.badgeGrid) return;
+    dom.badgeGrid.innerHTML = '';
+    BADGES.forEach((b) => {
+      const got = save.badges.indexOf(b.id) >= 0;
+      const item = document.createElement('div');
+      item.className = 'badge-item' + (got ? ' unlocked' : '');
+      item.innerHTML =
+        `<div class="badge-ico">${b.ico}</div>` +
+        `<div class="badge-name">${got ? b.name : '???'}</div>` +
+        `<div class="badge-desc">${b.desc}</div>`;
+      dom.badgeGrid.appendChild(item);
+    });
+    if (dom.badgeCount) dom.badgeCount.textContent = save.badges.length;
+  }
+
+  /* ---------- 闯关地图 ---------- */
+  function maxUnlockedLevel() {
+    // 通关第 N 关后解锁 N+1，初始只解锁第 1 关
+    let cleared = 0;
+    LEVELS.forEach((lv) => { if (save.best['level' + lv.id]) cleared = lv.id; });
+    return Math.min(LEVELS.length, cleared + 1);
+  }
+  function renderLevels() {
+    if (!dom.levelList) return;
+    dom.levelList.innerHTML = '';
+    const unlocked = maxUnlockedLevel();
+    LEVELS.forEach((lv) => {
+      const cleared = !!save.best['level' + lv.id];
+      const locked = lv.id > unlocked;
+      const item = document.createElement('div');
+      item.className = 'level-item' + (locked ? ' locked' : (cleared ? ' cleared' : ' unlocked'));
+      item.innerHTML =
+        `<div class="level-ico">${cleared ? '⭐' : (locked ? '🔒' : '👉')}</div>` +
+        `<div class="level-info"><div class="level-name">${lv.name}</div>` +
+        `<div class="level-desc">${lv.desc}</div></div>` +
+        `<div class="level-state">${cleared ? '已通关' : (locked ? '未解锁' : '可挑战')}</div>`;
+      if (!locked) {
+        item.addEventListener('click', () => {
+          dom.levelModal.classList.remove('show');
+          startMode('learn');
+          G.levelId = lv.id;
+          setupSequenceFromKeys(lv.keys, 10);
+        });
+      }
+      dom.levelList.appendChild(item);
+    });
+  }
+
+  /* ---------- 皮肤 ---------- */
+  const SKINS = ['', 'skin-forest', 'skin-night', 'skin-sunset'];
+  const SKIN_NAMES = ['默认', '森林', '夜空', '晚霞'];
+  function applySkin() {
+    // 独立版是 #app；集成版根容器是 #td-root（其 class 承载皮肤）
+    const app = $('app') || $('root') || document.querySelector('.td-app');
+    if (!app) return;
+    SKINS.forEach((s) => { if (s) app.classList.remove(s); });
+    if (SKINS[save.skin]) app.classList.add(SKINS[save.skin]);
+    if (dom.skinBtn) dom.skinBtn.title = '主题：' + (SKIN_NAMES[save.skin] || '默认') + '（点击切换）';
+  }
+  function cycleSkin() {
+    save.skin = (save.skin + 1) % SKINS.length;
+    persist();
+    applySkin();
+    toast('主题已切换：' + (SKIN_NAMES[save.skin] || '默认'));
+  }
 
   /* ---------- 音效 ---------- */
   let actx = null;
@@ -5278,7 +5666,8 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
       mode, active: true, score: 0, combo: 0, maxCombo: 0,
       correct: 0, wrong: 0, totalAnswered: 0,
       seq: [], qIndex: 0, charIndex: 0,
-      targetKey: null, timeLeft: 0, holes: [], spawnDelay: 0, aliveMs: 0
+      targetKey: null, timeLeft: 0, holes: [], spawnDelay: 0, aliveMs: 0,
+      levelId: null, pkPlayer: 1, pkScores: [0, 0], pkRound: 1, masked: false
     };
   }
 
@@ -5320,6 +5709,11 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
     Object.keys(keyEls).forEach((k) => {
       keyEls[k].classList.remove('target', 'correct', 'wrong', 'pressed');
     });
+  }
+
+  function applyBlindVisual() {
+    if (!dom.keyboard) return;
+    dom.keyboard.classList.toggle('blind', !!save.blind);
   }
 
   function pressVisual(key) {
@@ -5405,7 +5799,20 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
       case 'word': setupSequence('words', 8); break;
       case 'pinyin': setupSequence('pinyin', 8); break;
       case 'whack': setupWhack(); break;
+      case 'weak': setupWeak(); break;
+      case 'listen': setupListen(); break;
+      case 'pk': setupPK(); break;
     }
+  }
+
+  /* 用指定键集生成序列（闯关地图用） */
+  function setupSequenceFromKeys(keys, count) {
+    G.seq = sample(keys.split(''), count).map((c) => ({ text: c }));
+    G.qIndex = 0; G.charIndex = 0;
+    dom.target.innerHTML = '';
+    setProgress(0);
+    updateStats();
+    presentQuestion();
   }
 
   /* ---------- 模式 A：序列练习（字母 / 单词 / 拼音） ---------- */
@@ -5462,6 +5869,11 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
     if (key === expected) {
       G.correct++; G.totalAnswered++; G.score += 10 + G.combo * 2;
       G.combo++; G.maxCombo = Math.max(G.maxCombo, G.combo);
+      // 错键专项答对时递减该键的错键计数
+      if (G.mode === 'weak' && save.wrongKeys[key]) {
+        save.wrongKeys[key] = Math.max(0, save.wrongKeys[key] - 1);
+        persist();
+      }
       markKeyResult(key, true);
       SFX.good();
       const spans = dom.target.querySelectorAll('.wl');
@@ -5483,6 +5895,7 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
       }
     } else {
       G.wrong++; G.totalAnswered++; G.combo = 0;
+      recordWrong(key);
       markKeyResult(key, false);
       showFeedback(false);
       SFX.bad();
@@ -5519,6 +5932,7 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
       nextABCLetter();
     } else {
       G.wrong++; G.totalAnswered++; G.combo = 0;
+      recordWrong(key);
       markKeyResult(key, false); showFeedback(false); SFX.bad();
     }
     updateStats();
@@ -5587,9 +6001,166 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
       pressVisual(key); SFX.good();
     } else {
       G.wrong++; G.totalAnswered++; G.combo = 0;
+      recordWrong(key);
       showFeedback(false); SFX.bad();
     }
     updateStats();
+  }
+
+  /* ---------- 模式 D：错键专项 ---------- */
+  function setupWeak() {
+    const entries = Object.keys(save.wrongKeys)
+      .filter((k) => /^[a-z ]$/.test(k) && save.wrongKeys[k] > 0)
+      .sort((a, b) => save.wrongKeys[b] - save.wrongKeys[a])
+      .slice(0, 8);
+    if (!entries.length) {
+      toast('还没有错键记录，先玩几局就会统计啦！');
+      G.active = false;
+      later(goMenu, 300);
+      return;
+    }
+    G.seq = shuffle(entries).map((c) => ({ text: c }));
+    dom.instruction.textContent = '这些是你常按错的键，把它们练熟：';
+    presentQuestion();
+  }
+
+  /* ---------- 模式 E：听音打字 ---------- */
+  function speakWord(text) {
+    try {
+      if (!window.speechSynthesis) { toast('当前浏览器不支持朗读'); return; }
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'en-US';
+      u.rate = 0.75;
+      window.speechSynthesis.speak(u);
+    } catch (e) { toast('朗读失败，请看屏幕提示'); }
+  }
+  function setupListen() {
+    G.seq = sample(WORDS, 6).map((o) => ({ text: o.w, emoji: o.emoji, cn: o.cn }));
+    presentListenQuestion();
+  }
+  function presentListenQuestion() {
+    const item = G.seq[G.qIndex];
+    if (!item) { finishGame(); return; }
+    G.charIndex = 0;
+    G.masked = true;
+    dom.target.innerHTML = '';
+    const wrap = document.createElement('div');
+    wrap.className = 'listen-wrap';
+    const btn = document.createElement('button');
+    btn.className = 'listen-play';
+    btn.textContent = '🔊';
+    btn.title = '再听一次';
+    btn.addEventListener('click', () => speakWord(item.text));
+    wrap.appendChild(btn);
+    const line = document.createElement('div');
+    line.className = 'word-letters listen-mask';
+    item.text.split('').forEach((ch, i) => {
+      const s = document.createElement('span');
+      s.className = 'wl masked';
+      s.textContent = '_';
+      s.dataset.i = i;
+      line.appendChild(s);
+    });
+    wrap.appendChild(line);
+    wrap.appendChild(document.createElement('br'));
+    const cn = document.createElement('span');
+    cn.className = 'word-meaning';
+    cn.textContent = item.cn + '（听发音，打出英文）';
+    wrap.appendChild(cn);
+    dom.target.appendChild(wrap);
+    dom.instruction.textContent = '点喇叭听读音，把听到的单词打出来：';
+    setTargetKey(null);
+    setProgress(G.qIndex / G.seq.length);
+    later(() => speakWord(item.text), 350);
+  }
+  function handleListenKey(key) {
+    const item = G.seq[G.qIndex];
+    if (!item) return;
+    const expected = item.text[G.charIndex];
+    if (key === expected) {
+      G.correct++; G.totalAnswered++; G.score += 12 + G.combo * 2;
+      G.combo++; G.maxCombo = Math.max(G.maxCombo, G.combo);
+      pressVisual(key); SFX.good();
+      save.wrongKeys[key] = Math.max(0, (save.wrongKeys[key] || 0) - 1);
+      const spans = dom.target.querySelectorAll('.wl');
+      if (spans[G.charIndex]) {
+        spans[G.charIndex].classList.remove('masked');
+        spans[G.charIndex].classList.add('done');
+        spans[G.charIndex].textContent = expected.toUpperCase();
+      }
+      G.charIndex++;
+      if (G.charIndex >= item.text.length) {
+        G.qIndex++;
+        setProgress(G.qIndex / G.seq.length);
+        if (G.qIndex >= G.seq.length) { SFX.star(); later(finishGame, 450); }
+        else later(presentListenQuestion, 550);
+      }
+    } else {
+      G.wrong++; G.totalAnswered++; G.combo = 0;
+      recordWrong(key);
+      markKeyResult(key, false); showFeedback(false); SFX.bad();
+    }
+    updateStats();
+  }
+
+  /* ---------- 模式 F：亲子 PK（轮流各打 20 秒） ---------- */
+  function setupPK() {
+    G.pkScores = [0, 0];
+    G.pkPlayer = 1;
+    G.pkRound = 1;
+    G.timeLeft = 20;
+    dom.target.innerHTML = '';
+    nextABCLetter();
+    dom.instruction.innerHTML = '<span class="pk-banner" id="pkBanner">🔴 玩家 1 先来！</span> 打出发光字母，20 秒后换人';
+    every(() => {
+      G.timeLeft--;
+      setProgress((20 - G.timeLeft) / 20);
+      if (G.timeLeft <= 0) {
+        if (G.pkPlayer === 1) {
+          // 玩家 1 结束，换玩家 2
+          G.pkScores[0] = G.score;
+          G.pkPlayer = 2;
+          G.pkRound = 2;
+          G.score = 0;
+          G.combo = 0;
+          G.timeLeft = 20;
+          G.maxCombo = 0;
+          G.correct = 0; G.wrong = 0; G.totalAnswered = 0;
+          const b = $('pkBanner');
+          if (b) { b.textContent = '🔵 玩家 2 上场！'; b.classList.add('p2'); }
+          dom.instruction.innerHTML = '<span class="pk-banner p2" id="pkBanner">🔵 玩家 2 上场！</span> 打出发光字母，20 秒后换人';
+          nextABCLetter();
+          updateStats();
+          setProgress(0);
+          SFX.good();
+        } else {
+          G.pkScores[1] = G.score;
+          clearTimers();
+          SFX.star();
+          finishGame();
+        }
+      }
+    }, 1000);
+  }
+  function handlePKKey(key) {
+    if (key === G.targetKey) {
+      G.correct++; G.totalAnswered++; G.score += 10 + G.combo * 2;
+      G.combo++; G.maxCombo = Math.max(G.maxCombo, G.combo);
+      markKeyResult(key, true); SFX.good();
+      nextABCLetter();
+    } else {
+      G.wrong++; G.totalAnswered++; G.combo = 0;
+      recordWrong(key);
+      markKeyResult(key, false); showFeedback(false); SFX.bad();
+    }
+    updateStats();
+  }
+
+  /* ---------- 错键统计 ---------- */
+  function recordWrong(key) {
+    save.wrongKeys[key] = (save.wrongKeys[key] || 0) + 1;
+    persist();
   }
 
   /* ---------- 统一按键分发 ---------- */
@@ -5597,19 +6168,22 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
     if (!G || !G.active) return;
     pressVisual(key);
     switch (G.mode) {
-      case 'learn': case 'word': case 'pinyin': handleSequenceKey(key); break;
+      case 'learn': case 'word': case 'pinyin': case 'weak': handleSequenceKey(key); break;
       case 'abc': handleABCKey(key); break;
       case 'whack': handleWhackKey(key); break;
+      case 'listen': handleListenKey(key); break;
+      case 'pk': handlePKKey(key); break;
     }
   }
 
   /* ---------- 结算 ---------- */
   function calcStars() {
     const acc = G.totalAnswered ? G.correct / G.totalAnswered : 0;
-    if (G.mode === 'abc' || G.mode === 'whack') {
-      const t = G.mode === 'abc' ? 40 : 28;
-      if (G.score >= t) return 3;
-      if (G.score >= t * 0.55) return 2;
+    if (G.mode === 'abc' || G.mode === 'whack' || G.mode === 'pk') {
+      const t = G.mode === 'abc' ? 40 : (G.mode === 'whack' ? 28 : 45);
+      const sc = G.mode === 'pk' ? Math.max(G.pkScores[0], G.pkScores[1]) : G.score;
+      if (sc >= t) return 3;
+      if (sc >= t * 0.55) return 2;
       return 1;
     }
     if (acc >= 0.9) return 3;
@@ -5621,23 +6195,66 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
     G.active = false;
     clearTimers();
     clearKeyStates();
+    if (window.speechSynthesis) { try { window.speechSynthesis.cancel(); } catch (e) {} }
 
     const stars = calcStars();
     save.stars += stars;
     save.best[G.mode] = Math.max(save.best[G.mode] || 0, G.score);
+
+    // 闯关通关记录
+    if (G.mode === 'learn' && G.levelId) {
+      const key = 'level' + G.levelId;
+      if (!save.best[key]) save.best[key] = 1;
+    }
+    // 错键专项计数
+    if (G.mode === 'weak') save.weakCorrect = (save.weakCorrect || 0) + G.correct;
+    // PK 胜场
+    let pkResult = '';
+    if (G.mode === 'pk') {
+      const a = G.pkScores[0], b = G.pkScores[1];
+      if (a > b) { save.pkWin = (save.pkWin || 0) + 1; pkResult = '🏆 玩家 1 获胜！'; }
+      else if (b > a) { pkResult = '🏆 玩家 2 获胜！'; }
+      else pkResult = '🤝 平局，都很棒！';
+    }
+
+    // 打卡
+    const checkedIn = doCheckin();
     persist();
     refreshStarTotal();
-    if (typeof window.TypingDuck.onFinish === 'function') {
-      try { window.TypingDuck.onFinish({ mode: G.mode, score: G.score, stars: stars, correct: G.correct, total: G.totalAnswered }); } catch (e) {}
-    }
+    renderDuck();
+    if (dom.streakVal) dom.streakVal.textContent = save.checkin.streak;
+    if (dom.checkinTip) dom.checkinTip.textContent = checkedIn
+      ? '打卡成功！连续 ' + save.checkin.streak + ' 天 🎉'
+      : '今天已打卡，明天见！';
+
+    // 勋章判定
+    if (stars === 3) checkBadge('first3');
+    if (G.maxCombo >= 10) checkBadge('combo10');
+    if (G.totalAnswered > 0 && G.wrong === 0) checkBadge('perfect');
+    if (save.checkin.streak >= 7) checkBadge('week7');
+    if (duckLevel() >= 5) checkBadge('duck5');
+    if ((save.weakCorrect || 0) >= 10) checkBadge('weak10');
+    if ((save.pkWin || 0) >= 1) checkBadge('pkwin');
+    if (save.stars >= 100) checkBadge('star100');
 
     const acc = G.totalAnswered ? Math.round((G.correct / G.totalAnswered) * 100) : 100;
     dom.resultEmoji.textContent = stars === 3 ? '🎉' : (stars === 2 ? '👏' : '💪');
     dom.resultTitle.textContent = stars === 3 ? '太棒啦！' : (stars === 2 ? '很好哦！' : '继续加油！');
     dom.resultStars.textContent = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
-    dom.resultDetail.innerHTML =
-      `本次得分：<b>${G.score}</b>　最高连击：<b>🔥${G.maxCombo}</b><br>` +
-      `正确率：<b>${acc}%</b>　获得星星：<b>+${stars}⭐</b>`;
+    if (G.mode === 'pk') {
+      dom.resultDetail.innerHTML =
+        `<div class="pk-done">${pkResult}</div><br>` +
+        `玩家 1：<b>${G.pkScores[0]}</b> 分　玩家 2：<b>${G.pkScores[1]}</b> 分<br>` +
+        `获得星星：<b>+${stars}⭐</b>`;
+    } else {
+      dom.resultDetail.innerHTML =
+        `本次得分：<b>${G.score}</b>　最高连击：<b>🔥${G.maxCombo}</b><br>` +
+        `正确率：<b>${acc}%</b>　获得星星：<b>+${stars}⭐</b>` +
+        (checkedIn ? `<br>📅 今日打卡成功，连续 ${save.checkin.streak} 天！` : '');
+    }
+    if (typeof window.TypingDuck !== 'undefined' && typeof window.TypingDuck.onFinish === 'function') {
+      try { window.TypingDuck.onFinish({ mode: G.mode, score: G.score, stars: stars, correct: G.correct, total: G.totalAnswered }); } catch (e) {}
+    }
     dom.resultModal.classList.add('show');
     SFX.finish();
   }
@@ -5680,11 +6297,57 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
       if (save.sound) { ensureAudio(); SFX.good(); }
     });
 
+    // 皮肤切换
+    if (dom.skinBtn) dom.skinBtn.addEventListener('click', cycleSkin);
+
+    // 盲打开关
+    if (dom.blindBtn) {
+      dom.blindBtn.addEventListener('click', () => {
+        save.blind = !save.blind;
+        persist();
+        applyBlindVisual();
+        dom.blindBtn.classList.toggle('on', save.blind);
+        dom.blindBtn.textContent = save.blind ? '👀' : '🙈';
+        toast(save.blind ? '盲打挑战开启：按键字母已藏起来！' : '盲打挑战关闭');
+      });
+    }
+
+    // 喂小鸭
+    if (dom.feedBtn) dom.feedBtn.addEventListener('click', feedDuck);
+
+    // 勋章墙
+    if (dom.badgeBtn) dom.badgeBtn.addEventListener('click', () => {
+      renderBadges();
+      dom.badgeModal.classList.add('show');
+    });
+    if (dom.badgeCloseBtn) dom.badgeCloseBtn.addEventListener('click', () => dom.badgeModal.classList.remove('show'));
+    if (dom.badgeModal) dom.badgeModal.addEventListener('click', (e) => {
+      if (e.target === dom.badgeModal) dom.badgeModal.classList.remove('show');
+    });
+
+    // 闯关地图
+    if (dom.levelBtn) dom.levelBtn.addEventListener('click', () => {
+      renderLevels();
+      dom.levelModal.classList.add('show');
+    });
+    if (dom.levelCloseBtn) dom.levelCloseBtn.addEventListener('click', () => dom.levelModal.classList.remove('show'));
+    if (dom.levelModal) dom.levelModal.addEventListener('click', (e) => {
+      if (e.target === dom.levelModal) dom.levelModal.classList.remove('show');
+    });
+
     document.addEventListener('keydown', (e) => {
+      if (typeof window.TypingDuck !== 'undefined' && typeof window.TypingDuck.isActive === 'function' && !window.TypingDuck.isActive()) return;
       if (e.repeat) return;
-      if (typeof window.TypingDuck.isActive === 'function' && !window.TypingDuck.isActive()) return;
       if (dom.helpModal.classList.contains('show')) {
         if (e.key === 'Escape') dom.helpModal.classList.remove('show');
+        return;
+      }
+      if (dom.badgeModal && dom.badgeModal.classList.contains('show')) {
+        if (e.key === 'Escape') dom.badgeModal.classList.remove('show');
+        return;
+      }
+      if (dom.levelModal && dom.levelModal.classList.contains('show')) {
+        if (e.key === 'Escape') dom.levelModal.classList.remove('show');
         return;
       }
       if (!G || !G.active) return;
@@ -5706,46 +6369,47 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
     dom.soundBtn.textContent = save.sound ? '🔊' : '🔇';
     dom.soundBtn.classList.toggle('off', !save.sound);
     buildKeyboard();
+    applySkin();
+    applyBlindVisual();
+    if (dom.blindBtn) {
+      dom.blindBtn.classList.toggle('on', !!save.blind);
+      dom.blindBtn.textContent = save.blind ? '👀' : '🙈';
+    }
+    // 打卡
+    const checkedIn = doCheckin();
+    if (dom.streakVal) dom.streakVal.textContent = save.checkin.streak;
+    if (dom.checkinTip) dom.checkinTip.textContent = checkedIn
+      ? '打卡成功！连续 ' + save.checkin.streak + ' 天 🎉'
+      : '今天已打卡，明天见！';
+    renderDuck();
+    renderBadges();
     bindEvents();
   }
 
-  init();
-
-  /* 对外暴露给 SpellLab 的接口 */
   window.TypingDuck = {
-    onFinish: null,
-    isActive: null,
-    enter: function () {
-      if (G) { G.active = false; }
-      clearTimers(); clearKeyStates();
-      dom.resultModal.classList.remove('show');
-      dom.helpModal.classList.remove('show');
-      showMenuScreen();
-    },
-    leave: function () {
-      if (G) { G.active = false; }
-      clearTimers(); clearKeyStates(); G = null;
-      dom.resultModal.classList.remove('show');
-      dom.helpModal.classList.remove('show');
-    },
+    enter: function(){ showGameScreen(); },
+    leave: function(){ goMenu(); },
     isTypingMode: function () { return !!(G && G.active); }
   };
+  init();
 })();
+
+
 
 /* 打字小鸭 → SpellLab 集成接线 */
 (function(){
-  // 游戏结算时把星星换算成 SpellLab 积分（1★=2分，最高6分），计入积分流水
+  var MODE_CN = { whack:'打地鼠', abc:'字母连打', word:'单词练习', pinyin:'拼音练习', weak:'错键专项', listen:'听音打字', pk:'亲子PK', learn:'认识字母' };
   window.TypingDuck.onFinish = function(r){
     var pts = (Number(r.stars)||0) * 2;
-    if (pts > 0) { addPoints(pts, '打字练习·' + (r.mode==='whack'?'打地鼠':(r.mode==='abc'?'字母连打':(r.mode==='word'?'单词练习':(r.mode==='pinyin'?'拼音练习':'认识字母'))))); }
+    if (pts > 0) { addPoints(pts, '打字练习·' + (MODE_CN[r.mode] || '认识字母')); }
     var el = document.getElementById('td-resultDetail');
     if (el) { el.innerHTML += '<br>✨ 积分 <b>+' + pts + '</b> 已存入 SpellLab'; }
   };
-  // 只有处于打字模式且游戏进行中，打字小鸭才接管字母键
   window.TypingDuck.isActive = function(){
     return (typeof mode !== 'undefined' && mode === 'typing');
   };
 })();
+
 </script>
 </body>
 </html>
