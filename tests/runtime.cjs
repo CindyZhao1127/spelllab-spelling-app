@@ -684,6 +684,118 @@ check('normalizeState 容错非法数据', () => {
   if(r.a < 9 || r.ba < 9 || r.bprogress !== 0 || r.attempted !== 9 || r.bRate !== 0.9) throw new Error(JSON.stringify(r));
   return 'null / 字段类型错误均回落到默认结构并保留合法值';
 });
+/* ---- 记忆成长中心（错词复习 / 听写 / 闯关 / 统计）---- */
+check('成长中心默认状态与旧存档兼容', () => run(`
+  (function(){
+    const d=normalizeState(null);
+    const old=normalizeState({progress:{},wrong:[],vocab:[],history:[],stats:{attempted:7},settings:{rate:0.9}});
+    return JSON.stringify({keys:Object.keys(d.memo).sort().join(','),
+      oldSrs:Object.keys(old.memo.srs).length, oldStars:Object.keys(old.memo.stars).length,
+      unlock:old.memo.mapUnlockAll, kept:old.stats.attempted});
+  })()
+`) === JSON.stringify({keys:'dictBest,mapUnlockAll,srs,stars',oldSrs:0,oldStars:0,unlock:false,kept:7})
+  ? '旧存档自动补齐 memo，不丢原有数据' : (()=>{throw new Error(run('JSON.stringify(normalizeState(null).memo)'));})());
+
+check('错词收录与遗忘曲线升级', () => run(`
+  (function(){
+    memo().srs={}; srEnroll('apple','苹果',false,true);
+    const lv0=memo().srs.apple.lv, due0=memo().srs.apple.due===today();
+    srEnroll('apple','苹果',true,true);
+    const lv1=memo().srs.apple.lv, due1=memo().srs.apple.due;
+    srEnroll('apple','苹果',true,false);
+    const lv2=memo().srs.apple.lv, due2=memo().srs.apple.due;
+    srEnroll('banana','香蕉',true,false);
+    return JSON.stringify({lv0:lv0,due0:due0,lv1:lv1,lv2:lv2,
+      dueGrow:dayNum(due2)>dayNum(due1),noGhost:!memo().srs.banana});
+  })()
+`) === JSON.stringify({lv0:0,due0:true,lv1:1,lv2:2,dueGrow:true,noGhost:true})
+  ? '答错归零当天重练，答对逐级推远到期日' : (()=>{throw new Error(run('JSON.stringify(memo().srs)'));})());
+
+check('到期队列与复习面板渲染', () => run(`
+  (function(){
+    memo().srs={};
+    srEnroll('cat','猫',false,true);
+    srEnroll('dog','狗',true,true); srEnroll('dog','狗',true,true);
+    srRenderList();
+    return JSON.stringify({due:srDueList().length,all:srAllList().length,
+      panel:$('srList').innerHTML.includes('cat'),count:$('srDue').textContent});
+  })()
+`) === JSON.stringify({due:1,all:2,panel:true,count:1})
+  ? '只列今日到期项，清单可渲染' : (()=>{throw new Error(run('JSON.stringify({d:srDueList().length,a:srAllList().length})'));})());
+
+check('复习流程：答对升级并记入积分与记录', () => run(`
+  (function(){
+    memo().srs={}; const p0=Number(state.plan.points)||0; const h0=state.history.length;
+    srEnroll('sun','太阳',false,true);
+    srQueue=[]; srIdx=0; srRight=0; srCurrent=null;
+    srStart(false);
+    $('srInput').value='sun'; srSubmit();
+    const right=srRight, phase=srPhase, lv=memo().srs.sun.lv;
+    srIdx++; srNextCard();
+    return JSON.stringify({right:right,phase:phase,lv:lv,pts:(Number(state.plan.points)||0)-p0,
+      hist:state.history.length-h0,donePhase:srPhase,bar:$('srBar').style.width});
+  })()
+`) === JSON.stringify({right:1,phase:'answered',lv:1,pts:Number(run('Number(state.plan.perCorrect)||0')),hist:1,donePhase:'idle',bar:'100%'})
+  ? '提交 → 判分 → 升级 → 结算，全程闭环' : (()=>{throw new Error(run('JSON.stringify({right:srRight,lv:(memo().srs.sun||{}).lv,h:state.history.length})'));})());
+
+check('听写：判分、连对与历史最佳', () => run(`
+  (function(){
+    memo().dictBest={}; const h0=state.history.length;
+    dcQueue=[{en:'rain',cn:'雨',kind:'单词'},{en:'wind',cn:'风',kind:'单词'}];
+    dcIdx=0; dcRight=0; dcStreak=0; dcPhase='ask'; dcT0=Date.now();
+    dcNextCard(); $('dcInput').value='rain'; dcSubmit();
+    const r1=dcRight, s1=dcStreak; dcAdvance(false);
+    $('dcInput').value='xxx'; dcSubmit();
+    const r2=dcRight, s2=dcStreak; dcAdvance(false);
+    return JSON.stringify({r1:r1,s1:s1,r2:r2,s2:s2,best:memo().dictBest[srDictUnit()],
+      hist:state.history.length-h0,phase:dcPhase});
+  })()
+`) === JSON.stringify({r1:1,s1:1,r2:1,s2:0,best:1,hist:2,phase:'idle'})
+  ? '连对错后归零，历史最佳写入存档' : (()=>{throw new Error(run('JSON.stringify({r:dcRight,s:dcStreak,best:memo().dictBest[srDictUnit()]})'));})());
+
+check('闯关地图：星级计算与解锁规则', () => run(`
+  (function(){
+    state.progress={}; state.wordStats={}; memo().stars={}; memo().mapUnlockAll=false;
+    const us=units(); const before=mapStars(us[0]);
+    us[0].sentences.forEach((_,i)=>{ state.progress[uid(us[0].id,i)]={m:3}; });
+    (us[0].words||[]).forEach(w=>{ state.wordStats[normWord(w[0])]={m:3}; });
+    const after=mapStars(us[0]);
+    mapRender();
+    const html=$('mapGrid').innerHTML;
+    memo().mapUnlockAll=true; mapRender();
+    const unlocked=$('mapGrid').innerHTML;
+    return JSON.stringify({before:before,after:after,starSaved:memo().stars[us[0].id],
+      locked:html.includes('locked'),free:!unlocked.includes('locked'),nodes:(html.match(/map-node/g)||[]).length});
+  })()
+`) === JSON.stringify({before:0,after:3,starSaved:3,locked:true,free:true,nodes:Number(run('units().length'))})
+  ? '掌握度换算星级，默认逐关解锁 / 自由模式全开' : (()=>{throw new Error(run('JSON.stringify({a:mapStars(units()[0]),s:memo().stars})'));})());
+
+check('学习统计：指标、图表与模式分布', () => run(`
+  (function(){
+    state.history=[{t:Date.now(),mode:'sentence',cn:'x',en:'y',ok:true,ms:1000,bad:0},
+      {t:Date.now()-86400000,mode:'dict',cn:'a',en:'b',ok:false,ms:900,bad:1}];
+    statsRender();
+    const g=$('stGrid').innerHTML, c=$('stChart').innerHTML, m=$('stModes').innerHTML;
+    return JSON.stringify({grid:g.includes('累计练习')&&g.includes('连续练习天数'),
+      svg:c.includes('<svg')&&c.includes('rect'),modes:m.includes('句子拼写')&&m.includes('听写练习'),
+      legend:$('stChart').innerHTML.length>100});
+  })()
+`) === JSON.stringify({grid:true,svg:true,modes:true,legend:true})
+  ? '按历史记录生成指标卡、柱状图与模式分布' : (()=>{throw new Error(run('JSON.stringify({g:$("stGrid").innerHTML,c:$("stChart").innerHTML.length})'));})());
+
+check('成长中心切换与积分面板入口', () => run(`
+  (function(){
+    switchGrowth('map'); const mapOn=$('gMap').classList.contains('on');
+    switchGrowth('stats'); const statOn=$('gStats').classList.contains('on');
+    setMode('growth');
+    const shown=!$('growthView').hidden && $('sentenceView').hidden;
+    setMode('sentence');
+    return JSON.stringify({mapOn:mapOn,statOn:statOn,shown:shown,
+      back:$('growthView').hidden&&!$('sentenceView').hidden});
+  })()
+`) === JSON.stringify({mapOn:true,statOn:true,shown:true,back:true})
+  ? '四个子面板可切换，进入/退出成长中心视图正确' : (()=>{throw new Error(run('JSON.stringify({m:$("gMap").className,s:$("gStats").className,h:$("growthView").hidden})'));})());
+
 check('镜像写入与配额超限自动降级', () => {
   const backup = store.get('spelllab.state.v1');
   const r = JSON.parse(run(`(function(){
