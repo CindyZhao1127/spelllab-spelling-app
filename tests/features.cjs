@@ -1060,6 +1060,84 @@ function fireScheduled(){
     return '首字高亮 + 打过变绿去高亮 + 闪烁光标';
   });
 
+  check('打字游戏展示当前教材单元学习进度', () => {
+    ['setUnitProvider','td-unitCard','td-unitName','td-unitBar','td-unitWords','td-unitDone',
+     'td-unitBad','td-unitMastered','td-unitPracticeBtn','td-unitFocusBtn','renderUnitProgress',
+     'startUnitPractice'].forEach(k => assert(html.indexOf(k) >= 0, '缺单元进度元素 ' + k));
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      const before=JSON.stringify(state.typingDuck||{});
+      const info=window.TypingDuck._testUnitInfo ? window.TypingDuck._testUnitInfo() : null;
+      const u=currentUnit();
+      const words=(u.words||[]).map(w=>String(w[0]||'').trim().toLowerCase())
+        .filter(w=>/^[a-z][a-z'-]*$/.test(w));
+      const word=words[0]||'apple';
+      const td=state.typingDuck||(state.typingDuck={});
+      td.wordStats=td.wordStats||{};
+      td.wordStats[word]={n:3,bad:2,ok:1,cn:'测试'};
+      window.TypingDuck.setSaveIO(function(){return state.typingDuck;},function(obj){state.typingDuck=obj;});
+      window.TypingDuck.reloadSave();
+      const done=document.getElementById('td-unitDone').textContent;
+      const bad=document.getElementById('td-unitBad').textContent;
+      const width=document.getElementById('td-unitBar').style.width;
+      const name=document.getElementById('td-unitName').textContent;
+      const badBtn=document.getElementById('td-unitFocusBtn');
+      return {word:word,done:done,bad:bad,width:width,name:name,
+        enabled:!badBtn.disabled,unit:u.name||''};})())`));
+    assert(Number(o.done) >= 1, '已练词数未随单元词表更新: ' + JSON.stringify(o));
+    assert(Number(o.bad) >= 1, '错过词数未统计: ' + JSON.stringify(o));
+    assert(o.width && o.width !== '0%', '进度条未更新: ' + JSON.stringify(o));
+    assert(o.enabled === true, '错词重点练按钮未启用: ' + JSON.stringify(o));
+    return o.name + ' · 已练 ' + o.done + ' / 错 ' + o.bad + ' · 进度 ' + o.width;
+  });
+
+  check('纸笔听写：中文/英文读音、写在纸上、家长解锁后批阅并计分', () => {
+    ['gPaper','data-g="paper"','ppStart','ppLang','ppKind','ppList','ppSave','ppShowGrade',
+     "paperdict:{label:'纸笔听写批改'",'speakLang','ppRenderGrade'].forEach(k =>
+      assert(html.indexOf(k) >= 0, '缺纸笔听写元素 ' + k));
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      const u=currentUnit();
+      const words=(u.words||[]).filter(w=>w&&w[0]);
+      const sentences=(u.sentences||[]).filter(q=>q&&q.en);
+      const pool=words.concat(sentences);
+      if(!pool.length) return {err:'no content'};
+      const beforePoints=Number(state.plan.points)||0;
+      const beforeHistory=(state.history||[]).length;
+      const beforeSrs=Object.keys(memo().srs||{}).length;
+      $('ppKind').value='mix'; $('ppLang').value='cn'; $('ppCount').value='5';
+      ppStart();
+      const total=ppQueue.length;
+      const prompts=[];
+      while(ppPhase==='ask'){ prompts.push($('ppPrompt').innerHTML); ppNext(); }
+      const speakBtn=$('ppSpeak'); // 再听一遍按钮存在（听写只出声、不显示答案）
+      ppShowGrade();                // 未解锁 → 走 guardParent 弹层
+      const gate=$('parentMask').hidden;
+      parentUnlocked=true;
+      ppReveal();
+      const htmlList=$('ppList').innerHTML;
+      const revealed=htmlList.indexOf(esc(ppQueue[0].en))>=0;
+      ppMarks=ppQueue.map((_,i)=> i===0);
+      ppSave();
+      const afterPoints=Number(state.plan.points)||0;
+      const afterHistory=(state.history||[]).length;
+      const afterSrs=Object.keys(memo().srs||{}).length;
+      const last=memo().paperDict.last;
+      const types=(state.history||[]).slice(beforeHistory).map(x=>x.mode);
+      parentUnlocked=false;
+      return {total:total,prompts:prompts.length,gate:gate,revealed:revealed,
+        points:afterPoints-beforePoints,history:afterHistory-beforeHistory,
+        srs:afterSrs-beforeSrs,types:types,lastRight:last&&last.right,
+        hasSpeak:!!speakBtn};})())`));
+    if (o.err) throw new Error(o.err);
+    assert(o.total >= 1 && o.prompts === o.total, '听写题数不对: ' + JSON.stringify(o));
+    assert(o.gate === false, '批阅未受家长密码保护: ' + JSON.stringify(o));
+    assert(o.revealed === true, '家长解锁后未显示答案: ' + JSON.stringify(o));
+    assert(o.history === o.total && o.types.every(t => t === 'paperdict'),
+      '批阅结果未写入历史: ' + JSON.stringify(o));
+    assert(o.srs >= 1 && o.lastRight === 1, '错题未进入复习计划/统计不对: ' + JSON.stringify(o));
+    assert(o.points >= 0, '积分未结算: ' + JSON.stringify(o));
+    return o.total + ' 题 · 家长锁生效 · 判对 1 题记入历史/复习';
+  });
+
   check('全库导出含家长密码哈希、不含明文', () => {
     const sql = run('exportSQLite()');
     assert(sql.indexOf("VALUES('parent'") >= 0, 'app_meta 缺 parent');

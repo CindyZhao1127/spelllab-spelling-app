@@ -1134,6 +1134,21 @@
 #td-root .hc-main { font-size: 20px; font-weight: 900; color: #343a40; }
 #td-root .hc-main b { color: #f76707; font-size: 26px; }
 #td-root .hc-sub { font-size: 12px; color: var(--ink-soft); }
+/* 当前单元进度条：让孩子知道打字练习和课本词表的关系 */
+#td-root .unit-progress-card {
+  width: min(1040px, 100%); margin: 14px auto 0; padding: 12px 16px;
+  background: rgba(255,255,255,.82); border: 2px solid rgba(255,255,255,.9);
+  border-radius: 18px; box-shadow: var(--shadow);
+}
+#td-root .upc-head { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+#td-root .upc-title { font-size:14px; font-weight:800; color:#e8590c; }
+#td-root .upc-name { font-size:12px; font-weight:700; color:var(--ink-soft); }
+#td-root .upc-bar { height:9px; border-radius:99px; background:rgba(80,70,120,.13); overflow:hidden; margin:9px 0 7px; }
+#td-root .upc-bar i { display:block; height:100%; width:0; border-radius:99px;
+  background:linear-gradient(90deg,#ffd43b,#f76707); transition:width .35s ease; }
+#td-root .upc-stats { display:flex; gap:16px; flex-wrap:wrap; font-size:12px; color:var(--ink-soft); }
+#td-root .upc-stats b { color:#343a40; font-size:14px; }
+#td-root .upc-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
 #td-root .duck-card { align-items: center; text-align: center; }
 #td-root .duck-stage {
   font-size: 52px; line-height: 1.1; animation: bob 2.8s ease-in-out infinite;
@@ -1315,6 +1330,23 @@ body.td-typing #typingView { height: 100%; }
 .gprompt b{color:var(--text);font-size:26px;font-weight:800;letter-spacing:.5px}
 .gfeedback{min-height:26px;margin:12px 0 0;font-weight:700;font-size:14px}
 .gfeedback.ok{color:var(--ok)} .gfeedback.bad{color:var(--err)}
+/* 纸笔听写：家长批阅列表 */
+.pp-label{font-size:12px;color:var(--muted);font-weight:700}
+.pp-badge{font-size:11px;font-weight:800;color:var(--ok);background:rgba(92,226,160,.12);border:1px solid rgba(92,226,160,.35);padding:5px 10px;border-radius:999px}
+.pp-list{display:flex;flex-direction:column;gap:8px}
+.pp-row{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:14px;border:1px solid rgba(226,232,255,.12);background:rgba(255,255,255,.04)}
+.pp-row .pp-no{flex:0 0 30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:900;background:rgba(139,123,255,.18);color:#c3b8ff}
+.pp-row .pp-body{flex:1;min-width:0}
+.pp-row .pp-en{font-size:17px;font-weight:800;word-break:break-word}
+.pp-row .pp-cn{font-size:12px;color:var(--muted);margin-top:2px}
+.pp-row .pp-kind{font-size:10px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 7px;margin-left:6px}
+.pp-row .pp-btns{flex:0 0 auto;display:flex;gap:6px;flex-wrap:wrap}
+.pp-mark{min-width:38px;padding:7px 11px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;font-weight:800;transition:.15s}
+.pp-mark:hover{transform:translateY(-1px)}
+.pp-mark.yes.on{background:rgba(92,226,160,.18);border-color:#5ce2a0;color:#5ce2a0}
+.pp-mark.no.on{background:rgba(255,107,107,.18);border-color:#ff6b6b;color:#ff8787}
+.pp-row.pp-ok{border-color:rgba(92,226,160,.45)} .pp-row.pp-no2{border-color:rgba(255,107,107,.45)}
+.pp-speak{padding:7px 10px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.05)}
 .ganswer{font-size:17px;font-weight:800;color:#ffd76a;margin-top:6px}
 .gprogress{height:8px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden;margin:12px 0}
 .gprogress i{display:block;height:100%;background:linear-gradient(90deg,#6a5cff,#3ddc97);border-radius:99px;transition:width .3s}
@@ -1473,6 +1505,25 @@ body.td-typing #typingView { height: 100%; }
           <button class="mini-btn wide" id="td-badgeBtn">🏅 勋章墙 (<span id="td-badgeCount">0</span>/8)</button>
           <button class="mini-btn wide" id="td-levelBtn">🗺️ 键位闯关</button>
           <button class="mini-btn wide" id="td-wordStatsBtn">📊 单词统计</button>
+        </div>
+      </div>
+
+      <!-- 当前单元进度：和 SpellLab 教材词表联动 -->
+      <div class="unit-progress-card" id="td-unitCard">
+        <div class="upc-head">
+          <span class="upc-title">📘 当前单元学习进度</span>
+          <span class="upc-name" id="td-unitName">未选择教材单元</span>
+        </div>
+        <div class="upc-bar"><i id="td-unitBar"></i></div>
+        <div class="upc-stats">
+          <span>单元词 <b id="td-unitWords">0</b></span>
+          <span>已练 <b id="td-unitDone">0</b></span>
+          <span>错过 <b id="td-unitBad">0</b></span>
+          <span>练熟 <b id="td-unitMastered">0</b></span>
+        </div>
+        <div class="upc-actions">
+          <button class="mini-btn" id="td-unitPracticeBtn">▶ 练本单元单词</button>
+          <button class="mini-btn" id="td-unitFocusBtn">🎯 本单元错词重点练</button>
         </div>
       </div>
 
@@ -1673,6 +1724,7 @@ body.td-typing #typingView { height: 100%; }
         <div class="growth-tabs" id="growthTabs">
           <button data-g="review" class="active">错词复习</button>
           <button data-g="dict">听写练习</button>
+          <button data-g="paper">纸笔听写 👨‍👩‍👧</button>
           <button data-g="map">闯关地图</button>
           <button data-g="stats">学习统计</button>
         </div>
@@ -1730,6 +1782,45 @@ body.td-typing #typingView { height: 100%; }
             <button class="primary" id="dcNext">下一个 →</button>
             <button id="dcSkip">跳过这题</button>
           </div>
+        </div>
+      </div>
+
+      <div class="growth-panel" id="gPaper">
+        <div class="gcard">
+          <h3>纸笔听写 👨‍👩‍👧</h3>
+          <p class="gnote">听中文或英文读音，孩子<strong>写在纸上</strong>，家长按标准答案逐题评判。评分区由家长密码保护，孩子看不到答案，也不会自己给自己打分。</p>
+          <div class="gstats">
+            <div class="gstat"><b id="ppRound">0</b><span>本轮题数</span></div>
+            <div class="gstat"><b id="ppRight">0</b><span>家长判对</span></div>
+            <div class="gstat"><b id="ppRate">--</b><span>正确率</span></div>
+          </div>
+          <div class="grow" style="margin:14px 0">
+            <label class="pp-label">内容 <span class="sel"><select id="ppKind"><option value="mix">单词 + 句子</option><option value="word">只写单词</option><option value="sentence">只写句子</option></select></span></label>
+            <label class="pp-label">读音 <span class="sel"><select id="ppLang"><option value="cn">中文（写英文）</option><option value="en">英文（写英文）</option></select></span></label>
+            <label class="pp-label">题数 <span class="sel"><select id="ppCount"><option value="5">5 题</option><option value="8" selected>8 题</option><option value="12">12 题</option></select></span></label>
+            <button class="primary" id="ppStart">开始听写</button>
+          </div>
+          <div class="gprogress"><i id="ppBar" style="width:0%"></i></div>
+          <div class="gprompt" id="ppPrompt" hidden></div>
+          <div class="grow" id="ppActions" hidden style="margin:12px 0 0">
+            <button id="ppSpeak">🔊 再听一遍</button>
+            <button class="primary" id="ppNext">下一题 →</button>
+            <button id="ppFinish">听写完，家长批阅 →</button>
+          </div>
+          <div class="gfeedback" id="ppFeedback"></div>
+        </div>
+        <div class="gcard" id="ppGradeCard" hidden>
+          <div class="grow" style="justify-content:space-between">
+            <h3 style="margin:0">家长批阅 ✍️</h3>
+            <span class="pp-badge" id="ppLockBadge">🔒 家长已解锁</span>
+          </div>
+          <p class="gnote">对照孩子手写的答案，逐题选择 ✅ 对 / ❌ 错；拿不准可点 🔊 重听。全部批完后点「保存批阅结果」，错题会自动进入复习计划。</p>
+          <div class="pp-list" id="ppList"></div>
+          <div class="grow" style="margin-top:14px">
+            <button class="primary" id="ppSave">保存批阅结果</button>
+            <button id="ppAgain">再听一轮</button>
+          </div>
+          <div class="gfeedback" id="ppGradeFeedback"></div>
         </div>
       </div>
 
@@ -1902,9 +1993,9 @@ body.td-typing #typingView { height: 100%; }
     <div class="tab-page" id="pageGrowth" hidden>
       <div class="panel">
         <h3>记忆成长中心</h3>
-        <div class="panel-note">四个新工具都在这里：间隔复习、听写练习、闯关地图、学习统计。错词会自动进入复习计划。</div>
+        <div class="panel-note">五个工具都在这里：间隔复习、听写练习、纸笔听写（家长批阅）、闯关地图、学习统计。错词会自动进入复习计划。</div>
         <div class="stat-grid" id="growthMini"></div>
-        <div class="btn-row" style="margin-top:10px"><button class="mini-btn primary" id="goGrowth">打开成长中心 →</button></div>
+        <div class="btn-row" style="margin-top:10px"><button class="mini-btn primary" id="goGrowth">打开成长中心 →</button><button class="mini-btn" id="goPaper">纸笔听写 ✍️</button></div>
       </div>
     </div>
 
@@ -2159,7 +2250,7 @@ body.td-typing #typingView { height: 100%; }
       <div class="parent-actions"><button class="primary" id="btnParentUnlock">解锁</button></div>
     </div>
     <div id="parentPanel" hidden>
-      <div class="panel-note">当前受家长密码保护：抽奖与奖项设置。孩子仍可自由练习和抽奖；保护范围在程序里可以按需扩展。</div>
+      <div class="panel-note">当前受家长密码保护：抽奖与奖项设置、纸笔听写批阅。孩子仍可自由练习和抽奖；保护范围在程序里可以按需扩展。</div>
       <label class="parent-label" for="parentOld">原密码</label>
       <input class="field" id="parentOld" type="password" autocomplete="off" placeholder="原管理密码">
       <label class="parent-label" for="parentNew">新密码（4–32 位）</label>
@@ -2324,7 +2415,8 @@ function hashPassword(pwd,salt){
 /* 受家长密码保护的功能域。以后要保护别的配置，只需在这里加一项，
    再把对应控件的事件处理包一层 guardParent('域名', fn) 即可。 */
 const PARENT_SCOPES = {
-  lottery:{label:'抽奖与奖项设置',hint:'奖项内容、中奖概率、每次消耗积分'}
+  lottery:{label:'抽奖与奖项设置',hint:'奖项内容、中奖概率、每次消耗积分'},
+  paperdict:{label:'纸笔听写批改',hint:'显示正确答案、给孩子听写打分'}
 };
 let parentUnlocked = false;   // 只在内存里，刷新 / 重启即重新锁定
 let parentPending = null;
@@ -2345,7 +2437,7 @@ const DEFAULT_STATE = {
   parent:clone(DEFAULT_PARENT),
   /* 记忆进阶模块：错词间隔复习 / 关卡星级 / 听写。独立命名空间，
      与旧存档天然兼容（normalizeState 会补齐），备份导出自动带上。 */
-  memo:{srs:{}, stars:{}, mapUnlockAll:false, dictBest:{}}
+  memo:{srs:{}, stars:{}, mapUnlockAll:false, dictBest:{}, paperDict:{}}
 };
 let state = loadState();
 let mode = 'sentence';
@@ -2437,7 +2529,7 @@ function normalizeState(s){
   });
   /* 记忆进阶：把 srs/stars/dictBest 规范为纯对象，剔除非法条目。 */
   if(!out.memo || typeof out.memo!=='object' || Array.isArray(out.memo)) out.memo={};
-  ['srs','stars','dictBest'].forEach(k=>{
+  ['srs','stars','dictBest','paperDict'].forEach(k=>{
     if(!out.memo[k] || typeof out.memo[k]!=='object' || Array.isArray(out.memo[k])) out.memo[k]={};
   });
   out.memo.mapUnlockAll=!!out.memo.mapUnlockAll;
@@ -2850,17 +2942,25 @@ function toast(msg,type){
   const el=$('toast'); el.textContent=msg; el.className='toast show'+(type?' '+type:'');
   clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.className='toast',1900);
 }
-function speak(text){
+/* 语音朗读者：默认英文；纸笔听写可指定中文读音（听中文写英文） */
+function speakLang(text, lang, rate){
   if(!('speechSynthesis' in window)){ toast('当前浏览器不支持朗读','bad'); return; }
   try{
     window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
-    u.lang='en-US'; u.rate=Number(state.settings.rate)||0.9; u.pitch=1;
-    const v = window.speechSynthesis.getVoices().find(v=>/en[-_]US/i.test(v.lang));
+    const isZh = /^zh/i.test(lang||'');
+    u.lang = lang || 'en-US';
+    u.rate = typeof rate==='number' ? rate : (isZh ? 1 : (Number(state.settings.rate)||0.9));
+    u.pitch = 1;
+    const voices = (window.speechSynthesis.getVoices && window.speechSynthesis.getVoices()) || [];
+    const v = isZh
+      ? (voices.find(v=>/zh[-_]CN/i.test(v.lang)) || voices.find(v=>/^zh/i.test(v.lang)))
+      : voices.find(v=>/en[-_]US/i.test(v.lang));
     if(v) u.voice=v;
     window.speechSynthesis.speak(u);
   }catch(e){ toast('朗读暂不可用','bad'); }
 }
+function speak(text){ speakLang(text,'en-US'); }
 function tokenize(en,hints,cn){
   const raw = String(en).match(/[A-Za-z][A-Za-z'-]*|[^A-Za-z\s]/g) || [];
   let hi=0;
@@ -2966,6 +3066,7 @@ function renderToolbars(){
     '<div class="sep"></div>'+
     '<button class="tb-main" id="sCheck">检查答案</button>'+
     '<div class="sep"></div>'+
+    tb('sPaper','edit','纸笔听写：写在纸上，家长批阅')+
     tb('sNext','right','下一题')+
     tb('sMenu','menu','学习面板');
   $('toolbarWord').innerHTML =
@@ -2976,6 +3077,7 @@ function renderToolbars(){
     '<div class="sep"></div>'+
     '<button class="tb-main" id="wNext">下一个单词</button>'+
     '<div class="sep"></div>'+
+    tb('wPaper','edit','纸笔听写：写在纸上，家长批阅')+
     tb('wMenu','menu','学习面板');
   $('toolbarChunk').innerHTML =
     tb('cPrev','left','上一题')+
@@ -4472,7 +4574,8 @@ function exportSQLite(){
 }
 
 /* ---------------- 练习记录 ---------------- */
-const MODE_CN={sentence:'整句',chunk:'分步',word:'单词',dict:'听写',review:'错词复习',typing:'打字练习'};
+const MODE_CN={sentence:'整句',chunk:'分步',word:'单词',dict:'听写',paperdict:'纸笔听写',review:'错词复习',typing:'打字练习'};
+function goPaperDict(){ openDrawer(false); setMode('growth'); switchGrowth('paper'); }
 function histDate(t){
   const d=new Date(t||Date.now());
   return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();   // 与 today() 同格式
@@ -4740,7 +4843,7 @@ function renderParentCenter(){
   $('parentPanel').hidden=!parentUnlocked;
   $('parentInitialHint').hidden=!parentIsInitial();
   $('parentStatus').textContent=(parentUnlocked?'家长模式已解锁':'家长模式未解锁')+
-    ' · 当前保护：'+PARENT_SCOPES.lottery.label;
+    ' · 当前保护：'+Object.keys(PARENT_SCOPES).map(function(k){return PARENT_SCOPES[k].label;}).join('、');
   renderParentChip();
 }
 function renderParentChip(){
@@ -5306,6 +5409,7 @@ function bind(){
   $('btnLibrary').addEventListener('click',()=>openDrawer(true,'library'));
   $('btnStorage').addEventListener('click',()=>openDrawer(true,'storage'));
   $('goGrowth').addEventListener('click',()=>{ openDrawer(false); setMode('growth'); });
+  $('goPaper').addEventListener('click',goPaperDict);
   $('drawerClose').addEventListener('click',()=>openDrawer(false));
   $('mask').addEventListener('click',()=>openDrawer(false));
   $('drawerTabs').addEventListener('click',e=>{
@@ -5406,6 +5510,7 @@ function bind(){
       case 'sHint': hintCurrent(); break;
       case 'sReset': resetQuestion(); break;
       case 'sCheck': checkAll(); break;
+      case 'sPaper': goPaperDict(); break;
       case 'sMenu': openDrawer(true); break;
     }
   });
@@ -5417,6 +5522,7 @@ function bind(){
       case 'wShuffle': pickWord(); break;
       case 'wAnswer': showWordAnswer(); break;
       case 'wNext': pickWord(); break;
+      case 'wPaper': goPaperDict(); break;
       case 'wMenu': openDrawer(true); break;
     }
   });
@@ -5774,6 +5880,25 @@ function bind(){
   $('dcNext').addEventListener('click',()=>dcAdvance(false));
   $('dcSkip').addEventListener('click',()=>dcAdvance(true));
 
+  /* ---- 纸笔听写（家长批阅） ---- */
+  $('ppStart').addEventListener('click',ppStart);
+  $('ppSpeak').addEventListener('click',()=>ppSpeakText(ppCurrent));
+  $('ppNext').addEventListener('click',ppNext);
+  $('ppFinish').addEventListener('click',ppShowGrade);
+  $('ppSave').addEventListener('click',ppSave);
+  $('ppAgain').addEventListener('click',()=>{ $('ppGradeCard').hidden=true; ppPhase='idle'; ppStart(); });
+  $('ppList').addEventListener('click',e=>{
+    const sp=e.target.closest('button[data-pp-speak]');
+    if(sp){ const i=Number(sp.dataset.ppSpeak); ppSpeakText(ppQueue[i]); return; }
+    const b=e.target.closest('button[data-pp-mark]');
+    if(b){
+      const i=Number(b.dataset.ppMark);
+      if(ppMarks[i]!=null && ppMarks[i]===(b.dataset.ppVal==='1')) ppMarks[i]=null;
+      else ppMarks[i]=(b.dataset.ppVal==='1');
+      ppRenderGrade();
+    }
+  });
+
   /* 答完后输入框会被 disabled，键盘事件不再落到它身上：
      用文档级兜底让「答完再按回车」直接进入下一题，复习/听写都适用。 */
   document.addEventListener('keydown',e=>{
@@ -5949,6 +6074,108 @@ function dcAdvance(skip){
   }
   dcIdx++; dcPhase='ask'; dcNextCard();
 }
+/* ---------------- 纸笔听写（家长批阅） ----------------
+   听中文/英文 → 写在纸上 → 家长解锁后逐题判对错。
+   状态存 state.memo.paperDict：{done:[[unitId,时间,对数,总数]], ...} */
+let ppQueue=[], ppIdx=0, ppMarks=[], ppLang='cn', ppKind='mix', ppCurrent=null, ppPhase='idle';
+function ppUnitKey(){ try{ return currentUnit().id||''; }catch(e){ return ''; } }
+function ppRenderPanel(){
+  const total=ppQueue.length;
+  const right=ppMarks.filter(x=>x===true).length;
+  $('ppRound').textContent=total; $('ppRight').textContent=right;
+  $('ppRate').textContent=total?Math.round(right/total*100)+'%':'--';
+  $('ppBar').style.width=total?Math.round(ppIdx/total*100)+'%':'0%';
+}
+function ppStart(){
+  const u=currentUnit(), pool=[];
+  ppKind=$('ppKind').value||'mix';
+  if(ppKind!=='sentence') (u.words||[]).forEach(w=>{ if(w&&w[0]) pool.push({en:String(w[0]),cn:String(w[1]||''),kind:'单词'}); });
+  if(ppKind!=='word') (u.sentences||[]).forEach(q=>{ if(q&&q.en) pool.push({en:q.en,cn:q.cn||'',kind:'句子'}); });
+  if(!pool.length){ toast('这个单元还没有可听写的内容','bad'); return; }
+  ppLang=$('ppLang').value||'cn';
+  const n=Number($('ppCount').value)||8;
+  ppQueue=shuffle(pool).slice(0,n); ppIdx=0; ppMarks=ppQueue.map(()=>null);
+  ppCurrent=null; ppPhase='ask';
+  $('ppGradeCard').hidden=true; $('ppFeedback').textContent=''; $('ppFeedback').className='gfeedback';
+  $('ppGradeFeedback').textContent=''; $('ppGradeFeedback').className='gfeedback';
+  ppNextCard();
+}
+function ppSpeakText(item){
+  if(!item) return;
+  if(ppLang==='cn'){
+    const cn=String(item.cn||'').trim();
+    if(cn) speakLang(cn,'zh-CN',0.95);
+    else { toast('这条内容没有中文释义，改放英文','bad'); speakLang(item.en,'en-US'); }
+  } else speakLang(item.en,'en-US');
+}
+function ppNextCard(){
+  if(ppIdx>=ppQueue.length){
+    ppPhase='idle';
+    $('ppPrompt').hidden=true; $('ppActions').hidden=true;
+    $('ppFeedback').className='gfeedback ok';
+    $('ppFeedback').textContent='听写完成！共 '+ppQueue.length+' 题。请点「听写完，家长批阅」，输入家长密码后对照答案打分。';
+    ppRenderPanel(); return;
+  }
+  ppCurrent=ppQueue[ppIdx];
+  $('ppPrompt').hidden=false;
+  $('ppPrompt').innerHTML='第 '+(ppIdx+1)+' / '+ppQueue.length+' 题 · <b>'+esc(ppCurrent.kind)+'</b> · 仔细听，写在纸上';
+  $('ppActions').hidden=false;
+  $('ppFeedback').textContent=''; $('ppFeedback').className='gfeedback';
+  ppSpeakText(ppCurrent); ppRenderPanel();
+}
+function ppNext(){ if(ppPhase!=='ask') return; ppIdx++; ppNextCard(); }
+function ppShowGrade(){
+  if(!ppQueue.length || ppPhase!=='idle'){ toast('请先完成一轮纸笔听写','bad'); return; }
+  guardParent('paperdict', ppReveal);
+}
+function ppReveal(){
+  ppPhase='grade';
+  $('ppGradeCard').hidden=false;
+  $('ppLockBadge').textContent=(parentUnlocked?'🔓 家长已解锁':'🔒 家长模式未解锁');
+  ppRenderGrade();
+}
+function ppRenderGrade(){
+  $('ppList').innerHTML=ppQueue.map((it,i)=>{
+    const mark=ppMarks[i];
+    const cls=mark===true?' pp-ok':mark===false?' pp-no2':'';
+    return '<div class="pp-row'+cls+'" data-i="'+i+'">'+
+      '<span class="pp-no">'+(i+1)+'</span>'+
+      '<div class="pp-body"><div class="pp-en">'+esc(it.en)+'</div>'+
+        '<div class="pp-cn">'+esc(it.cn||'（无中文释义）')+'<span class="pp-kind">'+esc(it.kind)+'</span></div></div>'+
+      '<div class="pp-btns">'+
+        '<button class="pp-speak" data-pp-speak="'+i+'" title="重听这一题">🔊</button>'+
+        '<button class="pp-mark yes'+(mark===true?' on':'')+'" data-pp-mark="'+i+'" data-pp-val="1">✅</button>'+
+        '<button class="pp-mark no'+(mark===false?' on':'')+'" data-pp-mark="'+i+'" data-pp-val="0">❌</button>'+
+      '</div></div>';
+  }).join('');
+  ppRenderPanel();
+}
+function ppSave(){
+  if(ppPhase!=='grade') return;
+  guardParent('paperdict', function(){
+    const unmarked=ppMarks.filter(x=>x==null).length;
+    if(unmarked){ toast('还有 '+unmarked+' 题没判，请全部批阅后再保存','bad'); return; }
+    const unitName=currentUnit().name||'';
+    ppQueue.forEach((it,i)=>{
+      const ok=ppMarks[i]===true;
+      srEnroll(it.en,it.cn,ok,true);
+      addHistory({mode:'paperdict',unit:unitName,cn:it.cn,en:it.en,
+        ok:ok,assisted:false,ms:0,bad:ok?0:1});
+      if(ok && Number(state.plan.perCorrect||0)>0) addPoints(Number(state.plan.perCorrect),'纸笔听写答对');
+    });
+    const m=memo(), rec=m.paperDict||(m.paperDict={});
+    if(!Array.isArray(rec.done)) rec.done=[];
+    rec.done.push([ppUnitKey(),Date.now(),ppMarks.filter(x=>x===true).length,ppQueue.length]);
+    if(rec.done.length>60) rec.done=rec.done.slice(-60);
+    rec.last={unit:unitName,lang:ppLang,total:ppQueue.length,right:ppMarks.filter(x=>x===true).length,t:Date.now()};
+    const right=rec.last.right;
+    ppPhase='done';
+    $('ppGradeFeedback').className='gfeedback ok';
+    $('ppGradeFeedback').textContent='批阅结果已保存：'+right+' / '+ppQueue.length+' 题正确。错题已加入复习计划，可以在「错词复习」里巩固。';
+    ppRenderPanel(); saveState(true); renderHeader(); renderDrawer();
+    toast('已保存 '+right+' / '+ppQueue.length,'ok');
+  });
+}
 /* ---------------- 闯关地图 ---------------- */
 function mapStars(u){
   const ids=(u.sentences||[]).map((_,i)=>uid(u.id,i));
@@ -6015,16 +6242,17 @@ function renderGrowthMini(){
     box(Number(state.plan.points)||0,'可用积分');
 }
 function growthRender(){
-  srRenderList(); dcRenderPanel(); mapRender(); statsRender(); renderGrowthMini();
+  srRenderList(); dcRenderPanel(); ppRenderPanel(); mapRender(); statsRender(); renderGrowthMini();
 }
 function switchGrowth(g){
   growthTab=g;
-  ['review','dict','map','stats'].forEach(k=>{
+  ['review','dict','paper','map','stats'].forEach(k=>{
     const el=$('g'+k[0].toUpperCase()+k.slice(1)); if(el) el.classList.toggle('on',k===g);
   });
   document.querySelectorAll('#growthTabs button').forEach(b=>b.classList.toggle('active',b.dataset.g===g));
   if(g==='review') srRenderList();
   if(g==='dict') dcRenderPanel();
+  if(g==='paper') ppRenderPanel();
   if(g==='map') mapRender();
   if(g==='stats') statsRender();
 }
@@ -6147,6 +6375,17 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
      独立版不注入，取词回退到内置 WORDS/PINYIN，行为完全不变。 */
   let externalWordsProvider = null;
   function setWordProvider(fn) { externalWordsProvider = typeof fn === 'function' ? fn : null; }
+  /* 当前教材单元信息由宿主注入：{name, words:[{text,cn}]}，用来展示本单元进度 */
+  let externalUnitProvider = null;
+  function setUnitProvider(fn) { externalUnitProvider = typeof fn === 'function' ? fn : null; }
+  function currentUnitInfo() {
+    if (!externalUnitProvider) return null;
+    try {
+      const u = externalUnitProvider();
+      if (!u || typeof u !== 'object') return null;
+      return { name: String(u.name || ''), words: Array.isArray(u.words) ? u.words : [] };
+    } catch (e) { return null; }
+  }
   function wordsFromProvider(kind, count) {
     if (!externalWordsProvider) return null;
     try {
@@ -6208,6 +6447,9 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
     wordStatBtn: $('wordStatsBtn'), wordStatModal: $('wordStatsModal'),
     wordStatSummary: $('wordStatSummary'), wordStatList: $('wordStatList'),
     wordStatFocusBtn: $('wordStatFocusBtn'), wordStatCloseBtn: $('wordStatCloseBtn'),
+    unitCard: $('unitCard'), unitName: $('unitName'), unitBar: $('unitBar'),
+    unitWords: $('unitWords'), unitDone: $('unitDone'), unitBad: $('unitBad'),
+    unitMastered: $('unitMastered'), unitPracticeBtn: $('unitPracticeBtn'), unitFocusBtn: $('unitFocusBtn'),
     toast: $('toast')
   };
   const keyEls = {};
@@ -6410,6 +6652,66 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
       `<span class="ws-num bad">错 ${x.bad} 次</span>` +
       `<span class="ws-num">全对 ${x.ok}</span></div>`
     ).join('');
+  }
+
+  /* ---------- 当前单元进度（与 SpellLab 教材词表联动） ---------- */
+  function unitWordList() {
+    const info = currentUnitInfo();
+    const seen = Object.create(null), list = [];
+    (((info && info.words) || [])).forEach(function (w) {
+      const text = String((w && w.text) || '').trim().toLowerCase();
+      if (!/^[a-z][a-z'-]*$/.test(text) || seen[text]) return;
+      seen[text] = 1;
+      list.push({ text: text, cn: String((w && w.cn) || '') });
+    });
+    return { info: info, list: list };
+  }
+  function renderUnitProgress() {
+    if (!dom.unitCard) return;
+    const data = unitWordList(), list = data.list;
+    dom.unitCard.style.display = data.info ? '' : 'none';
+    if (dom.unitName) dom.unitName.textContent = data.info && data.info.name
+      ? data.info.name + ' · 共 ' + list.length + ' 词' : '未选择教材单元';
+    let done = 0, bad = 0, mastered = 0;
+    list.forEach(function (w) {
+      const s = save.wordStats[w.text] || {};
+      if ((s.n || 0) > 0) done++;
+      if ((s.bad || 0) > 0) bad++;
+      if ((s.ok || 0) >= 2 || ((s.n || 0) >= 2 && (s.bad || 0) === 0)) mastered++;
+    });
+    if (dom.unitWords) dom.unitWords.textContent = list.length;
+    if (dom.unitDone) dom.unitDone.textContent = done;
+    if (dom.unitBad) dom.unitBad.textContent = bad;
+    if (dom.unitMastered) dom.unitMastered.textContent = mastered;
+    if (dom.unitBar) dom.unitBar.style.width = (list.length ? Math.round(done / list.length * 100) : 0) + '%';
+    if (dom.unitPracticeBtn) dom.unitPracticeBtn.disabled = !list.length;
+    if (dom.unitFocusBtn) dom.unitFocusBtn.disabled = !bad;
+  }
+  function startUnitPractice(onlyWeak) {
+    const list = unitWordList().list;
+    let use = list.slice();
+    if (onlyWeak) {
+      use = use.filter(function (w) { return (save.wordStats[w.text] || {}).bad > 0; })
+        .sort(function (a, b) {
+          return ((save.wordStats[b.text] || {}).bad || 0) - ((save.wordStats[a.text] || {}).bad || 0);
+        });
+    }
+    if (!use.length) {
+      toast(onlyWeak ? '本单元还没有打错的单词，先练几局吧！' : '当前单元还没有可练习的单词');
+      return;
+    }
+    clearTimers(); clearKeyStates();
+    G = freshGame('word');
+    dom.gameTitle.textContent = onlyWeak ? '本单元错词重点练' : '本单元单词练习';
+    dom.target.innerHTML = '';
+    dom.feedback.className = 'feedback';
+    dom.instruction.textContent = '';
+    setProgress(0); updateStats(); showGameScreen();
+    G.seq = shuffle(use).slice(0, 16);
+    dom.instruction.textContent = onlyWeak
+      ? '这些是本单元你打错过的单词，重点练一练：'
+      : '照着当前教材单元的单词，一个字母一个字母打：';
+    presentQuestion();
   }
   function escHtml(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, c =>
@@ -7085,6 +7387,7 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
     const stars = calcStars();
     save.stars += stars;
     save.best[G.mode] = Math.max(save.best[G.mode] || 0, G.score);
+    renderUnitProgress();
 
     // 闯关通关记录
     if (G.mode === 'learn' && G.levelId) {
@@ -7155,6 +7458,7 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
     if (dom.badgeModal) dom.badgeModal.classList.remove('show');
     if (dom.levelModal) dom.levelModal.classList.remove('show');
     if (dom.wordStatModal) dom.wordStatModal.classList.remove('show');
+    renderUnitProgress();
     showMenuScreen();
   }
   function replay() {
@@ -7238,6 +7542,8 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
       dom.wordStatModal.classList.remove('show');
       startMode('weakword');
     });
+    if (dom.unitPracticeBtn) dom.unitPracticeBtn.addEventListener('click', () => startUnitPractice(false));
+    if (dom.unitFocusBtn) dom.unitFocusBtn.addEventListener('click', () => startUnitPractice(true));
 
     document.addEventListener('keydown', (e) => {
       if (typeof window.TypingDuck !== 'undefined' && typeof window.TypingDuck.isActive === 'function' && !window.TypingDuck.isActive()) return;
@@ -7301,6 +7607,7 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
     leave: function(){ goMenu(); },
     isTypingMode: function () { return !!(G && G.active); },
     setWordProvider: setWordProvider,
+    setUnitProvider: setUnitProvider,
     /* 注入外部存档：load() 返回存档对象；commit(obj) 由宿主落盘。
        必须在 init() 之前调用才生效（init 会 loadSave）。 */
     setSaveIO: function(loadFn,commitFn){
@@ -7321,6 +7628,7 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
         dom.blindBtn.textContent = save.blind ? '👀' : '🙈';
       }
       applySkin(); applyBlindVisual(); renderDuck(); renderBadges();
+      renderUnitProgress();
     }
   };
   init();
@@ -7393,6 +7701,23 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
   }
   if (typeof window.TypingDuck.setWordProvider === 'function') {
     window.TypingDuck.setWordProvider(textbookWordsFor);
+  }
+  /* 当前教材单元信息 → 打字主菜单的「本单元进度」卡片。
+     setUnitProvider 会替换 provider，随后 reloadSave 触发一次进度渲染。 */
+  if (typeof window.TypingDuck.setUnitProvider === 'function') {
+    window.TypingDuck.setUnitProvider(function () {
+      try {
+        if (typeof currentUnit !== 'function') return null;
+        var u = currentUnit();
+        if (!u) return null;
+        var words = textbookWordsFor('word') || [];
+        return {
+          name: String(u.name || ''),
+          words: words.map(function (w) { return { text: w.text, cn: w.cn || '' }; })
+        };
+      } catch (e) { return null; }
+    });
+    if (typeof window.TypingDuck.reloadSave === 'function') window.TypingDuck.reloadSave();
   }
 })();
 

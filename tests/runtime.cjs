@@ -249,11 +249,12 @@ check('状态持久化', () => 'localStorage 字节数 ' + (store.get('spelllab.
 check('DOM id 引用无缺失', () => {
   const staticIds = new Set([...html.matchAll(/id="([A-Za-z0-9_-]+)"/g)].map(m => m[1]));
   const refs = [...new Set([...code.matchAll(/\$\('([A-Za-z0-9_-]+)'\)/g)].map(m => m[1]))];
-  const dynamic = new Set(['sPrev','sSpeak','sHints','sHint','sReset','sCheck','sNext','sMenu','wSpeak','wStar','wShuffle','wAnswer','wNext','wMenu','cPrev','cSpeak','cHint','cReset','cCheck','cNext','cMenu',
+  const dynamic = new Set(['sPrev','sSpeak','sHints','sHint','sReset','sCheck','sNext','sMenu','sPaper','wSpeak','wStar','wShuffle','wAnswer','wNext','wMenu','wPaper','cPrev','cSpeak','cHint','cReset','cCheck','cNext','cMenu',
     // 打字小鸭集成模块：$() 内部自动加 td- 前缀，这些名字对应 td-xxx 实际 id
     'screenMenu','screenGame','starTotal','soundBtn','gameTitle','scoreVal','comboVal','accVal','stageInstruction','targetDisplay','progressText','keyboard','handHint','handHintDot','handHintText','resultModal','resultEmoji','resultTitle','resultStars','resultDetail','helpModal','legend','modeGrid','backBtn','brandHome','againBtn','menuBtn','helpBtn','helpCloseBtn',
     'skinBtn','blindBtn','heroDuck','streakVal','checkinTip','duckStage','duckInfo','feedBtn','badgeBtn','badgeCount','levelBtn','badgeModal','badgeGrid','badgeCloseBtn','levelModal','levelList','levelCloseBtn','toast','app','root','screenMenu',
-    'wordStatsBtn','wordStatsModal','wordStatSummary','wordStatList','wordStatFocusBtn','wordStatCloseBtn']);
+    'wordStatsBtn','wordStatsModal','wordStatSummary','wordStatList','wordStatFocusBtn','wordStatCloseBtn',
+    'unitCard','unitName','unitBar','unitWords','unitDone','unitBad','unitMastered','unitPracticeBtn','unitFocusBtn']);
   const missing = refs.filter(r => !staticIds.has(r) && !dynamic.has(r));
   if(missing.length) throw new Error('缺失 id: ' + missing.join(','));
   return refs.length + ' 个引用，动态按钮 ' + dynamic.size + ' 个';
@@ -773,7 +774,7 @@ check('成长中心默认状态与旧存档兼容', () => run(`
       oldSrs:Object.keys(old.memo.srs).length, oldStars:Object.keys(old.memo.stars).length,
       unlock:old.memo.mapUnlockAll, kept:old.stats.attempted});
   })()
-`) === JSON.stringify({keys:'dictBest,mapUnlockAll,srs,stars',oldSrs:0,oldStars:0,unlock:false,kept:7})
+`) === JSON.stringify({keys:'dictBest,mapUnlockAll,paperDict,srs,stars',oldSrs:0,oldStars:0,unlock:false,kept:7})
   ? '旧存档自动补齐 memo，不丢原有数据' : (()=>{throw new Error(run('JSON.stringify(normalizeState(null).memo)'));})());
 
 check('错词收录与遗忘曲线升级', () => run(`
