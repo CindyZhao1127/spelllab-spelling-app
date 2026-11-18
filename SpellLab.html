@@ -929,8 +929,16 @@
 #td-root .word-letters .wl.done { color: #2f9e44; transform: scale(.9); }
 #td-root .word-letters .wl.current {
   color: #e8590c; transform: scale(1.18);
-  text-shadow: 0 3px 0 #ffe3a3;
+  background: #fff3bf; border-radius: 12px;
+  box-shadow: 0 3px 0 #ffa94d, 0 5px 12px rgba(0,0,0,.12);
 }
+#td-root .word-letters .wl.current::after {
+  content: ''; position: absolute; left: 50%; bottom: -12px; transform: translateX(-50%);
+  border-left: 6px solid transparent; border-right: 6px solid transparent;
+  border-bottom: 7px solid #e8590c; animation: caretBlink 1s steps(2) infinite;
+}
+#td-root .word-letters .wl { position: relative; }
+@keyframes caretBlink { 50% { opacity: 0; } }
 #td-root .word-emoji { font-size: 70px; line-height: 1; margin-bottom: 2px; }
 #td-root .word-meaning { font-size: 18px; color: var(--ink-soft); font-weight: 700; }
 
@@ -1108,6 +1116,9 @@
 #td-root .card-orange { background: linear-gradient(145deg,#ffa94d,#f76707); }
 #td-root .card-teal   { background: linear-gradient(145deg,#38d9a9,#0ca678); }
 #td-root .card-red    { background: linear-gradient(145deg,#ff8787,#e03131); }
+#td-root .card-indigo { background: linear-gradient(145deg,#8d99ff,#5c6bc0); color:#fff; }
+/* 9 个模式卡在 4 列布局下会落单，最后一张横跨整行更协调 */
+#td-root .mode-grid .mode-card:last-child:nth-child(9) { grid-column: 1 / -1; }
 
 /* 成长面板 */
 #td-root .home-row {
@@ -1214,6 +1225,29 @@
 #td-root .level-name { font-size: 15px; font-weight: 800; color: #343a40; }
 #td-root .level-desc { font-size: 12px; color: var(--ink-soft); }
 #td-root .level-state { font-size: 13px; font-weight: 800; color: #f76707; }
+
+/* 单词练习统计 */
+#td-root .word-stat-summary {
+  display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+  margin: 12px 0 14px;
+}
+#td-root .ws-pill {
+  background: #fff3bf; color: #e8590c; border-radius: 999px;
+  padding: 6px 16px; font-size: 13px; font-weight: 800;
+}
+#td-root .word-stat-list {
+  max-height: 44vh; overflow-y: auto; text-align: left;
+  display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px;
+}
+#td-root .ws-row {
+  display: flex; align-items: center; gap: 12px; padding: 9px 14px;
+  border-radius: 12px; background: #f8f9fa; border: 2px solid #e9ecef;
+}
+#td-root .ws-row.hot { background: #fff5f5; border-color: #ffa8a8; }
+#td-root .ws-word { font-size: 18px; font-weight: 900; color: #343a40; min-width: 88px; }
+#td-root .ws-cn { flex: 1; font-size: 13px; color: var(--ink-soft); }
+#td-root .ws-num { font-size: 13px; font-weight: 800; color: #495057; white-space: nowrap; }
+#td-root .ws-num.bad { color: #e03131; }
 
 /* 轻提示 */
 #td-root .toast {
@@ -1344,6 +1378,7 @@ body.td-typing #typingView { height: 100%; }
     <span class="fb-title">学习范围</span>
     <label>年级 <span class="sel"><select id="gradeFilter" aria-label="选择年级"></select></span></label>
     <label>教材 <span class="sel"><select id="bookFilter" aria-label="选择教材版本"></select></span></label>
+    <label>册别 <span class="sel"><select id="volumeFilter" aria-label="选择上册下册"></select></span></label>
     <span class="fb-info" id="filterInfo"></span>
     <button class="link-btn" id="btnManage">管理年级 / 教材</button>
     <button class="link-btn" id="btnLibrary">教材库</button>
@@ -1437,6 +1472,7 @@ body.td-typing #typingView { height: 100%; }
         <div class="home-card quick-card">
           <button class="mini-btn wide" id="td-badgeBtn">🏅 勋章墙 (<span id="td-badgeCount">0</span>/8)</button>
           <button class="mini-btn wide" id="td-levelBtn">🗺️ 键位闯关</button>
+          <button class="mini-btn wide" id="td-wordStatsBtn">📊 单词统计</button>
         </div>
       </div>
 
@@ -1455,6 +1491,11 @@ body.td-typing #typingView { height: 100%; }
           <span class="card-emoji">🍎</span>
           <span class="card-title">单词练习</span>
           <span class="card-desc">打出简单的英文小单词</span>
+        </button>
+        <button class="mode-card card-indigo" data-mode="weakword">
+          <span class="card-emoji">🎯</span>
+          <span class="card-title">错词重点练</span>
+          <span class="card-desc">专攻你打错最多的那些单词</span>
         </button>
         <button class="mode-card card-pink" data-mode="pinyin">
           <span class="card-emoji">🀄</span>
@@ -1598,6 +1639,20 @@ body.td-typing #typingView { height: 100%; }
         <div class="level-list" id="td-levelList"></div>
         <div class="modal-btns">
           <button class="btn btn-primary" id="td-levelCloseBtn">关闭</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 单词统计弹窗 -->
+    <div class="modal-mask" id="td-wordStatsModal">
+      <div class="modal-card wide-card">
+        <h2>📊 我的单词练习统计</h2>
+        <p class="help-lead">每个单词练了几次、打错几次都记在这里。错得多的记得用「错词重点练」攻一攻！</p>
+        <div class="word-stat-summary" id="td-wordStatSummary"></div>
+        <div class="word-stat-list" id="td-wordStatList"></div>
+        <div class="modal-btns">
+          <button class="btn btn-primary" id="td-wordStatFocusBtn">🎯 重点练错词</button>
+          <button class="btn btn-ghost" id="td-wordStatCloseBtn">关闭</button>
         </div>
       </div>
     </div>
@@ -1937,11 +1992,12 @@ body.td-typing #typingView { height: 100%; }
     <div class="tab-page" id="pageLibrary" hidden>
       <div class="panel">
         <h3>新建教材包</h3>
-        <div class="panel-note">一个教材包 = 一册书，下面可包含任意多个单元；每个单元有独立的句子与单词表，会自动成为课程单元。教材保存在本机，导出 JSON 后可提交到 Git 管版本或分享给别人。</div>
+        <div class="panel-note">一个教材包 = 一册书，可标注上册 / 下册 / 全册，顶部「学习范围」能按册别筛选；包下可包含任意多个单元，每个单元有独立的句子与单词表。教材保存在本机，导出 JSON 后可提交到 Git 管版本或分享给别人。</div>
         <div class="field-row"><input class="field" id="tbName" placeholder="如 人教版 PEP 四年级上册"></div>
         <div class="field-row">
           <span class="sel"><select id="tbGrade"></select></span>
           <span class="sel"><select id="tbBook"></select></span>
+          <span class="sel"><select id="tbVolume"></select></span>
           <button class="mini-btn primary sm" id="tbCreate">创建教材包</button>
         </div>
       </div>
@@ -2211,6 +2267,16 @@ const DEFAULT_BOOKS = [
   {id:'b_yl',name:'译林版'},
   {id:'b_bsd',name:'北师大版'}
 ];
+/* 册别：上册 / 下册 / 全册（不分册）。默认从教材包名称里推断，老数据无需手工补录。 */
+const VOLUMES = [{id:'upper',name:'上册'},{id:'lower',name:'下册'},{id:'whole',name:'全册'}];
+function inferVolume(name){
+  const s=String(name||'');
+  if(/上册|上冊/.test(s)) return 'upper';
+  if(/下册|下冊/.test(s)) return 'lower';
+  return '';
+}
+function volumeName(id){ const v=VOLUMES.find(x=>x.id===id); return v?v.name:'未分册'; }
+function packVolume(p){ return (p && p.volume!=null) ? p.volume : (inferVolume(p&&p.name)||''); }
 const clone = o => JSON.parse(JSON.stringify(o));
 const HISTORY_LIMIT = 500;   // 练习记录最多保留 500 条，避免存档无限膨胀
 function gradeName(id){ const g=(state.grades||[]).find(x=>x.id===id); return g?g.name:'未分类'; }
@@ -2273,7 +2339,7 @@ const DEFAULT_STATE = {
     timerMode:'count',difficulty:'normal',autoVocab:true,askResume:true,askNextUnit:true},
   custom:[], customMeta:{gradeId:'g4',bookId:'b_hj'},
   grades:DEFAULT_GRADES, books:DEFAULT_BOOKS, unitMeta:{},
-  filter:{gradeId:'all',bookId:'all'},
+  filter:{gradeId:'all',bookId:'all',volumeId:'all'},
   vocab:[], practiceSets:[], textbooks:[], seq:1,
   session:null, plan:clone(DEFAULT_PLAN), lottery:clone(DEFAULT_LOTTERY),
   parent:clone(DEFAULT_PARENT),
@@ -2380,6 +2446,8 @@ function normalizeState(s){
   if(out.history.length>HISTORY_LIMIT) out.history=out.history.slice(-HISTORY_LIMIT);
   if(!out.grades.length) out.grades=clone(DEFAULT_GRADES);
   if(!out.books.length) out.books=clone(DEFAULT_BOOKS);
+  /* 教材包册别：老存档没有 volume 字段时按名称推断；显式设为未分册('')要保留 */
+  (out.textbooks||[]).forEach(p=>{ if(p && p.volume==null) p.volume=inferVolume(p.name)||''; });
   if(!Array.isArray(out.plan.ledger)) out.plan.ledger=[];
   if(!out.plan.results || typeof out.plan.results!=='object' || Array.isArray(out.plan.results)) out.plan.results={};
   if(out.plan.ledger.length>LEDGER_LIMIT) out.plan.ledger=out.plan.ledger.slice(-LEDGER_LIMIT);
@@ -2713,7 +2781,7 @@ function allUnits(){
       if(!tu || !(tu.sentences||[]).length) return;
       base.push({
         id:'tb:'+tb.id+':'+tu.id, name:tu.name||'未命名单元', book:tb.name||'教材包',
-        gradeId:tb.gradeId||'g4', bookId:tb.bookId||'b_hj',
+        gradeId:tb.gradeId||'g4', bookId:tb.bookId||'b_hj', volume:packVolume(tb),
         sentences:tu.sentences, words:tu.words||[], packId:tb.id, tuId:tu.id
       });
     });
@@ -2730,6 +2798,7 @@ function unitsInScope(){
   return allUnits().filter(u=>{
     if(f.gradeId && f.gradeId!=='all' && u.gradeId!==f.gradeId) return false;
     if(f.bookId && f.bookId!=='all' && u.bookId!==f.bookId) return false;
+    if(f.volumeId && f.volumeId!=='all' && u.volume!==f.volumeId) return false;
     return true;
   });
 }
@@ -2852,8 +2921,11 @@ function renderFilters(){
     state.grades.map(g=>'<option value="'+esc(g.id)+'">'+esc(g.name)+'</option>').join('');
   $('bookFilter').innerHTML='<option value="all">全部教材</option>'+
     state.books.map(b=>'<option value="'+esc(b.id)+'">'+esc(b.name)+'</option>').join('');
+  $('volumeFilter').innerHTML='<option value="all">全部册别</option>'+
+    VOLUMES.map(v=>'<option value="'+esc(v.id)+'">'+esc(v.name)+'</option>').join('');
   $('gradeFilter').value=f.gradeId||'all';
   $('bookFilter').value=f.bookId||'all';
+  $('volumeFilter').value=f.volumeId||'all';
   const visible=units();
   $('filterInfo').textContent=(filterFallback?'该范围暂无课程，已显示全部 · ':'')+'当前 '+visible.length+' 个单元';
 }
@@ -3605,7 +3677,8 @@ function normWord(w){ return String(w||'').trim().toLowerCase(); }
 function activeScopeIds(){
   const f=state.filter||{};
   return {gradeId:(f.gradeId&&f.gradeId!=='all')?f.gradeId:'g4',
-          bookId:(f.bookId&&f.bookId!=='all')?f.bookId:'b_hj'};
+          bookId:(f.bookId&&f.bookId!=='all')?f.bookId:'b_hj',
+          volumeId:(f.volumeId&&f.volumeId!=='all')?f.volumeId:''};
 }
 function addVocab(en,cn,source,scope,quiet){
   const word=String(en||'').trim();
@@ -3783,10 +3856,11 @@ function refreshLibrary(){
   unitPos=Math.min(unitPos,Math.max(0,units().length-1));
   renderFilters(); renderDrawer(); renderHeader(); setMode(mode);
 }
-function makePack(name,gradeId,bookId){
+function makePack(name,gradeId,bookId,volume){
   const n=String(name||'').trim();
   if(!n){ toast('请填写教材包名称','bad'); return null; }
-  const p={id:nextId('tb'),name:n,gradeId:gradeId||'g4',bookId:bookId||'b_hj',
+  const v=volume===undefined?inferVolume(n):volume;
+  const p={id:nextId('tb'),name:n,gradeId:gradeId||'g4',bookId:bookId||'b_hj',volume:v,
            enabled:true,created:today(),units:[]};
   tbPacks().push(p); saveState();
   libSel={packId:p.id,unitId:'',qIdx:-1};
@@ -3803,6 +3877,15 @@ function removePack(id){
   state.textbooks=tbPacks().filter(x=>x.id!==id);
   if(libSel.packId===id) libSel={packId:'',unitId:'',qIdx:-1};
   saveState(); refreshLibrary(); toast('教材包已删除');
+}
+function setPackVolume(id){
+  const p=tbPack(id); if(!p) return;
+  const cur=packVolume(p);
+  const opts=VOLUMES.map(v=>v.id).concat(['']);
+  const next=opts[(opts.indexOf(cur)+1)%opts.length];
+  p.volume=next;
+  saveState(); refreshLibrary();
+  toast('「'+p.name+'」册别已改为 '+volumeName(next));
 }
 function togglePack(id){
   const p=tbPack(id); if(!p) return;
@@ -3930,7 +4013,7 @@ function packExportPayload(packs){
   return {
     format:'spelllab.textbook.v1', exportedAt:new Date().toISOString(),
     packs:packs.map(p=>({
-      name:p.name, gradeId:p.gradeId, bookId:p.bookId,
+      name:p.name, gradeId:p.gradeId, bookId:p.bookId, volume:packVolume(p),
       gradeName:gradeName(p.gradeId), bookName:bookName(p.bookId),
       units:(p.units||[]).map(u=>({
         name:u.name,
@@ -3973,10 +4056,13 @@ function normalizeImportedPack(raw){
     });
     return {id:nextId('tu'),name:String(ru.name||'').trim()||'未命名单元',sentences:sentences,words:words};
   }).filter(Boolean);
+  const vol=(raw.volume!=null && (VOLUMES.some(v=>v.id===raw.volume)||raw.volume===''))
+    ? raw.volume : (inferVolume(name)||'');
   return {
     id:nextId('tb'), name:name,
     gradeId:ensureCat('grade',raw.gradeId,raw.gradeName),
     bookId:ensureCat('book',raw.bookId,raw.bookName),
+    volume:vol,
     enabled:true, created:today(), units:units
   };
 }
@@ -4058,6 +4144,11 @@ function renderLibrary(){
   $('tbBook').innerHTML='<option value="none">未分类</option>'+bs.map(b=>'<option value="'+esc(b.id)+'">'+esc(b.name)+'</option>').join('');
   $('tbGrade').value=gs.some(x=>x.id===sc.gradeId)?sc.gradeId:'none';
   $('tbBook').value=bs.some(x=>x.id===sc.bookId)?sc.bookId:'none';
+  const prevVolume=$('tbVolume').value;
+  const inferred=inferVolume($('tbName').value);
+  $('tbVolume').innerHTML='<option value="">未分册</option>'+
+    VOLUMES.map(v=>'<option value="'+esc(v.id)+'">'+esc(v.name)+'</option>').join('');
+  $('tbVolume').value=prevVolume||sc.volumeId||inferred||'';
   const packs=tbPacks();
   $('tbCount').textContent=packs.length;
   $('tbList').innerHTML=packs.length?packs.map(p=>{
@@ -4073,10 +4164,11 @@ function renderLibrary(){
     return '<div class="tb-card'+(p.enabled===false?' off':'')+'">'+
       '<div class="tb-head"><span class="tb-title">'+esc(p.name)+'</span>'+
         '<span class="count-pill">'+(p.enabled===false?'已停用':'使用中')+'</span></div>'+
-      '<div class="tb-meta">'+esc(gradeName(p.gradeId))+' · '+esc(bookName(p.bookId))+
+      '<div class="tb-meta">'+esc(volumeName(packVolume(p)))+' · '+esc(gradeName(p.gradeId))+' · '+esc(bookName(p.bookId))+
         ' · '+c.units+' 单元 / '+c.sentences+' 题 / '+c.words+' 词 · 创建于 '+esc(p.created||'-')+'</div>'+
       '<div class="btn-row tight" style="margin-top:8px">'+
         '<button class="mini-btn sm" data-tb-addunit="'+esc(p.id)+'">加单元</button>'+
+        '<button class="mini-btn sm" data-tb-volume="'+esc(p.id)+'">改册别</button>'+
         '<button class="mini-btn sm" data-tb-toggle="'+esc(p.id)+'">'+(p.enabled===false?'启用':'停用')+'</button>'+
         '<button class="mini-btn sm" data-tb-export="'+esc(p.id)+'">导出此包</button>'+
         '<button class="mini-btn sm danger" data-tb-delpack="'+esc(p.id)+'">删除包</button>'+
@@ -4315,7 +4407,7 @@ function exportSQLite(){
   add('BEGIN TRANSACTION;');
   add('CREATE TABLE IF NOT EXISTS grades(id TEXT PRIMARY KEY,name TEXT);');
   add('CREATE TABLE IF NOT EXISTS books(id TEXT PRIMARY KEY,name TEXT);');
-  add('CREATE TABLE IF NOT EXISTS packs(id TEXT PRIMARY KEY,name TEXT,grade_id TEXT,book_id TEXT,enabled INTEGER,created TEXT);');
+  add('CREATE TABLE IF NOT EXISTS packs(id TEXT PRIMARY KEY,name TEXT,grade_id TEXT,book_id TEXT,volume TEXT,enabled INTEGER,created TEXT);');
   add('CREATE TABLE IF NOT EXISTS units(id TEXT PRIMARY KEY,pack_id TEXT,name TEXT);');
   add('CREATE TABLE IF NOT EXISTS questions(unit_id TEXT,seq INTEGER,cn TEXT,en TEXT,hints TEXT,chunks TEXT);');
   add('CREATE TABLE IF NOT EXISTS words(unit_id TEXT,en TEXT,cn TEXT);');
@@ -4334,7 +4426,7 @@ function exportSQLite(){
   (state.grades||[]).forEach(g=>add('INSERT INTO grades VALUES'+sqlVals([g.id,g.name])));
   (state.books||[]).forEach(b=>add('INSERT INTO books VALUES'+sqlVals([b.id,b.name])));
   (state.textbooks||[]).forEach(p=>add('INSERT INTO packs VALUES'+
-    sqlVals([p.id,p.name,p.gradeId||'',p.bookId||'',p.enabled===false?0:1,p.created||''])));
+    sqlVals([p.id,p.name,p.gradeId||'',p.bookId||'',packVolume(p),p.enabled===false?0:1,p.created||''])));
   const units=[],questions=[],words=[];
   const pushUnit=(id,packId,name,sentences,wordList)=>{
     units.push([id,packId,name]);
@@ -5300,6 +5392,7 @@ function bind(){
 
   $('gradeFilter').addEventListener('change',e=>setFilter('gradeId',e.target.value));
   $('bookFilter').addEventListener('change',e=>setFilter('bookId',e.target.value));
+  $('volumeFilter').addEventListener('change',e=>setFilter('volumeId',e.target.value));
 
   $('toolbarSentence').addEventListener('click',e=>{
     const b=e.target.closest('button'); if(!b) return;
@@ -5486,10 +5579,10 @@ function bind(){
 
   /* 教材库 */
   $('tbCreate').addEventListener('click',()=>{
-    if(makePack($('tbName').value,$('tbGrade').value,$('tbBook').value)) $('tbName').value='';
+    if(makePack($('tbName').value,$('tbGrade').value,$('tbBook').value,$('tbVolume').value)) $('tbName').value='';
   });
   $('tbName').addEventListener('keydown',e=>{
-    if(e.key==='Enter' && makePack($('tbName').value,$('tbGrade').value,$('tbBook').value)) $('tbName').value='';
+    if(e.key==='Enter' && makePack($('tbName').value,$('tbGrade').value,$('tbBook').value,$('tbVolume').value)) $('tbName').value='';
   });
   $('tbList').addEventListener('click',e=>{
     const b=e.target.closest&&e.target.closest('button');
@@ -5499,6 +5592,7 @@ function bind(){
       const d=b.dataset;
       if(d.tbAddunit) addUnit(d.tbAddunit,'');
       else if(d.tbToggle) togglePack(d.tbToggle);
+      else if(d.tbVolume) setPackVolume(d.tbVolume);
       else if(d.tbDelpack) removePack(d.tbDelpack);
       else if(d.tbRename) renameUnit(d.tbRename,unitId);
       else if(d.tbDelunit) removeUnit(d.tbDelunit,unitId);
@@ -6067,7 +6161,7 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
   const MODE_TITLES = {
     learn: '认识字母', abc: '字母连打', word: '单词练习',
     pinyin: '拼音练习', whack: '打地鼠', weak: '错键专项',
-    listen: '听音打字', pk: '亲子 PK'
+    listen: '听音打字', pk: '亲子 PK', weakword: '错词重点练'
   };
 
   /* ---------- 勋章定义 ---------- */
@@ -6111,6 +6205,9 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
     badgeBtn: $('badgeBtn'), badgeCount: $('badgeCount'), levelBtn: $('levelBtn'),
     badgeModal: $('badgeModal'), badgeGrid: $('badgeGrid'), badgeCloseBtn: $('badgeCloseBtn'),
     levelModal: $('levelModal'), levelList: $('levelList'), levelCloseBtn: $('levelCloseBtn'),
+    wordStatBtn: $('wordStatsBtn'), wordStatModal: $('wordStatsModal'),
+    wordStatSummary: $('wordStatSummary'), wordStatList: $('wordStatList'),
+    wordStatFocusBtn: $('wordStatFocusBtn'), wordStatCloseBtn: $('wordStatCloseBtn'),
     toast: $('toast')
   };
   const keyEls = {};
@@ -6120,6 +6217,7 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
   const DEFAULT_SAVE = {
     stars: 0, best: {}, sound: true,
     wrongKeys: {},        // 错键统计：{ a: 3, b: 5 }
+    wordStats: {},        // 单词练习统计：{ apple: {n:练过几次, bad:打错几次, ok:全对几次, cn:词义} }
     checkin: { last: '', streak: 0, total: 0 },
     duck: { exp: 0 },     // 小鸭成长值，每 3 点升 1 级（上限 5）
     badges: [],           // 已解锁勋章 id
@@ -6282,6 +6380,40 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
       }
       dom.levelList.appendChild(item);
     });
+  }
+
+  /* ---------- 单词统计 ---------- */
+  function renderWordStats() {
+    if (!dom.wordStatList) return;
+    const all = Object.keys(save.wordStats || {}).map(w => {
+      const s = save.wordStats[w] || {};
+      return { w, n: s.n || 0, bad: s.bad || 0, ok: s.ok || 0, cn: s.cn || '' };
+    }).filter(x => x.n > 0).sort((a, b) =>
+      (b.bad - a.bad) || (a.n - b.n) || a.w.localeCompare(b.w));
+    const totalN = all.reduce((s, x) => s + x.n, 0);
+    const totalBad = all.reduce((s, x) => s + x.bad, 0);
+    if (dom.wordStatSummary) {
+      dom.wordStatSummary.innerHTML =
+        `<span class="ws-pill">练过 ${all.length} 个单词</span>` +
+        `<span class="ws-pill">累计 ${totalN} 次</span>` +
+        `<span class="ws-pill">打错 ${totalBad} 次</span>`;
+    }
+    if (!all.length) {
+      dom.wordStatList.innerHTML = '<div class="empty">还没有单词记录，先玩几局「单词练习」或「听音打字」吧！</div>';
+      return;
+    }
+    dom.wordStatList.innerHTML = all.slice(0, 60).map(x =>
+      `<div class="ws-row${x.bad >= 2 ? ' hot' : ''}">` +
+      `<span class="ws-word">${escHtml(x.w)}</span>` +
+      `<span class="ws-cn">${escHtml(x.cn)}</span>` +
+      `<span class="ws-num">练 ${x.n} 次</span>` +
+      `<span class="ws-num bad">错 ${x.bad} 次</span>` +
+      `<span class="ws-num">全对 ${x.ok}</span></div>`
+    ).join('');
+  }
+  function escHtml(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, c =>
+      ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   }
 
   /* ---------- 皮肤 ---------- */
@@ -6474,6 +6606,7 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
       case 'learn': setupSequence('letters', 20); break;
       case 'abc': setupTimedABC(); break;
       case 'word': setupSequence('words', 8); break;
+      case 'weakword': setupWeakWord(); break;
       case 'pinyin': setupSequence('pinyin', 8); break;
       case 'whack': setupWhack(); break;
       case 'weak': setupWeak(); break;
@@ -6513,6 +6646,7 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
     G.charIndex = 0;
     const text = item.text;
     dom.target.innerHTML = '';
+    if (text.length > 1) noteWordStart();
 
     if (G.mode === 'learn') {
       const box = document.createElement('div');
@@ -6530,7 +6664,7 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
       line.className = 'word-letters';
       text.split('').forEach((ch, i) => {
         const s = document.createElement('span');
-        s.className = 'wl'; s.textContent = ch; s.dataset.i = i;
+        s.className = i === 0 ? 'wl current' : 'wl'; s.textContent = ch; s.dataset.i = i;
         line.appendChild(s);
       });
       dom.target.appendChild(line);
@@ -6560,9 +6694,13 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
       markKeyResult(key, true);
       SFX.good();
       const spans = dom.target.querySelectorAll('.wl');
-      if (spans[G.charIndex]) spans[G.charIndex].classList.add('done');
+      if (spans[G.charIndex]) {
+        spans[G.charIndex].classList.remove('current');
+        spans[G.charIndex].classList.add('done');
+      }
       G.charIndex++;
       if (G.charIndex >= item.text.length) {
+        if (item.text.length > 1) noteWordDone();
         dom.feedback.textContent = '⭐';
         dom.feedback.className = 'feedback show-good';
         later(() => { dom.feedback.className = 'feedback'; }, 620);
@@ -6578,6 +6716,7 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
       }
     } else {
       G.wrong++; G.totalAnswered++; G.combo = 0;
+      if (item.text.length > 1) noteWordWrong();
       recordWrong(key);
       markKeyResult(key, false);
       showFeedback(false);
@@ -6707,6 +6846,20 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
     presentQuestion();
   }
 
+  /* ---------- 模式 D2：错词重点练 ---------- */
+  function setupWeakWord() {
+    const list = weakWords(8);
+    if (!list.length) {
+      toast('还没有错词记录，先玩几局单词练习吧！');
+      G.active = false;
+      later(goMenu, 300);
+      return;
+    }
+    G.seq = shuffle(list);
+    dom.instruction.textContent = '这些单词你打错得最多，重点练一练：';
+    presentQuestion();
+  }
+
   /* ---------- 模式 E：听音打字 ---------- */
   function speakWord(text) {
     try {
@@ -6728,6 +6881,7 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
     if (!item) { finishGame(); return; }
     G.charIndex = 0;
     G.masked = true;
+    noteWordStart();
     dom.target.innerHTML = '';
     const wrap = document.createElement('div');
     wrap.className = 'listen-wrap';
@@ -6741,7 +6895,7 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
     line.className = 'word-letters listen-mask';
     item.text.split('').forEach((ch, i) => {
       const s = document.createElement('span');
-      s.className = 'wl masked';
+      s.className = i === 0 ? 'wl masked current' : 'wl masked';
       s.textContent = '_';
       s.dataset.i = i;
       line.appendChild(s);
@@ -6769,12 +6923,14 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
       save.wrongKeys[key] = Math.max(0, (save.wrongKeys[key] || 0) - 1);
       const spans = dom.target.querySelectorAll('.wl');
       if (spans[G.charIndex]) {
-        spans[G.charIndex].classList.remove('masked');
+        spans[G.charIndex].classList.remove('masked', 'current');
         spans[G.charIndex].classList.add('done');
         spans[G.charIndex].textContent = expected.toUpperCase();
       }
       G.charIndex++;
+      if (G.charIndex < item.text.length && spans[G.charIndex]) spans[G.charIndex].classList.add('current');
       if (G.charIndex >= item.text.length) {
+        noteWordDone();
         G.qIndex++;
         setProgress(G.qIndex / G.seq.length);
         if (G.qIndex >= G.seq.length) { SFX.star(); later(finishGame, 450); }
@@ -6782,6 +6938,7 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
       }
     } else {
       G.wrong++; G.totalAnswered++; G.combo = 0;
+      noteWordWrong();
       recordWrong(key);
       markKeyResult(key, false); showFeedback(false); SFX.bad();
     }
@@ -6841,6 +6998,50 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
     updateStats();
   }
 
+  /* ---------- 单词练习统计 ---------- */
+  function wordKey(){ return G && G.seq && G.seq[G.qIndex] ? String(G.seq[G.qIndex].text||'').toLowerCase() : ''; }
+  function wordStat(w){
+    if(!save.wordStats || typeof save.wordStats!=='object' || Array.isArray(save.wordStats)) save.wordStats={};
+    if(!save.wordStats[w]) save.wordStats[w]={n:0,bad:0,ok:0,cn:''};
+    return save.wordStats[w];
+  }
+  /* 一个单词开始练习：记录次数 + 词义，并重置本题的错误计数 */
+  function noteWordStart(){
+    if(!G || !G.seq || !G.seq[G.qIndex]) return;
+    const item=G.seq[G.qIndex];
+    const w=String(item.text||'').toLowerCase();
+    G.wordMisses=0;
+    if(!w) return;
+    const st=wordStat(w);
+    st.n=(st.n||0)+1;
+    if(item.cn && !st.cn) st.cn=item.cn;
+    persist();
+  }
+  /* 单词过程中按错一次 */
+  function noteWordWrong(){
+    const w=wordKey();
+    if(!w) return;
+    G.wordMisses=(G.wordMisses||0)+1;
+    const st=wordStat(w); st.bad=(st.bad||0)+1; persist();
+  }
+  /* 单词完整打完：本题零失误则 ok+1 */
+  function noteWordDone(){
+    const w=wordKey();
+    if(!w) return;
+    const st=wordStat(w);
+    if(!(G.wordMisses||0)) st.ok=(st.ok||0)+1;
+    persist();
+  }
+  /* 错词重点练习：按错误次数优先、其次练得少优先，取前 N 个 */
+  function weakWords(limit){
+    return Object.keys(save.wordStats||{})
+      .filter(w=>/^[a-z'-]+$/.test(w) && (save.wordStats[w].bad||0)>0)
+      .sort((a,b)=> (save.wordStats[b].bad-save.wordStats[a].bad) ||
+                     ((save.wordStats[a].n||0)-(save.wordStats[b].n||0)))
+      .slice(0,limit||8)
+      .map(w=>({text:w, cn:(save.wordStats[w].cn||''), emoji:''}));
+  }
+
   /* ---------- 错键统计 ---------- */
   function recordWrong(key) {
     save.wrongKeys[key] = (save.wrongKeys[key] || 0) + 1;
@@ -6852,7 +7053,7 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
     if (!G || !G.active) return;
     pressVisual(key);
     switch (G.mode) {
-      case 'learn': case 'word': case 'pinyin': case 'weak': handleSequenceKey(key); break;
+      case 'learn': case 'word': case 'pinyin': case 'weak': case 'weakword': handleSequenceKey(key); break;
       case 'abc': handleABCKey(key); break;
       case 'whack': handleWhackKey(key); break;
       case 'listen': handleListenKey(key); break;
@@ -6953,6 +7154,7 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
     if (dom.helpModal) dom.helpModal.classList.remove('show');
     if (dom.badgeModal) dom.badgeModal.classList.remove('show');
     if (dom.levelModal) dom.levelModal.classList.remove('show');
+    if (dom.wordStatModal) dom.wordStatModal.classList.remove('show');
     showMenuScreen();
   }
   function replay() {
@@ -7023,6 +7225,20 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
       if (e.target === dom.levelModal) dom.levelModal.classList.remove('show');
     });
 
+    // 单词统计
+    if (dom.wordStatBtn) dom.wordStatBtn.addEventListener('click', () => {
+      renderWordStats();
+      dom.wordStatModal.classList.add('show');
+    });
+    if (dom.wordStatCloseBtn) dom.wordStatCloseBtn.addEventListener('click', () => dom.wordStatModal.classList.remove('show'));
+    if (dom.wordStatModal) dom.wordStatModal.addEventListener('click', (e) => {
+      if (e.target === dom.wordStatModal) dom.wordStatModal.classList.remove('show');
+    });
+    if (dom.wordStatFocusBtn) dom.wordStatFocusBtn.addEventListener('click', () => {
+      dom.wordStatModal.classList.remove('show');
+      startMode('weakword');
+    });
+
     document.addEventListener('keydown', (e) => {
       if (typeof window.TypingDuck !== 'undefined' && typeof window.TypingDuck.isActive === 'function' && !window.TypingDuck.isActive()) return;
       if (e.repeat) return;
@@ -7036,6 +7252,10 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
       }
       if (dom.levelModal && dom.levelModal.classList.contains('show')) {
         if (e.key === 'Escape') dom.levelModal.classList.remove('show');
+        return;
+      }
+      if (dom.wordStatModal && dom.wordStatModal.classList.contains('show')) {
+        if (e.key === 'Escape') dom.wordStatModal.classList.remove('show');
         return;
       }
       if (!G || !G.active) return;
@@ -7110,7 +7330,7 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
 
 /* 打字小鸭 → SpellLab 集成接线 */
 (function(){
-  var MODE_CN = { whack:'打地鼠', abc:'字母连打', word:'单词练习', pinyin:'拼音练习', weak:'错键专项', listen:'听音打字', pk:'亲子PK', learn:'认识字母' };
+  var MODE_CN = { whack:'打地鼠', abc:'字母连打', word:'单词练习', pinyin:'拼音练习', weak:'错键专项', weakword:'错词重点练', listen:'听音打字', pk:'亲子PK', learn:'认识字母' };
   window.TypingDuck.onFinish = function(r){
     /* 每局固定 1 分，与星星数脱钩 */
     var pts = 1;

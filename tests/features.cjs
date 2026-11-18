@@ -84,7 +84,9 @@ const sandbox = {
   },
   SpeechSynthesisUtterance: class { constructor(t){ this.text = t; } },
   setTimeout: (fn, ms) => { scheduled.push({fn, ms}); return scheduled.length; },
+  setInterval: (fn, ms) => { scheduled.push({fn, ms, interval:true}); return scheduled.length; },
   clearTimeout: () => {},
+  clearInterval: () => {},
   confirm: () => true, prompt: () => '',
   fetch: fakeFetch,
   navigator: {
@@ -971,6 +973,91 @@ function fireScheduled(){
     assert(o.after2.idx === 1 && o.after2.phase === 'ask' && o.after2.en === 'dog' &&
       o.after2.empty && o.after2.enabled, '第二次回车未进入下一题: ' + JSON.stringify(o));
     return '第 1 次提交锁定 · 第 2 次切到 dog';
+  });
+
+  check('教材按上册/下册分册管理并可筛选', () => {
+    assert(html.indexOf('id="volumeFilter"') >= 0, '缺册别筛选下拉');
+    assert(html.indexOf('id="tbVolume"') >= 0, '缺新建教材包册别选择');
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      const before={v:(state.filter.volumeId||'all'),n:state.textbooks.length};
+      const p1=makePack('测试教材 四年级上册','g4','b_pep','upper');
+      const p2=makePack('测试教材 四年级下册','g4','b_pep','lower');
+      const p3=makePack('测试教材 不分册','g4','b_pep','');
+      const volumes={p1:packVolume(p1),p2:packVolume(p2),p3:packVolume(p3)};
+      state.filter={gradeId:'g4',bookId:'b_pep',volumeId:'upper'};
+      renderFilters();
+      const upperUnits=unitsInScope().filter(u=>u.packId===p1.id||u.packId===p2.id||u.packId===p3.id);
+      state.filter.volumeId='lower'; renderFilters();
+      const lowerUnits=unitsInScope().filter(u=>u.packId===p1.id||u.packId===p2.id||u.packId===p3.id);
+      state.filter.volumeId='all'; renderFilters();
+      const allVol=unitsInScope().filter(u=>u.packId===p1.id||u.packId===p2.id||u.packId===p3.id);
+      const payload=packExportPayload([p1]);
+      state.textbooks=state.textbooks.filter(p=>p.id!==p1.id&&p.id!==p2.id&&p.id!==p3.id);
+      saveState(); renderFilters();
+      return {before:before,volumes:volumes,
+        upper:upperUnits.length,lower:lowerUnits.length,all:allVol.length,
+        exported:payload.packs[0].volume};})())`));
+    assert(o.before.v === 'all', '默认册别筛选不是全部: ' + JSON.stringify(o));
+    assert(o.volumes.p1 === 'upper' && o.volumes.p2 === 'lower' && o.volumes.p3 === '',
+      '册别未被正确保存/推断: ' + JSON.stringify(o));
+    assert(o.exported === 'upper', '导出的教材包 JSON 未带册别');
+    return '上册/下册/未分册 · 导出带册别 · 筛选可区分';
+  });
+
+  check('打字单词统计：练习次数、错误次数、错词重点练', () => {
+    ['wordStats','noteWordStart','noteWordWrong','noteWordDone','weakWords','setupWeakWord',
+     'wordStatsBtn','wordStatList','card-indigo','data-mode="weakword"'].forEach(k =>
+      assert(html.indexOf(k) >= 0, '缺单词统计元素 ' + k));
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      var captured=null;
+      window.TypingDuck.setSaveIO(function(){return null;},function(obj){captured=obj;});
+      var grid=document.getElementById('td-modeGrid');
+      grid.listeners.click[0]({target:{closest:function(s){return s==='.mode-card'?{dataset:{mode:'word'}}:null;}}});
+      var target=document.getElementById('td-targetDisplay');
+      var line=target.children.filter(function(c){return c.className==='word-letters';})[0];
+      if(!line) return {err:'no word line'};
+      var word=line.children.map(function(s){return s.textContent;}).join('');
+      var kb=document.getElementById('td-keyboard');
+      function press(ch){
+        for(var i=0;i<kb.children.length;i++){
+          var row=kb.children[i];
+          for(var j=0;j<row.children.length;j++){
+            var k=row.children[j];
+            if(k.dataset.key===ch && k.listeners.pointerdown){
+              k.listeners.pointerdown[0]({preventDefault:function(){}}); return true;
+            }
+          }
+        } return false;
+      }
+      var first=word.charAt(0), wrongKey=first==='z'?'x':'z';
+      press(wrongKey);
+      for(var i=0;i<word.length;i++) press(word.charAt(i));
+      var st=(captured&&captured.wordStats&&captured.wordStats[word.toLowerCase()])||{};
+      var statBtn=document.getElementById('td-wordStatsBtn');
+      statBtn.listeners.click[0]({});
+      var listHtml=document.getElementById('td-wordStatList').innerHTML;
+      grid.listeners.click[0]({target:{closest:function(s){return s==='.mode-card'?{dataset:{mode:'weakword'}}:null;}}});
+      var focusLine=document.getElementById('td-targetDisplay').children
+        .filter(function(c){return c.className==='word-letters';})[0];
+      var focusWord=focusLine?focusLine.children.map(function(s){return s.textContent;}).join(''):'';
+      return {word:word,stat:st,listHas:listHtml.indexOf(word.toLowerCase())>=0,focusWord:focusWord};
+    })())`));
+    if (o.err) throw new Error(o.err);
+    assert(o.stat.n >= 1, '练习次数未记录: ' + JSON.stringify(o));
+    assert(o.stat.bad >= 1, '错误次数未记录: ' + JSON.stringify(o));
+    assert(o.listHas, '统计弹窗未列出该单词: ' + JSON.stringify(o));
+    assert(o.focusWord === o.word, '重点练词未取到错词: ' + JSON.stringify(o));
+    return o.word + ' 练 ' + o.stat.n + ' 次 / 错 ' + o.stat.bad + ' 次 · 重点练取回该词';
+  });
+
+  check('待输入字母高亮：首个字母高亮、打过的字母不再高亮', () => {
+    assert(html.indexOf("s.className = i === 0 ? 'wl current' : 'wl'") >= 0,
+      '首个字母未加 current 高亮');
+    assert(html.indexOf("spans[G.charIndex].classList.remove('current')") >= 0,
+      '打过的字母未移除 current');
+    assert(html.indexOf('.word-letters .wl.current::after') >= 0,
+      '缺高亮指示箭头');
+    return '首字高亮 + 打过变绿去高亮 + 闪烁光标';
   });
 
   check('全库导出含家长密码哈希、不含明文', () => {
