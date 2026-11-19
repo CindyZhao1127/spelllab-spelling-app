@@ -234,7 +234,11 @@
           ["about", "大约；关于"],
           ["woman", "妇女"],
           ["Mr", "先生"],
-          ["Miss", "女士"]
+          ["Miss", "女士"],
+          ["classmate", "同班同学"],
+          ["UK", "英国"],
+          ["Canada", "加拿大"],
+          ["USA", "美国"]
         ],
         "sentences": [
           {"cn": "你叫什么名字？", "en": "What's your name?"},
@@ -267,7 +271,12 @@
           ["talk", "说话"],
           ["so", "这么"],
           ["right", "对的"],
-          ["has", "有"]
+          ["has", "有"],
+          ["long", "长的"],
+          ["leg", "腿"],
+          ["fat", "肥的"],
+          ["love", "喜爱"],
+          ["bye", "再见"]
         ],
         "sentences": [
           {"cn": "这只小猫很可爱。", "en": "The little cat is very lovely."},
@@ -294,7 +303,13 @@
           ["learn", "学习"],
           ["book", "书"],
           ["hear", "听见"],
-          ["computer", "电脑"]
+          ["computer", "电脑"],
+          ["eraser", "橡皮"],
+          ["taste", "尝"],
+          ["touch", "触摸"],
+          ["sense", "感觉官能"],
+          ["tongue", "舌"],
+          ["smell", "闻"]
         ],
         "sentences": [
           {"cn": "我能用一下你的铅笔吗？", "en": "Can I use your pencil?"},
@@ -321,7 +336,10 @@
           ["breakfast", "早餐"],
           ["milk", "奶"],
           ["noodle", "面条"],
-          ["egg", "蛋"]
+          ["egg", "蛋"],
+          ["plate", "盘子"],
+          ["colourful", "五彩缤纷的"],
+          ["yummy", "很好吃的"]
         ],
         "sentences": [
           {"cn": "我想喝点水。", "en": "I'd like some water."},
@@ -350,7 +368,9 @@
           ["cap", "帽子"],
           ["on", "在上面"],
           ["under", "在下面"],
-          ["cool", "酷的"]
+          ["cool", "酷的"],
+          ["shelf", "架子"],
+          ["still", "还是"]
         ],
         "sentences": [
           {"cn": "你有旧玩具吗？", "en": "Do you have old toys?"},
@@ -374,7 +394,11 @@
           ["seventeen", "十七"],
           ["back", "回原处"],
           ["thirteen", "十三"],
-          ["sixteen", "十六"]
+          ["sixteen", "十六"],
+          ["choose", "选择"],
+          ["save", "储蓄"],
+          ["spend", "用"],
+          ["pay", "付费"]
         ],
         "sentences": [
           {"cn": "你们有多少把尺子？", "en": "How many rulers do you have?"},
@@ -497,12 +521,7 @@
           ["old", "年老的"],
           ["tell", "讲述"],
           ["everyone", "每人"],
-          ["Ms", "女士"],
-          ["busy", "忙碌的"],
-          ["tired", "疲倦的"],
-          ["chore", "家务"],
-          ["help", "帮助"],
-          ["also", "也"]
+          ["Ms", "女士"]
         ],
         "sentences": [
           {"cn": "你爸爸是做什么工作的？", "en": "What's your father's job?"},

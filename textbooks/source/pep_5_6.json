@@ -4,10 +4,7 @@
     "name": "人教版 PEP 五年级上册（2026版·三年级起点）",
     "gradeId": "g5",
     "edition": "2024版 · 2026年秋启用",
-    "sources": [
-      "http://www.dzkbw.com/books/rjb/yingyu/pep5s_2026/",
-      "https://zy.21cnjy.com/26168697"
-    ],
+    "sources": ["http://www.dzkbw.com/books/rjb/yingyu/pep5s_2026/", "https://zy.21cnjy.com/26168697"],
     "notes": "单元名采用电子课本网 pep5s_2026 正式目录。词汇沿用 21cnjy 26168697 的新版五上按单元词表，该资源单元名写作早期版本名（Different Friends / Feelings / My Week / Healthy Habits / Food and Plants / Nature and Weather），已按正式目录重命名，词组类词条（take care of、ice cream、go hiking 等）未收入 words。",
     "units": [
       {
@@ -268,7 +265,8 @@
           ["lovely", "可爱的"],
           ["leaf", "叶子"],
           ["fall", "落下"],
-          ["paint", "绘画"]
+          ["paint", "绘画"],
+          ["all", "完全"]
         ],
         "sentences": [
           {"cn": "你最喜欢哪个季节？", "en": "Which season do you like best?"},
@@ -303,7 +301,15 @@
           ["contest", "比赛；竞赛"],
           ["holiday", "节日；假日"],
           ["game", "游戏"],
-          ["chocolate", "巧克力"]
+          ["chocolate", "巧克力"],
+          ["national", "国家的"],
+          ["American", "美国的"],
+          ["Thanksgiving", "感恩节"],
+          ["Christmas", "圣诞节"],
+          ["roll", "滚动"],
+          ["bunny", "兔子"],
+          ["RSVP", "请赐复"],
+          ["by", "在……之前"]
         ],
         "sentences": [
           {"cn": "运动会是什么时候？", "en": "When is the sports meet?"},
@@ -393,7 +399,8 @@
           ["teach", "教"],
           ["sure", "当然"],
           ["Canadian", "加拿大的"],
-          ["Spanish", "西班牙的"]
+          ["Spanish", "西班牙的"],
+          ["show", "指导"]
         ],
         "sentences": [
           {"cn": "靠右走。", "en": "Keep to the right."},
@@ -569,7 +576,10 @@
           ["question", "问题"],
           ["sunset", "日落"],
           ["telescope", "望远镜"],
-          ["astronaut", "宇航员"]
+          ["astronaut", "宇航员"],
+          ["spaceship", "宇宙飞船"],
+          ["time", "次"],
+          ["Mars", "火星"]
         ],
         "sentences": [
           {"cn": "天空中你能看见什么？", "en": "What can you see in the sky?"},
@@ -606,7 +616,9 @@
           ["dirty", "脏的"],
           ["side", "一边；一面"],
           ["unplug", "拔掉电源插头"],
-          ["difference", "差别；影响"]
+          ["difference", "差别；影响"],
+          ["run", "跑"],
+          ["few", "不多"]
         ],
         "sentences": [
           {"cn": "流水可以发电。", "en": "Running water can make electricity."},

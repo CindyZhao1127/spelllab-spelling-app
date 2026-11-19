@@ -1,6 +1,6 @@
 {
   "format": "spelllab.textbook.v1",
-  "exportedAt": "2026-11-15T12:38:10Z",
+  "exportedAt": "2026-11-19T17:11:51Z",
   "packs": [
     {
       "name": "人教版 PEP 六年级上册（2026版·三年级起点）",
@@ -468,7 +468,7 @@
               "en": "I still need to save more.",
               "hints": [
                 "我",
-                "仍然",
+                "还是",
                 "需要",
                 "到；向",
                 "节约；保存",
@@ -713,6 +713,18 @@
             [
               "astronaut",
               "宇航员"
+            ],
+            [
+              "spaceship",
+              "宇宙飞船"
+            ],
+            [
+              "time",
+              "次"
+            ],
+            [
+              "Mars",
+              "火星"
             ]
           ]
         },
@@ -877,6 +889,10 @@
             [
               "difference",
               "差别；影响"
+            ],
+            [
+              "few",
+              "不多"
             ]
           ]
         }
