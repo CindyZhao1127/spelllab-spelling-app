@@ -1431,6 +1431,8 @@ body.td-typing #typingView { height: 100%; }
 
   <div class="filter-bar">
     <span class="fb-title">学习范围</span>
+    <label>学制 <span class="sel"><select id="systemFilter" aria-label="选择学制"></select></span></label>
+    <label>学段 <span class="sel"><select id="stageFilter" aria-label="选择学段"></select></span></label>
     <label>年级 <span class="sel"><select id="gradeFilter" aria-label="选择年级"></select></span></label>
     <label>教材 <span class="sel"><select id="bookFilter" aria-label="选择教材版本"></select></span></label>
     <label>册别 <span class="sel"><select id="volumeFilter" aria-label="选择上册下册"></select></span></label>
@@ -2134,6 +2136,10 @@ body.td-typing #typingView { height: 100%; }
 
       <div class="panel">
         <h3>我的教材包 <span class="count-pill" id="tbCount">0</span></h3>
+        <div class="field-row" style="margin-bottom:10px">
+          <label>学段 <span class="sel"><select id="libStage" aria-label="教材库学段"></select></span></label>
+          <span class="subtle" id="libStageTip"></span>
+        </div>
         <div id="tbList"></div>
       </div>
 
@@ -2411,35 +2417,89 @@ const clone = o => JSON.parse(JSON.stringify(o));
 const HISTORY_LIMIT = 500;   // 练习记录最多保留 500 条，避免存档无限膨胀
 function gradeName(id){ const g=(state.grades||[]).find(x=>x.id===id); return g?g.name:'未分类'; }
 function bookName(id){ const b=(state.books||[]).find(x=>x.id===id); return b?b.name:'未分类'; }
-/* 学段：小学 / 初中 / 其他。初中教材包导入时会自建 g7~g9 / j1~j3，
-   名称也是「初中七年级」，两种写法都要认得。 */
+/* 学段 / 学制：小学 / 初中 / 其他；六三制（小学 1–6，初中 7–9）或五四制（小学 1–5，初中 6–9）。
+   初中教材包导入时会自建 g7~g9 / j1~j3，名称也是「初中七年级」，这里统一折算成年级序号，
+   这样两种 id 写法都能按同一年级筛选，不会被别名拆成两套。 */
 const STAGES=[{id:'primary',name:'小学'},{id:'junior',name:'初中'},{id:'other',name:'其他'}];
+const SYSTEMS=[{id:'63',name:'六三制'},{id:'54',name:'五四制'}];
+const CN_NUMS=['一','二','三','四','五','六','七','八','九'];
 function stageName(id){ const s=STAGES.find(x=>x.id===id); return s?s.name:'其他'; }
+function systemId(){ return state.system==='54'?'54':'63'; }
+function primaryMax(sys){ return sys==='54'?5:6; }
+/* 年级序号：g1..g9 就是 1..9；j1..j3 是初中一至三年级，对应 7..9；j6 是五四制初中六年级。 */
+function gradeNum(id,name){
+  const s=String(id||''), m=/^([gj])([1-9])$/.exec(s);
+  if(m){ const n=Number(m[2]); return m[1]==='j'?(n===6?6:n+6):n; }
+  const nm=String(name||''), t=/(?:小学|初中)?([一二三四五六七八九1-9])年级/.exec(nm);
+  if(!t) return 0;
+  const raw=t[1];
+  return /^\d$/.test(raw)?Number(raw):(CN_NUMS.indexOf(raw)+1);
+}
+function gradeLabelFor(id,sys,name){
+  const n=gradeNum(id,name||'');
+  return n?CN_NUMS[n-1]+'年级':'未分年级';
+}
+function gradeLabel(id){
+  const g=(state.grades||[]).find(x=>x.id===String(id));
+  return gradeLabelFor(id,systemId(),g?g.name:'');
+}
+function gradeCatalogIds(sys){
+  const ids=[];
+  for(let n=1;n<=9;n++) ids.push(sys==='54'&&n===6?'j6':'g'+n);
+  return ids;
+}
+/* 旧存档里的 j1/j2/j3 折算到 g7/g8/g9，筛选只认规范 id，别名由 sameGrade 兼容。 */
+function canonicalGradeId(id,sys){
+  const n=gradeNum(id);
+  if(!n) return id;
+  return sys==='54'&&n===6?'j6':'g'+n;
+}
+function gradeOptions(sys){ return gradeCatalogIds(sys||systemId()).map(id=>({id:id,name:gradeLabelFor(id,sys||systemId())})); }
+function ensureGradeCatalog(target){
+  const sys=target.system==='54'?'54':'63';
+  gradeCatalogIds(sys).forEach(id=>{
+    if(!(target.grades||[]).some(x=>x.id===id)) target.grades.push({id:id,name:gradeLabelFor(id,sys)});
+  });
+}
 function stageOfGrade(id){
   const s=String(id||''), g=(state.grades||[]).find(x=>x.id===s), nm=g?String(g.name||''):'';
-  if(/^j\d/.test(s)||/^g[789]$/.test(s)||/初中|七年级|八年级|九年级/.test(nm)) return 'junior';
-  if(/^g[1-6]$/.test(s)||/小学/.test(nm)) return 'primary';
-  return 'other';
+  if(s==='j6'||/初中六年级/.test(nm)) return 'junior';
+  /* 五四制下 g6 是六三制小学六上/六下的旧归类，不能误当初中六年级 */
+  if(systemId()==='54'&&(s==='g6'||/小学六年级/.test(nm))) return 'other';
+  const n=gradeNum(s,nm);
+  if(!n) return 'other';
+  return n<=primaryMax(systemId())?'primary':'junior';
+}
+function gradeNumOf(id){
+  const g=(state.grades||[]).find(x=>x.id===String(id));
+  return gradeNum(id,g?g.name:'');
+}
+function sameGrade(a,b){
+  if(a===b) return true;
+  if(systemId()==='54'&&((a==='g6'&&b==='j6')||(a==='j6'&&b==='g6'))) return false;
+  const x=gradeNumOf(a), y=gradeNumOf(b);
+  return x>0&&y>0&&x===y;
 }
 function stageOfBook(b){
-  return /初中|七年级|八年级|九年级/.test(String((b&&b.name)||'')) ? 'junior' : 'primary';
+  const nm=String((b&&b.name)||'');
+  if(/初中|七年级|八年级|九年级/.test(nm)) return 'junior';
+  return systemId()==='54'&&/六年级/.test(nm)?'junior':'primary';
 }
 /* 教材册显示名：三年级(上) / 八年级(下)，年级名里已有的「小学/初中」前缀去掉 */
 function packLabel(p){
-  const g=gradeName(p&&p.gradeId);
-  let base=(g&&g!=='未分类'?g:'').replace(/^(小学|初中)/,'');
-  if(!base){
-    const m=/^(?:g|j)([1-9])$/.exec(String((p&&p.gradeId)||''));
-    base=m?(['一','二','三','四','五','六','七','八','九'][Number(m[1])-1]+'年级'):'未分年级';
-  }
+  const name=String((p&&p.gradeId)||'');
+  const g=gradeLabel(name);
+  const base=(g&&g!=='未分年级')?g:'未分年级';
   const v=packVolume(p), tail=v==='upper'?'(上)':v==='lower'?'(下)':v==='whole'?'(全)':'';
   return base+tail;
 }
 /* 教材库树：学段 → 教材类别 → 册（每个册包下面再展开单元） */
-function groupPacks(packs){
-  const groups=[];
+function groupPacks(packs,stage){
+  const groups=[], only=(stage&&stage!=='all')?stage:'';
+  const volRank=v=>v==='upper'?0:v==='lower'?1:2;
   (packs||[]).forEach(function(p){
     const st=stageOfGrade(p&&p.gradeId), bk=String(bookName(p&&p.bookId)||'未分类');
+    if(only&&st!==only) return;
     let g=groups.find(x=>x.stage===st);
     if(!g){ g={stage:st,books:[]}; groups.push(g); }
     let b=g.books.find(x=>x.name===bk);
@@ -2449,15 +2509,23 @@ function groupPacks(packs){
   const order={primary:0,junior:1,other:2};
   const rank=s=>Object.prototype.hasOwnProperty.call(order,s)?order[s]:9;
   groups.sort((a,b)=>rank(a.stage)-rank(b.stage));
+  groups.forEach(g=>{
+    g.books.sort((a,b)=>a.name.localeCompare(b.name,'zh'));
+    g.books.forEach(b=>b.packs.sort((a,c)=>
+      gradeNumOf(a.gradeId)-gradeNumOf(c.gradeId)||volRank(packVolume(a))-volRank(packVolume(c))||
+      String(a.name).localeCompare(String(c.name),'zh')));
+  });
   return groups;
 }
-function optionGroups(list,stageFn,current,allLabel,allValue){
+function optionGroups(list,stageFn,current,allLabel,allValue,labelFn,onlyStage){
   let html='<option value="'+(allValue||'all')+'">'+esc(allLabel)+'</option>';
   STAGES.forEach(function(st){
+    if(onlyStage&&onlyStage!=='all'&&st.id!==onlyStage&&st.id!=='other') return;
     const items=list.filter(x=>stageFn(x)===st.id);
     if(!items.length) return;
     html+='<optgroup label="'+esc(st.name)+'">'+items.map(x=>
-      '<option value="'+esc(x.id)+'"'+(x.id===current?' selected':'')+'>'+esc(x.name)+'</option>').join('')+'</optgroup>';
+      '<option value="'+esc(x.id)+'"'+(x.id===current?' selected':'')+'>'+
+      esc(labelFn?labelFn(x):x.name)+'</option>').join('')+'</optgroup>';
   });
   return html;
 }
@@ -2525,7 +2593,8 @@ const DEFAULT_STATE = {
     timerMode:'count',difficulty:'normal',autoVocab:true,askResume:true,askNextUnit:true},
   custom:[], customMeta:{gradeId:'g4',bookId:'b_hj'},
   grades:DEFAULT_GRADES, books:DEFAULT_BOOKS, unitMeta:{},
-  filter:{gradeId:'all',bookId:'all',volumeId:'all'},
+  system:'63',
+  filter:{stageId:'all',gradeId:'all',bookId:'all',volumeId:'all'},
   vocab:[], practiceSets:[], textbooks:[], seq:1,
   session:null, plan:clone(DEFAULT_PLAN), lottery:clone(DEFAULT_LOTTERY),
   parent:clone(DEFAULT_PARENT),
@@ -2632,6 +2701,11 @@ function normalizeState(s){
   if(out.history.length>HISTORY_LIMIT) out.history=out.history.slice(-HISTORY_LIMIT);
   if(!out.grades.length) out.grades=clone(DEFAULT_GRADES);
   if(!out.books.length) out.books=clone(DEFAULT_BOOKS);
+  /* 学制与学段筛选：默认六三制 / 全部学段；旧存档缺字段时自动补齐 */
+  out.system=out.system==='54'?'54':'63';
+  if(!out.filter.stageId||!STAGES.some(x=>x.id===out.filter.stageId)) out.filter.stageId='all';
+  if(out.filter.gradeId&&out.filter.gradeId!=='all') out.filter.gradeId=canonicalGradeId(out.filter.gradeId,out.system);
+  ensureGradeCatalog(out);
   /* 教材包册别：老存档没有 volume 字段时按名称推断；显式设为未分册('')要保留 */
   (out.textbooks||[]).forEach(p=>{ if(p && p.volume==null) p.volume=inferVolume(p.name)||''; });
   if(!Array.isArray(out.plan.ledger)) out.plan.ledger=[];
@@ -2996,7 +3070,8 @@ let filterFallback=false;
 function unitsInScope(){
   const f=state.filter||{};
   return allUnits().filter(u=>{
-    if(f.gradeId && f.gradeId!=='all' && u.gradeId!==f.gradeId) return false;
+    if(f.stageId && f.stageId!=='all' && stageOfGrade(u.gradeId)!==f.stageId) return false;
+    if(f.gradeId && f.gradeId!=='all' && !sameGrade(u.gradeId,f.gradeId)) return false;
     if(f.bookId && f.bookId!=='all' && u.bookId!==f.bookId) return false;
     if(f.volumeId && f.volumeId!=='all' && u.volume!==f.volumeId) return false;
     return true;
@@ -3011,7 +3086,7 @@ function units(){
 function findUnitIndex(id){
   let i=units().findIndex(u=>u.id===id);
   if(i>=0) return i;
-  state.filter={gradeId:'all',bookId:'all'};
+  state.filter={stageId:'all',gradeId:'all',bookId:'all',volumeId:'all'};
   renderFilters(); saveState();
   return Math.max(0,units().findIndex(u=>u.id===id));
 }
@@ -3123,24 +3198,59 @@ const SFX = {
 };
 
 /* ---------------- 渲染：顶部 / 工具条 ---------------- */
+function renderStageControls(){
+  const stage=(state.filter&&state.filter.stageId)||'all';
+  const stageOpts='<option value="all">全部学段</option>'+
+    STAGES.filter(s=>s.id!=='other').map(s=>'<option value="'+s.id+'">'+esc(s.name)+'</option>').join('');
+  ['stageFilter','libStage'].forEach(id=>{
+    const el=$(id); if(!el) return;
+    el.innerHTML=stageOpts; el.value=stage;
+  });
+  const sys=systemId();
+  const sysEl=$('systemFilter');
+  if(sysEl){ sysEl.innerHTML=SYSTEMS.map(s=>'<option value="'+s.id+'">'+esc(s.name)+'</option>').join(''); sysEl.value=sys; }
+  const tip=$('libStageTip');
+  if(tip) tip.textContent=sys==='54'
+    ?'五四制：小学一年级～五年级，初中六年级～九年级；六三制的六上/六下列在「其他」。'
+    :'六三制：小学一年级～六年级，初中七年级～九年级。选择学段后，下面只显示对应学段的教材。';
+}
 function renderFilters(){
-  const f=state.filter||{};
-  /* 学习范围先按学段分组，再选教材版本与年级 */
-  $('gradeFilter').innerHTML=optionGroups(state.grades,g=>stageOfGrade(g.id),'','全部年级');
-  $('bookFilter').innerHTML=optionGroups(state.books,stageOfBook,'','全部教材');
+  const f=state.filter||{}, stage=f.stageId||'all';
+  renderStageControls();
+  /* 学制决定年级范围，学段决定只显示小学还是初中；年级、教材、册别逐级收窄 */
+  const grades=gradeOptions(systemId());
+  $('gradeFilter').innerHTML=optionGroups(grades,x=>stageOfGrade(x.id),
+    canonicalGradeId(f.gradeId||'all',systemId()),'全部年级','all',x=>x.name,stage);
+  $('bookFilter').innerHTML=optionGroups(state.books,stageOfBook,f.bookId||'all',
+    '全部教材','all',null,stage);
   $('volumeFilter').innerHTML='<option value="all">全部册别</option>'+
     VOLUMES.map(v=>'<option value="'+esc(v.id)+'">'+esc(v.name)+'</option>').join('');
-  $('gradeFilter').value=f.gradeId||'all';
+  $('gradeFilter').value=canonicalGradeId(f.gradeId||'all',systemId());
   $('bookFilter').value=f.bookId||'all';
   $('volumeFilter').value=f.volumeId||'all';
   const visible=units();
   $('filterInfo').textContent=(filterFallback?'该范围暂无课程，已显示全部 · ':'')+'当前 '+visible.length+' 个单元';
 }
+function resetScopePosition(){ unitPos=0; qPos=0; wordCur=null; sessionOrder={unitId:'',list:[]}; }
 function setFilter(k,v){
-  state.filter[k]=v; saveState();
-  unitPos=0; qPos=0; wordCur=null;
-  sessionOrder={unitId:'',list:[]};
-  renderFilters(); setMode(mode); renderDrawer();
+  if(!state.filter) state.filter={stageId:'all',gradeId:'all',bookId:'all',volumeId:'all'};
+  state.filter[k]=v;
+  if(k==='stageId'){
+    state.filter.gradeId='all'; state.filter.bookId='all'; state.filter.volumeId='all';
+  }
+  saveState(); resetScopePosition();
+  renderFilters(); renderLibrary(); setMode(mode); renderDrawer();
+}
+function setSystem(v){
+  if(v!=='54'&&v!=='63') return;
+  state.system=v; ensureGradeCatalog(state);
+  if(state.filter){
+    state.filter.stageId=state.filter.stageId||'all';
+    state.filter.gradeId='all'; state.filter.bookId='all'; state.filter.volumeId='all';
+  }
+  saveState(); resetScopePosition();
+  renderFilters(); renderLibrary(); renderManagement(); setMode(mode); renderDrawer();
+  toast('已切换为'+(v==='54'?'五四制（小学 1–5 / 初中 6–9）':'六三制（小学 1–6 / 初中 7–9）'));
 }
 function renderHeader(){
   const u=currentUnit();
@@ -3885,8 +3995,9 @@ function renderManagement(){ renderGrades(); renderBooks(); renderUnitMetaList()
 let vocabSelected=new Set(), vocabQuery='', vocabOnlyNew=false, drawerTab='learn';
 function normWord(w){ return String(w||'').trim().toLowerCase(); }
 function activeScopeIds(){
-  const f=state.filter||{};
-  return {gradeId:(f.gradeId&&f.gradeId!=='all')?f.gradeId:'g4',
+  const f=state.filter||{}, stage=f.stageId||'all';
+  const defaultGrade=stage==='junior'?(systemId()==='54'?'j6':'g7'):'g4';
+  return {gradeId:(f.gradeId&&f.gradeId!=='all')?f.gradeId:defaultGrade,
           bookId:(f.bookId&&f.bookId!=='all')?f.bookId:'b_hj',
           volumeId:(f.volumeId&&f.volumeId!=='all')?f.volumeId:''};
 }
@@ -3920,7 +4031,8 @@ function toggleVocabMastered(id){
 function visibleVocab(){
   const f=state.filter||{}, q=String(vocabQuery||'').trim().toLowerCase();
   return state.vocab.filter(v=>{
-    if(f.gradeId&&f.gradeId!=='all'&&v.gradeId!==f.gradeId) return false;
+    if(f.stageId&&f.stageId!=='all'&&stageOfGrade(v.gradeId)!==f.stageId) return false;
+    if(f.gradeId&&f.gradeId!=='all'&&!sameGrade(v.gradeId,f.gradeId)) return false;
     if(f.bookId&&f.bookId!=='all'&&v.bookId!==f.bookId) return false;
     if(vocabOnlyNew&&(v.m||0)>=3) return false;
     if(q && !(v.en.toLowerCase().includes(q)||String(v.cn).toLowerCase().includes(q)||String(v.source).toLowerCase().includes(q))) return false;
@@ -4015,7 +4127,9 @@ function createPracticeSet(name){
   const set={id:nextId('ps'),name:nm,gradeId:sc.gradeId,bookId:sc.bookId,
     words:words,sentences:sentences,created:d.getTime()};
   state.practiceSets.push(set); saveState();
-  state.filter={gradeId:sc.gradeId,bookId:sc.bookId};
+  const keepFilter=state.filter||{};
+  state.filter={stageId:keepFilter.stageId||'all',gradeId:sc.gradeId,bookId:sc.bookId,
+    volumeId:keepFilter.volumeId||'all'};
   unitPos=findUnitIndex('ps:'+set.id);
   qPos=0; wordCur=null; sessionOrder={unitId:'',list:[]};
   vocabSelected.clear();
@@ -4349,18 +4463,24 @@ function emitJSON(filename,obj){
   return text;
 }
 function renderLibrary(){
-  const gs=state.grades||[],bs=state.books||[],sc=activeScopeIds();
-  $('tbGrade').innerHTML=optionGroups(gs,g=>stageOfGrade(g.id),'','未分类','none');
-  $('tbBook').innerHTML=optionGroups(bs,stageOfBook,'','未分类','none');
-  $('tbGrade').value=gs.some(x=>x.id===sc.gradeId)?sc.gradeId:'none';
+  const bs=state.books||[],sc=activeScopeIds();
+  const stage=(state.filter&&state.filter.stageId)||'all';
+  const gs=gradeOptions(systemId());
+  renderStageControls();
+  $('tbGrade').innerHTML=optionGroups(gs,x=>stageOfGrade(x.id),
+    canonicalGradeId(sc.gradeId,systemId()),'未分类','none',x=>x.name,stage);
+  $('tbBook').innerHTML=optionGroups(bs,stageOfBook,sc.bookId,'未分类','none',null,stage);
+  $('tbGrade').value=gs.some(x=>x.id===canonicalGradeId(sc.gradeId,systemId()))?
+    canonicalGradeId(sc.gradeId,systemId()):'none';
   $('tbBook').value=bs.some(x=>x.id===sc.bookId)?sc.bookId:'none';
   const prevVolume=$('tbVolume').value;
   const inferred=inferVolume($('tbName').value);
   $('tbVolume').innerHTML='<option value="">未分册</option>'+
     VOLUMES.map(v=>'<option value="'+esc(v.id)+'">'+esc(v.name)+'</option>').join('');
   $('tbVolume').value=prevVolume||sc.volumeId||inferred||'';
-  const packs=tbPacks();
-  $('tbCount').textContent=packs.length;
+  const packs=tbPacks(), groups=groupPacks(packs,stage);
+  const shown=groups.reduce((n,g)=>n+g.books.reduce((m,b)=>m+b.packs.length,0),0);
+  $('tbCount').textContent=shown+(shown!==packs.length?' / '+packs.length:'');
   const packCard=function(p){
     const c=tbCounts(p);
     const rows=(p.units||[]).map(u=>
@@ -4385,12 +4505,14 @@ function renderLibrary(){
       '</div><div class="tb-units">'+rows+'</div></div>';
   };
   /* 学段 → 教材类别 → 册（三年级(上) / 三年级(下)）→ 单元 */
-  $('tbList').innerHTML=packs.length?groupPacks(packs).map(g=>
+  $('tbList').innerHTML=shown?groups.map(g=>
     '<div class="tb-group"><div class="tb-stage">'+esc(stageName(g.stage))+
       ' <span class="count-pill">'+g.books.reduce((n,b)=>n+b.packs.length,0)+' 册</span></div>'+
       g.books.map(b=>'<div class="tb-bookgroup"><div class="tb-bookname">'+esc(b.name)+'</div>'+
         b.packs.map(packCard).join('')+'</div>').join('')+'</div>'
-  ).join(''):'<div class="empty">还没有教材包。上方可以新建，下方可以粘贴 JSON 导入。</div>';
+  ).join(''):'<div class="empty">'+(packs.length
+    ?'当前学段下没有教材包，切到「全部学段」可查看其他册。'
+    :'还没有教材包。上方可以新建，下方可以粘贴 JSON 导入。')+'</div>';
   renderTbEditor();
 }
 function renderTbEditor(){
@@ -5683,6 +5805,9 @@ function bind(){
     else if(d.prizeProb!=null) guardParent('lottery',()=>updatePrizeField(d.prizeProb,'prob',v));
   });
 
+  $('systemFilter').addEventListener('change',e=>setSystem(e.target.value));
+  $('stageFilter').addEventListener('change',e=>setFilter('stageId',e.target.value));
+  $('libStage').addEventListener('change',e=>setFilter('stageId',e.target.value));
   $('gradeFilter').addEventListener('change',e=>setFilter('gradeId',e.target.value));
   $('bookFilter').addEventListener('change',e=>setFilter('bookId',e.target.value));
   $('volumeFilter').addEventListener('change',e=>setFilter('volumeId',e.target.value));

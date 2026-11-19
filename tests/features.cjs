@@ -1377,6 +1377,75 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     return o.stages.join(' / ') + ' · ' + o.labels.join('、');
   });
 
+  check('学段级联：选小学只看小学教材，选初中只看初中教材', () => {
+    const o = JSON.parse(run(`(function(){
+      var oldTexts=state.textbooks.slice(), oldBooks=state.books.slice(), oldFilter=JSON.parse(JSON.stringify(state.filter||{}));
+      state.books=oldBooks.concat([{id:'bjtest',name:'人教版初中英语（2024修订版）'}]);
+      state.textbooks=[
+        {id:'c1',name:'人教版 PEP 一年级上册',gradeId:'g1',bookId:'b_pep',volume:'upper',units:[]},
+        {id:'c2',name:'人教版 PEP 一年级下册',gradeId:'g1',bookId:'b_pep',volume:'lower',units:[]},
+        {id:'c3',name:'人教版 PEP 六年级上册',gradeId:'g6',bookId:'b_pep',volume:'upper',units:[]},
+        {id:'c4',name:'人教版初中英语 七年级上册',gradeId:'g7',bookId:'bjtest',volume:'upper',units:[]}
+      ];
+      function snap(){
+        renderLibrary(); renderFilters();
+        return {html:document.getElementById('tbList').innerHTML,
+          grades:document.getElementById('gradeFilter').innerHTML,
+          count:document.getElementById('tbCount').textContent};
+      }
+      state.filter.stageId='all'; setFilter('stageId','primary'); var primary=snap();
+      setFilter('stageId','junior'); var junior=snap();
+      state.textbooks=oldTexts; state.books=oldBooks; state.filter=oldFilter;
+      renderLibrary(); renderFilters();
+      return JSON.stringify({primary:primary,junior:junior});
+    })()`));
+    assert(o.primary.html.indexOf('一年级(上)')>=0 && o.primary.html.indexOf('一年级(下)')>=0,
+      '小学未显示一年级上下册: '+JSON.stringify(o.primary));
+    assert(o.primary.html.indexOf('七年级(上)')<0 && o.primary.grades.indexOf('<optgroup label="初中">')<0,
+      '小学视图混入初中册或年级');
+    assert(o.primary.count === '3 / 4', '小学计数未显示当前/总数: '+o.primary.count);
+    assert(o.junior.html.indexOf('七年级(上)')>=0 && o.junior.html.indexOf('一年级')<0,
+      '初中视图未只显示初中教材: '+JSON.stringify(o.junior));
+    assert(o.junior.grades.indexOf('<optgroup label="小学">')<0, '初中视图混入小学年级');
+    assert(o.junior.count === '1 / 4', '初中计数未显示当前/总数: '+o.junior.count);
+    return '小学 3/4 · 初中 1/4 · 年级下拉同步收窄';
+  });
+
+  check('五四制：小学 1–5 年级、初中 6–9 年级，旧六上归其他', () => {
+    const o = JSON.parse(run(`(function(){
+      var oldSystem=state.system, oldGrades=state.grades.slice(), oldTexts=state.textbooks.slice(),
+        oldFilter=JSON.parse(JSON.stringify(state.filter||{}));
+      setSystem('54');
+      var opts=gradeOptions('54'), stages=opts.map(function(x){return stageOfGrade(x.id);});
+      var res={system:state.system, labels:opts.map(function(x){return x.name;}),
+        primary:stages.filter(function(s){return s==='primary';}).length,
+        junior:stages.filter(function(s){return s==='junior';}).length,
+        g6:stageOfGrade('g6'), j6:stageOfGrade('j6'), j6Label:packLabel({gradeId:'j6',volume:'upper'})};
+      state.textbooks=[
+        {id:'p5',name:'人教版 PEP 五年级下册',gradeId:'g5',bookId:'b_pep',volume:'lower',units:[]},
+        {id:'old6',name:'人教版 PEP 六年级上册',gradeId:'g6',bookId:'b_pep',volume:'upper',units:[]},
+        {id:'j6a',name:'五四制人教版 六年级上册',gradeId:'j6',bookId:'b_pep',volume:'upper',units:[]}
+      ];
+      state.filter.stageId='junior'; renderLibrary(); renderFilters();
+      res.juniorHtml=document.getElementById('tbList').innerHTML;
+      state.filter.stageId='primary'; renderLibrary();
+      res.primaryHtml=document.getElementById('tbList').innerHTML;
+      state.system=oldSystem; state.grades=oldGrades; state.textbooks=oldTexts; state.filter=oldFilter;
+      renderLibrary(); renderFilters();
+      return JSON.stringify(res);
+    })()`));
+    assert(o.system === '54' && o.primary === 5 && o.junior === 4,
+      '五四制年级范围错误: '+JSON.stringify(o));
+    assert(o.labels[5] === '六年级' && o.labels[8] === '九年级', '六年级/九年级显示名错误: '+JSON.stringify(o.labels));
+    assert(o.g6 === 'other' && o.j6 === 'junior' && o.j6Label === '六年级(上)',
+      '五四制六年级归类或册名错误: '+JSON.stringify(o));
+    assert(o.juniorHtml.indexOf('六年级(上)')>=0 && o.juniorHtml.indexOf('五年级(下)')<0,
+      '初中视图未显示六年级册: '+o.juniorHtml.slice(0,300));
+    assert(o.primaryHtml.indexOf('五年级(下)')>=0 && o.primaryHtml.indexOf('六年级(上)')<0,
+      '小学视图混入六年级: '+o.primaryHtml.slice(0,300));
+    return '小学 5 年级 / 初中 6–9 四年级 · 旧六上归其他';
+  });
+
   const failed = results.filter(r => r[1] === 'FAIL');
   results.forEach(r => console.log('[' + r[1] + ']   ' + r[0] + (r[2] ? '  -> ' + r[2] : '')));
   console.log('\n合计 ' + results.length + ' 项，失败 ' + failed.length + ' 项');
