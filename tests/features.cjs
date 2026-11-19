@@ -120,6 +120,8 @@ function fireScheduled(){
   const list = scheduled.splice(0, scheduled.length);
   list.forEach(x => { try { x.fn(); } catch(_){} });
 }
+/* 抽奖有「每日次数 / 每日一次中奖」限制，跨测试需要模拟新的一天，避免相互污染 */
+function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:false,afterWin:0}"); }
 
 (async () => {
   await new Promise(r => setImmediate(r));   // 等 bootDesktop() 的异步加载结束
@@ -487,6 +489,7 @@ function fireScheduled(){
   check('抽奖：扣分、概率边界与奖项随时可改', () => {
     run(`(function(){state.plan.points=100; state.lottery={cost:10,
       prizes:[{id:'p1',name:'一等奖',prob:100}],log:[]};})()`);
+    newLotteryDay();
     const before = run('state.plan.points');
     run('drawLottery()');
     const o = JSON.parse(run('JSON.stringify({p:state.plan.points,n:state.lottery.log.length,prize:state.lottery.log[0].prize})'));
@@ -500,6 +503,7 @@ function fireScheduled(){
     assert(run('state.lottery.prizes.length') === 5, '恢复默认失败');
     run(`(function(){state.lottery.prizes[0].prob=150;const b=state.plan.points;drawLottery();
       if(state.plan.points!==b) throw new Error('概率超 100% 仍然扣分');})()`);
+    newLotteryDay();
     return '必中奖 / 实时改名称与概率 / 超 100% 拦截';
   });
 
@@ -638,6 +642,7 @@ function fireScheduled(){
     const o = JSON.parse(run(`JSON.stringify((function(){
       state.lottery.prizes=[{id:'a',name:'一等奖',prob:100}];
       state.lottery.cost=10; state.plan.points=50; state.lottery.log=[];
+      state.lottery.daily={date:today(),draws:0,won:false,afterWin:0};
       openWheel();
       const res=spinWheel();
       const out={points:state.plan.points,log:state.lottery.log.length,
@@ -660,7 +665,8 @@ function fireScheduled(){
   check('连抽两次，指针仍停在第二次结果对应的扇区', () => {
     const o = JSON.parse(run(`JSON.stringify((function(){
       state.lottery.prizes=[{id:'a',name:'A',prob:20},{id:'b',name:'B',prob:20}];
-      state.lottery.cost=1; state.plan.points=100;
+      state.lottery.cost=1; state.plan.points=100; state.lottery.dailyLimit=10;
+      state.lottery.daily={date:today(),draws:0,won:false,afterWin:0};
       wheelRotation=0; wheelSpinning=false;
       openWheel();
       const r1=spinWheel(); finishSpin(r1);
@@ -689,6 +695,7 @@ function fireScheduled(){
     // 开盒状态机：openWheel 复位 → spinWheel 进入 opening → finishSpin 进入 reveal
     const o = JSON.parse(run(`JSON.stringify((function(){
       state.lottery.prizes=[{id:'a',name:'奖',prob:100}]; state.plan.points=50;
+      state.lottery.daily={date:today(),draws:0,won:false,afterWin:0};
       openWheel(); const a=$('boxScene').className;
       const r=spinWheel(); const b=$('boxScene').className;
       finishSpin(r); const c=$('boxScene').className;
@@ -846,6 +853,8 @@ function fireScheduled(){
       wheelRotation=0; wheelSpinning=false; openWheel();
       const out=[];
       for(let i=0;i<5;i++){
+        /* 本用例只验证落点与扇区一致，每抽前复位当天状态以绕过「每天一次中奖」 */
+        state.lottery.daily={date:today(),draws:0,won:false,afterWin:0};
         const r=spinWheel(); finishSpin(r);
         const pointing=(((-wheelRotation)%360)+360)%360;
         const seg=wheelSegs.find(s=>s.index===r.index);
@@ -871,6 +880,7 @@ function fireScheduled(){
     const o = JSON.parse(run(`JSON.stringify((function(){
       state.lottery.prizes=[{id:'a',name:'特等奖',prob:100}];
       state.lottery.cost=1; state.plan.points=50;
+      state.lottery.daily={date:today(),draws:0,won:false,afterWin:0};
       wheelRotation=0; wheelSpinning=false; openWheel();
       const r=spinWheel(); finishSpin(r);
       const out={prize:r.prize,color:r.color,
@@ -891,6 +901,7 @@ function fireScheduled(){
     const o = JSON.parse(run(`JSON.stringify((function(){
       state.lottery.prizes=[{id:'a',name:'唯一奖',prob:0}];
       state.lottery.cost=1; state.plan.points=50;
+      state.lottery.daily={date:today(),draws:0,won:false,afterWin:0};
       wheelRotation=0; wheelSpinning=false; openWheel();
       const r=spinWheel(); finishSpin(r);
       const seg=wheelSegs.find(s=>s.index===r.index);
@@ -917,6 +928,7 @@ function fireScheduled(){
     const o = JSON.parse(run(`JSON.stringify((function(){
       state.lottery.prizes=[{id:'a',name:'免写一次作业',prob:100}];
       state.lottery.cost=1; state.plan.points=50;
+      state.lottery.daily={date:today(),draws:0,won:false,afterWin:0};
       openWheel();
       const before=$('boxPrizeName').textContent;
       const r=spinWheel();
@@ -936,16 +948,30 @@ function fireScheduled(){
     return '开盒即写入奖品 · 揭晓只留文字 · 重开清空';
   });
 
-  check('打字游戏每局固定兑换 1 积分（与星星数无关）', () => {
-    assert(html.indexOf('var pts = 1;') >= 0, '未改为固定 1 分');
+  check('打字得分可配置（默认每局 1 分、可改可归零，与星级无关）', () => {
+    assert(html.indexOf('typingPointsInput') >= 0, '缺打字积分配置项');
+    assert(html.indexOf('state.lottery.typingPoints') >= 0, '未读取打字积分配置');
     const o = JSON.parse(run(`JSON.stringify((function(){
+      state.lottery.typingPoints=1;
       const p0=Number(state.plan.points)||0, n0=state.plan.ledger.length;
       window.TypingDuck.onFinish({mode:'word',stars:3,score:999});
       const p1=Number(state.plan.points)||0;
       window.TypingDuck.onFinish({mode:'abc',stars:1,score:10});
-      return {d1:p1-p0,d2:(Number(state.plan.points)||0)-p1,n:state.plan.ledger.length-n0};})())`));
-    assert(o.d1 === 1 && o.d2 === 1 && o.n === 2, '兑换积分不对: ' + JSON.stringify(o));
-    return '三星 / 一星均 +1 · 各记 1 条流水';
+      const d1=p1-p0, d2=(Number(state.plan.points)||0)-p1;
+      state.lottery.typingPoints=5;
+      const p2=Number(state.plan.points)||0;
+      window.TypingDuck.onFinish({mode:'word',stars:1,score:1});
+      const d3=(Number(state.plan.points)||0)-p2;
+      state.lottery.typingPoints=0;
+      const p3=Number(state.plan.points)||0;
+      window.TypingDuck.onFinish({mode:'word',stars:5,score:500});
+      const d4=(Number(state.plan.points)||0)-p3;
+      state.lottery.typingPoints=1;
+      return {d1:d1,d2:d2,d3:d3,d4:d4,n:state.plan.ledger.length-n0};})())`));
+    assert(o.d1 === 1 && o.d2 === 1, '默认每局应 +1: ' + JSON.stringify(o));
+    assert(o.d3 === 5, '改为 5 分后未生效: ' + JSON.stringify(o));
+    assert(o.d4 === 0, '设为 0 仍加了分: ' + JSON.stringify(o));
+    return '默认 +1 / 改 5 分 +5 / 设 0 不计分 · 与星级无关';
   });
 
   check('复习回车：提交后再回车直接下一题，听写同理', () => {
@@ -1136,6 +1162,69 @@ function fireScheduled(){
     assert(o.srs >= 1 && o.lastRight === 1, '错题未进入复习计划/统计不对: ' + JSON.stringify(o));
     assert(o.points >= 0, '积分未结算: ' + JSON.stringify(o));
     return o.total + ' 题 · 家长锁生效 · 判对 1 题记入历史/复习';
+  });
+
+  check('抽奖每日次数上限：当天抽满后不再扣分也不出结果', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      state.lottery.prizes=[{id:'a',name:'奖',prob:100}];
+      state.lottery.cost=1; state.plan.points=100; state.lottery.log=[];
+      state.lottery.dailyLimit=3;
+      state.lottery.daily={date:today(),draws:0,won:false,afterWin:0};
+      const p0=state.plan.points, rs=[];
+      for(let i=0;i<4;i++){ const r=drawLottery(); rs.push(r?r.prize:null); }
+      return {spent:p0-state.plan.points,draws:state.lottery.daily.draws,
+        rs:rs,log:state.lottery.log.length,left:lotteryLeft(),
+        over:drawLottery()};})())`));
+    /* 基础 1 分，中奖后再抽翻倍为 2、4，共扣 7；第 4 次超限被拦截 */
+    assert(o.spent === 7 && o.draws === 3 && o.log === 3,
+      '每日上限未生效: ' + JSON.stringify(o));
+    assert(o.rs[3] === null && o.over === null, '超限仍能抽奖: ' + JSON.stringify(o));
+    newLotteryDay(); run('state.plan.points=100');
+    return '每天 3 次 · 第 4 次返回 null 且不扣分';
+  });
+
+  check('抽奖每天只中奖一次，中奖后必为「谢谢参与」', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      state.lottery.prizes=[{id:'a',name:'免写一次',prob:100}];
+      state.lottery.cost=1; state.plan.points=100; state.lottery.dailyLimit=5;
+      state.lottery.daily={date:today(),draws:0,won:false,afterWin:0};
+      const r1=drawLottery();
+      const won1=state.lottery.daily.won;
+      const r2=drawLottery();
+      const r3=drawLottery();
+      return {p1:r1.prize,i1:r1.index,won1:won1,
+        p2:r2.prize,i2:r2.index,p3:r3.prize,i3:r3.index};})())`));
+    assert(o.p1 === '免写一次' && o.i1 === 0 && o.won1 === true,
+      '首次未中奖: ' + JSON.stringify(o));
+    assert(o.p2 === '谢谢参与' && o.i2 === -1 && o.p3 === '谢谢参与' && o.i3 === -1,
+      '中奖后仍能中奖: ' + JSON.stringify(o));
+    newLotteryDay(); run('state.plan.points=100');
+    return '首抽中奖 · 之后固定「谢谢参与」';
+  });
+
+  check('中奖后再抽消耗逐次翻倍，且可配置上限与得分转换', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      state.lottery.prizes=[{id:'a',name:'奖',prob:100}];
+      state.lottery.cost=2; state.plan.points=1000; state.lottery.dailyLimit=6;
+      state.lottery.daily={date:today(),draws:0,won:false,afterWin:0};
+      const c0=lotteryCostNow();
+      const r1=drawLottery(); const c1=lotteryCostNow();
+      const p1=state.plan.points; const r2=drawLottery(); const spent2=p1-state.plan.points;
+      const c2=lotteryCostNow();
+      const p2=state.plan.points; const r3=drawLottery(); const spent3=p2-state.plan.points;
+      /* 配置读写 */
+      const cfg=normalizeState({lottery:{cost:10,dailyLimit:99,typingPoints:50,
+        daily:{date:today(),draws:-5,won:true,afterWin:99}}});
+      return {c0:c0,c1:c1,c2:c2,spent2:spent2,spent3:spent3,
+        limit:cfg.lottery.dailyLimit,tp:cfg.lottery.typingPoints,
+        draws:cfg.lottery.daily.draws,after:cfg.lottery.daily.afterWin};})())`));
+    assert(o.c0 === 2, '基础消耗不对: ' + JSON.stringify(o));
+    assert(o.c1 === 4 && o.spent2 === 4, '中奖后首次未翻倍为 4: ' + JSON.stringify(o));
+    assert(o.c2 === 8 && o.spent3 === 8, '第 3 次未翻倍为 8: ' + JSON.stringify(o));
+    assert(o.limit === 10 && o.tp === 50, '配置未生效或钳制失败: ' + JSON.stringify(o));
+    assert(o.draws === 0 && o.after === 99, '计数钳制不对: ' + JSON.stringify(o));
+    newLotteryDay(); run('state.plan.points=100');
+    return '2→4→8 翻倍 · 上限钳制 10 / 打字分 50';
   });
 
   check('全库导出含家长密码哈希、不含明文', () => {

@@ -2024,7 +2024,7 @@ body.td-typing #typingView { height: 100%; }
       <div class="panel">
         <h3>积分抽奖 · 惊喜盲盒</h3>
         <div class="plan-head"><div><b id="lotteryPoints">0</b> <span>分</span></div><span class="badge" id="lotteryCostTag">每次 10 分</span></div>
-        <div class="panel-note">抽奖按钮已移到页面右上角（积分旁边），点「🎁 抽盲盒」即可开盒。每次消耗 <b id="lotteryCostText">10</b> 分，按奖项概率揭晓结果；奖项概率之和需 ≤ 100%，剩余部分为「谢谢参与」。</div>
+        <div class="panel-note">点右上角「🎁 抽盲盒」即可开盒，基础消耗 <b id="lotteryCostText">10</b> 分。<b>每天最多抽 <b id="lotteryLimitText">3</b> 次，且每天只能中奖一次</b>；中奖后再抽不会再中奖，消耗还会逐次翻倍（第 2 次 2 倍、第 3 次 4 倍……）。今日已抽 <b id="lotteryDailyText">0/3</b> 次。奖项概率之和需 ≤ 100%，剩余为「谢谢参与」。</div>
       </div>
       <div class="panel">
         <h3>奖项设置 <span class="lock-badge" id="prizeLockBadge">家长锁定</span></h3>
@@ -2035,8 +2035,14 @@ body.td-typing #typingView { height: 100%; }
           <div class="btn-row tight" style="justify-content:center"><button class="mini-btn primary sm" id="prizeUnlock">家长解锁</button></div>
         </div>
         <div id="prizeEditor" hidden>
-          <div class="parent-label">每次抽奖消耗积分</div>
+          <div class="parent-label">每次抽奖基础消耗积分</div>
           <div class="field-row"><input class="field" id="lotteryCost" type="number" min="1" max="999" value="10" placeholder="每次消耗积分"></div>
+          <div class="parent-label">每天最多抽奖次数（1–10）</div>
+          <div class="field-row"><input class="field" id="lotteryDailyLimit" type="number" min="1" max="10" value="3" placeholder="每天最多抽几次"></div>
+          <div class="parent-label">打字练习每局兑换积分（0–99）</div>
+          <div class="field-row"><input class="field" id="typingPointsInput" type="number" min="0" max="99" value="1" placeholder="每局打字得几分"></div>
+          <div class="panel-note" style="margin:2px 0 8px">打字得分转换：设为 0 则打字练习不计积分；默认每局 1 分，与该局星级无关。</div>
+          <div class="parent-label">奖项与概率</div>
           <div id="prizeList"></div>
           <div class="btn-row tight" style="margin-top:10px">
             <button class="mini-btn sm" id="prizeAdd">添加奖项</button>
@@ -2200,7 +2206,7 @@ body.td-typing #typingView { height: 100%; }
 <div class="wheel-mask" id="wheelMask" hidden>
   <div class="wheel-dialog" role="dialog" aria-modal="true">
     <div class="dialog-head"><h3>惊喜盲盒</h3><button class="dialog-close" id="btnWheelClose" aria-label="关闭">&times;</button></div>
-    <div class="wheel-meta"><span>当前积分 <b id="wheelPoints">0</b></span><span>每次消耗 <b id="wheelCost">10</b> 分</span></div>
+    <div class="wheel-meta"><span>当前积分 <b id="wheelPoints">0</b></span><span>本次消耗 <b id="wheelCost">10</b> 分</span><span>今日 <b id="wheelDaily">0/3</b> 次</span></div>
     <div class="wheel-stage">
       <!-- 盲盒视觉主体 -->
       <div class="box-scene" id="boxScene">
@@ -2388,7 +2394,12 @@ const DEFAULT_PRIZES = [
 ];
 const DEFAULT_PLAN = {enabled:false,type:'units',target:3,reward:20,penalty:10,perCorrect:1,
   points:0,ledger:[],results:{},since:'',lastEval:''};
-const DEFAULT_LOTTERY = {cost:10,prizes:clone(DEFAULT_PRIZES),log:[]};
+/* lottery.typingPoints：打字练习每局兑换的积分；lottery.dailyLimit：每天最多抽奖次数；
+   lottery.daily：按天滚动的抽奖记录（draws 当天已抽次数、won 当天是否已中奖、
+   afterWin 中奖后又抽了几次，用来按 2 的幂递增消耗）。 */
+const DEFAULT_LOTTERY = {cost:10,typingPoints:1,dailyLimit:3,
+  prizes:clone(DEFAULT_PRIZES),log:[],daily:{date:'',draws:0,won:false,afterWin:0}};
+const LOTTERY_COST_CAP = 99999;   // 翻倍消耗的硬上限，避免 2^n 溢出
 const LEDGER_LIMIT = 200, LOTTERY_LOG_LIMIT = 100, SESSION_MAX_AGE = 7*24*3600*1000;
 
 /* ---------------- 家长密码 ----------------
@@ -2558,6 +2569,16 @@ function normalizeState(s){
   });
   if(!Array.isArray(out.lottery.log)) out.lottery.log=[];
   if(out.lottery.log.length>LOTTERY_LOG_LIMIT) out.lottery.log=out.lottery.log.slice(-LOTTERY_LOG_LIMIT);
+  /* 打字得分转换：允许 0（纯娱乐不积分）～ 99；默认 1。 */
+  out.lottery.typingPoints=Math.max(0,Math.min(99,Math.round(Number(out.lottery.typingPoints)||0)));
+  /* 每天抽奖上限：1～10 次，默认 3。 */
+  out.lottery.dailyLimit=Math.max(1,Math.min(10,Math.round(Number(out.lottery.dailyLimit)||3)));
+  /* 当天抽奖计数：跨天自动清零；字段缺失/类型错误都回退到干净计数。 */
+  const dl=out.lottery.daily;
+  out.lottery.daily=(dl && typeof dl==='object' && !Array.isArray(dl) && typeof dl.date==='string')?{
+    date:dl.date, draws:Math.max(0,Math.round(Number(dl.draws)||0)),
+    won:!!dl.won, afterWin:Math.max(0,Math.round(Number(dl.afterWin)||0))
+  }:clone(DEFAULT_LOTTERY.daily);
   if(out.session && typeof out.session!=='object') out.session=null;
   out.parent=Object.assign({},DEFAULT_PARENT,
     (s.parent&&typeof s.parent==='object')?s.parent:{});
@@ -4896,6 +4917,32 @@ let wheelSegs=[], wheelRotation=0, wheelSpinning=false, wheelInvalid=false, whee
 /* 最近一次中奖的扇区下标，用来在图例里高亮命中行（-99 表示无） */
 let wheelHit=-99;
 
+/* ---- 抽奖的「按天限制」状态 ----
+   每天最多抽 dailyLimit 次；当天最多中奖一次；中奖后再抽，消耗按 2 的幂
+   逐次翻倍（第 1 次再抽 2 倍、第 2 次 4 倍……）直到硬上限。换天自动清零。 */
+function ensureLotteryDaily(){
+  const L=state.lottery;
+  if(!L.daily || typeof L.daily!=='object' || Array.isArray(L.daily))
+    L.daily=clone(DEFAULT_LOTTERY.daily);
+  const d=L.daily, tk=today();
+  if(d.date!==tk){ d.date=tk; d.draws=0; d.won=false; d.afterWin=0; }
+  d.draws=Math.max(0,Math.round(Number(d.draws)||0));
+  d.afterWin=Math.max(0,Math.round(Number(d.afterWin)||0));
+  d.won=!!d.won;
+  return d;
+}
+function lotteryDailyLimit(){
+  return Math.max(1,Math.min(10,Math.round(Number(state.lottery.dailyLimit)||3)));
+}
+function lotteryLeft(){ return Math.max(0,lotteryDailyLimit()-ensureLotteryDaily().draws); }
+/* 本次抽奖实际消耗：未中奖时为基础分；已中奖后按 2^(afterWin+1) 翻倍 */
+function lotteryCostNow(){
+  const d=ensureLotteryDaily();
+  const base=Math.max(1,Number(state.lottery.cost)||10);
+  const mult=d.won?Math.pow(2,d.afterWin+1):1;
+  return Math.min(LOTTERY_COST_CAP,Math.round(base*mult));
+}
+
 function prizeTotal(){
   return (Array.isArray(state.lottery.prizes)?state.lottery.prizes:[])
     .reduce((a,p)=>a+(Number(p.prob)||0),0);
@@ -4982,15 +5029,23 @@ function resetWheelAngle(){
 }
 function syncWheelButtons(){
   const points=Number(state.plan.points)||0;
-  const cost=Math.max(1,Number(state.lottery.cost)||10);
-  const disabled=wheelSpinning||wheelInvalid||points<cost;
+  const d=ensureLotteryDaily();
+  const cost=lotteryCostNow();
+  const noLeft=d.draws>=lotteryDailyLimit();
+  const disabled=wheelSpinning||wheelInvalid||points<cost||noLeft;
   $('btnSpin').disabled=disabled;
   $('wheelHub').classList.toggle('off',disabled);
-  $('wheelWarn').classList.toggle('show',wheelInvalid);
+  $('wheelWarn').classList.toggle('show',wheelInvalid||noLeft||d.won);
   $('wheelWarn').textContent=wheelInvalid?
-    '奖项概率合计 '+wheelTotal+'%，超过 100%。请家长解锁后在「抽奖」页调整，暂时不能抽奖。':'';
+    '奖项概率合计 '+wheelTotal+'%，超过 100%。请家长解锁后在「抽奖」页调整，暂时不能抽奖。':
+    noLeft? '今天已抽 '+d.draws+' 次，达到每日上限（'+lotteryDailyLimit()+' 次），明天再来吧。':
+    d.won? '今天已经中过奖啦！再抽不会再中奖，且消耗翻倍为 '+cost+' 分。':
+    cost>Math.max(1,Number(state.lottery.cost)||10)? '本次消耗已翻倍为 '+cost+' 分。':'';
   $('wheelPoints').textContent=points;
   $('wheelCost').textContent=cost;
+  if($('wheelDaily')) $('wheelDaily').textContent=d.draws+'/'+lotteryDailyLimit();
+  if($('btnSpin')) $('btnSpin').textContent=noLeft?'今日已抽满':
+    (d.won?'再抽一次（翻倍）':'开始抽奖');
 }
 function openWheel(){
   if(wheelSpinning) return;
@@ -5000,7 +5055,6 @@ function openWheel(){
   $('wheelResult').textContent='点「开始抽奖」或点盒子，揭晓惊喜';
   $('wheelResult').className='wheel-result';
   $('wheelPrize').classList.remove('show');
-  $('btnSpin').textContent='开始抽奖';
   /* 盲盒每次打开都从盖好的初始态开始 */
   const scene=$('boxScene'); if(scene) scene.className='box-scene';
   if($('boxPrizeName')) $('boxPrizeName').textContent='';
@@ -5059,7 +5113,6 @@ function finishSpin(res){
      与标签，不触碰 transform，圆盘仍停在结果角度。 */
   wheelHit=res.index; renderWheel();
   syncWheelButtons();
-  $('btnSpin').textContent='再抽一次';
   $('wheelResult').textContent=(res.index>=0?'恭喜抽中：':'本次结果：')+res.prize;
   $('wheelResult').className='wheel-result win';
   $('wheelPrizeTag').textContent=res.index>=0?'恭喜抽中':'本次结果';
@@ -5077,10 +5130,15 @@ function finishSpin(res){
 function renderLottery(){
   const L=state.lottery, points=Number(state.plan.points)||0;
   const cost=Math.max(1,Number(L.cost)||10);
+  const d=ensureLotteryDaily();
   $('lotteryPoints').textContent=points;
   $('lotteryCost').value=cost;
   $('lotteryCostTag').textContent='每次 '+cost+' 分';
   $('lotteryCostText').textContent=cost;
+  if($('lotteryDailyLimit')) $('lotteryDailyLimit').value=lotteryDailyLimit();
+  if($('typingPointsInput')) $('typingPointsInput').value=Number(L.typingPoints)||0;
+  if($('lotteryLimitText')) $('lotteryLimitText').textContent=lotteryDailyLimit();
+  if($('lotteryDailyText')) $('lotteryDailyText').textContent=d.draws+'/'+lotteryDailyLimit();
   /* 未解锁时只展示只读奖项，编辑器整体隐藏；所有写操作再经 guardParent 兜底 */
   const locked=!parentUnlocked;
   $('prizeLocked').hidden=!locked;
@@ -5149,31 +5207,50 @@ function resetPrizes(){
   state.lottery.prizes=clone(DEFAULT_PRIZES); saveState(); lotteryChanged(); toast('已恢复默认奖项');
 }
 function drawLottery(){
-  const L=state.lottery, cost=Math.max(1,Number(L.cost)||10);
-  L.cost=cost;
+  const L=state.lottery, d=ensureLotteryDaily();
+  const cost=lotteryCostNow();
+  L.cost=Math.max(1,Number(L.cost)||10);   // 基础消耗保持家长设置值，翻倍只作用于本次
+  /* 次数限制：当天抽满 dailyLimit 次后不再扣积分、不再出结果。 */
+  if(d.draws>=lotteryDailyLimit()){
+    toast('今天已抽 '+d.draws+' 次，每日最多 '+lotteryDailyLimit()+' 次，明天再来吧','bad');
+    return null;
+  }
   const points=Number(state.plan.points)||0;
-  if(points<cost){ toast('积分不足，还差 '+(cost-points)+' 分','bad'); return null; }
+  if(points<cost){ toast('积分不足，本次需要 '+cost+' 分（还差 '+(cost-points)+' 分）','bad'); return null; }
   /* 抽奖与盘面共用 wheelSegments()：结果的名称、下标、颜色都来自指针
      真正能停到的那个扇区，避免两套概率逻辑各自漂移后「奖项对不上分区」。 */
   const segs=wheelSegments();
   if(wheelTotal>100){ toast('奖项概率合计超过 100%，请先调整','bad'); return null; }
-  const total=segs.reduce((a,s)=>a+s.prob,0)||100;
-  const r=Math.random()*total;
-  let acc=0, hit=segs[segs.length-1]||
-    {name:'谢谢参与',index:-1,color:WHEEL_THANKS};
-  for(let k=0;k<segs.length;k++){
-    acc+=segs[k].prob;
-    if(r<acc){ hit=segs[k]; break; }
+  let hit;
+  if(d.won){
+    /* 当天已经中过奖：本次必为「谢谢参与」，不再抽中真实奖项。 */
+    hit=segs.find(s=>s.index===-1)||{name:'谢谢参与',index:-1,color:WHEEL_THANKS,prob:0};
+  }else{
+    const total=segs.reduce((a,s)=>a+s.prob,0)||100;
+    const r=Math.random()*total;
+    let acc=0; hit=segs[segs.length-1]||
+      {name:'谢谢参与',index:-1,color:WHEEL_THANKS};
+    for(let k=0;k<segs.length;k++){
+      acc+=segs[k].prob;
+      if(r<acc){ hit=segs[k]; break; }
+    }
   }
   addPoints(-cost,'积分抽奖');
   const name=hit.name;
   if(!Array.isArray(L.log)) L.log=[];
   L.log.push({t:Date.now(),cost:cost,prize:name});
   if(L.log.length>LOTTERY_LOG_LIMIT) L.log.splice(0,L.log.length-LOTTERY_LOG_LIMIT);
+  /* 更新当天计数：中奖后 afterWin 归零，之后再抽逐次 +1 供翻倍使用。 */
+  const wasWon=!!d.won;
+  const realWin=hit.index>=0;
+  d.draws++;
+  if(realWin && !wasWon){ d.won=true; d.afterWin=0; }
+  else if(wasWon){ d.afterWin++; }
   saveState(true); renderDrawer();
   /* 结果同步返回给转盘（也方便回归测试）；界面不再弹旧的结果对话框 */
   return {prize:name,index:hit.index,color:hit.color,cost:cost,
-    points:Number(state.plan.points)||0};
+    points:Number(state.plan.points)||0,left:lotteryLeft(),
+    realWin:realWin&&!wasWon, doubled:wasWon};
 }
 
 /* ---------------- 单元完成后的去向 ---------------- */
@@ -5480,6 +5557,20 @@ function bind(){
     guardParent('lottery',()=>{
       state.lottery.cost=Math.max(1,Math.min(999,Number(v)||10));
       saveState(); lotteryChanged();
+    });
+  });
+  $('lotteryDailyLimit').addEventListener('change',e=>{
+    const v=e.target.value;
+    guardParent('lottery',()=>{
+      state.lottery.dailyLimit=Math.max(1,Math.min(10,Math.round(Number(v)||3)));
+      saveState(); lotteryChanged(); toast('每天抽奖次数已更新','ok');
+    });
+  });
+  $('typingPointsInput').addEventListener('change',e=>{
+    const v=e.target.value;
+    guardParent('lottery',()=>{
+      state.lottery.typingPoints=Math.max(0,Math.min(99,Math.round(Number(v)||0)));
+      saveState(); lotteryChanged(); toast('打字积分兑换已更新','ok');
     });
   });
   $('prizeAdd').addEventListener('click',()=>guardParent('lottery',addPrize));
@@ -7640,11 +7731,14 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
 (function(){
   var MODE_CN = { whack:'打地鼠', abc:'字母连打', word:'单词练习', pinyin:'拼音练习', weak:'错键专项', weakword:'错词重点练', listen:'听音打字', pk:'亲子PK', learn:'认识字母' };
   window.TypingDuck.onFinish = function(r){
-    /* 每局固定 1 分，与星星数脱钩 */
-    var pts = 1;
-    addPoints(pts, '打字练习·' + (MODE_CN[r.mode] || '认识字母'));
+    /* 每局积分由家长在「抽奖」设置中配置（state.lottery.typingPoints，默认 1），
+       与星星数脱钩；设为 0 表示打字练习不计积分。 */
+    var pts = Math.max(0, Math.min(99, Number(state.lottery.typingPoints) || 0));
+    if (pts > 0) addPoints(pts, '打字练习·' + (MODE_CN[r.mode] || '认识字母'));
     var el = document.getElementById('td-resultDetail');
-    if (el) { el.innerHTML += '<br>✨ 积分 <b>+' + pts + '</b> 已存入 SpellLab'; }
+    if (el) { el.innerHTML += (pts > 0
+      ? '<br>✨ 积分 <b>+' + pts + '</b> 已存入 SpellLab'
+      : '<br>✨ 本局不计积分（家长已设为 0）'); }
   };
   window.TypingDuck.isActive = function(){
     return (typeof mode !== 'undefined' && mode === 'typing');
