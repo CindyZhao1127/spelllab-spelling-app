@@ -1446,6 +1446,105 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     return '小学 5 年级 / 初中 6–9 四年级 · 旧六上归其他';
   });
 
+  /* ---------------- 自然拼读 / 奖品兑换 ---------------- */
+  check('自然拼读：内置课程五组齐全，字数与状态归一化', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      const c=phonicsCount(), ids=PHONICS_GROUPS.map(g=>g.id);
+      const n=normalizeState({phonics:{done:{'lt-a':{best:9,right:'2'}},correct:'7',attempted:'10'}});
+      return {groups:ids,lessons:c.lessons,words:c.words,done:n.phonics.done['lt-a'],
+        correct:n.phonics.correct,attempted:n.phonics.attempted,
+        hasTab:/id="tabPhonics"/.test(document.getElementById('drawerTabs').innerHTML||'')};})())`));
+    assert(o.groups.join(',') === 'letter,short,long,blend,family', '课程分组不对: '+o.groups);
+    assert(o.lessons >= 50 && o.words >= 200, '课程/词条数偏少: '+JSON.stringify(o));
+    assert(o.done && o.done.best === 3 && o.done.right === 2, '进度归一化失败');
+    assert(o.correct === 7 && o.attempted === 10, '计数归一化失败');
+    assert(/id="tabPhonics"/.test(html) && /id="pagePhonics"/.test(html), '缺拼读标签/页面');
+    return o.groups.join('/')+' · '+o.lessons+' 课 '+o.words+' 词';
+  });
+
+  check('自然拼读：两种练法、答对计分、答错看答案，进度落盘', () => {
+    run(`(function(){
+      state.phonics={done:{},correct:0,attempted:0};
+      phStart('fm-at');
+      $('phMode').value='listen';
+    })()`);
+    const first = run('phLast && phLast[0]');
+    assert(first, '未进入第一课');
+    /* 听音拼词：答对 */
+    run(`(function(){ $('phInput').value=phLast[0].toUpperCase(); phCheck(); })()`);
+    const ok = JSON.parse(run(`JSON.stringify({fb:$('phFeedback').textContent,cls:$('phFeedback').className,
+      right:state.phonics.correct,att:state.phonics.attempted,hist:state.history.length,
+      done:$('phInput').disabled})`));
+    assert(ok.right === 1 && ok.att === 1 && ok.cls.indexOf('ok') >= 0, '答对未计分: '+JSON.stringify(ok));
+    assert(ok.hist >= 1 && ok.done, '答题未记历史或未锁定输入');
+    /* 看词拼读：答错后显示答案 */
+    run(`(function(){ phAdvance(); $('phMode').value='read'; phShow();
+      $('phInput').value='zzzzwrong'; phCheck(); })()`);
+    const bad = JSON.parse(run(`JSON.stringify({fb:$('phFeedback').textContent,
+      cls:$('phFeedback').className,hint:$('phHint').textContent})`));
+    assert(bad.cls.indexOf('bad') >= 0 && bad.fb.indexOf('正确答案') >= 0, '答错未显示答案: '+JSON.stringify(bad));
+    assert(bad.hint.indexOf('音素') >= 0, '看词拼读缺音素提示');
+    run('phBack()');
+    return '听音拼词对 1 题 / 看词拼读错 1 题 · 历史与进度已记录';
+  });
+
+  check('奖品自动兑换：抽到不扣分、即时已兑换；普通奖待家长兑换', () => {
+    /* 自动兑换奖：必中且返还消耗 */
+    run(`(function(){ state.plan.points=100;
+      state.lottery={cost:10,typingPoints:1,dailyLimit:10,
+        prizes:[{id:'auto',name:'再抽一次',prob:100,autoRedeem:true}],log:[]};
+    })()`);
+    newLotteryDay();
+    const autoRes = run('JSON.stringify(drawLottery())');
+    const auto = JSON.parse(autoRes);
+    const ao = JSON.parse(run(`JSON.stringify({p:state.plan.points,log:state.lottery.log[0]})`));
+    ao.cost = auto.cost; ao.status = auto.status;
+    assert(ao.p === 100 && ao.cost === 0 && ao.status === 'auto', '自动兑换仍扣分: '+JSON.stringify(ao));
+    assert(ao.log.autoRedeem === true && ao.log.redeemed === true && ao.log.prizeId === 'auto',
+      '自动兑换日志缺状态: '+JSON.stringify(ao.log));
+    /* 普通奖：扣分 + 待兑换 */
+    run(`(function(){ state.plan.points=100;
+      state.lottery.prizes=[{id:'gift',name:'一张小贴纸',prob:100,autoRedeem:false}];
+      state.lottery.log=[]; })()`);
+    newLotteryDay();
+    run('drawLottery()');
+    const go = JSON.parse(run(`JSON.stringify({p:state.plan.points,log:state.lottery.log[0]})`));
+    assert(go.p === 90 && go.log.autoRedeem === false && go.log.redeemed === false && go.log.cost === 10,
+      '普通奖状态不对: '+JSON.stringify(go));
+    /* 家长确认兑换：未解锁触发家长中心，解锁后可标记 */
+    const t = go.log.t;
+    const before = run(`(function(){ parentUnlocked=false; redeemPrize(${t}); return state.lottery.log[0].redeemed; })()`);
+    assert(before === false, '未解锁就被兑换了');
+    const after = run(`(function(){ parentUnlocked=true; const r=redeemPrize(${t});
+      parentUnlocked=false; return {r:r, redeemed:state.lottery.log[0].redeemed}; })()`);
+    assert(after.r === true && after.redeemed === true, '家长兑换失败: '+JSON.stringify(after));
+    /* 获得奖品列表显示待兑换 / 已兑换 / 自动兑换 */
+    run(`(function(){ state.lottery.log=[state.lottery.log[0],
+      {t:Date.now()+1,cost:10,prize:'再抽一次',prizeId:'a2',autoRedeem:true,redeemed:true}];
+      renderLottery(); })()`);
+    const list = run("$('prizeWonList').innerHTML");
+    assert(list.indexOf('已兑换') >= 0 && list.indexOf('自动兑换') >= 0, '奖品列表缺兑换状态: '+list.slice(0,300));
+    assert(run("$('prizePending').textContent").indexOf('0 待兑换') >= 0, '待兑换计数不对');
+    run('state.lottery=clone(DEFAULT_LOTTERY); state.plan.points=0;');
+    return '自动兑换净扣 0 / 普通奖扣 10 且待兑换 / 家长解锁后确认';
+  });
+
+  check('新增奖项默认关闭自动兑换，家长解锁后才可勾选', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      parentUnlocked=true; state.lottery.prizes=clone(DEFAULT_PRIZES);
+      addPrize(); const fresh=state.lottery.prizes[state.lottery.prizes.length-1];
+      const wasDefault=fresh.autoRedeem;
+      updatePrizeField(fresh.id,'autoRedeem',true);
+      const on=state.lottery.prizes.find(p=>p.id===fresh.id).autoRedeem;
+      renderLottery(); const html=$('prizeList').innerHTML;
+      parentUnlocked=false;
+      return {fresh:wasDefault===false, on:on,
+        checkbox:/data-prize-auto=/.test(html), label:html.indexOf('自动兑换')>=0};})())`));
+    assert(o.fresh === true && o.on === true && o.checkbox && o.label, '自动兑换开关缺失: '+JSON.stringify(o));
+    assert(run("DEFAULT_PRIZES.find(p=>p.id==='p5').autoRedeem") === true, '默认「再抽一次」未设自动兑换');
+    return '新奖默认关闭 · 可勾选 · 默认再抽一次自动兑换';
+  });
+
   const failed = results.filter(r => r[1] === 'FAIL');
   results.forEach(r => console.log('[' + r[1] + ']   ' + r[0] + (r[2] ? '  -> ' + r[2] : '')));
   console.log('\n合计 ' + results.length + ' 项，失败 ' + failed.length + ' 项');

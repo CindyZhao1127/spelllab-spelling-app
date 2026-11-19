@@ -209,6 +209,9 @@
   .prize-row .field{flex:1;min-width:0}
   .prize-row .prob{width:64px;flex:none;text-align:center}
   .prize-row .unit{font-size:11px;color:var(--muted);flex:none}
+  .prize-row .prize-auto{display:flex;align-items:center;gap:3px;font-size:11px;
+    color:var(--muted);white-space:nowrap;flex:none;cursor:pointer}
+  .prize-row .prize-auto input{accent-color:#6a5cff;cursor:pointer}
   .panel-note.warn{color:#ffb3ba;font-weight:800;background:rgba(255,122,134,.12);
     border:1px solid rgba(255,122,134,.4)}
   .ledger-item{display:flex;justify-content:space-between;gap:8px;padding:7px 0;
@@ -1400,6 +1403,36 @@ body.td-typing #typingView { height: 100%; }
 .bar-row .bt i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#6a5cff,#3ddc97)}
 .bar-row .bv{width:52px;text-align:right;flex:none;font-weight:700}
 
+/* ---------- 自然拼读 ---------- */
+.ph-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.ph-head h3{margin:0;font-size:15px;font-weight:800}
+.ph-group{margin:12px 0 4px;font-size:12px;font-weight:800;color:var(--muted);letter-spacing:.4px}
+.ph-row{display:flex;align-items:center;gap:8px;padding:9px 10px;border:1px solid rgba(226,232,255,.12);
+  border-radius:12px;background:rgba(255,255,255,.04);margin-bottom:6px;cursor:pointer;transition:.16s}
+.ph-row:hover{border-color:var(--accent);background:rgba(139,123,255,.1)}
+.ph-row.done{border-color:rgba(61,220,151,.42)}
+.ph-row .ph-name{flex:1;font-weight:700;font-size:13px}
+.ph-row .ph-desc{display:block;font-size:11px;color:var(--muted);font-weight:400;margin-top:2px}
+.ph-stars{font-size:12px;letter-spacing:1px;color:#ffcf5c;flex:none}
+.ph-stars .off{opacity:.28}
+.ph-progress{height:8px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden;margin-bottom:12px}
+.ph-progress i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#6a5cff,#3ddc97);transition:width .25s}
+.ph-prompt{font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:6px}
+.ph-prompt b{display:block;color:var(--text);font-size:26px;font-weight:800;letter-spacing:1px;margin-top:4px}
+.ph-prompt .ph-sound{color:#b8adff;font-size:15px;letter-spacing:2px}
+.ph-hint{font-size:11px;color:var(--muted);min-height:16px;margin:4px 0 8px}
+.ph-feedback{min-height:24px;margin-top:10px;font-weight:800;font-size:13px}
+.ph-feedback.ok{color:var(--ok)} .ph-feedback.bad{color:var(--err)}
+/* ---------- 获得奖品 ---------- */
+.prize-won{display:flex;align-items:center;gap:10px;padding:9px 10px;border:1px solid rgba(226,232,255,.12);
+  border-radius:12px;background:rgba(255,255,255,.04);margin-bottom:6px;font-size:12px}
+.prize-won .pw-name{flex:1;font-weight:700}
+.prize-won .pw-time{color:var(--muted);font-size:11px}
+.prize-won .pw-tag{border-radius:99px;padding:3px 9px;font-size:11px;font-weight:800;flex:none}
+.prize-won .pw-tag.auto{background:rgba(139,123,255,.18);color:#c7bcff}
+.prize-won .pw-tag.done{background:rgba(61,220,151,.16);color:#5ee0a6}
+.prize-won .pw-tag.wait{background:rgba(255,193,110,.16);color:#ffce82}
+
 </style>
 </head>
 <body>
@@ -1904,6 +1937,7 @@ body.td-typing #typingView { height: 100%; }
       <button data-tab="learn" id="tabLearn" class="active">学习</button>
       <button data-tab="history" id="tabHistory">记录</button>
       <button data-tab="vocab" id="tabVocab">生词本</button>
+      <button data-tab="phonics" id="tabPhonics">拼读</button>
       <button data-tab="growth" id="tabGrowth">成长</button>
       <button data-tab="plan" id="tabPlan">计划</button>
       <button data-tab="lottery" id="tabLottery">抽奖</button>
@@ -2025,6 +2059,32 @@ body.td-typing #typingView { height: 100%; }
       </div>
     </div>
 
+    <div class="tab-page" id="pagePhonics" hidden>
+      <div class="panel">
+        <h3>自然拼读 <span class="count-pill" id="phStat">0 / 0</span></h3>
+        <div class="panel-note">内置课程按「字母音 → 短元音 → 长元音 → 辅音组合 → 常见词族」循序渐进。每课用两种练法：<b>听音拼词</b>（听单词发音拼出来）和<b>看词拼读</b>（看中文和音素提示拼出来）。答对得星，进度自动保存。</div>
+        <div class="field-row">
+          <span class="sel"><select id="phMode"><option value="listen">听音拼词</option><option value="read">看词拼读</option></select></span>
+          <button class="mini-btn primary sm" id="phContinue">继续上次</button>
+        </div>
+        <div id="phGroupList"></div>
+      </div>
+      <div class="panel" id="phPracticePanel" hidden>
+        <div class="ph-head"><h3 id="phLessonTitle">—</h3><button class="mini-btn sm" id="phBack">← 课程列表</button></div>
+        <div class="ph-progress"><i id="phBar"></i></div>
+        <div class="ph-prompt" id="phPrompt"></div>
+        <div class="ph-hint" id="phHint"></div>
+        <input class="gfield" id="phInput" placeholder="拼出英文单词，回车提交" autocomplete="off" spellcheck="false">
+        <div class="ph-feedback" id="phFeedback"></div>
+        <div class="btn-row tight">
+          <button class="mini-btn sm" id="phSpeak">🔊 再听一遍</button>
+          <button class="mini-btn sm" id="phShow">看答案</button>
+          <button class="mini-btn sm" id="phShuffle">换一题</button>
+          <button class="mini-btn primary sm" id="phNext" hidden>下一题 →</button>
+        </div>
+      </div>
+    </div>
+
     <div class="tab-page" id="pageGrowth" hidden>
       <div class="panel">
         <h3>记忆成长中心</h3>
@@ -2085,6 +2145,11 @@ body.td-typing #typingView { height: 100%; }
           </div>
           <div class="panel-note" style="margin-top:8px" id="prizeSum"></div>
         </div>
+      </div>
+      <div class="panel">
+        <h3>获得的奖品 <span class="count-pill" id="prizePending">0 待兑换</span></h3>
+        <div class="panel-note">「自动兑换」的奖品（如再抽一次）抽到即生效、<b>不扣本次积分</b>；其余奖品显示「待兑换」，请家长在下方点「已兑换」确认。孩子也能看到自己的奖品，但兑换确认需家长解锁。</div>
+        <div id="prizeWonList"></div>
       </div>
       <div class="panel"><h3>最近抽奖</h3><div id="lotteryLog"></div></div>
     </div>
@@ -2536,13 +2601,102 @@ const DIFFICULTY = {
   normal:{label:'正常', seconds:60,  hints:2, bonusReveal:0},
   hard:  {label:'困难', seconds:35,  hints:1, bonusReveal:0}
 };
+/* 奖项 autoRedeem：true = 抽到即自动兑现、不扣本次积分（如「再抽一次」）；
+   false = 抽到后记为「待兑换」，由家长在获得奖品列表里点兑换。 */
 const DEFAULT_PRIZES = [
-  {id:'p1',name:'免写一次抄写',prob:5},
-  {id:'p2',name:'一张小贴纸',prob:10},
-  {id:'p3',name:'多玩十分钟',prob:8},
-  {id:'p4',name:'挑一本睡前绘本',prob:5},
-  {id:'p5',name:'再抽一次',prob:12}
+  {id:'p1',name:'免写一次抄写',prob:5,autoRedeem:false},
+  {id:'p2',name:'一张小贴纸',prob:10,autoRedeem:false},
+  {id:'p3',name:'多玩十分钟',prob:8,autoRedeem:false},
+  {id:'p4',name:'挑一本睡前绘本',prob:5,autoRedeem:false},
+  {id:'p5',name:'再抽一次',prob:12,autoRedeem:true}
 ];
+/* ---------------- 内置自然拼读课程 ----------------
+   五组循序渐进：字母音 → 短元音 → 长元音 → 辅音组合 → 常见词族。
+   每课提供音素（sound）与若干代表词；练习只做「听音拼词 / 看词拼读」，
+   例句与发音来自浏览器朗读，不依赖外部数据或网络。 */
+const PHONICS_GROUPS = [
+  {id:'letter', name:'字母音', desc:'26 个字母最常见读音，先建立音—形对应',
+   lessons:[
+    {id:'lt-a',t:'Aa /æ/',s:'æ',w:[['apple','苹果'],['ant','蚂蚁'],['cat','猫'],['map','地图']]},
+    {id:'lt-b',t:'Bb /b/',s:'b',w:[['bag','书包'],['bed','床'],['bus','公交车'],['rabbit','兔子']]},
+    {id:'lt-c',t:'Cc /k/',s:'k',w:[['cat','猫'],['cup','杯子'],['car','小汽车'],['cake','蛋糕']]},
+    {id:'lt-d',t:'Dd /d/',s:'d',w:[['dog','狗'],['duck','鸭子'],['desk','书桌'],['red','红色']]},
+    {id:'lt-e',t:'Ee /e/',s:'e',w:[['egg','鸡蛋'],['pen','钢笔'],['ten','十'],['bed','床']]},
+    {id:'lt-f',t:'Ff /f/',s:'f',w:[['fish','鱼'],['fan','扇子'],['five','五'],['leaf','叶子']]},
+    {id:'lt-g',t:'Gg /g/',s:'g',w:[['go','去'],['bag','书包'],['big','大的'],['girl','女孩']]},
+    {id:'lt-h',t:'Hh /h/',s:'h',w:[['hat','帽子'],['hand','手'],['hen','母鸡'],['house','房子']]},
+    {id:'lt-i',t:'Ii /ɪ/',s:'ɪ',w:[['pig','猪'],['sit','坐'],['big','大的'],['milk','牛奶']]},
+    {id:'lt-j',t:'Jj /dʒ/',s:'dʒ',w:[['jump','跳'],['juice','果汁'],['jam','果酱'],['jeep','吉普车']]},
+    {id:'lt-k',t:'Kk /k/',s:'k',w:[['kite','风筝'],['key','钥匙'],['milk','牛奶'],['book','书']]},
+    {id:'lt-l',t:'Ll /l/',s:'l',w:[['leg','腿'],['lion','狮子'],['ball','球'],['yellow','黄色']]},
+    {id:'lt-m',t:'Mm /m/',s:'m',w:[['map','地图'],['moon','月亮'],['milk','牛奶'],['name','名字']]},
+    {id:'lt-n',t:'Nn /n/',s:'n',w:[['nose','鼻子'],['net','网'],['ten','十'],['pen','钢笔']]},
+    {id:'lt-o',t:'Oo /ɒ/',s:'ɒ',w:[['dog','狗'],['box','盒子'],['hot','热的'],['orange','橙子']]},
+    {id:'lt-p',t:'Pp /p/',s:'p',w:[['pen','钢笔'],['pig','猪'],['apple','苹果'],['map','地图']]},
+    {id:'lt-q',t:'Qq /kw/',s:'kw',w:[['queen','女王'],['quick','快的'],['quilt','被子'],['question','问题']]},
+    {id:'lt-r',t:'Rr /r/',s:'r',w:[['red','红色'],['rabbit','兔子'],['car','小汽车'],['run','跑']]},
+    {id:'lt-s',t:'Ss /s/',s:'s',w:[['sun','太阳'],['sit','坐'],['bus','公交车'],['fish','鱼']]},
+    {id:'lt-t',t:'Tt /t/',s:'t',w:[['ten','十'],['tiger','老虎'],['cat','猫'],['hat','帽子']]},
+    {id:'lt-u',t:'Uu /ʌ/',s:'ʌ',w:[['cup','杯子'],['bus','公交车'],['sun','太阳'],['duck','鸭子']]},
+    {id:'lt-v',t:'Vv /v/',s:'v',w:[['van','货车'],['five','五'],['very','非常'],['love','爱']]},
+    {id:'lt-w',t:'Ww /w/',s:'w',w:[['water','水'],['we','我们'],['window','窗户'],['yellow','黄色']]},
+    {id:'lt-x',t:'Xx /ks/',s:'ks',w:[['box','盒子'],['six','六'],['fox','狐狸'],['text','课文']]},
+    {id:'lt-y',t:'Yy /j/',s:'j',w:[['yes','是的'],['yellow','黄色'],['you','你'],['yo-yo','溜溜球']]},
+    {id:'lt-z',t:'Zz /z/',s:'z',w:[['zoo','动物园'],['zebra','斑马'],['puzzle','拼图'],['size','尺寸']]}
+   ]},
+  {id:'short',name:'短元音',desc:'a/e/i/o/u 的短音，闭音节里最常见',
+   lessons:[
+    {id:'sv-a',t:'短元音 a /æ/',s:'æ',w:[['cat','猫'],['bag','书包'],['map','地图'],['hat','帽子'],['sad','难过']]},
+    {id:'sv-e',t:'短元音 e /e/',s:'e',w:[['bed','床'],['pen','钢笔'],['ten','十'],['egg','鸡蛋'],['red','红色']]},
+    {id:'sv-i',t:'短元音 i /ɪ/',s:'ɪ',w:[['pig','猪'],['sit','坐'],['big','大的'],['fish','鱼'],['milk','牛奶']]},
+    {id:'sv-o',t:'短元音 o /ɒ/',s:'ɒ',w:[['dog','狗'],['box','盒子'],['hot','热的'],['top','顶部'],['mop','拖把']]},
+    {id:'sv-u',t:'短元音 u /ʌ/',s:'ʌ',w:[['cup','杯子'],['bus','公交车'],['sun','太阳'],['duck','鸭子'],['run','跑']]}
+   ]},
+  {id:'long',name:'长元音',desc:'元音发本身的字母音，含「神奇的 e」与元音组合',
+   lessons:[
+    {id:'lv-ae',t:'a_e /eɪ/',s:'eɪ',w:[['cake','蛋糕'],['name','名字'],['face','脸'],['game','游戏']]},
+    {id:'lv-ee',t:'e_e /iː/',s:'iː',w:[['these','这些'],['Pete','皮特'],['theme','主题'],['eve','前夕']]},
+    {id:'lv-ie',t:'i_e /aɪ/',s:'aɪ',w:[['bike','自行车'],['time','时间'],['five','五'],['kite','风筝']]},
+    {id:'lv-oe',t:'o_e /əʊ/',s:'əʊ',w:[['note','便条'],['home','家'],['rose','玫瑰'],['nose','鼻子']]},
+    {id:'lv-ue',t:'u_e /juː/',s:'juː',w:[['cute','可爱的'],['use','使用'],['tube','管子'],['June','六月']]},
+    {id:'lv-ee2',t:'ee /iː/',s:'iː',w:[['see','看见'],['tree','树'],['week','星期'],['green','绿色']]},
+    {id:'lv-ea',t:'ea /iː/',s:'iː',w:[['sea','大海'],['tea','茶'],['eat','吃'],['read','读']]},
+    {id:'lv-ai',t:'ai /eɪ/',s:'eɪ',w:[['rain','雨'],['train','火车'],['wait','等待'],['paint','涂色']]},
+    {id:'lv-oa',t:'oa /əʊ/',s:'əʊ',w:[['boat','船'],['coat','外套'],['goat','山羊'],['road','路']]}
+   ]},
+  {id:'blend',name:'辅音组合',desc:'两个辅音合在一起，各读各的快连读',
+   lessons:[
+    {id:'bl-sh',t:'sh /ʃ/',s:'ʃ',w:[['ship','轮船'],['fish','鱼'],['she','她'],['shop','商店']]},
+    {id:'bl-ch',t:'ch /tʃ/',s:'tʃ',w:[['chair','椅子'],['chess','国际象棋'],['much','许多'],['chip','薯片']]},
+    {id:'bl-th',t:'th /θ/ /ð/',s:'θ',w:[['think','想'],['three','三'],['this','这个'],['mother','妈妈']]},
+    {id:'bl-ph',t:'ph /f/',s:'f',w:[['photo','照片'],['phone','电话'],['elephant','大象'],['graph','图表']]},
+    {id:'bl-wh',t:'wh /w/',s:'w',w:[['what','什么'],['white','白色'],['where','哪里'],['when','什么时候']]},
+    {id:'bl-bl',t:'bl /bl/',s:'bl',w:[['black','黑色'],['blue','蓝色'],['block','积木'],['blow','吹']]},
+    {id:'bl-st',t:'st /st/',s:'st',w:[['star','星星'],['stop','停止'],['story','故事'],['list','清单']]},
+    {id:'bl-tr',t:'tr /tr/',s:'tr',w:[['tree','树'],['train','火车'],['try','尝试'],['country','国家']]}
+   ]},
+  {id:'family',name:'常见词族',desc:'同一韵脚换开头，一次记住一串词',
+   lessons:[
+    {id:'fm-at',t:'-at 家族',s:'æt',w:[['cat','猫'],['hat','帽子'],['bat','球棒'],['mat','垫子'],['sat','坐（过去式）']]},
+    {id:'fm-an',t:'-an 家族',s:'æn',w:[['can','能'],['man','男人'],['fan','扇子'],['van','货车']]},
+    {id:'fm-en',t:'-en 家族',s:'en',w:[['pen','钢笔'],['ten','十'],['hen','母鸡'],['men','男人们']]},
+    {id:'fm-ig',t:'-ig 家族',s:'ɪg',w:[['pig','猪'],['big','大的'],['dig','挖'],['wig','假发']]},
+    {id:'fm-op',t:'-op 家族',s:'ɒp',w:[['top','顶部'],['mop','拖把'],['hop','单脚跳'],['pop','流行']]},
+    {id:'fm-ug',t:'-ug 家族',s:'ʌg',w:[['bug','虫子'],['rug','地毯'],['hug','拥抱'],['mug','马克杯']]},
+    {id:'fm-ake',t:'-ake 家族',s:'eɪk',w:[['cake','蛋糕'],['make','制作'],['lake','湖'],['take','拿']]},
+    {id:'fm-ine',t:'-ine 家族',s:'aɪn',w:[['bike','自行车'],['time','时间'],['nine','九'],['line','线']]}
+   ]}
+];
+function phonicsLesson(id){
+  for(const g of PHONICS_GROUPS){ const l=g.lessons.find(x=>x.id===id); if(l) return {g:g,l:l}; }
+  return null;
+}
+function phonicsCount(){
+  let lessons=0,words=0;
+  PHONICS_GROUPS.forEach(g=>g.lessons.forEach(l=>{lessons++;words+=l.w.length;}));
+  return {lessons:lessons,words:words};
+}
+const DEFAULT_PHONICS = {done:{},correct:0,attempted:0};
 const DEFAULT_PLAN = {enabled:false,type:'units',target:3,reward:20,penalty:10,perCorrect:1,
   points:0,ledger:[],results:{},since:'',lastEval:''};
 /* lottery.typingPoints：打字练习每局兑换的积分；lottery.dailyLimit：每天最多抽奖次数；
@@ -2597,6 +2751,7 @@ const DEFAULT_STATE = {
   filter:{stageId:'all',gradeId:'all',bookId:'all',volumeId:'all'},
   vocab:[], practiceSets:[], textbooks:[], seq:1,
   session:null, plan:clone(DEFAULT_PLAN), lottery:clone(DEFAULT_LOTTERY),
+  phonics:clone(DEFAULT_PHONICS),
   parent:clone(DEFAULT_PARENT),
   /* 记忆进阶模块：错词间隔复习 / 关卡星级 / 听写。独立命名空间，
      与旧存档天然兼容（normalizeState 会补齐），备份导出自动带上。 */
@@ -2717,14 +2872,35 @@ function normalizeState(s){
   let pacc=0;
   out.lottery.prizes.forEach((p,i)=>{
     if(!p || typeof p!=='object'){
-      out.lottery.prizes[i]={id:'p'+(i+1),name:'奖项'+(i+1),prob:0}; return;
+      out.lottery.prizes[i]={id:'p'+(i+1),name:'奖项'+(i+1),prob:0,autoRedeem:false}; return;
     }
     if(!p.id) p.id='p'+(i+1);
     p.name=String(p.name||('奖项'+(i+1))).slice(0,40);
     const v=Math.max(0,Math.min(100,Number(p.prob)||0));
     p.prob=Math.min(v,Math.max(0,100-pacc)); pacc+=p.prob;
+    p.autoRedeem=!!p.autoRedeem;
   });
   if(!Array.isArray(out.lottery.log)) out.lottery.log=[];
+  /* 老存档的抽奖记录没有兑换字段，按「自动兑现」处理，不突然冒出一堆待兑换；
+     新记录带着 autoRedeem / redeemed，用于「获得奖品」列表显示状态。 */
+  out.lottery.log.forEach(x=>{
+    if(!x || typeof x!=='object') return;
+    if(typeof x.autoRedeem!=='boolean') x.autoRedeem=true;
+    if(typeof x.redeemed!=='boolean') x.redeemed=true;
+    if(!Number.isFinite(Number(x.t))) x.t=Date.now();
+  });
+  /* 自然拼读进度：每课 best 星级、答对/尝试次数，独立命名空间、旧存档自动补齐 */
+  if(!out.phonics || typeof out.phonics!=='object' || Array.isArray(out.phonics))
+    out.phonics=clone(DEFAULT_PHONICS);
+  out.phonics.done=(out.phonics.done && typeof out.phonics.done==='object' && !Array.isArray(out.phonics.done))
+    ?out.phonics.done:{};
+  out.phonics.correct=Math.max(0,Math.round(Number(out.phonics.correct)||0));
+  out.phonics.attempted=Math.max(0,Math.round(Number(out.phonics.attempted)||0));
+  Object.keys(out.phonics.done).forEach(k=>{
+    const v=out.phonics.done[k]||{};
+    out.phonics.done[k]={best:Math.max(0,Math.min(3,Math.round(Number(v.best)||0))),
+      right:Math.max(0,Math.round(Number(v.right)||0))};
+  });
   if(out.lottery.log.length>LOTTERY_LOG_LIMIT) out.lottery.log=out.lottery.log.slice(-LOTTERY_LOG_LIMIT);
   /* 打字得分转换：允许 0（纯娱乐不积分）～ 99；默认 1。 */
   out.lottery.typingPoints=Math.max(0,Math.min(99,Math.round(Number(out.lottery.typingPoints)||0)));
@@ -5335,13 +5511,16 @@ function finishSpin(res){
   syncWheelButtons();
   $('wheelResult').textContent=(res.index>=0?'恭喜抽中：':'本次结果：')+res.prize;
   $('wheelResult').className='wheel-result win';
-  $('wheelPrizeTag').textContent=res.index>=0?'恭喜抽中':'本次结果';
+  $('wheelPrizeTag').textContent=res.autoRedeem?'自动兑换 · 不扣分':
+    (res.index>=0?'待家长兑换':'本次结果');
   $('wheelPrizeName').textContent=res.prize;
   $('wheelPrizeDot').style.background=res.color||WHEEL_THANKS;
   $('wheelPrize').classList.add('show');
   if($('boxPrizeName')) $('boxPrizeName').textContent=res.prize||'谢谢参与';
-  if($('boxPrizeTag')) $('boxPrizeTag').textContent=res.index>=0?'🎉 恭喜抽中':'本次结果';
-  if($('boxPrizeNote')) $('boxPrizeNote').textContent=res.index>=0?'奖励已为你记下':'别灰心，再来一次';
+  if($('boxPrizeTag')) $('boxPrizeTag').textContent=res.autoRedeem?'🎉 自动兑换':
+    (res.index>=0?'🎉 恭喜抽中':'本次结果');
+  if($('boxPrizeNote')) $('boxPrizeNote').textContent=res.autoRedeem?'已经生效，未消耗积分':
+    (res.index>=0?'待家长在「抽奖」页兑换':'别灰心，再来一次');
   const scene=$('boxScene'); if(scene) scene.className='box-scene reveal';
   renderPoints(); renderDrawer();
 }
@@ -5367,13 +5546,16 @@ function renderLottery(){
   $('prizeLockBadge').classList.toggle('on',!locked);
   const prizes=Array.isArray(L.prizes)?L.prizes:[];
   $('prizeLockedList').innerHTML=prizes.length?prizes.map(p=>
-    '<span>'+esc(p.name||'奖项')+' · '+(Number(p.prob)||0)+'%</span>').join(''):
+    '<span>'+esc(p.name||'奖项')+' · '+(Number(p.prob)||0)+'% · '+
+    (p.autoRedeem?'自动兑换':'待家长兑换')+'</span>').join(''):
     '<span>暂无奖项</span>';
   $('prizeList').innerHTML=prizes.length?prizes.map(p=>
     '<div class="prize-row">'+
       '<input class="field" data-prize-name="'+esc(p.id)+'" value="'+esc(p.name)+'" placeholder="奖项内容">'+
       '<input class="field prob" type="number" min="0" max="100" step="1" data-prize-prob="'+esc(p.id)+'" value="'+(Number(p.prob)||0)+'" aria-label="中奖概率 %">'+
       '<span class="unit">%</span>'+
+      '<label class="prize-auto" title="自动兑换：抽到即生效、不扣本次积分；关闭则由家长兑换">'+
+        '<input type="checkbox" data-prize-auto="'+esc(p.id)+'"'+(p.autoRedeem?' checked':'')+'> 自动兑换</label>'+
       '<button class="mini-btn danger sm" data-prize-del="'+esc(p.id)+'">删</button>'+
     '</div>').join(''):'<div class="empty">还没有奖项，点「添加奖项」新建一个。</div>';
   const sum=prizeTotal(), over=sum>100;
@@ -5381,10 +5563,35 @@ function renderLottery(){
     '⚠ 概率合计 '+sum+'%，超过 100%，盲盒暂时不能抽，请调低某一项。':
     '当前总中奖概率 '+sum+'%（剩余 '+(100-sum)+'% 为「谢谢参与」）';
   $('prizeSum').classList.toggle('warn',over);
-  const log=(L.log||[]).slice(-12).reverse();
+  /* 获得奖品列表：只列真实中奖（装了 prizeId 的记录），显示自动/待兑换状态 */
+  const allLog=Array.isArray(L.log)?L.log:[];
+  const won=allLog.filter(x=>x && x.prizeId).slice().reverse();
+  const pending=won.filter(x=>!x.autoRedeem && !x.redeemed).length;
+  if($('prizePending')) $('prizePending').textContent=pending+' 待兑换';
+  $('prizeWonList').innerHTML=won.length?won.map(x=>{
+    const tag=x.autoRedeem?'<span class="pw-tag auto">自动兑换</span>':
+      x.redeemed?'<span class="pw-tag done">已兑换</span>':
+      '<span class="pw-tag wait">待兑换</span>';
+    const btn=(!x.autoRedeem && !x.redeemed)?
+      '<button class="mini-btn sm" data-prize-redeem="'+esc(x.t)+'">标记已兑换</button>':'';
+    return '<div class="prize-won"><span class="pw-name">🎁 '+esc(x.prize||'奖品')+'</span>'+
+      '<span class="pw-time">'+esc(new Date(x.t).toLocaleString('zh-CN'))+'</span>'+tag+btn+'</div>';
+  }).join(''):'<div class="empty">还没抽到奖品，点右上角「🎁 抽盲盒」试试。</div>';
+  const log=allLog.slice(-12).reverse();
   $('lotteryLog').innerHTML=log.length?log.map(x=>
     '<div class="ledger-item"><span>'+esc(new Date(x.t).toLocaleString('zh-CN'))+'</span><b>'+esc(x.prize||'谢谢参与')+'</b></div>'
   ).join(''):'<div class="empty">还没有抽奖记录。</div>';
+}
+/* 家长确认兑换一件待兑换奖品（时间作唯一标识，抽奖写日志时保证不重复）。
+   写操作本身经 guardParent 兜底：即便从测试/控制台直接调用也不会被孩子绕过。 */
+function redeemPrize(t){
+  if(!parentUnlocked){ guardParent('lottery'); return false; }
+  const L=state.lottery, hit=(L.log||[]).find(x=>x && Number(x.t)===Number(t));
+  if(!hit || hit.autoRedeem || hit.redeemed){ toast('这件奖品已兑换或不存在','bad'); return false; }
+  hit.redeemed=true;
+  saveState(true); renderLottery(); renderWheel();
+  toast('已标记兑换：'+hit.prize,'ok');
+  return true;
 }
 /* 奖项 / 消耗积分一变，侧栏和已打开的转盘一起刷新；转盘还要复位角度，
    否则新扇区会叠在上一次的落点上。抽奖进行中不打断动画。 */
@@ -5405,6 +5612,8 @@ function updatePrizeField(id,field,value){
   const p=prizes.find(x=>x.id===id); if(!p) return;
   if(field==='name'){
     p.name=String(value).trim().slice(0,40)||('奖项'+(prizes.indexOf(p)+1));
+  }else if(field==='autoRedeem'){
+    p.autoRedeem=!!value;
   }else{
     const want=Math.max(0,Math.min(100,Number(value)||0));
     p.prob=prizeProbCap(prizes,id,value);
@@ -5415,7 +5624,7 @@ function updatePrizeField(id,field,value){
 function addPrize(){
   if(!Array.isArray(state.lottery.prizes)) state.lottery.prizes=[];
   const rest=Math.max(0,100-prizeTotal());
-  state.lottery.prizes.push({id:nextId('p'),name:'新奖项',prob:Math.min(5,rest)});
+  state.lottery.prizes.push({id:nextId('p'),name:'新奖项',prob:Math.min(5,rest),autoRedeem:false});
   if(rest<=0) toast('概率已满 100%，新奖项暂设为 0%','bad');
   saveState(); lotteryChanged();
 }
@@ -5455,10 +5664,18 @@ function drawLottery(){
       if(r<acc){ hit=segs[k]; break; }
     }
   }
-  addPoints(-cost,'积分抽奖');
+  /* 自动兑换的奖品抽到即生效、返还本次积分：净消耗为 0。
+     其余奖品扣积分后记为「待兑换」，由家长在获得奖品列表确认。 */
+  const prizes=Array.isArray(L.prizes)?L.prizes:[];
+  const prize=hit.index>=0?prizes[hit.index]:null;
+  const autoRedeem=!!(prize && prize.autoRedeem);
+  /* 自动兑换：本次根本不扣积分（不是先扣后退，避免流水刷两条） */
+  if(!autoRedeem) addPoints(-cost,'积分抽奖');
+  const charge=autoRedeem?0:cost;
   const name=hit.name;
   if(!Array.isArray(L.log)) L.log=[];
-  L.log.push({t:Date.now(),cost:cost,prize:name});
+  L.log.push({t:Date.now(),cost:charge,prize:name,prizeId:prize?prize.id:'',
+    autoRedeem:autoRedeem,redeemed:autoRedeem});
   if(L.log.length>LOTTERY_LOG_LIMIT) L.log.splice(0,L.log.length-LOTTERY_LOG_LIMIT);
   /* 更新当天计数：中奖后 afterWin 归零，之后再抽逐次 +1 供翻倍使用。 */
   const wasWon=!!d.won;
@@ -5468,9 +5685,11 @@ function drawLottery(){
   else if(wasWon){ d.afterWin++; }
   saveState(true); renderDrawer();
   /* 结果同步返回给转盘（也方便回归测试）；界面不再弹旧的结果对话框 */
-  return {prize:name,index:hit.index,color:hit.color,cost:cost,
+  return {prize:name,index:hit.index,color:hit.color,cost:charge,
     points:Number(state.plan.points)||0,left:lotteryLeft(),
-    realWin:realWin&&!wasWon, doubled:wasWon};
+    realWin:realWin&&!wasWon, doubled:wasWon,
+    autoRedeem:autoRedeem,redeemed:autoRedeem,
+    status:autoRedeem?'auto':(realWin?'待兑换':'')};
 }
 
 /* ---------------- 单元完成后的去向 ---------------- */
@@ -5568,6 +5787,107 @@ function offerResume(){
     ]});
 }
 
+/* ---------------- 自然拼读练习 ----------------
+   课程是内置常量（见 PHONICS_GROUPS），进度存 state.phonics.done[lessonId]={best,right}。
+   两种练法共用同一作答流程：listen 只报发音看中文，read 额外显示音素提示。 */
+let phLesson=null, phQueue=[], phPos=0, phSolved=false, phLast=null;
+function renderPhonics(){ phRender(); }
+function phStars(n){
+  n=Math.max(0,Math.min(3,Math.round(Number(n)||0)));
+  return '<span class="on">'+'★'.repeat(n)+'</span><span class="off">'+'★'.repeat(3-n)+'</span>';
+}
+function phDone(id){ const d=state.phonics.done[id]; return d&&d.best?d:null; }
+function phRender(){
+  const total=phonicsCount();
+  const done=Object.values(state.phonics.done).filter(x=>x&&x.best>0).length;
+  $('phStat').textContent=done+' / '+total.lessons;
+  $('phGroupList').innerHTML=PHONICS_GROUPS.map(g=>
+    '<div class="ph-group">'+esc(g.name)+' · '+esc(g.desc)+'</div>'+
+    g.lessons.map(l=>{
+      const d=phDone(l.id);
+      return '<div class="ph-row'+(d?' done':'')+'" data-ph="'+esc(l.id)+'">'+
+        '<span class="ph-name">'+esc(l.t)+'<span class="ph-desc">'+l.w.length+' 个代表词</span></span>'+
+        '<span class="ph-stars">'+phStars(d?d.best:0)+'</span></div>';
+    }).join('')
+  ).join('');
+}
+function phStart(id,queue){
+  const found=phonicsLesson(id); if(!found) return;
+  phLesson=found;
+  phQueue=(queue&&queue.length)?queue.slice():found.l.w.map((x,i)=>i);
+  phPos=0; phSolved=false; phLast=null;
+  $('phPracticePanel').hidden=false;
+  $('phLessonTitle').textContent=found.g.name+' · '+found.l.t;
+  phShow();
+  try{ $('phInput').focus(); }catch(e){}
+}
+function phShuffle(){
+  if(!phLesson) return;
+  phQueue=phQueue.slice().sort(()=>Math.random()-0.5); phPos=0; phShow();
+}
+function phShow(){
+  if(!phLesson || !phQueue.length) return;
+  const idx=phQueue[phPos%phQueue.length];
+  const item=phLesson.l.w[idx]||phLesson.l.w[0];
+  phLast=item; phSolved=false;
+  const mode=$('phMode').value==='read'?'read':'listen';
+  $('phPrompt').innerHTML=(mode==='listen'?'听发音，拼出这个英文单词':'看中文，结合音素提示拼出单词')+
+    '<b>'+esc(item[1])+'</b>';
+  $('phHint').textContent=mode==='read'?('音素 /'+(phLesson.l.s||'')+'/ · 首字母 '+item[0][0].toUpperCase()):'';
+  $('phInput').value=''; $('phInput').disabled=false;
+  $('phFeedback').textContent=''; $('phFeedback').className='ph-feedback';
+  $('phNext').hidden=true;
+  $('phBar').style.width=Math.round((phPos+1)/phQueue.length*100)+'%';
+  if(mode==='listen') phSpeak();
+  try{ $('phInput').focus(); }catch(e){}
+}
+function phSpeak(){ if(phLast && typeof speak==='function') speak(phLast[0]); }
+function phCheck(){
+  if(!phLesson || !phLast || phSolved) return;
+  const raw=String($('phInput').value||'').trim();
+  if(!raw) return;
+  const ok=raw.toLowerCase()===String(phLast[0]).toLowerCase();
+  state.phonics.attempted++;
+  if(ok){ state.phonics.correct++; SFX.correct(); }
+  else SFX.wrong();
+  phSolved=true; $('phInput').disabled=true; $('phNext').hidden=false;
+  $('phFeedback').textContent=ok?'✔ 拼对了！'+phLast[0]:'✘ 正确答案：'+phLast[0];
+  $('phFeedback').className='ph-feedback '+(ok?'ok':'bad');
+  if(ok) phSpeak();
+  /* 每答对一次记一条练习记录，和拼写练习共用打卡日历 */
+  try{ addHistory({mode:'phonics',unit:phLesson.l.id,cn:phLast[1],en:phLast[0],ok:ok,ms:0,bad:ok?0:1}); }catch(e){}
+  saveState();
+}
+function phAdvance(){
+  if(!phLesson) return;
+  if(!phSolved){ phCheck(); return; }
+  phPos=(phPos+1)%phQueue.length;
+  if(phPos===0){
+    const d=state.phonics.done[phLesson.l.id]||{best:0,right:0};
+    d.right=Math.max(0,Math.round(Number(d.right)||0)+1);
+    state.phonics.done[phLesson.l.id]=d;
+    saveState();
+    toast('这一轮完成，继续加油！','ok');
+  }
+  phShow();
+}
+function phFinishLesson(){
+  if(!phLesson) return;
+  const right=phQueue.length, id=phLesson.l.id;
+  const d=state.phonics.done[id]||{best:0,right:0};
+  d.best=Math.max(d.best,3); d.right=Math.max(0,Math.round(Number(d.right)||0));
+  state.phonics.done[id]=d; saveState();
+  phRender(); phBack(); toast('本课已完成，获得 3 星','ok');
+}
+function phBack(){ $('phPracticePanel').hidden=true; phLesson=null; phLast=null; phRender(); }
+function phContinue(){
+  const ids=Object.keys(state.phonics.done);
+  let next=null;
+  PHONICS_GROUPS.forEach(g=>g.lessons.forEach(l=>{ if(!next && ids.indexOf(l.id)<0) next=l.id; }));
+  if(!next) next=PHONICS_GROUPS[0].lessons[0].id;
+  phStart(next);
+}
+
 /* ---------------- 学习面板 ---------------- */
 function renderDrawer(){
   const us=units();
@@ -5603,13 +5923,13 @@ function renderDrawer(){
   $('rateRange').value=state.settings.rate;
   $('rateVal').textContent=Number(state.settings.rate).toFixed(1);
   renderHistory(); renderSaveBadge(); renderPlan(); renderLottery();
-  renderVocab(); renderGrowthMini(); renderSets(); renderManagement(); renderLibrary(); renderFilters();
+  renderVocab(); renderPhonics(); renderGrowthMini(); renderSets(); renderManagement(); renderLibrary(); renderFilters();
   if(drawerTab==='storage') renderStorage();
 }
 function box(v,label){ return '<div class="stat-box"><b>'+esc(v)+'</b><span>'+esc(label)+'</span></div>'; }
 function switchTab(t){
   drawerTab=t;
-  ['learn','history','vocab','growth','plan','lottery','manage','library','storage'].forEach(k=>{
+  ['learn','history','vocab','phonics','growth','plan','lottery','manage','library','storage'].forEach(k=>{
     const cap=k[0].toUpperCase()+k.slice(1);
     $('page'+cap).hidden=(k!==t);
     $('tab'+cap).classList.toggle('active',k===t);
@@ -5617,6 +5937,7 @@ function switchTab(t){
   if(t==='history') renderHistory();
   if(t==='storage') renderSaveBadge();
   if(t==='vocab') renderVocab();
+  if(t==='phonics') renderPhonics();
   if(t==='growth') renderGrowthMini();
   if(t==='plan') renderPlan();
   if(t==='lottery') renderLottery();
@@ -5803,6 +6124,12 @@ function bind(){
     const t=e.target, d=t.dataset||{}, v=t.value;
     if(d.prizeName!=null) guardParent('lottery',()=>updatePrizeField(d.prizeName,'name',v));
     else if(d.prizeProb!=null) guardParent('lottery',()=>updatePrizeField(d.prizeProb,'prob',v));
+    else if(d.prizeAuto!=null) guardParent('lottery',()=>updatePrizeField(d.prizeAuto,'autoRedeem',!!t.checked));
+  });
+  /* 兑换确认属于家长权限：孩子能看到待兑换，但不能自己标记已兑换 */
+  if($('prizeWonList')) $('prizeWonList').addEventListener('click',e=>{
+    const b=e.target.closest&&e.target.closest('button[data-prize-redeem]');
+    if(b) redeemPrize(b.dataset.prizeRedeem);
   });
 
   $('systemFilter').addEventListener('change',e=>setSystem(e.target.value));
@@ -5986,6 +6313,22 @@ function bind(){
       renderVocab();
     }
   });
+
+  /* 自然拼读 */
+  $('phGroupList').addEventListener('click',e=>{
+    const row=e.target.closest&&e.target.closest('[data-ph]');
+    if(row) phStart(row.dataset.ph);
+  });
+  $('phContinue').addEventListener('click',phContinue);
+  $('phBack').addEventListener('click',phBack);
+  $('phSpeak').addEventListener('click',phSpeak);
+  $('phShow').addEventListener('click',()=>{
+    if(phLast){ $('phFeedback').textContent='答案：'+phLast[0]; $('phFeedback').className='ph-feedback ok'; }
+  });
+  $('phShuffle').addEventListener('click',phShuffle);
+  $('phNext').addEventListener('click',phAdvance);
+  $('phInput').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); phAdvance(); } });
+  $('phMode').addEventListener('change',()=>{ if(phLesson && !phSolved) phShow(); });
 
   /* 从生词本创建练习 */
   $('createSet').addEventListener('click',()=>{
