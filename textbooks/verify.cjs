@@ -39,7 +39,7 @@ const pieces = [
   decl(/const DEFAULT_GRADES\s*=\s*\[[\s\S]*?\];/, 'DEFAULT_GRADES'),
   decl(/const DEFAULT_BOOKS\s*=\s*\[[\s\S]*?\];/, 'DEFAULT_BOOKS'),
   decl(/const clone\s*=\s*[^;]+;/, 'clone'),
-  fn('gradeName'), fn('bookName'), fn('nextId'), fn('today'),
+  fn('gradeName'), fn('bookName'), fn('nextId'), fn('today'), fn('inferVolume'),
   fn('tokenize'), fn('validateQuestion'), fn('normalizeImportedPack'), fn('parsePackJSON'),
 ];
 
@@ -50,7 +50,9 @@ const sandbox = {
 vm.createContext(sandbox);
 vm.runInContext(
   pieces.join('\n') +
-    '\nstate = { grades: DEFAULT_GRADES, books: DEFAULT_BOOKS, seq: 1 };' +
+    '\nstate = { grades: DEFAULT_GRADES.concat([' +
+    '{id:"g7",name:"初中七年级"},{id:"g8",name:"初中八年级"},{id:"g9",name:"初中九年级"}]), ' +
+    'books: DEFAULT_BOOKS.concat([{id:"b_pep_junior",name:"人教版新目标（七年级起点）"}]), seq: 1 };' +
     '\nglobalThis.API = { parsePackJSON, validateQuestion, tokenize };',
   sandbox
 );
@@ -58,6 +60,7 @@ const api = sandbox.API;
 
 const files = [
   path.join(root, 'pep-sanqi-2024.json'),
+  path.join(root, 'junior-2024.json'),
   ...fs.readdirSync(path.join(root, 'packs'))
     .filter((f) => f.endsWith('.json'))
     .sort()

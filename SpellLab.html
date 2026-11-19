@@ -1134,6 +1134,20 @@
 #td-root .hc-main { font-size: 20px; font-weight: 900; color: #343a40; }
 #td-root .hc-main b { color: #f76707; font-size: 26px; }
 #td-root .hc-sub { font-size: 12px; color: var(--ink-soft); }
+/* 每日打卡日历 */
+#td-root .cal-box { margin-top: 6px; }
+#td-root .cal-nav { display: flex; align-items: center; justify-content: space-between; font-size: 12px; font-weight: 800; color: #495057; margin-bottom: 3px; }
+#td-root .cal-nav-btn { border: none; background: rgba(255,255,255,.7); color: #e8590c; font-size: 18px; font-weight: 900; line-height: 1; border-radius: 8px; cursor: pointer; width: 26px; height: 24px; padding: 0; }
+#td-root .cal-nav-btn:hover { background: #ffe8cc; }
+#td-root .cal-week, #td-root .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+#td-root .cal-week i { font-style: normal; text-align: center; font-size: 10px; color: var(--ink-soft); padding-bottom: 2px; }
+#td-root .cal-cell { position: relative; text-align: center; font-size: 11px; line-height: 20px; height: 20px; border-radius: 6px; color: #495057; }
+#td-root .cal-cell.empty { visibility: hidden; }
+#td-root .cal-cell.checked { background: linear-gradient(145deg,#ffd43b,#fab005); color: #5f3dc4; font-weight: 900; box-shadow: 0 1px 0 #e8a100; }
+#td-root .cal-cell.today { outline: 2px solid #f76707; outline-offset: -1px; }
+#td-root .cal-cell.future { color: #adb5bd; }
+/* 鸭群计数 */
+#td-root .duck-count { font-size: 11px; color: #e8590c; font-weight: 800; }
 /* 当前单元进度条：让孩子知道打字练习和课本词表的关系 */
 #td-root .unit-progress-card {
   width: min(1040px, 100%); margin: 14px auto 0; padding: 12px 16px;
@@ -1494,10 +1508,20 @@ body.td-typing #typingView { height: 100%; }
           <div class="hc-title">📅 每日打卡</div>
           <div class="hc-main">连续 <b id="td-streakVal">1</b> 天</div>
           <div class="hc-sub" id="td-checkinTip">今天已打卡，明天见！</div>
+          <div class="cal-box">
+            <div class="cal-nav">
+              <button class="cal-nav-btn" id="td-calPrev" title="上个月">‹</button>
+              <span id="td-calTitle">—</span>
+              <button class="cal-nav-btn" id="td-calNext" title="下个月">›</button>
+            </div>
+            <div class="cal-week"><i>日</i><i>一</i><i>二</i><i>三</i><i>四</i><i>五</i><i>六</i></div>
+            <div class="cal-grid" id="td-calGrid"></div>
+          </div>
         </div>
         <div class="home-card duck-card">
-          <div class="hc-title">🦆 我的小鸭</div>
+          <div class="hc-title">🦆 我的鸭群</div>
           <div class="duck-stage" id="td-duckStage">🥚</div>
+          <div class="duck-count" id="td-duckCount">第 1 只 · 共养 1 只</div>
           <div class="hc-sub" id="td-duckInfo">Lv.1 鸭蛋 · 喂 3⭐ 长大</div>
           <button class="mini-btn" id="td-feedBtn">喂食 3⭐</button>
         </div>
@@ -6531,7 +6555,8 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
     // 新增功能 DOM
     skinBtn: $('skinBtn'), blindBtn: $('blindBtn'),
     heroDuck: $('heroDuck'), streakVal: $('streakVal'), checkinTip: $('checkinTip'),
-    duckStage: $('duckStage'), duckInfo: $('duckInfo'), feedBtn: $('feedBtn'),
+    duckStage: $('duckStage'), duckCount: $('duckCount'), duckInfo: $('duckInfo'), feedBtn: $('feedBtn'),
+    calPrev: $('calPrev'), calNext: $('calNext'), calTitle: $('calTitle'), calGrid: $('calGrid'),
     badgeBtn: $('badgeBtn'), badgeCount: $('badgeCount'), levelBtn: $('levelBtn'),
     badgeModal: $('badgeModal'), badgeGrid: $('badgeGrid'), badgeCloseBtn: $('badgeCloseBtn'),
     levelModal: $('levelModal'), levelList: $('levelList'), levelCloseBtn: $('levelCloseBtn'),
@@ -6551,8 +6576,8 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
     stars: 0, best: {}, sound: true,
     wrongKeys: {},        // 错键统计：{ a: 3, b: 5 }
     wordStats: {},        // 单词练习统计：{ apple: {n:练过几次, bad:打错几次, ok:全对几次, cn:词义} }
-    checkin: { last: '', streak: 0, total: 0 },
-    duck: { exp: 0 },     // 小鸭成长值，每 3 点升 1 级（上限 5）
+    checkin: { last: '', streak: 0, total: 0, days: [] }, // days: 打卡日期 'YYYY-MM-DD' 数组，供日历显示
+    duck: { exp: 0, no: 1 }, // exp: 当前鸭成长值（每 3 点升 1 级，上限 5）；no: 第几只鸭 / 共养数量
     badges: [],           // 已解锁勋章 id
     weakCorrect: 0,       // 错键专项累计答对数
     pkWin: 0,             // PK 胜场
@@ -6564,12 +6589,21 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
      否则独立 localStorage 会随每次启动的新浏览器 profile 一起被删掉，导致
      「关闭程序再打开，打字游戏的星星/勋章/养成全没了」。独立版不注入，仍用 localStorage。 */
   const saveIO = { load:null, commit:null };
+  /* 旧存档没有 duck.no / checkin.days，读取后统一补齐，避免 undefined 参与运算。 */
+  function normalizeSave() {
+    if (!save.duck || typeof save.duck !== 'object') save.duck = { exp: 0, no: 1 };
+    if (typeof save.duck.exp !== 'number') save.duck.exp = 0;
+    if (typeof save.duck.no !== 'number' || save.duck.no < 1) save.duck.no = 1;
+    if (!save.checkin || typeof save.checkin !== 'object') save.checkin = { last: '', streak: 0, total: 0, days: [] };
+    if (!Array.isArray(save.checkin.days)) save.checkin.days = [];
+  }
   function loadSave() {
     try {
       if (typeof saveIO.load === 'function') {
         const ext = saveIO.load();
         if (ext && typeof ext === 'object') {
           save = Object.assign(JSON.parse(JSON.stringify(DEFAULT_SAVE)), ext);
+          normalizeSave();
           return;
         }
       }
@@ -6584,6 +6618,7 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
         save = Object.assign(JSON.parse(JSON.stringify(DEFAULT_SAVE)), JSON.parse(raw));
       }
     } catch (e) { /* 忽略 */ }
+    normalizeSave();
   }
   function persist() {
     if (typeof saveIO.commit === 'function') {
@@ -6616,6 +6651,8 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
   function doCheckin() {
     const today = todayStr();
     const c = save.checkin;
+    if (!Array.isArray(c.days)) c.days = [];
+    if (c.days.indexOf(today) < 0) c.days.push(today);
     if (c.last === today) return false;
     const gap = c.last ? daysBetween(c.last, today) : 999;
     c.streak = (gap === 1) ? c.streak + 1 : 1;
@@ -6625,33 +6662,82 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
     return true;
   }
 
-  /* ---------- 小鸭成长 ---------- */
+  /* ---------- 打卡日历 ---------- */
+  let calCursor = null; // {y, m} 当前查看的年月，null 表示尚未初始化
+  function renderCalendar() {
+    if (!dom.calGrid) return;
+    const now = new Date();
+    if (!calCursor) calCursor = { y: now.getFullYear(), m: now.getMonth() };
+    const y = calCursor.y, m = calCursor.m;
+    if (dom.calTitle) dom.calTitle.textContent = `${y}年 ${m + 1}月`;
+    const days = new Set((save.checkin.days || []).slice());
+    const today = todayStr();
+    const firstDow = new Date(y, m, 1).getDay();          // 0=周日
+    const daysInMonth = new Date(y, m + 1, 0).getDate();
+    let html = '';
+    for (let i = 0; i < firstDow; i++) html += '<span class="cal-cell empty"></span>';
+    for (let d = 1; d <= daysInMonth; d++) {
+      const ds = `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+      const cls = ['cal-cell'];
+      if (days.has(ds)) cls.push('checked');
+      if (ds === today) cls.push('today');
+      if (ds > today) cls.push('future');
+      html += `<span class="${cls.join(' ')}" title="${ds}">${d}</span>`;
+    }
+    dom.calGrid.innerHTML = html;
+  }
+  function shiftCalendar(delta) {
+    if (!calCursor) { const n = new Date(); calCursor = { y: n.getFullYear(), m: n.getMonth() }; }
+    const d = new Date(calCursor.y, calCursor.m + delta, 1);
+    calCursor = { y: d.getFullYear(), m: d.getMonth() };
+    renderCalendar();
+  }
+
+  /* ---------- 小鸭成长（鸭群）----------
+     每只鸭 3 点成长值升 1 级，Lv.5 满级；满级后继续喂食会孵化下一只小鸭，
+     因此喂食永远有去处，鸭群数量随投入持续增长。 */
   function duckLevel() { return Math.min(5, 1 + Math.floor((save.duck.exp || 0) / 3)); }
   const DUCK_STAGES = ['🥚', '🐣', '🐤', '🦕', '🦆'];
   const DUCK_NAMES = ['鸭蛋', '破壳', '小鸭', '幼鸭', '神气鸭'];
   const DUCK_COST = 3;
+  function duckCount() { return save.duck.no || 1; }
   function renderDuck() {
     if (!dom.duckStage) return;
     const lv = duckLevel();
-    dom.duckStage.textContent = DUCK_STAGES[lv - 1];
-    dom.heroDuck.textContent = DUCK_STAGES[lv - 1];
+    const no = duckCount();
+    const emoji = DUCK_STAGES[lv - 1];
+    dom.duckStage.textContent = emoji;
+    if (dom.heroDuck) dom.heroDuck.textContent = emoji;
+    if (dom.duckCount) dom.duckCount.textContent = `第 ${no} 只 · 共养 ${no} 只 🦆`;
     dom.duckInfo.textContent = lv >= 5
-      ? `Lv.${lv} ${DUCK_NAMES[lv-1]} · 已长大啦！`
+      ? `Lv.${lv} ${DUCK_NAMES[lv-1]} · 喂 ${DUCK_COST}⭐ 孵下一只`
       : `Lv.${lv} ${DUCK_NAMES[lv-1]} · 喂 ${DUCK_COST}⭐ 长大`;
-    if (dom.feedBtn) dom.feedBtn.disabled = lv >= 5 || save.stars < DUCK_COST;
+    if (dom.feedBtn) {
+      dom.feedBtn.disabled = save.stars < DUCK_COST;
+      dom.feedBtn.textContent = lv >= 5 ? `孵新鸭 ${DUCK_COST}⭐` : `喂食 ${DUCK_COST}⭐`;
+    }
   }
   function feedDuck() {
-    const lv = duckLevel();
-    if (lv >= 5) { toast('小鸭已经完全长大啦！🦆'); return; }
     if (save.stars < DUCK_COST) { toast('星星不够，再玩几局攒星星吧 ⭐'); return; }
+    const lv = duckLevel();
+    const beforeNo = duckCount();
     save.stars -= DUCK_COST;
-    save.duck.exp = (save.duck.exp || 0) + 1;
+    let hatched = false;
+    if (lv >= 5) {
+      // 满级 → 孵化新的小鸭，成长值归零重新养
+      save.duck.no = beforeNo + 1;
+      save.duck.exp = 0;
+      hatched = true;
+    } else {
+      save.duck.exp = (save.duck.exp || 0) + 1;
+    }
     persist();
     refreshStarTotal();
     renderDuck();
     SFX.good();
     const nl = duckLevel();
-    if (nl > lv) { toast(`小鸭升级到 Lv.${nl} ${DUCK_NAMES[nl-1]}！`); SFX.star(); checkBadge('duck5'); }
+    if (hatched) { toast(`第 ${save.duck.no} 只小鸭孵化啦！🦆`); SFX.star(); }
+    else if (nl > lv) { toast(`小鸭升级到 Lv.${nl} ${DUCK_NAMES[nl-1]}！`); SFX.star(); checkBadge('duck5'); }
     else toast('小鸭吃得好开心！🥚');
   }
 
@@ -6980,6 +7066,7 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
     dom.screenGame.classList.remove('active');
     dom.screenMenu.classList.add('active');
     $('legend').style.display = 'flex';
+    renderCalendar();
   }
 
   /* ---------- 启动模式 ---------- */
@@ -7501,6 +7588,7 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
     persist();
     refreshStarTotal();
     renderDuck();
+    renderCalendar();
     if (dom.streakVal) dom.streakVal.textContent = save.checkin.streak;
     if (dom.checkinTip) dom.checkinTip.textContent = checkedIn
       ? '打卡成功！连续 ' + save.checkin.streak + ' 天 🎉'
@@ -7600,6 +7688,10 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
     // 喂小鸭
     if (dom.feedBtn) dom.feedBtn.addEventListener('click', feedDuck);
 
+    // 打卡日历翻页
+    if (dom.calPrev) dom.calPrev.addEventListener('click', () => shiftCalendar(-1));
+    if (dom.calNext) dom.calNext.addEventListener('click', () => shiftCalendar(1));
+
     // 勋章墙
     if (dom.badgeBtn) dom.badgeBtn.addEventListener('click', () => {
       renderBadges();
@@ -7687,6 +7779,7 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
       ? '打卡成功！连续 ' + save.checkin.streak + ' 天 🎉'
       : '今天已打卡，明天见！';
     renderDuck();
+    renderCalendar();
     renderBadges();
     bindEvents();
   }
@@ -7718,7 +7811,7 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
         dom.blindBtn.classList.toggle('on', !!save.blind);
         dom.blindBtn.textContent = save.blind ? '👀' : '🙈';
       }
-      applySkin(); applyBlindVisual(); renderDuck(); renderBadges();
+      applySkin(); applyBlindVisual(); renderDuck(); renderCalendar(); renderBadges();
       renderUnitProgress();
     }
   };

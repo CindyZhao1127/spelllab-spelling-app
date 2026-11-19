@@ -252,7 +252,7 @@ check('DOM id 引用无缺失', () => {
   const dynamic = new Set(['sPrev','sSpeak','sHints','sHint','sReset','sCheck','sNext','sMenu','sPaper','wSpeak','wStar','wShuffle','wAnswer','wNext','wMenu','wPaper','cPrev','cSpeak','cHint','cReset','cCheck','cNext','cMenu',
     // 打字小鸭集成模块：$() 内部自动加 td- 前缀，这些名字对应 td-xxx 实际 id
     'screenMenu','screenGame','starTotal','soundBtn','gameTitle','scoreVal','comboVal','accVal','stageInstruction','targetDisplay','progressText','keyboard','handHint','handHintDot','handHintText','resultModal','resultEmoji','resultTitle','resultStars','resultDetail','helpModal','legend','modeGrid','backBtn','brandHome','againBtn','menuBtn','helpBtn','helpCloseBtn',
-    'skinBtn','blindBtn','heroDuck','streakVal','checkinTip','duckStage','duckInfo','feedBtn','badgeBtn','badgeCount','levelBtn','badgeModal','badgeGrid','badgeCloseBtn','levelModal','levelList','levelCloseBtn','toast','app','root','screenMenu',
+    'skinBtn','blindBtn','heroDuck','streakVal','checkinTip','duckStage','duckCount','duckInfo','feedBtn','calPrev','calNext','calTitle','calGrid','badgeBtn','badgeCount','levelBtn','badgeModal','badgeGrid','badgeCloseBtn','levelModal','levelList','levelCloseBtn','toast','app','root','screenMenu',
     'wordStatsBtn','wordStatsModal','wordStatSummary','wordStatList','wordStatFocusBtn','wordStatCloseBtn',
     'unitCard','unitName','unitBar','unitWords','unitDone','unitBad','unitMastered','unitPracticeBtn','unitFocusBtn']);
   const missing = refs.filter(r => !staticIds.has(r) && !dynamic.has(r));

@@ -1,0 +1,1110 @@
+{
+  "format": "spelllab.textbook.v1",
+  "exportedAt": "2026-11-19T14:12:43Z",
+  "packs": [
+    {
+      "name": "人教版新目标八年级下册（2024版·七年级起点）",
+      "gradeId": "g8",
+      "gradeName": "初中八年级",
+      "bookId": "b_pep_junior",
+      "bookName": "人教版新目标（七年级起点）",
+      "units": [
+        {
+          "name": "Unit 1 Time to Relax",
+          "sentences": [
+            {
+              "cn": "我通过听音乐来放松。",
+              "en": "I relax by listening to music.",
+              "hints": [
+                "我",
+                "放松",
+                "通过；被；在……旁",
+                "听",
+                "到；向",
+                "音乐"
+              ]
+            },
+            {
+              "cn": "阅读是我最喜欢的爱好。",
+              "en": "Reading is my favourite hobby.",
+              "hints": [
+                "阅读",
+                "是",
+                "我的",
+                "最喜欢的",
+                "业余爱好"
+              ]
+            },
+            {
+              "cn": "我周末有空闲时间。",
+              "en": "I have free time on weekends.",
+              "hints": [
+                "我",
+                "有",
+                "空闲的",
+                "时间",
+                "在……上",
+                "周末"
+              ]
+            },
+            {
+              "cn": "看电影很有趣。",
+              "en": "Watching movies is fun.",
+              "hints": [
+                "观看",
+                "电影",
+                "是",
+                "乐趣"
+              ]
+            },
+            {
+              "cn": "我感到平静而快乐。",
+              "en": "I feel calm and happy.",
+              "hints": [
+                "我",
+                "感觉",
+                "平静的",
+                "和；与",
+                "快乐的"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "relax",
+              "放松"
+            ],
+            [
+              "relaxing",
+              "令人放松的"
+            ],
+            [
+              "hobby",
+              "业余爱好"
+            ],
+            [
+              "free",
+              "空闲的；自由的"
+            ],
+            [
+              "time",
+              "时间"
+            ],
+            [
+              "spare",
+              "空闲的"
+            ],
+            [
+              "enjoy",
+              "享受；喜爱"
+            ],
+            [
+              "interest",
+              "兴趣"
+            ],
+            [
+              "activity",
+              "活动"
+            ],
+            [
+              "music",
+              "音乐"
+            ],
+            [
+              "art",
+              "艺术"
+            ],
+            [
+              "read",
+              "阅读"
+            ],
+            [
+              "book",
+              "书"
+            ],
+            [
+              "movie",
+              "电影"
+            ],
+            [
+              "game",
+              "游戏"
+            ],
+            [
+              "sport",
+              "运动"
+            ],
+            [
+              "fun",
+              "乐趣"
+            ],
+            [
+              "happy",
+              "快乐的"
+            ],
+            [
+              "calm",
+              "平静的"
+            ],
+            [
+              "peace",
+              "平静；和平"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 2 Stay Healthy",
+          "sentences": [
+            {
+              "cn": "我们应该保持健康。",
+              "en": "We should stay healthy.",
+              "hints": [
+                "我们",
+                "应该",
+                "停留",
+                "健康的"
+              ]
+            },
+            {
+              "cn": "你应该去看医生。",
+              "en": "You should see a doctor.",
+              "hints": [
+                "你；你们",
+                "应该",
+                "看见",
+                "一；一个",
+                "医生"
+              ]
+            },
+            {
+              "cn": "锻炼对你的健康有好处。",
+              "en": "Exercise is good for your health.",
+              "hints": [
+                "锻炼",
+                "是",
+                "好的",
+                "为；给",
+                "你的；你们的",
+                "健康"
+              ]
+            },
+            {
+              "cn": "我每晚睡八个小时。",
+              "en": "I sleep eight hours every night.",
+              "hints": [
+                "我",
+                "睡觉",
+                "八",
+                "小时",
+                "每个；每一",
+                "夜晚"
+              ]
+            },
+            {
+              "cn": "多吃蔬菜和水果。",
+              "en": "Eat more vegetables and fruit.",
+              "hints": [
+                "吃",
+                "更多",
+                "蔬菜",
+                "和；与",
+                "水果"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "health",
+              "健康"
+            ],
+            [
+              "healthy",
+              "健康的"
+            ],
+            [
+              "ill",
+              "生病的"
+            ],
+            [
+              "sick",
+              "生病的"
+            ],
+            [
+              "doctor",
+              "医生"
+            ],
+            [
+              "nurse",
+              "护士"
+            ],
+            [
+              "hospital",
+              "医院"
+            ],
+            [
+              "medicine",
+              "药"
+            ],
+            [
+              "exercise",
+              "锻炼；练习"
+            ],
+            [
+              "habit",
+              "习惯"
+            ],
+            [
+              "sleep",
+              "睡觉"
+            ],
+            [
+              "rest",
+              "休息"
+            ],
+            [
+              "diet",
+              "饮食"
+            ],
+            [
+              "vegetable",
+              "蔬菜"
+            ],
+            [
+              "fruit",
+              "水果"
+            ],
+            [
+              "strong",
+              "强壮的"
+            ],
+            [
+              "fit",
+              "健壮的"
+            ],
+            [
+              "prevent",
+              "预防"
+            ],
+            [
+              "care",
+              "关心；照顾"
+            ],
+            [
+              "body",
+              "身体"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 3 Growing Up",
+          "sentences": [
+            {
+              "cn": "我想快点长大。",
+              "en": "I want to grow up quickly.",
+              "hints": [
+                "我",
+                "想要",
+                "到；向",
+                "生长",
+                "向上",
+                "迅速地"
+              ]
+            },
+            {
+              "cn": "青少年应该学会独立。",
+              "en": "Teenagers should learn to be independent.",
+              "hints": [
+                "青少年",
+                "应该",
+                "学习",
+                "到；向",
+                "是；成为",
+                "独立的"
+              ]
+            },
+            {
+              "cn": "成长意味着变化。",
+              "en": "Growing up means changes.",
+              "hints": [
+                "生长",
+                "向上",
+                "意思是",
+                "变化"
+              ]
+            },
+            {
+              "cn": "父母支持他们的孩子。",
+              "en": "Parents support their children.",
+              "hints": [
+                "父亲或母亲",
+                "支持",
+                "他们的",
+                "孩子们"
+              ]
+            },
+            {
+              "cn": "我面对很多难题。",
+              "en": "I face many problems.",
+              "hints": [
+                "我",
+                "面对",
+                "许多",
+                "难题"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "grow",
+              "成长；生长"
+            ],
+            [
+              "growth",
+              "成长"
+            ],
+            [
+              "child",
+              "孩子"
+            ],
+            [
+              "childhood",
+              "童年"
+            ],
+            [
+              "teenager",
+              "青少年"
+            ],
+            [
+              "adult",
+              "成年人"
+            ],
+            [
+              "parent",
+              "父亲或母亲"
+            ],
+            [
+              "responsibility",
+              "责任"
+            ],
+            [
+              "independent",
+              "独立的"
+            ],
+            [
+              "learn",
+              "学习"
+            ],
+            [
+              "experience",
+              "经历；经验"
+            ],
+            [
+              "change",
+              "改变"
+            ],
+            [
+              "age",
+              "年龄"
+            ],
+            [
+              "mature",
+              "成熟的"
+            ],
+            [
+              "wise",
+              "明智的"
+            ],
+            [
+              "decide",
+              "决定"
+            ],
+            [
+              "choice",
+              "选择"
+            ],
+            [
+              "face",
+              "面对"
+            ],
+            [
+              "problem",
+              "难题"
+            ],
+            [
+              "support",
+              "支持"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 4 The Wonders of Nature",
+          "sentences": [
+            {
+              "cn": "这些山很美丽。",
+              "en": "The mountains are beautiful.",
+              "hints": [
+                "这个；那个",
+                "高山",
+                "是",
+                "美丽的"
+              ]
+            },
+            {
+              "cn": "这条河很长。",
+              "en": "This river is very long.",
+              "hints": [
+                "这个",
+                "河流",
+                "是",
+                "很；非常",
+                "长的"
+              ]
+            },
+            {
+              "cn": "海洋又深又宽。",
+              "en": "The ocean is deep and wide.",
+              "hints": [
+                "这个；那个",
+                "海洋",
+                "是",
+                "深的",
+                "和；与",
+                "宽的"
+              ]
+            },
+            {
+              "cn": "大自然有许多奇观。",
+              "en": "Nature has many wonders.",
+              "hints": [
+                "自然界",
+                "有",
+                "许多",
+                "奇观"
+              ]
+            },
+            {
+              "cn": "我们应该保护大自然。",
+              "en": "We should protect nature.",
+              "hints": [
+                "我们",
+                "应该",
+                "保护",
+                "自然界"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "wonder",
+              "奇观；想知道"
+            ],
+            [
+              "nature",
+              "大自然"
+            ],
+            [
+              "mountain",
+              "高山"
+            ],
+            [
+              "river",
+              "河流"
+            ],
+            [
+              "lake",
+              "湖泊"
+            ],
+            [
+              "sea",
+              "海"
+            ],
+            [
+              "ocean",
+              "海洋"
+            ],
+            [
+              "forest",
+              "森林"
+            ],
+            [
+              "desert",
+              "沙漠"
+            ],
+            [
+              "waterfall",
+              "瀑布"
+            ],
+            [
+              "valley",
+              "山谷"
+            ],
+            [
+              "beautiful",
+              "美丽的"
+            ],
+            [
+              "amazing",
+              "令人惊奇的"
+            ],
+            [
+              "grand",
+              "宏伟的"
+            ],
+            [
+              "high",
+              "高的"
+            ],
+            [
+              "deep",
+              "深的"
+            ],
+            [
+              "wide",
+              "宽的"
+            ],
+            [
+              "explore",
+              "探索"
+            ],
+            [
+              "protect",
+              "保护"
+            ],
+            [
+              "wonderful",
+              "精彩的"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 5 Nature's Temper",
+          "sentences": [
+            {
+              "cn": "暴风雨可能很危险。",
+              "en": "Storms can be dangerous.",
+              "hints": [
+                "暴风雨",
+                "能；可以",
+                "是；成为",
+                "危险的"
+              ]
+            },
+            {
+              "cn": "闪电非常强大。",
+              "en": "Lightning is very powerful.",
+              "hints": [
+                "闪电",
+                "是",
+                "很；非常",
+                "强大的"
+              ]
+            },
+            {
+              "cn": "暴风雨中我们必须保证安全。",
+              "en": "We must keep safe in a storm.",
+              "hints": [
+                "我们",
+                "必须",
+                "保持",
+                "安全的",
+                "在……里",
+                "一；一个",
+                "暴风雨"
+              ]
+            },
+            {
+              "cn": "风非常大。",
+              "en": "The wind is very strong.",
+              "hints": [
+                "这个；那个",
+                "风",
+                "是",
+                "很；非常",
+                "强壮的"
+              ]
+            },
+            {
+              "cn": "洪水会损坏房屋。",
+              "en": "Floods can damage homes.",
+              "hints": [
+                "洪水",
+                "能；可以",
+                "损害",
+                "家"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "temper",
+              "脾气；性情"
+            ],
+            [
+              "weather",
+              "天气"
+            ],
+            [
+              "storm",
+              "暴风雨"
+            ],
+            [
+              "thunder",
+              "雷"
+            ],
+            [
+              "lightning",
+              "闪电"
+            ],
+            [
+              "flood",
+              "洪水"
+            ],
+            [
+              "earthquake",
+              "地震"
+            ],
+            [
+              "wind",
+              "风"
+            ],
+            [
+              "rain",
+              "雨"
+            ],
+            [
+              "snow",
+              "雪"
+            ],
+            [
+              "hot",
+              "炎热的"
+            ],
+            [
+              "cold",
+              "寒冷的"
+            ],
+            [
+              "dangerous",
+              "危险的"
+            ],
+            [
+              "safe",
+              "安全的"
+            ],
+            [
+              "damage",
+              "损害"
+            ],
+            [
+              "fire",
+              "火"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 6 Crossing Cultures",
+          "sentences": [
+            {
+              "cn": "世界各地的文化各不相同。",
+              "en": "Cultures are different around the world.",
+              "hints": [
+                "文化",
+                "是",
+                "不同的",
+                "大约",
+                "这个；那个",
+                "世界"
+              ]
+            },
+            {
+              "cn": "我们应该尊重其他文化。",
+              "en": "We should respect other cultures.",
+              "hints": [
+                "我们",
+                "应该",
+                "尊敬",
+                "另外的",
+                "文化"
+              ]
+            },
+            {
+              "cn": "你能理解外国习俗吗？",
+              "en": "Can you understand foreign customs?",
+              "hints": [
+                "能；可以",
+                "你；你们",
+                "理解",
+                "外国的",
+                "习俗"
+              ]
+            },
+            {
+              "cn": "不同的国家有不同的传统。",
+              "en": "Different countries have different traditions.",
+              "hints": [
+                "不同的",
+                "国家",
+                "有",
+                "不同的",
+                "传统"
+              ]
+            },
+            {
+              "cn": "语言是文化的一部分。",
+              "en": "Language is part of culture.",
+              "hints": [
+                "语言",
+                "是",
+                "部分",
+                "……的",
+                "文化"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "culture",
+              "文化"
+            ],
+            [
+              "cross",
+              "穿过"
+            ],
+            [
+              "custom",
+              "习俗"
+            ],
+            [
+              "tradition",
+              "传统"
+            ],
+            [
+              "foreign",
+              "外国的"
+            ],
+            [
+              "country",
+              "国家"
+            ],
+            [
+              "different",
+              "不同的"
+            ],
+            [
+              "believe",
+              "相信"
+            ],
+            [
+              "respect",
+              "尊重"
+            ],
+            [
+              "understand",
+              "理解；明白"
+            ],
+            [
+              "greet",
+              "问候"
+            ],
+            [
+              "polite",
+              "有礼貌的"
+            ],
+            [
+              "gift",
+              "礼物"
+            ],
+            [
+              "visit",
+              "拜访"
+            ],
+            [
+              "guest",
+              "客人"
+            ],
+            [
+              "host",
+              "主人"
+            ],
+            [
+              "communication",
+              "交流"
+            ],
+            [
+              "difference",
+              "差别"
+            ],
+            [
+              "world",
+              "世界"
+            ],
+            [
+              "language",
+              "语言"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 7 A Good Read",
+          "sentences": [
+            {
+              "cn": "我喜欢读书。",
+              "en": "I like reading books.",
+              "hints": [
+                "我",
+                "喜欢；像",
+                "阅读",
+                "书"
+              ]
+            },
+            {
+              "cn": "这本小说非常有趣。",
+              "en": "This novel is very interesting.",
+              "hints": [
+                "这个",
+                "小说",
+                "是",
+                "很；非常",
+                "有趣的"
+              ]
+            },
+            {
+              "cn": "这位作家写很棒的故事。",
+              "en": "The author writes great stories.",
+              "hints": [
+                "这个；那个",
+                "作者",
+                "写（第三人称单数）",
+                "很棒的",
+                "故事"
+              ]
+            },
+            {
+              "cn": "阅读给了我知识。",
+              "en": "Reading gives me knowledge.",
+              "hints": [
+                "阅读",
+                "给予",
+                "我（宾格）",
+                "知识"
+              ]
+            },
+            {
+              "cn": "我每周去图书馆。",
+              "en": "I go to the library every week.",
+              "hints": [
+                "我",
+                "去",
+                "到；向",
+                "这个；那个",
+                "图书馆",
+                "每个；每一",
+                "星期；周"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "story",
+              "故事"
+            ],
+            [
+              "novel",
+              "小说"
+            ],
+            [
+              "author",
+              "作者"
+            ],
+            [
+              "character",
+              "人物；角色"
+            ],
+            [
+              "writer",
+              "作家"
+            ],
+            [
+              "article",
+              "文章"
+            ],
+            [
+              "magazine",
+              "杂志"
+            ],
+            [
+              "interesting",
+              "有趣的"
+            ],
+            [
+              "boring",
+              "乏味的"
+            ],
+            [
+              "exciting",
+              "令人激动的"
+            ],
+            [
+              "meaning",
+              "意义"
+            ],
+            [
+              "knowledge",
+              "知识"
+            ],
+            [
+              "imagine",
+              "想象"
+            ],
+            [
+              "adventure",
+              "冒险"
+            ],
+            [
+              "hero",
+              "英雄"
+            ],
+            [
+              "page",
+              "页"
+            ],
+            [
+              "library",
+              "图书馆"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 8 Making a Difference",
+          "sentences": [
+            {
+              "cn": "我们能带来改变。",
+              "en": "We can make a difference.",
+              "hints": [
+                "我们",
+                "能；可以",
+                "制作",
+                "一；一个",
+                "差别"
+              ]
+            },
+            {
+              "cn": "志愿者帮助社区。",
+              "en": "Volunteers help the community.",
+              "hints": [
+                "志愿者",
+                "帮助",
+                "这个；那个",
+                "社区"
+              ]
+            },
+            {
+              "cn": "捐钱帮助穷人。",
+              "en": "Donating money helps poor people.",
+              "hints": [
+                "捐赠（进行时）",
+                "钱",
+                "帮助",
+                "贫穷的",
+                "人们"
+              ]
+            },
+            {
+              "cn": "小小的行动能改变世界。",
+              "en": "Small actions can change the world.",
+              "hints": [
+                "小的",
+                "行动",
+                "能；可以",
+                "改变",
+                "这个；那个",
+                "世界"
+              ]
+            },
+            {
+              "cn": "我想帮助他人。",
+              "en": "I want to help others.",
+              "hints": [
+                "我",
+                "想要",
+                "到；向",
+                "帮助",
+                "其他人"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "make",
+              "制作；使"
+            ],
+            [
+              "help",
+              "帮助"
+            ],
+            [
+              "volunteer",
+              "志愿者"
+            ],
+            [
+              "community",
+              "社区"
+            ],
+            [
+              "charity",
+              "慈善机构"
+            ],
+            [
+              "donate",
+              "捐赠"
+            ],
+            [
+              "kind",
+              "善良的"
+            ],
+            [
+              "improve",
+              "改善；提高"
+            ],
+            [
+              "people",
+              "人们"
+            ],
+            [
+              "solve",
+              "解决"
+            ],
+            [
+              "give",
+              "给予"
+            ],
+            [
+              "share",
+              "分享"
+            ],
+            [
+              "hope",
+              "希望"
+            ],
+            [
+              "effort",
+              "努力"
+            ],
+            [
+              "action",
+              "行动"
+            ],
+            [
+              "clean",
+              "清洁的；打扫"
+            ],
+            [
+              "green",
+              "绿色的"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

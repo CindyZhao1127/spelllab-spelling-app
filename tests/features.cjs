@@ -1235,6 +1235,76 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     return 'app_meta 四份 JSON，密码只以哈希出现';
   });
 
+  check('鸭群养成：满级后继续喂食孵化新鸭，不再卡在 Lv.5', () => {
+    ['duckCount','cal-box','calGrid','calPrev','calNext','孵新鸭'].forEach(k =>
+      assert(html.indexOf(k) >= 0, '缺鸭群/日历元素 ' + k));
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      var captured=null;
+      // 造一只已到 Lv.5（exp=12）的鸭，星星充足
+      var seed={stars:100,duck:{exp:12,no:1},checkin:{last:'',streak:0,total:0,days:[]}};
+      window.TypingDuck.setSaveIO(function(){return JSON.parse(JSON.stringify(seed));},
+        function(obj){captured=obj;});
+      window.TypingDuck.reloadSave();
+      var stageBefore=document.getElementById('td-duckStage').textContent;
+      var btnBefore=document.getElementById('td-feedBtn').textContent;
+      var disabledBefore=document.getElementById('td-feedBtn').disabled;
+      // 点击喂食 → 应孵化第 2 只
+      document.getElementById('td-feedBtn').listeners.click[0]({});
+      var after=captured||{};
+      var countText=document.getElementById('td-duckCount').textContent;
+      var btnAfter=document.getElementById('td-feedBtn').textContent;
+      // 再喂 4 次，让新鸭从 Lv1 升到 Lv2（exp 0→4，第 3 点升级）
+      for(var i=0;i<4;i++) document.getElementById('td-feedBtn').listeners.click[0]({});
+      var after2=captured||{};
+      return {no1:seed.duck.no,no2:after.duck&&after.duck.no,exp2:after.duck&&after.duck.exp,
+        stars2:after.stars,countText:countText,btnBefore:btnBefore,btnAfter:btnAfter,
+        disabledBefore:disabledBefore,no3:after2.duck&&after2.duck.no,exp3:after2.duck&&after2.duck.exp,
+        stageBefore:stageBefore};
+    })())`));
+    assert(o.no2 === 2, '满级后未孵化新鸭: ' + JSON.stringify(o));
+    assert(o.exp2 === 0, '孵化后成长值未归零: ' + JSON.stringify(o));
+    assert(o.stars2 === 97, '孵化未扣 3 星: ' + JSON.stringify(o));
+    assert(o.disabledBefore === false, '满级时喂食按钮仍被禁用: ' + JSON.stringify(o));
+    assert(o.countText.indexOf('第 2 只') >= 0, '鸭群计数未更新: ' + JSON.stringify(o));
+    assert(o.btnBefore.indexOf('孵新鸭') >= 0, '满级按钮文案未变: ' + JSON.stringify(o));
+    assert(o.no3 === 2 && o.exp3 === 4, '新鸭继续喂食成长异常: ' + JSON.stringify(o));
+    return 'Lv.5 再喂孵出第 2 只 · 新鸭 exp 归零继续长大 · 按钮不再禁用';
+  });
+
+  check('打卡日历：记录打卡日期并在当月高亮，可翻月', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      var d=new Date(); var y=d.getFullYear(), m=d.getMonth();
+      var pad=function(n){return String(n).padStart(2,'0');};
+      var today=y+'-'+pad(m+1)+'-'+pad(d.getDate());
+      var yesterday=new Date(y,m,d.getDate()-1);
+      var yd=yesterday.getFullYear()+'-'+pad(yesterday.getMonth()+1)+'-'+pad(yesterday.getDate());
+      var seed={stars:0,duck:{exp:0,no:1},
+        checkin:{last:today,streak:2,total:2,days:[yd,today]}};
+      window.TypingDuck.setSaveIO(function(){return JSON.parse(JSON.stringify(seed));},
+        function(obj){});
+      window.TypingDuck.reloadSave();
+      var grid=document.getElementById('td-calGrid');
+      var title=document.getElementById('td-calTitle').textContent;
+      var checked=(grid.innerHTML.match(/cal-cell checked/g)||[]).length;
+      var todayMarked=/<span class="cal-cell[^"]*checked[^"]*today/.test(grid.innerHTML)
+        || /<span class="cal-cell[^"]*today[^"]*checked/.test(grid.innerHTML);
+      // 翻到上个月再翻回来
+      document.getElementById('td-calPrev').listeners.click[0]({});
+      var prevTitle=document.getElementById('td-calTitle').textContent;
+      document.getElementById('td-calNext').listeners.click[0]({});
+      var backTitle=document.getElementById('td-calTitle').textContent;
+      return {today:today,yd:yd,title:title,checked:checked,todayMarked:todayMarked,
+        prevTitle:prevTitle,backTitle:backTitle};
+    })())`));
+    assert(o.checked >= 2, '当月打卡日期未高亮: ' + JSON.stringify(o));
+    assert(o.title.indexOf((o.today).slice(0,4)) >= 0 && o.title.indexOf('月') >= 0,
+      '日历标题未显示当前年月: ' + JSON.stringify(o));
+    assert(o.todayMarked, '今天未同时标记打卡: ' + JSON.stringify(o));
+    assert(o.prevTitle !== o.title && o.backTitle === o.title,
+      '日历翻月/翻回异常: ' + JSON.stringify(o));
+    return o.title + ' · 高亮 ' + o.checked + ' 天 · 今天已打卡 · 翻月正常';
+  });
+
   const failed = results.filter(r => r[1] === 'FAIL');
   results.forEach(r => console.log('[' + r[1] + ']   ' + r[0] + (r[2] ? '  -> ' + r[2] : '')));
   console.log('\n合计 ' + results.length + ' 项，失败 ' + failed.length + ' 项');

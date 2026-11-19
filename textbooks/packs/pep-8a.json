@@ -1,0 +1,1117 @@
+{
+  "format": "spelllab.textbook.v1",
+  "exportedAt": "2026-11-19T14:12:43Z",
+  "packs": [
+    {
+      "name": "人教版新目标八年级上册（2024版·七年级起点）",
+      "gradeId": "g8",
+      "gradeName": "初中八年级",
+      "bookId": "b_pep_junior",
+      "bookName": "人教版新目标（七年级起点）",
+      "units": [
+        {
+          "name": "Unit 1 Happy Holiday",
+          "sentences": [
+            {
+              "cn": "你的假期过得怎么样？",
+              "en": "How was your holiday?",
+              "hints": [
+                "怎样；多么",
+                "是（过去）",
+                "你的；你们的",
+                "假期"
+              ]
+            },
+            {
+              "cn": "去年夏天我去了北京。",
+              "en": "I went to Beijing last summer.",
+              "hints": [
+                "我",
+                "去（过去）",
+                "到；向",
+                "北京",
+                "上一个的；最后的",
+                "夏天"
+              ]
+            },
+            {
+              "cn": "景色很美。",
+              "en": "The view was beautiful.",
+              "hints": [
+                "这个；那个",
+                "景色",
+                "是（过去）",
+                "美丽的"
+              ]
+            },
+            {
+              "cn": "我们拍了很多照片。",
+              "en": "We took many photos.",
+              "hints": [
+                "我们",
+                "拿；拍（过去式）",
+                "许多",
+                "照片"
+              ]
+            },
+            {
+              "cn": "我玩得很开心。",
+              "en": "I had a wonderful time.",
+              "hints": [
+                "我",
+                "有（过去式）",
+                "一；一个",
+                "精彩的",
+                "时间"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "holiday",
+              "假期"
+            ],
+            [
+              "vacation",
+              "假期"
+            ],
+            [
+              "trip",
+              "旅行"
+            ],
+            [
+              "journey",
+              "旅程"
+            ],
+            [
+              "visit",
+              "参观；拜访"
+            ],
+            [
+              "place",
+              "地方"
+            ],
+            [
+              "beautiful",
+              "美丽的"
+            ],
+            [
+              "view",
+              "景色；视野"
+            ],
+            [
+              "photo",
+              "照片"
+            ],
+            [
+              "enjoy",
+              "享受；喜爱"
+            ],
+            [
+              "relax",
+              "放松"
+            ],
+            [
+              "exciting",
+              "令人激动的"
+            ],
+            [
+              "wonderful",
+              "精彩的"
+            ],
+            [
+              "memorable",
+              "难忘的"
+            ],
+            [
+              "experience",
+              "经历；经验"
+            ],
+            [
+              "travel",
+              "旅行"
+            ],
+            [
+              "guide",
+              "向导；指南"
+            ],
+            [
+              "tourist",
+              "游客"
+            ],
+            [
+              "culture",
+              "文化"
+            ],
+            [
+              "souvenir",
+              "纪念品"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 2 Home Sweet Home",
+          "sentences": [
+            {
+              "cn": "我在家帮助父母。",
+              "en": "I help my parents at home.",
+              "hints": [
+                "我",
+                "帮助",
+                "我的",
+                "父亲或母亲",
+                "在",
+                "家"
+              ]
+            },
+            {
+              "cn": "我的家温暖又舒适。",
+              "en": "My home is warm and comfortable.",
+              "hints": [
+                "我的",
+                "家",
+                "是",
+                "温暖的",
+                "和；与",
+                "舒适的"
+              ]
+            },
+            {
+              "cn": "我们一起做饭。",
+              "en": "We cook meals together.",
+              "hints": [
+                "我们",
+                "烹饪",
+                "一餐",
+                "在一起"
+              ]
+            },
+            {
+              "cn": "我扫地。",
+              "en": "I sweep the floor.",
+              "hints": [
+                "我",
+                "扫",
+                "这个；那个",
+                "地板"
+              ]
+            },
+            {
+              "cn": "我爱我的家人。",
+              "en": "I love my family.",
+              "hints": [
+                "我",
+                "爱；喜爱",
+                "我的",
+                "家庭"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "home",
+              "家"
+            ],
+            [
+              "house",
+              "房子"
+            ],
+            [
+              "room",
+              "房间"
+            ],
+            [
+              "clean",
+              "打扫；干净的"
+            ],
+            [
+              "tidy",
+              "整洁的"
+            ],
+            [
+              "comfortable",
+              "舒适的"
+            ],
+            [
+              "parent",
+              "父亲或母亲"
+            ],
+            [
+              "family",
+              "家庭；家人"
+            ],
+            [
+              "chore",
+              "家务"
+            ],
+            [
+              "cook",
+              "烹饪"
+            ],
+            [
+              "meal",
+              "一餐；饭"
+            ],
+            [
+              "share",
+              "分享"
+            ],
+            [
+              "together",
+              "一起"
+            ],
+            [
+              "warm",
+              "温暖的"
+            ],
+            [
+              "love",
+              "爱"
+            ],
+            [
+              "help",
+              "帮助"
+            ],
+            [
+              "wash",
+              "洗"
+            ],
+            [
+              "sweep",
+              "扫"
+            ],
+            [
+              "floor",
+              "地板"
+            ],
+            [
+              "kitchen",
+              "厨房"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 3 Same or Different?",
+          "sentences": [
+            {
+              "cn": "我们在很多方面不同。",
+              "en": "We are different in many ways.",
+              "hints": [
+                "我们",
+                "是",
+                "不同的",
+                "在……里",
+                "许多",
+                "方式；方法"
+              ]
+            },
+            {
+              "cn": "我的朋友比我更外向。",
+              "en": "My friend is more outgoing than me.",
+              "hints": [
+                "我的",
+                "朋友",
+                "是",
+                "更多",
+                "外向的",
+                "比",
+                "我（宾格）"
+              ]
+            },
+            {
+              "cn": "我们有很多共同点。",
+              "en": "We have a lot in common.",
+              "hints": [
+                "我们",
+                "有",
+                "一；一个",
+                "许多",
+                "在……里",
+                "共同的"
+              ]
+            },
+            {
+              "cn": "虽然我们不同，但我们是朋友。",
+              "en": "Although we are different, we are friends.",
+              "hints": [
+                "虽然",
+                "我们",
+                "是",
+                "不同的",
+                "我们",
+                "是",
+                "朋友"
+              ]
+            },
+            {
+              "cn": "她和她姐姐一样害羞。",
+              "en": "She is as shy as her sister.",
+              "hints": [
+                "她",
+                "是",
+                "一；一个",
+                "害羞的",
+                "一；一个",
+                "她的",
+                "姐；妹"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "same",
+              "相同的"
+            ],
+            [
+              "different",
+              "不同的"
+            ],
+            [
+              "difference",
+              "差别；不同"
+            ],
+            [
+              "similar",
+              "相似的"
+            ],
+            [
+              "compare",
+              "比较"
+            ],
+            [
+              "common",
+              "共同的；普通的"
+            ],
+            [
+              "both",
+              "两个都"
+            ],
+            [
+              "although",
+              "虽然；尽管"
+            ],
+            [
+              "however",
+              "然而"
+            ],
+            [
+              "other",
+              "其他的"
+            ],
+            [
+              "each",
+              "每个"
+            ],
+            [
+              "friend",
+              "朋友"
+            ],
+            [
+              "personality",
+              "性格"
+            ],
+            [
+              "outgoing",
+              "外向的"
+            ],
+            [
+              "shy",
+              "害羞的"
+            ],
+            [
+              "quiet",
+              "安静的"
+            ],
+            [
+              "serious",
+              "严肃的"
+            ],
+            [
+              "humorous",
+              "幽默的"
+            ],
+            [
+              "friendship",
+              "友谊"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 4 Amazing Plants and Animals",
+          "sentences": [
+            {
+              "cn": "动植物令人惊奇。",
+              "en": "Plants and animals are amazing.",
+              "hints": [
+                "植物",
+                "和；与",
+                "动物",
+                "是",
+                "令人惊奇的"
+              ]
+            },
+            {
+              "cn": "这棵树长得很高。",
+              "en": "The tree grows very tall.",
+              "hints": [
+                "这个；那个",
+                "树",
+                "生长",
+                "很；非常",
+                "高的"
+              ]
+            },
+            {
+              "cn": "我们应该保护环境。",
+              "en": "We should protect the environment.",
+              "hints": [
+                "我们",
+                "应该",
+                "保护",
+                "这个；那个",
+                "环境"
+              ]
+            },
+            {
+              "cn": "这朵花非常美丽。",
+              "en": "This flower is very beautiful.",
+              "hints": [
+                "这个",
+                "花",
+                "是",
+                "很；非常",
+                "美丽的"
+              ]
+            },
+            {
+              "cn": "有些动物处于危险中。",
+              "en": "Some animals are in danger.",
+              "hints": [
+                "一些",
+                "动物",
+                "是",
+                "在……里",
+                "危险"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "plant",
+              "植物"
+            ],
+            [
+              "animal",
+              "动物"
+            ],
+            [
+              "amazing",
+              "令人惊奇的"
+            ],
+            [
+              "wonder",
+              "奇观；想知道"
+            ],
+            [
+              "nature",
+              "大自然"
+            ],
+            [
+              "forest",
+              "森林"
+            ],
+            [
+              "flower",
+              "花"
+            ],
+            [
+              "leaf",
+              "叶子"
+            ],
+            [
+              "root",
+              "根"
+            ],
+            [
+              "grow",
+              "生长"
+            ],
+            [
+              "life",
+              "生命；生活"
+            ],
+            [
+              "live",
+              "居住；生活"
+            ],
+            [
+              "protect",
+              "保护"
+            ],
+            [
+              "environment",
+              "环境"
+            ],
+            [
+              "strange",
+              "奇怪的"
+            ],
+            [
+              "huge",
+              "巨大的"
+            ],
+            [
+              "strong",
+              "强壮的"
+            ],
+            [
+              "danger",
+              "危险"
+            ],
+            [
+              "save",
+              "拯救；节约"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 5 What a Delicious Meal!",
+          "sentences": [
+            {
+              "cn": "多么美味的一餐！",
+              "en": "What a delicious meal!",
+              "hints": [
+                "什么",
+                "一；一个",
+                "美味的",
+                "一餐"
+              ]
+            },
+            {
+              "cn": "我会做饭。",
+              "en": "I can cook a meal.",
+              "hints": [
+                "我",
+                "能；可以",
+                "烹饪",
+                "一；一个",
+                "一餐"
+              ]
+            },
+            {
+              "cn": "往汤里加点盐。",
+              "en": "Add some salt to the soup.",
+              "hints": [
+                "添加",
+                "一些",
+                "盐",
+                "到；向",
+                "这个；那个",
+                "汤"
+              ]
+            },
+            {
+              "cn": "这食物尝起来很棒。",
+              "en": "The food tastes great.",
+              "hints": [
+                "这个；那个",
+                "食物",
+                "尝",
+                "很棒的"
+              ]
+            },
+            {
+              "cn": "我们一起享用晚餐。",
+              "en": "We enjoy the dinner together.",
+              "hints": [
+                "我们",
+                "享受",
+                "这个；那个",
+                "晚餐",
+                "在一起"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "delicious",
+              "美味的"
+            ],
+            [
+              "recipe",
+              "食谱"
+            ],
+            [
+              "food",
+              "食物"
+            ],
+            [
+              "taste",
+              "尝；味道"
+            ],
+            [
+              "dish",
+              "菜肴；盘子"
+            ],
+            [
+              "ingredient",
+              "配料；成分"
+            ],
+            [
+              "boil",
+              "煮沸"
+            ],
+            [
+              "fry",
+              "油炸；煎"
+            ],
+            [
+              "cut",
+              "切"
+            ],
+            [
+              "mix",
+              "混合"
+            ],
+            [
+              "add",
+              "添加"
+            ],
+            [
+              "salt",
+              "盐"
+            ],
+            [
+              "sugar",
+              "糖"
+            ],
+            [
+              "breakfast",
+              "早餐"
+            ],
+            [
+              "dinner",
+              "晚餐"
+            ],
+            [
+              "flavour",
+              "味道；风味"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 6 Plan for Yourself",
+          "sentences": [
+            {
+              "cn": "我对将来有一个计划。",
+              "en": "I have a plan for the future.",
+              "hints": [
+                "我",
+                "有",
+                "一；一个",
+                "计划",
+                "为；给",
+                "这个；那个",
+                "将来"
+              ]
+            },
+            {
+              "cn": "我梦想的工作是医生。",
+              "en": "My dream job is a doctor.",
+              "hints": [
+                "我的",
+                "梦想",
+                "工作",
+                "是",
+                "一；一个",
+                "医生"
+              ]
+            },
+            {
+              "cn": "我想提高我的英语。",
+              "en": "I want to improve my English.",
+              "hints": [
+                "我",
+                "想要",
+                "到；向",
+                "提高",
+                "我的",
+                "英语"
+              ]
+            },
+            {
+              "cn": "努力学习，永不放弃。",
+              "en": "Work hard and never give up.",
+              "hints": [
+                "工作",
+                "努力地",
+                "和；与",
+                "从不",
+                "给予",
+                "向上"
+              ]
+            },
+            {
+              "cn": "我相信我自己。",
+              "en": "I believe in myself.",
+              "hints": [
+                "我",
+                "相信",
+                "在……里",
+                "我自己"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "plan",
+              "计划"
+            ],
+            [
+              "goal",
+              "目标"
+            ],
+            [
+              "future",
+              "将来"
+            ],
+            [
+              "dream",
+              "梦想"
+            ],
+            [
+              "job",
+              "工作"
+            ],
+            [
+              "career",
+              "职业"
+            ],
+            [
+              "study",
+              "学习；研究"
+            ],
+            [
+              "work",
+              "工作"
+            ],
+            [
+              "improve",
+              "提高；改善"
+            ],
+            [
+              "decide",
+              "决定"
+            ],
+            [
+              "choose",
+              "选择"
+            ],
+            [
+              "skill",
+              "技能"
+            ],
+            [
+              "practice",
+              "练习"
+            ],
+            [
+              "habit",
+              "习惯"
+            ],
+            [
+              "successful",
+              "成功的"
+            ],
+            [
+              "hard",
+              "努力地；困难的"
+            ],
+            [
+              "try",
+              "尝试"
+            ],
+            [
+              "believe",
+              "相信"
+            ],
+            [
+              "hope",
+              "希望"
+            ],
+            [
+              "wish",
+              "愿望"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 7 When Tomorrow Comes",
+          "sentences": [
+            {
+              "cn": "将来会是什么样子？",
+              "en": "What will the future be like?",
+              "hints": [
+                "什么",
+                "将；会",
+                "这个；那个",
+                "将来",
+                "是；成为",
+                "喜欢；像"
+              ]
+            },
+            {
+              "cn": "机器人会在家里帮助我们。",
+              "en": "Robots will help us at home.",
+              "hints": [
+                "机器人",
+                "将；会",
+                "帮助",
+                "我们（宾格）",
+                "在",
+                "家"
+              ]
+            },
+            {
+              "cn": "我认为那会很令人激动。",
+              "en": "I think it will be exciting.",
+              "hints": [
+                "我",
+                "思考",
+                "它",
+                "将；会",
+                "是；成为",
+                "令人激动的"
+              ]
+            },
+            {
+              "cn": "人们会活得更久。",
+              "en": "People will live longer.",
+              "hints": [
+                "人们",
+                "将；会",
+                "居住",
+                "更长的"
+              ]
+            },
+            {
+              "cn": "也许我们会去太空旅行。",
+              "en": "Maybe we will travel to space.",
+              "hints": [
+                "也许",
+                "我们",
+                "将；会",
+                "旅行",
+                "到；向",
+                "太空"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "tomorrow",
+              "明天"
+            ],
+            [
+              "predict",
+              "预测"
+            ],
+            [
+              "prediction",
+              "预言"
+            ],
+            [
+              "robot",
+              "机器人"
+            ],
+            [
+              "technology",
+              "技术"
+            ],
+            [
+              "change",
+              "改变"
+            ],
+            [
+              "world",
+              "世界"
+            ],
+            [
+              "possible",
+              "可能的"
+            ],
+            [
+              "impossible",
+              "不可能的"
+            ],
+            [
+              "probably",
+              "大概；或许"
+            ],
+            [
+              "perhaps",
+              "也许"
+            ],
+            [
+              "machine",
+              "机器"
+            ],
+            [
+              "space",
+              "太空；空间"
+            ],
+            [
+              "trend",
+              "趋势"
+            ],
+            [
+              "develop",
+              "发展"
+            ],
+            [
+              "human",
+              "人类"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 8 Let's Communicate!",
+          "sentences": [
+            {
+              "cn": "让我们互相交流。",
+              "en": "Let's communicate with each other.",
+              "hints": [
+                "让我们",
+                "交流",
+                "和；用",
+                "每个",
+                "另外的"
+              ]
+            },
+            {
+              "cn": "我给朋友们发电子邮件。",
+              "en": "I send emails to my friends.",
+              "hints": [
+                "我",
+                "发送；邮寄",
+                "电子邮件",
+                "到；向",
+                "我的",
+                "朋友"
+              ]
+            },
+            {
+              "cn": "你能理解我吗？",
+              "en": "Can you understand me?",
+              "hints": [
+                "能；可以",
+                "你；你们",
+                "理解",
+                "我（宾格）"
+              ]
+            },
+            {
+              "cn": "请回复我的消息。",
+              "en": "Please reply to my message.",
+              "hints": [
+                "请",
+                "回复",
+                "到；向",
+                "我的",
+                "消息"
+              ]
+            },
+            {
+              "cn": "良好的沟通很重要。",
+              "en": "Good communication is important.",
+              "hints": [
+                "好的",
+                "交流",
+                "是",
+                "重要的"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "communicate",
+              "交流；沟通"
+            ],
+            [
+              "communication",
+              "交流；沟通"
+            ],
+            [
+              "message",
+              "消息"
+            ],
+            [
+              "email",
+              "电子邮件"
+            ],
+            [
+              "letter",
+              "信；字母"
+            ],
+            [
+              "phone",
+              "电话"
+            ],
+            [
+              "call",
+              "打电话"
+            ],
+            [
+              "chat",
+              "聊天"
+            ],
+            [
+              "talk",
+              "交谈"
+            ],
+            [
+              "information",
+              "信息"
+            ],
+            [
+              "express",
+              "表达"
+            ],
+            [
+              "feeling",
+              "感觉；情感"
+            ],
+            [
+              "idea",
+              "主意；想法"
+            ],
+            [
+              "opinion",
+              "观点；意见"
+            ],
+            [
+              "listen",
+              "听"
+            ],
+            [
+              "understand",
+              "理解；明白"
+            ],
+            [
+              "reply",
+              "回复"
+            ],
+            [
+              "conversation",
+              "谈话；交谈"
+            ],
+            [
+              "polite",
+              "有礼貌的"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

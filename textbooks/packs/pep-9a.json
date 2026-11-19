@@ -1,0 +1,1072 @@
+{
+  "format": "spelllab.textbook.v1",
+  "exportedAt": "2026-11-19T14:12:43Z",
+  "packs": [
+    {
+      "name": "人教版新目标九年级上册（2024版·七年级起点）",
+      "gradeId": "g9",
+      "gradeName": "初中九年级",
+      "bookId": "b_pep_junior",
+      "bookName": "人教版新目标（七年级起点）",
+      "units": [
+        {
+          "name": "Unit 1 The Changing World",
+          "sentences": [
+            {
+              "cn": "发生了巨大的变化。",
+              "en": "Great changes have taken place.",
+              "hints": [
+                "很棒的",
+                "变化",
+                "有",
+                "拿；带（过去分词）",
+                "地方"
+              ]
+            },
+            {
+              "cn": "我的家乡变了很多。",
+              "en": "My hometown has changed a lot.",
+              "hints": [
+                "我的",
+                "家乡",
+                "有",
+                "改变",
+                "一；一个",
+                "许多"
+              ]
+            },
+            {
+              "cn": "道路现在更宽了。",
+              "en": "The roads are wider now.",
+              "hints": [
+                "这个；那个",
+                "道路",
+                "是",
+                "更宽的",
+                "现在"
+              ]
+            },
+            {
+              "cn": "生活比以前更好了。",
+              "en": "Life is better than before.",
+              "hints": [
+                "生活",
+                "是",
+                "更好的",
+                "比",
+                "在……以前"
+              ]
+            },
+            {
+              "cn": "我在这里住了十年了。",
+              "en": "I have lived here for ten years.",
+              "hints": [
+                "我",
+                "有",
+                "居住（过去式）",
+                "这里",
+                "为；给",
+                "十",
+                "年；岁"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "change",
+              "改变；变化"
+            ],
+            [
+              "world",
+              "世界"
+            ],
+            [
+              "hometown",
+              "家乡"
+            ],
+            [
+              "village",
+              "村庄"
+            ],
+            [
+              "city",
+              "城市"
+            ],
+            [
+              "building",
+              "建筑物"
+            ],
+            [
+              "road",
+              "道路"
+            ],
+            [
+              "develop",
+              "发展"
+            ],
+            [
+              "modern",
+              "现代的"
+            ],
+            [
+              "poor",
+              "贫穷的"
+            ],
+            [
+              "rich",
+              "富裕的"
+            ],
+            [
+              "grow",
+              "增长；生长"
+            ],
+            [
+              "improve",
+              "改善；提高"
+            ],
+            [
+              "life",
+              "生活"
+            ],
+            [
+              "past",
+              "过去"
+            ],
+            [
+              "present",
+              "现在；目前的"
+            ],
+            [
+              "compare",
+              "比较"
+            ],
+            [
+              "experience",
+              "经历；经验"
+            ],
+            [
+              "technology",
+              "技术"
+            ],
+            [
+              "transport",
+              "交通"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 2 Inspiring People",
+          "sentences": [
+            {
+              "cn": "你钦佩谁？",
+              "en": "Who do you admire?",
+              "hints": [
+                "谁",
+                "做；助动词",
+                "你；你们",
+                "钦佩"
+              ]
+            },
+            {
+              "cn": "她是一位鼓舞人心的科学家。",
+              "en": "She is an inspiring scientist.",
+              "hints": [
+                "她",
+                "是",
+                "一个",
+                "鼓舞人心的",
+                "科学家"
+              ]
+            },
+            {
+              "cn": "他的故事鼓舞了许多人。",
+              "en": "His story inspires many people.",
+              "hints": [
+                "他的",
+                "故事",
+                "鼓舞",
+                "许多",
+                "人们"
+              ]
+            },
+            {
+              "cn": "我们应该向英雄学习。",
+              "en": "We should learn from heroes.",
+              "hints": [
+                "我们",
+                "应该",
+                "学习",
+                "从；来自",
+                "英雄"
+              ]
+            },
+            {
+              "cn": "只要你努力，没有什么是不可能的。",
+              "en": "Nothing is impossible if you try.",
+              "hints": [
+                "没有什么",
+                "是",
+                "不可能的",
+                "如果",
+                "你；你们",
+                "尝试"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "admire",
+              "钦佩；羡慕"
+            ],
+            [
+              "inspire",
+              "鼓舞；激励"
+            ],
+            [
+              "inspiring",
+              "鼓舞人心的"
+            ],
+            [
+              "person",
+              "人"
+            ],
+            [
+              "hero",
+              "英雄"
+            ],
+            [
+              "scientist",
+              "科学家"
+            ],
+            [
+              "profession",
+              "职业"
+            ],
+            [
+              "brave",
+              "勇敢的"
+            ],
+            [
+              "strong",
+              "强壮的"
+            ],
+            [
+              "work",
+              "工作"
+            ],
+            [
+              "achieve",
+              "实现；达到"
+            ],
+            [
+              "success",
+              "成功"
+            ],
+            [
+              "famous",
+              "著名的"
+            ],
+            [
+              "great",
+              "伟大的"
+            ],
+            [
+              "respect",
+              "尊敬"
+            ],
+            [
+              "example",
+              "榜样；例子"
+            ],
+            [
+              "learn",
+              "学习"
+            ],
+            [
+              "courage",
+              "勇气"
+            ],
+            [
+              "effort",
+              "努力"
+            ],
+            [
+              "dream",
+              "梦想"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 3 Smart Learning",
+          "sentences": [
+            {
+              "cn": "你怎样学英语？",
+              "en": "How do you learn English?",
+              "hints": [
+                "怎样；多么",
+                "做；助动词",
+                "你；你们",
+                "学习",
+                "英语"
+              ]
+            },
+            {
+              "cn": "我通过记笔记来学习。",
+              "en": "I learn by taking notes.",
+              "hints": [
+                "我",
+                "学习",
+                "通过；被；在……旁",
+                "拿；拍（进行时）",
+                "笔记"
+              ]
+            },
+            {
+              "cn": "优秀的学习者会提问。",
+              "en": "Good learners ask questions.",
+              "hints": [
+                "好的",
+                "学习者",
+                "问；请求",
+                "问题"
+              ]
+            },
+            {
+              "cn": "复习帮助我记忆。",
+              "en": "Reviewing helps me remember.",
+              "hints": [
+                "复习",
+                "帮助",
+                "我（宾格）",
+                "记住"
+              ]
+            },
+            {
+              "cn": "我想提高我的技能。",
+              "en": "I want to improve my skills.",
+              "hints": [
+                "我",
+                "想要",
+                "到；向",
+                "提高",
+                "我的",
+                "技能"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "learning",
+              "学习"
+            ],
+            [
+              "smart",
+              "聪明的；智能的"
+            ],
+            [
+              "method",
+              "方法"
+            ],
+            [
+              "strategy",
+              "策略"
+            ],
+            [
+              "skill",
+              "技能"
+            ],
+            [
+              "practice",
+              "练习"
+            ],
+            [
+              "remember",
+              "记住"
+            ],
+            [
+              "understand",
+              "理解；明白"
+            ],
+            [
+              "notice",
+              "注意"
+            ],
+            [
+              "review",
+              "复习"
+            ],
+            [
+              "plan",
+              "计划"
+            ],
+            [
+              "goal",
+              "目标"
+            ],
+            [
+              "habit",
+              "习惯"
+            ],
+            [
+              "mind",
+              "头脑"
+            ],
+            [
+              "brain",
+              "大脑"
+            ],
+            [
+              "question",
+              "问题"
+            ],
+            [
+              "think",
+              "思考"
+            ],
+            [
+              "discover",
+              "发现"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 4 Our Memory",
+          "sentences": [
+            {
+              "cn": "我记忆力很好。",
+              "en": "I have a good memory.",
+              "hints": [
+                "我",
+                "有",
+                "一；一个",
+                "好的",
+                "记忆"
+              ]
+            },
+            {
+              "cn": "我记不起他的名字。",
+              "en": "I cannot remember his name.",
+              "hints": [
+                "我",
+                "不能",
+                "记住",
+                "他的",
+                "名字"
+              ]
+            },
+            {
+              "cn": "她记事情记得很好。",
+              "en": "She remembers things well.",
+              "hints": [
+                "她",
+                "记住",
+                "东西",
+                "好；健康"
+              ]
+            },
+            {
+              "cn": "图片帮我记单词。",
+              "en": "Pictures help me remember words.",
+              "hints": [
+                "图画",
+                "帮助",
+                "我（宾格）",
+                "记住",
+                "单词"
+              ]
+            },
+            {
+              "cn": "我们可以训练记忆力。",
+              "en": "We can train our memory.",
+              "hints": [
+                "我们",
+                "能；可以",
+                "训练",
+                "我们的",
+                "记忆"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "memory",
+              "记忆；记忆力"
+            ],
+            [
+              "forget",
+              "忘记"
+            ],
+            [
+              "recall",
+              "回忆起"
+            ],
+            [
+              "image",
+              "图像；形象"
+            ],
+            [
+              "word",
+              "单词；词"
+            ],
+            [
+              "list",
+              "列表；清单"
+            ],
+            [
+              "story",
+              "故事"
+            ],
+            [
+              "name",
+              "名字"
+            ],
+            [
+              "face",
+              "脸；面部"
+            ],
+            [
+              "detail",
+              "细节"
+            ],
+            [
+              "train",
+              "训练"
+            ],
+            [
+              "old",
+              "年老的"
+            ],
+            [
+              "young",
+              "年轻的"
+            ],
+            [
+              "picture",
+              "图片"
+            ],
+            [
+              "repeat",
+              "重复"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 5 Power of Ideas",
+          "sentences": [
+            {
+              "cn": "发明改变了我们的生活。",
+              "en": "Inventions change our lives.",
+              "hints": [
+                "发明物",
+                "改变",
+                "我们的",
+                "居住"
+              ]
+            },
+            {
+              "cn": "谁发明了电话？",
+              "en": "Who invented the telephone?",
+              "hints": [
+                "谁",
+                "发明",
+                "这个；那个",
+                "电话"
+              ]
+            },
+            {
+              "cn": "纸是在中国发明的。",
+              "en": "Paper was invented in China.",
+              "hints": [
+                "纸",
+                "是（过去）",
+                "发明",
+                "在……里",
+                "中国"
+              ]
+            },
+            {
+              "cn": "好想法需要努力付出。",
+              "en": "Good ideas need hard work.",
+              "hints": [
+                "好的",
+                "主意",
+                "需要",
+                "努力地",
+                "工作"
+              ]
+            },
+            {
+              "cn": "技术让生活更轻松。",
+              "en": "Technology makes life easier.",
+              "hints": [
+                "技术",
+                "制作",
+                "生活",
+                "更容易的"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "idea",
+              "主意；想法"
+            ],
+            [
+              "invent",
+              "发明"
+            ],
+            [
+              "invention",
+              "发明物"
+            ],
+            [
+              "inventor",
+              "发明家"
+            ],
+            [
+              "create",
+              "创造"
+            ],
+            [
+              "creative",
+              "有创造力的"
+            ],
+            [
+              "power",
+              "力量"
+            ],
+            [
+              "machine",
+              "机器"
+            ],
+            [
+              "tool",
+              "工具"
+            ],
+            [
+              "process",
+              "过程"
+            ],
+            [
+              "useful",
+              "有用的"
+            ],
+            [
+              "future",
+              "将来"
+            ],
+            [
+              "imagine",
+              "想象"
+            ],
+            [
+              "paper",
+              "纸"
+            ],
+            [
+              "print",
+              "印刷"
+            ],
+            [
+              "electric",
+              "电的"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 6 Beyond Earth",
+          "sentences": [
+            {
+              "cn": "我想探索太空。",
+              "en": "I want to explore space.",
+              "hints": [
+                "我",
+                "想要",
+                "到；向",
+                "探索",
+                "太空"
+              ]
+            },
+            {
+              "cn": "月亮离地球很远。",
+              "en": "The moon is far from Earth.",
+              "hints": [
+                "这个；那个",
+                "月亮",
+                "是",
+                "远的；远",
+                "从；来自",
+                "地球"
+              ]
+            },
+            {
+              "cn": "宇航员进入太空旅行。",
+              "en": "Astronauts travel into space.",
+              "hints": [
+                "宇航员",
+                "旅行",
+                "进入；到……里",
+                "太空"
+              ]
+            },
+            {
+              "cn": "太空探索令人激动。",
+              "en": "Space exploration is exciting.",
+              "hints": [
+                "太空",
+                "探索",
+                "是",
+                "令人激动的"
+              ]
+            },
+            {
+              "cn": "也许我们将来会住在火星上。",
+              "en": "Perhaps we will live on Mars.",
+              "hints": [
+                "也许",
+                "我们",
+                "将；会",
+                "居住",
+                "在……上",
+                "火星"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "earth",
+              "地球；土地"
+            ],
+            [
+              "space",
+              "太空；空间"
+            ],
+            [
+              "planet",
+              "行星"
+            ],
+            [
+              "rocket",
+              "火箭"
+            ],
+            [
+              "satellite",
+              "卫星"
+            ],
+            [
+              "universe",
+              "宇宙"
+            ],
+            [
+              "moon",
+              "月亮"
+            ],
+            [
+              "star",
+              "星星"
+            ],
+            [
+              "astronaut",
+              "宇航员"
+            ],
+            [
+              "explore",
+              "探索"
+            ],
+            [
+              "exploration",
+              "探索"
+            ],
+            [
+              "flight",
+              "飞行"
+            ],
+            [
+              "travel",
+              "旅行"
+            ],
+            [
+              "scientific",
+              "科学的"
+            ],
+            [
+              "research",
+              "研究"
+            ],
+            [
+              "hope",
+              "希望"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 7 Feel the Rhythm",
+          "sentences": [
+            {
+              "cn": "我喜欢流行音乐。",
+              "en": "I like pop music.",
+              "hints": [
+                "我",
+                "喜欢；像",
+                "流行的",
+                "音乐"
+              ]
+            },
+            {
+              "cn": "她钢琴弹得很好。",
+              "en": "She plays the piano well.",
+              "hints": [
+                "她",
+                "玩；演奏",
+                "这个；那个",
+                "钢琴",
+                "好；健康"
+              ]
+            },
+            {
+              "cn": "这个乐队举办音乐会。",
+              "en": "The band gives a concert.",
+              "hints": [
+                "这个；那个",
+                "乐队",
+                "给予",
+                "一；一个",
+                "音乐会"
+              ]
+            },
+            {
+              "cn": "音乐让我快乐。",
+              "en": "Music makes me happy.",
+              "hints": [
+                "音乐",
+                "制作",
+                "我（宾格）",
+                "快乐的"
+              ]
+            },
+            {
+              "cn": "节奏很令人激动。",
+              "en": "The rhythm is exciting.",
+              "hints": [
+                "这个；那个",
+                "节奏",
+                "是",
+                "令人激动的"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "music",
+              "音乐"
+            ],
+            [
+              "musical",
+              "音乐的"
+            ],
+            [
+              "rhythm",
+              "节奏；韵律"
+            ],
+            [
+              "song",
+              "歌曲"
+            ],
+            [
+              "sing",
+              "唱歌"
+            ],
+            [
+              "singer",
+              "歌手"
+            ],
+            [
+              "instrument",
+              "乐器"
+            ],
+            [
+              "guitar",
+              "吉他"
+            ],
+            [
+              "piano",
+              "钢琴"
+            ],
+            [
+              "violin",
+              "小提琴"
+            ],
+            [
+              "drum",
+              "鼓"
+            ],
+            [
+              "concert",
+              "音乐会"
+            ],
+            [
+              "band",
+              "乐队"
+            ],
+            [
+              "beat",
+              "节拍"
+            ],
+            [
+              "dance",
+              "跳舞"
+            ],
+            [
+              "feel",
+              "感觉"
+            ],
+            [
+              "beautiful",
+              "美丽的"
+            ],
+            [
+              "wonderful",
+              "精彩的"
+            ],
+            [
+              "enjoy",
+              "享受；喜爱"
+            ],
+            [
+              "composer",
+              "作曲家"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 8 More than a Game",
+          "sentences": [
+            {
+              "cn": "运动把人们聚在一起。",
+              "en": "Sports bring people together.",
+              "hints": [
+                "运动",
+                "带来",
+                "人们",
+                "在一起"
+              ]
+            },
+            {
+              "cn": "这位运动员赢得了一枚奖牌。",
+              "en": "The athlete won a medal.",
+              "hints": [
+                "这个；那个",
+                "运动员",
+                "赢（过去式）",
+                "一；一个",
+                "奖牌"
+              ]
+            },
+            {
+              "cn": "赢并不是一切。",
+              "en": "Winning is not everything.",
+              "hints": [
+                "赢",
+                "是",
+                "不",
+                "一切"
+              ]
+            },
+            {
+              "cn": "团队合作非常重要。",
+              "en": "Teamwork is very important.",
+              "hints": [
+                "团队合作",
+                "是",
+                "很；非常",
+                "重要的"
+              ]
+            },
+            {
+              "cn": "我为我的队伍感到自豪。",
+              "en": "I feel proud of my team.",
+              "hints": [
+                "我",
+                "感觉",
+                "自豪的",
+                "……的",
+                "我的",
+                "队"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "game",
+              "比赛；游戏"
+            ],
+            [
+              "sport",
+              "运动"
+            ],
+            [
+              "event",
+              "赛事；事件"
+            ],
+            [
+              "Olympic",
+              "奥林匹克的"
+            ],
+            [
+              "athlete",
+              "运动员"
+            ],
+            [
+              "player",
+              "运动员；选手"
+            ],
+            [
+              "team",
+              "队；组"
+            ],
+            [
+              "win",
+              "赢；获胜"
+            ],
+            [
+              "lose",
+              "输；失败"
+            ],
+            [
+              "competition",
+              "比赛；竞争"
+            ],
+            [
+              "match",
+              "比赛"
+            ],
+            [
+              "medal",
+              "奖牌"
+            ],
+            [
+              "Champion",
+              "冠军"
+            ],
+            [
+              "training",
+              "训练"
+            ],
+            [
+              "spirit",
+              "精神"
+            ],
+            [
+              "fair",
+              "公平的"
+            ],
+            [
+              "proud",
+              "自豪的"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

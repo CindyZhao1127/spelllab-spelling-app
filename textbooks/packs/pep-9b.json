@@ -1,0 +1,712 @@
+{
+  "format": "spelllab.textbook.v1",
+  "exportedAt": "2026-11-19T14:12:43Z",
+  "packs": [
+    {
+      "name": "人教版新目标九年级下册（2024版·七年级起点）",
+      "gradeId": "g9",
+      "gradeName": "初中九年级",
+      "bookId": "b_pep_junior",
+      "bookName": "人教版新目标（七年级起点）",
+      "units": [
+        {
+          "name": "Unit 1 Let's Celebrate!",
+          "sentences": [
+            {
+              "cn": "我们庆祝春节。",
+              "en": "We celebrate the Spring Festival.",
+              "hints": [
+                "我们",
+                "庆祝",
+                "这个；那个",
+                "春天",
+                "节日"
+              ]
+            },
+            {
+              "cn": "家人们为了节日聚在一起。",
+              "en": "Families get together for the festival.",
+              "hints": [
+                "家庭",
+                "得到；到达",
+                "在一起",
+                "为；给",
+                "这个；那个",
+                "节日"
+              ]
+            },
+            {
+              "cn": "人们在节日期间吃月饼。",
+              "en": "People eat mooncakes during the festival.",
+              "hints": [
+                "人们",
+                "吃",
+                "月饼",
+                "在……期间",
+                "这个；那个",
+                "节日"
+              ]
+            },
+            {
+              "cn": "这个节日是团圆的日子。",
+              "en": "The festival is a time for reunion.",
+              "hints": [
+                "这个；那个",
+                "节日",
+                "是",
+                "一；一个",
+                "时间",
+                "为；给",
+                "团圆"
+              ]
+            },
+            {
+              "cn": "它带来好运。",
+              "en": "It brings good luck.",
+              "hints": [
+                "它",
+                "带来",
+                "好的",
+                "幸运"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "celebrate",
+              "庆祝"
+            ],
+            [
+              "festival",
+              "节日"
+            ],
+            [
+              "celebration",
+              "庆祝；庆典"
+            ],
+            [
+              "tradition",
+              "传统"
+            ],
+            [
+              "custom",
+              "习俗"
+            ],
+            [
+              "holiday",
+              "假期"
+            ],
+            [
+              "gift",
+              "礼物"
+            ],
+            [
+              "lantern",
+              "灯笼"
+            ],
+            [
+              "mooncake",
+              "月饼"
+            ],
+            [
+              "reunion",
+              "团圆；重聚"
+            ],
+            [
+              "ancestor",
+              "祖先"
+            ],
+            [
+              "tomb",
+              "坟墓"
+            ],
+            [
+              "parade",
+              "游行"
+            ],
+            [
+              "costume",
+              "服装；戏装"
+            ],
+            [
+              "dragon",
+              "龙"
+            ],
+            [
+              "poem",
+              "诗"
+            ],
+            [
+              "honour",
+              "尊敬；荣誉"
+            ],
+            [
+              "wish",
+              "愿望"
+            ],
+            [
+              "luck",
+              "幸运"
+            ],
+            [
+              "ceremony",
+              "仪式；典礼"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 2 A Look into the Past",
+          "sentences": [
+            {
+              "cn": "我们可以从历史中学习。",
+              "en": "We can learn from history.",
+              "hints": [
+                "我们",
+                "能；可以",
+                "学习",
+                "从；来自",
+                "历史"
+              ]
+            },
+            {
+              "cn": "金字塔是古代的奇观。",
+              "en": "The pyramids are ancient wonders.",
+              "hints": [
+                "这个；那个",
+                "金字塔",
+                "是",
+                "古代的",
+                "奇观"
+              ]
+            },
+            {
+              "cn": "这座博物馆有许多珍宝。",
+              "en": "This museum has many treasures.",
+              "hints": [
+                "这个",
+                "博物馆",
+                "有",
+                "许多",
+                "珍宝"
+              ]
+            },
+            {
+              "cn": "人们很久以前建造了它。",
+              "en": "People built it long ago.",
+              "hints": [
+                "人们",
+                "建造（过去式）",
+                "它",
+                "长的",
+                "以前"
+              ]
+            },
+            {
+              "cn": "历史帮助我们理解过去。",
+              "en": "History helps us understand the past.",
+              "hints": [
+                "历史",
+                "帮助",
+                "我们（宾格）",
+                "理解",
+                "这个；那个",
+                "过去"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "history",
+              "历史"
+            ],
+            [
+              "past",
+              "过去"
+            ],
+            [
+              "ancient",
+              "古代的"
+            ],
+            [
+              "civilization",
+              "文明"
+            ],
+            [
+              "pyramid",
+              "金字塔"
+            ],
+            [
+              "emperor",
+              "皇帝"
+            ],
+            [
+              "treasure",
+              "珍宝；财富"
+            ],
+            [
+              "discover",
+              "发现"
+            ],
+            [
+              "excavation",
+              "挖掘"
+            ],
+            [
+              "museum",
+              "博物馆"
+            ],
+            [
+              "artifact",
+              "文物；人工制品"
+            ],
+            [
+              "century",
+              "世纪"
+            ],
+            [
+              "dynasty",
+              "朝代"
+            ],
+            [
+              "war",
+              "战争"
+            ],
+            [
+              "peace",
+              "和平"
+            ],
+            [
+              "hero",
+              "英雄"
+            ],
+            [
+              "story",
+              "故事"
+            ],
+            [
+              "remember",
+              "记住"
+            ],
+            [
+              "learn",
+              "学习"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 3 A Taste of Art",
+          "sentences": [
+            {
+              "cn": "我喜欢欣赏绘画。",
+              "en": "I enjoy looking at paintings.",
+              "hints": [
+                "我",
+                "享受",
+                "看",
+                "在",
+                "绘画"
+              ]
+            },
+            {
+              "cn": "这位画家画美丽的图画。",
+              "en": "The artist paints beautiful pictures.",
+              "hints": [
+                "这个；那个",
+                "艺术家",
+                "绘画",
+                "美丽的",
+                "图画"
+              ]
+            },
+            {
+              "cn": "艺术让生活更加多彩。",
+              "en": "Art makes life more colourful.",
+              "hints": [
+                "艺术",
+                "制作",
+                "生活",
+                "更多",
+                "多彩的"
+              ]
+            },
+            {
+              "cn": "这座雕塑令人惊奇。",
+              "en": "This sculpture is amazing.",
+              "hints": [
+                "这个",
+                "雕塑",
+                "是",
+                "令人惊奇的"
+              ]
+            },
+            {
+              "cn": "音乐和舞蹈是艺术形式。",
+              "en": "Music and dance are art forms.",
+              "hints": [
+                "音乐",
+                "和；与",
+                "跳舞",
+                "是",
+                "艺术",
+                "形式"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "art",
+              "艺术"
+            ],
+            [
+              "artist",
+              "艺术家"
+            ],
+            [
+              "painting",
+              "绘画；油画"
+            ],
+            [
+              "sculpture",
+              "雕塑"
+            ],
+            [
+              "music",
+              "音乐"
+            ],
+            [
+              "dance",
+              "舞蹈；跳舞"
+            ],
+            [
+              "theatre",
+              "剧院；戏剧"
+            ],
+            [
+              "performance",
+              "表演"
+            ],
+            [
+              "beauty",
+              "美；美丽"
+            ],
+            [
+              "style",
+              "风格"
+            ],
+            [
+              "colour",
+              "颜色"
+            ],
+            [
+              "draw",
+              "画；绘制"
+            ],
+            [
+              "paint",
+              "绘画；涂色"
+            ],
+            [
+              "create",
+              "创造"
+            ],
+            [
+              "imagine",
+              "想象"
+            ],
+            [
+              "feel",
+              "感觉"
+            ],
+            [
+              "emotion",
+              "情感；情绪"
+            ],
+            [
+              "work",
+              "作品；工作"
+            ],
+            [
+              "masterpiece",
+              "杰作"
+            ],
+            [
+              "appreciate",
+              "欣赏；感激"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 4 Reduce, Reuse, Recycle",
+          "sentences": [
+            {
+              "cn": "我们应该减少浪费。",
+              "en": "We should reduce waste.",
+              "hints": [
+                "我们",
+                "应该",
+                "减少",
+                "浪费"
+              ]
+            },
+            {
+              "cn": "回收利用保护环境。",
+              "en": "Recycling protects the environment.",
+              "hints": [
+                "回收利用",
+                "保护",
+                "这个；那个",
+                "环境"
+              ]
+            },
+            {
+              "cn": "不要到处扔垃圾。",
+              "en": "Don't throw rubbish everywhere.",
+              "hints": [
+                "不",
+                "扔",
+                "垃圾",
+                "到处"
+              ]
+            },
+            {
+              "cn": "重复使用瓶子和纸张。",
+              "en": "Reuse bottles and paper.",
+              "hints": [
+                "重复使用",
+                "瓶子",
+                "和；与",
+                "纸"
+              ]
+            },
+            {
+              "cn": "节约能源很重要。",
+              "en": "Saving energy is important.",
+              "hints": [
+                "节约；拯救（进行时）",
+                "能量",
+                "是",
+                "重要的"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "reduce",
+              "减少"
+            ],
+            [
+              "reuse",
+              "重复使用"
+            ],
+            [
+              "recycle",
+              "回收利用"
+            ],
+            [
+              "recycling",
+              "回收利用"
+            ],
+            [
+              "waste",
+              "浪费；废物"
+            ],
+            [
+              "pollution",
+              "污染"
+            ],
+            [
+              "environment",
+              "环境"
+            ],
+            [
+              "protect",
+              "保护"
+            ],
+            [
+              "plastic",
+              "塑料"
+            ],
+            [
+              "paper",
+              "纸"
+            ],
+            [
+              "glass",
+              "玻璃"
+            ],
+            [
+              "metal",
+              "金属"
+            ],
+            [
+              "bottle",
+              "瓶子"
+            ],
+            [
+              "save",
+              "节约；拯救"
+            ],
+            [
+              "energy",
+              "能源；能量"
+            ],
+            [
+              "resource",
+              "资源"
+            ],
+            [
+              "earth",
+              "地球"
+            ],
+            [
+              "clean",
+              "干净的；打扫"
+            ],
+            [
+              "green",
+              "绿色的"
+            ],
+            [
+              "throw",
+              "扔；投掷"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 5 Open to New Beginnings",
+          "sentences": [
+            {
+              "cn": "我们很快就要毕业了。",
+              "en": "We are graduating soon.",
+              "hints": [
+                "我们",
+                "是",
+                "毕业（进行时）",
+                "不久"
+              ]
+            },
+            {
+              "cn": "未来是光明的。",
+              "en": "The future is bright.",
+              "hints": [
+                "这个；那个",
+                "将来",
+                "是",
+                "光明的"
+              ]
+            },
+            {
+              "cn": "我会记住我的朋友们。",
+              "en": "I will remember my friends.",
+              "hints": [
+                "我",
+                "将；会",
+                "记住",
+                "我的",
+                "朋友"
+              ]
+            },
+            {
+              "cn": "感谢你的一切。",
+              "en": "Thank you for everything.",
+              "hints": [
+                "谢谢",
+                "你；你们",
+                "为；给",
+                "一切"
+              ]
+            },
+            {
+              "cn": "一段新的旅程开始了。",
+              "en": "A new journey begins.",
+              "hints": [
+                "一；一个",
+                "新的",
+                "旅程",
+                "开始"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "beginning",
+              "开始；开端"
+            ],
+            [
+              "graduate",
+              "毕业；毕业生"
+            ],
+            [
+              "graduation",
+              "毕业"
+            ],
+            [
+              "future",
+              "将来"
+            ],
+            [
+              "dream",
+              "梦想"
+            ],
+            [
+              "hope",
+              "希望"
+            ],
+            [
+              "plan",
+              "计划"
+            ],
+            [
+              "new",
+              "新的"
+            ],
+            [
+              "start",
+              "开始"
+            ],
+            [
+              "journey",
+              "旅程"
+            ],
+            [
+              "friend",
+              "朋友"
+            ],
+            [
+              "teacher",
+              "老师"
+            ],
+            [
+              "thanks",
+              "感谢"
+            ],
+            [
+              "grow",
+              "成长"
+            ],
+            [
+              "change",
+              "改变"
+            ],
+            [
+              "world",
+              "世界"
+            ],
+            [
+              "open",
+              "打开的；打开"
+            ],
+            [
+              "heart",
+              "心；内心"
+            ],
+            [
+              "bright",
+              "光明的；明亮的"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

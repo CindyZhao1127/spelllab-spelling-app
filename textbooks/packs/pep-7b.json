@@ -1,0 +1,1124 @@
+{
+  "format": "spelllab.textbook.v1",
+  "exportedAt": "2026-11-19T14:12:43Z",
+  "packs": [
+    {
+      "name": "人教版新目标七年级下册（2024版·七年级起点）",
+      "gradeId": "g7",
+      "gradeName": "初中七年级",
+      "bookId": "b_pep_junior",
+      "bookName": "人教版新目标（七年级起点）",
+      "units": [
+        {
+          "name": "Unit 1 Animal Friends",
+          "sentences": [
+            {
+              "cn": "你为什么喜欢动物？",
+              "en": "Why do you like animals?",
+              "hints": [
+                "为什么",
+                "做；助动词",
+                "你；你们",
+                "喜欢；像",
+                "动物"
+              ]
+            },
+            {
+              "cn": "我喜欢企鹅，因为它们很可爱。",
+              "en": "I like penguins because they are cute.",
+              "hints": [
+                "我",
+                "喜欢；像",
+                "企鹅",
+                "因为",
+                "他们；它们",
+                "是",
+                "可爱的"
+              ]
+            },
+            {
+              "cn": "长颈鹿住在哪里？",
+              "en": "Where do giraffes live?",
+              "hints": [
+                "哪里",
+                "做；助动词",
+                "长颈鹿",
+                "居住"
+              ]
+            },
+            {
+              "cn": "它们能游得很快。",
+              "en": "They can swim very fast.",
+              "hints": [
+                "他们；它们",
+                "能；可以",
+                "游泳",
+                "很；非常",
+                "快地；快的"
+              ]
+            },
+            {
+              "cn": "鲸鱼很巨大。",
+              "en": "The whale is huge.",
+              "hints": [
+                "这个；那个",
+                "鲸",
+                "是",
+                "巨大的"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "fox",
+              "狐狸"
+            ],
+            [
+              "giraffe",
+              "长颈鹿"
+            ],
+            [
+              "eagle",
+              "雕；鹰"
+            ],
+            [
+              "wolf",
+              "狼"
+            ],
+            [
+              "penguin",
+              "企鹅"
+            ],
+            [
+              "snake",
+              "蛇"
+            ],
+            [
+              "shark",
+              "鲨鱼"
+            ],
+            [
+              "whale",
+              "鲸"
+            ],
+            [
+              "scary",
+              "吓人的；恐怖的"
+            ],
+            [
+              "neck",
+              "脖子"
+            ],
+            [
+              "guess",
+              "猜测"
+            ],
+            [
+              "sandwich",
+              "三明治"
+            ],
+            [
+              "care",
+              "照顾；关心"
+            ],
+            [
+              "save",
+              "拯救；储蓄"
+            ],
+            [
+              "luck",
+              "幸运"
+            ],
+            [
+              "Thai",
+              "泰国的；泰国人"
+            ],
+            [
+              "trunk",
+              "象鼻"
+            ],
+            [
+              "pick",
+              "捡；摘"
+            ],
+            [
+              "carry",
+              "拿；提"
+            ],
+            [
+              "culture",
+              "文化"
+            ],
+            [
+              "friendly",
+              "友好的"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 2 No Rules, No Order",
+          "sentences": [
+            {
+              "cn": "上学不要迟到。",
+              "en": "Don't be late for school.",
+              "hints": [
+                "不",
+                "是；成为",
+                "迟的",
+                "为；给",
+                "学校"
+              ]
+            },
+            {
+              "cn": "不要在走廊里跑。",
+              "en": "Don't run in the hallways.",
+              "hints": [
+                "不",
+                "跑",
+                "在……里",
+                "这个；那个",
+                "走廊"
+              ]
+            },
+            {
+              "cn": "我们必须遵守规则。",
+              "en": "We must follow the rules.",
+              "hints": [
+                "我们",
+                "必须",
+                "遵守",
+                "这个；那个",
+                "规则"
+              ]
+            },
+            {
+              "cn": "要有礼貌并尊重他人。",
+              "en": "Be polite and treat others with respect.",
+              "hints": [
+                "是；成为",
+                "有礼貌的",
+                "和；与",
+                "对待",
+                "其他人",
+                "和；用",
+                "尊敬"
+              ]
+            },
+            {
+              "cn": "你必须穿校服。",
+              "en": "You have to wear the uniform.",
+              "hints": [
+                "你；你们",
+                "有",
+                "到；向",
+                "穿；戴",
+                "这个；那个",
+                "校服；制服"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "rule",
+              "规则"
+            ],
+            [
+              "arrive",
+              "到达"
+            ],
+            [
+              "late",
+              "迟的；晚的"
+            ],
+            [
+              "hallway",
+              "走廊"
+            ],
+            [
+              "order",
+              "秩序；命令"
+            ],
+            [
+              "follow",
+              "遵守；跟随"
+            ],
+            [
+              "bring",
+              "带来"
+            ],
+            [
+              "turn",
+              "转动；轮流"
+            ],
+            [
+              "treat",
+              "对待；招待"
+            ],
+            [
+              "respect",
+              "尊敬"
+            ],
+            [
+              "feed",
+              "喂养"
+            ],
+            [
+              "leave",
+              "离开；留下"
+            ],
+            [
+              "polite",
+              "有礼貌的"
+            ],
+            [
+              "absent",
+              "缺席的"
+            ],
+            [
+              "if",
+              "如果"
+            ],
+            [
+              "just",
+              "只是；正好"
+            ],
+            [
+              "quietly",
+              "轻声地"
+            ],
+            [
+              "mobile",
+              "可移动的"
+            ],
+            [
+              "must",
+              "必须"
+            ],
+            [
+              "noise",
+              "噪音"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 3 Keep Fit",
+          "sentences": [
+            {
+              "cn": "我每天早上锻炼。",
+              "en": "I exercise every morning.",
+              "hints": [
+                "我",
+                "锻炼",
+                "每个；每一",
+                "早晨"
+              ]
+            },
+            {
+              "cn": "你多久做一次运动？",
+              "en": "How often do you play sports?",
+              "hints": [
+                "怎样；多么",
+                "经常",
+                "做；助动词",
+                "你；你们",
+                "玩；打（球）；演奏",
+                "运动"
+              ]
+            },
+            {
+              "cn": "他从不吃垃圾食品。",
+              "en": "He never eats junk food.",
+              "hints": [
+                "他",
+                "从不",
+                "吃（第三人称单数）",
+                "垃圾（食品）",
+                "食物"
+              ]
+            },
+            {
+              "cn": "保持健康，保持强健。",
+              "en": "Keep fit and stay healthy.",
+              "hints": [
+                "保持",
+                "健壮的",
+                "和；与",
+                "停留",
+                "健康的"
+              ]
+            },
+            {
+              "cn": "游泳是很好的锻炼。",
+              "en": "Swimming is good exercise.",
+              "hints": [
+                "游泳",
+                "是",
+                "好的",
+                "锻炼"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "fit",
+              "健壮的；合适的"
+            ],
+            [
+              "exercise",
+              "锻炼；练习"
+            ],
+            [
+              "healthy",
+              "健康的"
+            ],
+            [
+              "advice",
+              "建议"
+            ],
+            [
+              "habit",
+              "习惯"
+            ],
+            [
+              "energy",
+              "能量；精力"
+            ],
+            [
+              "relax",
+              "放松"
+            ],
+            [
+              "practice",
+              "练习"
+            ],
+            [
+              "team",
+              "队；组"
+            ],
+            [
+              "sport",
+              "运动"
+            ],
+            [
+              "often",
+              "经常"
+            ],
+            [
+              "seldom",
+              "很少"
+            ],
+            [
+              "skate",
+              "滑冰"
+            ],
+            [
+              "swim",
+              "游泳"
+            ],
+            [
+              "jog",
+              "慢跑"
+            ],
+            [
+              "weight",
+              "体重；重量"
+            ],
+            [
+              "keep",
+              "保持"
+            ],
+            [
+              "strong",
+              "强壮的"
+            ],
+            [
+              "active",
+              "活跃的"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 4 Eat Well",
+          "sentences": [
+            {
+              "cn": "你想吃什么？",
+              "en": "What would you like to eat?",
+              "hints": [
+                "什么",
+                "会；愿意",
+                "你；你们",
+                "喜欢；像",
+                "到；向",
+                "吃"
+              ]
+            },
+            {
+              "cn": "我想要一些面条。",
+              "en": "I'd like some noodles.",
+              "hints": [
+                "我想",
+                "喜欢；像",
+                "一些",
+                "面条"
+              ]
+            },
+            {
+              "cn": "蔬菜对你有好处。",
+              "en": "Vegetables are good for you.",
+              "hints": [
+                "蔬菜",
+                "是",
+                "好的",
+                "为；给",
+                "你；你们"
+              ]
+            },
+            {
+              "cn": "这汤尝起来很美味。",
+              "en": "The soup tastes delicious.",
+              "hints": [
+                "这个；那个",
+                "汤",
+                "尝",
+                "美味的"
+              ]
+            },
+            {
+              "cn": "你想要米饭还是面条？",
+              "en": "Do you want rice or noodles?",
+              "hints": [
+                "做；助动词",
+                "你；你们",
+                "想要",
+                "米饭",
+                "或者",
+                "面条"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "food",
+              "食物"
+            ],
+            [
+              "meal",
+              "一餐；饭"
+            ],
+            [
+              "breakfast",
+              "早餐"
+            ],
+            [
+              "lunch",
+              "午餐"
+            ],
+            [
+              "dinner",
+              "晚餐"
+            ],
+            [
+              "dish",
+              "菜肴；盘子"
+            ],
+            [
+              "vegetable",
+              "蔬菜"
+            ],
+            [
+              "fruit",
+              "水果"
+            ],
+            [
+              "beef",
+              "牛肉"
+            ],
+            [
+              "chicken",
+              "鸡肉"
+            ],
+            [
+              "fish",
+              "鱼"
+            ],
+            [
+              "rice",
+              "米饭"
+            ],
+            [
+              "noodle",
+              "面条"
+            ],
+            [
+              "soup",
+              "汤"
+            ],
+            [
+              "taste",
+              "尝；味道"
+            ],
+            [
+              "delicious",
+              "美味的"
+            ],
+            [
+              "menu",
+              "菜单"
+            ],
+            [
+              "waiter",
+              "服务员"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 5 Here and Now",
+          "sentences": [
+            {
+              "cn": "现在几点了？",
+              "en": "What time is it now?",
+              "hints": [
+                "什么",
+                "时间",
+                "是",
+                "它",
+                "现在"
+              ]
+            },
+            {
+              "cn": "我正在做作业。",
+              "en": "I am doing my homework.",
+              "hints": [
+                "我",
+                "是",
+                "做（进行时）",
+                "我的",
+                "家庭作业"
+              ]
+            },
+            {
+              "cn": "她正在打电话。",
+              "en": "She is talking on the phone.",
+              "hints": [
+                "她",
+                "是",
+                "交谈",
+                "在……上",
+                "这个；那个",
+                "电话"
+              ]
+            },
+            {
+              "cn": "我们现在正在吃晚饭。",
+              "en": "We are having dinner now.",
+              "hints": [
+                "我们",
+                "是",
+                "有；吃（进行时）",
+                "晚餐",
+                "现在"
+              ]
+            },
+            {
+              "cn": "现在是早上八点。",
+              "en": "It is eight o'clock in the morning.",
+              "hints": [
+                "它",
+                "是",
+                "八",
+                "……点钟",
+                "在……里",
+                "这个；那个",
+                "早晨"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "right",
+              "正确的；权利"
+            ],
+            [
+              "now",
+              "现在"
+            ],
+            [
+              "world",
+              "世界"
+            ],
+            [
+              "time",
+              "时间"
+            ],
+            [
+              "zone",
+              "区域；地带"
+            ],
+            [
+              "different",
+              "不同的"
+            ],
+            [
+              "clock",
+              "时钟"
+            ],
+            [
+              "word",
+              "单词；词"
+            ],
+            [
+              "speak",
+              "说；讲"
+            ],
+            [
+              "call",
+              "打电话"
+            ],
+            [
+              "phone",
+              "电话"
+            ],
+            [
+              "message",
+              "消息；信息"
+            ],
+            [
+              "wait",
+              "等待"
+            ],
+            [
+              "moment",
+              "片刻；时刻"
+            ],
+            [
+              "across",
+              "穿过；在对面"
+            ],
+            [
+              "globe",
+              "地球；球体"
+            ],
+            [
+              "homework",
+              "家庭作业"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 6 Rain or Shine",
+          "sentences": [
+            {
+              "cn": "今天天气怎么样？",
+              "en": "How is the weather today?",
+              "hints": [
+                "怎样；多么",
+                "是",
+                "这个；那个",
+                "天气",
+                "今天"
+              ]
+            },
+            {
+              "cn": "天气晴朗而温暖。",
+              "en": "It is sunny and warm.",
+              "hints": [
+                "它",
+                "是",
+                "晴朗的",
+                "和；与",
+                "温暖的"
+              ]
+            },
+            {
+              "cn": "外面正在下雨。",
+              "en": "It is raining outside.",
+              "hints": [
+                "它",
+                "是",
+                "雨",
+                "在外面"
+              ]
+            },
+            {
+              "cn": "带上你的雨伞。",
+              "en": "Take an umbrella with you.",
+              "hints": [
+                "拿",
+                "一个",
+                "雨伞",
+                "和；用",
+                "你；你们"
+              ]
+            },
+            {
+              "cn": "今天风很大。",
+              "en": "The wind is strong today.",
+              "hints": [
+                "这个；那个",
+                "风",
+                "是",
+                "强壮的",
+                "今天"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "rain",
+              "雨；下雨"
+            ],
+            [
+              "shine",
+              "照耀"
+            ],
+            [
+              "weather",
+              "天气"
+            ],
+            [
+              "sunny",
+              "晴朗的"
+            ],
+            [
+              "rainy",
+              "下雨的"
+            ],
+            [
+              "cloudy",
+              "多云的"
+            ],
+            [
+              "windy",
+              "有风的"
+            ],
+            [
+              "snowy",
+              "下雪的"
+            ],
+            [
+              "hot",
+              "炎热的"
+            ],
+            [
+              "cold",
+              "寒冷的"
+            ],
+            [
+              "warm",
+              "温暖的"
+            ],
+            [
+              "cool",
+              "凉爽的"
+            ],
+            [
+              "umbrella",
+              "雨伞"
+            ],
+            [
+              "storm",
+              "暴风雨"
+            ],
+            [
+              "cloud",
+              "云"
+            ],
+            [
+              "wind",
+              "风"
+            ],
+            [
+              "snow",
+              "雪"
+            ],
+            [
+              "outside",
+              "在外面"
+            ],
+            [
+              "forecast",
+              "预报"
+            ],
+            [
+              "dry",
+              "干燥的"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 7 A Day to Remember",
+          "sentences": [
+            {
+              "cn": "昨天我度过了美好的一天。",
+              "en": "I had a great day yesterday.",
+              "hints": [
+                "我",
+                "有（过去式）",
+                "一；一个",
+                "很棒的",
+                "天；日子",
+                "昨天"
+              ]
+            },
+            {
+              "cn": "我们参观了一个农场。",
+              "en": "We visited a farm.",
+              "hints": [
+                "我们",
+                "参观",
+                "一；一个",
+                "农场"
+              ]
+            },
+            {
+              "cn": "我和朋友们摘了草莓。",
+              "en": "I picked strawberries with my friends.",
+              "hints": [
+                "我",
+                "捡",
+                "草莓",
+                "和；用",
+                "我的",
+                "朋友"
+              ]
+            },
+            {
+              "cn": "这次旅行令人激动。",
+              "en": "The trip was exciting.",
+              "hints": [
+                "这个；那个",
+                "旅行",
+                "是（过去）",
+                "令人激动的"
+              ]
+            },
+            {
+              "cn": "我们拍了很多照片。",
+              "en": "We took many photos.",
+              "hints": [
+                "我们",
+                "拿；拍（过去式）",
+                "许多",
+                "照片"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "remember",
+              "记住"
+            ],
+            [
+              "day",
+              "天；日子"
+            ],
+            [
+              "trip",
+              "旅行"
+            ],
+            [
+              "farm",
+              "农场"
+            ],
+            [
+              "strawberry",
+              "草莓"
+            ],
+            [
+              "cow",
+              "奶牛"
+            ],
+            [
+              "horse",
+              "马"
+            ],
+            [
+              "photo",
+              "照片"
+            ],
+            [
+              "take",
+              "拿；拍（照）"
+            ],
+            [
+              "exciting",
+              "令人激动的"
+            ],
+            [
+              "tired",
+              "疲劳的"
+            ],
+            [
+              "happy",
+              "快乐的"
+            ],
+            [
+              "experience",
+              "经历；经验"
+            ],
+            [
+              "visit",
+              "参观；拜访"
+            ],
+            [
+              "yesterday",
+              "昨天"
+            ],
+            [
+              "go",
+              "去"
+            ],
+            [
+              "wonderful",
+              "精彩的"
+            ],
+            [
+              "gift",
+              "礼物"
+            ]
+          ]
+        },
+        {
+          "name": "Unit 8 Once upon a Time",
+          "sentences": [
+            {
+              "cn": "从前，有一位国王。",
+              "en": "Once upon a time, there was a king.",
+              "hints": [
+                "曾经",
+                "在……之上",
+                "一；一个",
+                "时间",
+                "那里",
+                "是（过去）",
+                "一；一个",
+                "国王"
+              ]
+            },
+            {
+              "cn": "这个故事非常有趣。",
+              "en": "The story is very interesting.",
+              "hints": [
+                "这个；那个",
+                "故事",
+                "是",
+                "很；非常",
+                "有趣的"
+              ]
+            },
+            {
+              "cn": "他勇敢又聪明。",
+              "en": "He was brave and clever.",
+              "hints": [
+                "他",
+                "是（过去）",
+                "勇敢的",
+                "和；与",
+                "聪明的"
+              ]
+            },
+            {
+              "cn": "公主住在森林里。",
+              "en": "The princess lived in a forest.",
+              "hints": [
+                "这个；那个",
+                "公主",
+                "居住（过去式）",
+                "在……里",
+                "一；一个",
+                "森林"
+              ]
+            },
+            {
+              "cn": "他们开心地笑了。",
+              "en": "They laughed happily.",
+              "hints": [
+                "他们；它们",
+                "笑",
+                "开心地"
+              ]
+            }
+          ],
+          "words": [
+            [
+              "once",
+              "曾经；一次"
+            ],
+            [
+              "upon",
+              "在……之上"
+            ],
+            [
+              "story",
+              "故事"
+            ],
+            [
+              "king",
+              "国王"
+            ],
+            [
+              "queen",
+              "王后"
+            ],
+            [
+              "prince",
+              "王子"
+            ],
+            [
+              "princess",
+              "公主"
+            ],
+            [
+              "magic",
+              "魔法"
+            ],
+            [
+              "forest",
+              "森林"
+            ],
+            [
+              "clever",
+              "聪明的"
+            ],
+            [
+              "foolish",
+              "愚蠢的"
+            ],
+            [
+              "brave",
+              "勇敢的"
+            ],
+            [
+              "hunt",
+              "打猎"
+            ],
+            [
+              "wood",
+              "木头；树林"
+            ],
+            [
+              "cottage",
+              "小屋"
+            ],
+            [
+              "giant",
+              "巨人"
+            ],
+            [
+              "laugh",
+              "笑"
+            ],
+            [
+              "begin",
+              "开始"
+            ],
+            [
+              "end",
+              "结束"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

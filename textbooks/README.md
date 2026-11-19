@@ -1,9 +1,21 @@
-# 人教版 PEP（三年级起点）预制教材包
+# SpellLab 预制教材包（小学 + 初中）
 
-这里是 SpellLab 可直接导入的 `spelllab.textbook.v1` 教材包，覆盖小学三年级到六年级共 8 册、46 个单元、**849 个单词 / 254 个句子 / 1165 条逐词中文提示**。
+这里是 SpellLab 可直接导入的 `spelllab.textbook.v1` 教材包。
+
+## 小学：人教版 PEP（三年级起点）
+
+覆盖小学三年级到六年级共 8 册、46 个单元、**849 个单词 / 254 个句子 / 1165 条逐词中文提示**。
 
 - `pep-sanqi-2024.json` —— 总包，一次导入全部 8 册。
 - `packs/pep-3a.json` … `packs/pep-6b.json` —— 按册拆分，只学某一册时导入对应文件即可。
+
+## 初中：人教版新目标 Go for it!（七年级起点，2024 版）
+
+覆盖七年级上到九年级下共 6 册、47 个单元、**约 891 个单词 / 236 个句子**。册名含「上册 / 下册」，导入后会被自动归入对应册别（筛选可见）。
+
+- `junior-2024.json` —— 总包，一次导入全部 6 册。
+- `packs/pep-7a.json` … `packs/pep-9b.json` —— 按册拆分导入。
+- 源数据 `source/pep_junior.json`，构建脚本 `build_junior.py`。
 
 ## 怎么导入
 
@@ -48,8 +60,9 @@
 源数据在 `source/pep_3_4.json`、`source/pep_5_6.json`（每册 → 单元 → words / sentences），只改这两份即可，`build.py` 负责补提示、校验和导出：
 
 ```bash
-.venv/Scripts/python.exe textbooks/build.py     # 重新生成总包 + 8 个分册
-node textbooks/verify.cjs                       # 用 SpellLab.html 里的真实导入函数验证
+.venv/Scripts/python.exe textbooks/build.py          # 重新生成小学总包 + 8 个分册
+.venv/Scripts/python.exe textbooks/build_junior.py   # 重新生成初中总包 + 6 个分册
+node textbooks/verify.cjs                            # 用 SpellLab.html 里的真实导入函数验证全部包
 ```
 
 `verify.cjs` 会从 `SpellLab.html` 抽出 `validateQuestion` / `tokenize` / `normalizeImportedPack` / `parsePackJSON` 在沙箱里运行，逐项比对导入前后的包、单元、句子、提示与单词数量，确保不会被静默丢弃。若新增句子用到词表里没有的词，构建脚本会打印警告，把该词补进 `build.py` 的 `EXTRA` 词典即可。
