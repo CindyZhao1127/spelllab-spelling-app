@@ -1305,6 +1305,49 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     return o.title + ' · 高亮 ' + o.checked + ' 天 · 今天已打卡 · 翻月正常';
   });
 
+  check('打卡日历：主程序练习过的日子自动补进打卡日并重算连续天数', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      var d=new Date(), y=d.getFullYear(), m=d.getMonth();
+      var pad=function(n){return String(n).padStart(2,'0');};
+      var today=y+'-'+pad(m+1)+'-'+pad(d.getDate());
+      var ydate=new Date(y,m,d.getDate()-1,12,0,0);
+      var yd=ydate.getFullYear()+'-'+pad(ydate.getMonth()+1)+'-'+pad(ydate.getDate());
+      var captured=null;
+      var seed={stars:0,duck:{exp:0,no:1},checkin:{last:'',streak:0,total:0,days:[]}};
+      var old=(state.history||[]).slice();
+      // 昨天只做了拼写练习，没有进打字游戏
+      state.history=[{t:ydate.getTime(),mode:'word',ok:true,en:'test'}];
+      window.TypingDuck.setSaveIO(function(){return JSON.parse(JSON.stringify(seed));},
+        function(obj){captured=obj;});
+      window.TypingDuck.reloadSave();
+      window.TypingDuck.checkinAfterLoad();
+      state.history=old;
+      var grid=document.getElementById('td-calGrid');
+      return {yd:yd,today:today,
+        days:(captured&&captured.checkin&&captured.checkin.days)||[],
+        streak:(captured&&captured.checkin&&captured.checkin.streak)||0,
+        checked:(grid.innerHTML.match(/cal-cell checked/g)||[]).length};
+    })())`));
+    assert(o.days.indexOf(o.yd) >= 0, '昨天只做拼写练习却没补进打卡日: ' + JSON.stringify(o));
+    assert(o.days.indexOf(o.today) >= 0, '今天未打卡: ' + JSON.stringify(o));
+    assert(o.streak === 2, '连续天数未按真实打卡日重算: ' + JSON.stringify(o));
+    assert(o.checked >= 2, '日历未高亮补进来的日期: ' + JSON.stringify(o));
+    return o.yd + ' + ' + o.today + ' · 连续 ' + o.streak + ' 天';
+  });
+
+  check('主菜单三块卡片共用同一左右基准线', () => {
+    ['.home-row', '.mode-grid', '.unit-progress-card'].forEach(function(sel){
+      const re = new RegExp('#td-root\\s+' + sel.replace('.', '\\.') + '\\s*\\{([\\s\\S]*?)\\}');
+      const m = html.match(re);
+      assert(m, '缺样式 ' + sel);
+      assert(/width:\s*min\(1040px,\s*100%\)/.test(m[1]), sel + ' 宽度不一致');
+      assert(/margin:\s*0 auto/.test(m[1]), sel + ' 左右边距不一致');
+    });
+    assert(/function addHistory\([\s\S]{0,800}syncPracticeCheckin/.test(html),
+      'addHistory 未挂钩打卡日历同步');
+    return 'home-row / mode-grid / unit-progress-card 同宽同边距';
+  });
+
   const failed = results.filter(r => r[1] === 'FAIL');
   results.forEach(r => console.log('[' + r[1] + ']   ' + r[0] + (r[2] ? '  -> ' + r[2] : '')));
   console.log('\n合计 ' + results.length + ' 项，失败 ' + failed.length + ' 项');

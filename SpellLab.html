@@ -857,6 +857,7 @@
   grid-template-columns: repeat(4, 1fr);
   gap: 14px;
   width: min(1040px, 100%);
+  margin: 0 auto; /* 与上方成长面板、中间进度卡共用同一条左右基准线 */
 }
 #td-root .mode-card {
   border: none; border-radius: var(--radius); cursor: pointer;
@@ -1123,7 +1124,7 @@
 /* 成长面板 */
 #td-root .home-row {
   display: grid; grid-template-columns: 1fr 1.15fr 1fr; gap: 14px;
-  width: min(1040px, 100%);
+  width: min(1040px, 100%); margin: 0 auto;
 }
 #td-root .home-card {
   background: rgba(255,255,255,.82); border-radius: 18px; padding: 12px 16px;
@@ -1150,7 +1151,9 @@
 #td-root .duck-count { font-size: 11px; color: #e8590c; font-weight: 800; }
 /* 当前单元进度条：让孩子知道打字练习和课本词表的关系 */
 #td-root .unit-progress-card {
-  width: min(1040px, 100%); margin: 14px auto 0; padding: 12px 16px;
+  /* 间距交给 #screenMenu 的 gap:14px，避免叠加 margin 造成错行；
+     左右与其它卡片一致用 auto 居中 */
+  width: min(1040px, 100%); margin: 0 auto; padding: 12px 16px;
   background: rgba(255,255,255,.82); border: 2px solid rgba(255,255,255,.9);
   border-radius: 18px; box-shadow: var(--shadow);
 }
@@ -2775,6 +2778,10 @@ function applyLoadedState(){
   /* 主存档已就位，让打字模块从 state.typingDuck 重新读取存档并刷新界面 */
   if(typeof window!=='undefined' && window.TypingDuck && typeof window.TypingDuck.reloadSave==='function'){
     try{ window.TypingDuck.reloadSave(); }catch(e){}
+  }
+  /* 打卡必须等主存档加载完再记：启动瞬间只写了临时 profile 的 localStorage */
+  if(typeof window!=='undefined' && window.TypingDuck && typeof window.TypingDuck.checkinAfterLoad==='function'){
+    try{ window.TypingDuck.checkinAfterLoad(); }catch(e){}
   }
   offerResume();
 }
@@ -4629,6 +4636,10 @@ function addHistory(rec){
   if(!Array.isArray(state.history)) state.history=[];
   state.history.push(Object.assign({t:Date.now()},rec));
   if(state.history.length>HISTORY_LIMIT) state.history.splice(0,state.history.length-HISTORY_LIMIT);
+  /* 有练习记录的那天就算打卡，日历与主程序进度保持同一份数据 */
+  if(typeof window!=='undefined' && window.TypingDuck && typeof window.TypingDuck.syncPracticeCheckin==='function'){
+    try{ window.TypingDuck.syncPracticeCheckin(); }catch(e){}
+  }
 }
 function renderHistory(){
   const h=(Array.isArray(state.history)?state.history:[]).slice().sort((a,b)=>(b.t||0)-(a.t||0));
@@ -6647,19 +6658,54 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
     toastTimer = setTimeout(() => dom.toast.classList.remove('show'), 2200);
   }
 
-  /* ---------- 打卡 ---------- */
-  function doCheckin() {
-    const today = todayStr();
+  /* ---------- 打卡 ----------
+     打卡日 = 打字模块显式记录的日期 ∪ 主程序实际练习过的日期（state.history）。
+     旧逻辑只在打字模块 init / 单局结束时写 checkin.days；桌面版每次启动都用
+     全新 browser profile，init 那次写在临时 localStorage 里，随后被主存档
+     state.typingDuck 覆盖，而只做拼写练习的日子根本不会写打卡 → 日历缺一天。 */
+  function checkinDates() {
     const c = save.checkin;
-    if (!Array.isArray(c.days)) c.days = [];
-    if (c.days.indexOf(today) < 0) c.days.push(today);
-    if (c.last === today) return false;
-    const gap = c.last ? daysBetween(c.last, today) : 999;
-    c.streak = (gap === 1) ? c.streak + 1 : 1;
-    c.total += 1;
-    c.last = today;
+    const set = new Set(Array.isArray(c.days) ? c.days : []);
+    const today = todayStr();
+    try {
+      const hist = (typeof state !== 'undefined' && Array.isArray(state.history)) ? state.history : [];
+      hist.forEach(function (rec) {
+        if (!rec || !rec.t) return;
+        const d = new Date(rec.t);
+        if (isNaN(d.getTime())) return;
+        const ds = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') +
+          '-' + String(d.getDate()).padStart(2, '0');
+        if (ds >= '2000-01-01' && ds <= today) set.add(ds);
+      });
+    } catch (e) {}
+    return set;
+  }
+  /* total / streak 始终由日期集合重算，旧存档里漂移的计数会自愈 */
+  function refreshCheckinStats() {
+    const c = save.checkin;
+    c.days = Array.from(checkinDates()).sort();
+    c.total = c.days.length;
+    const set = new Set(c.days), today = todayStr();
+    let cursor = set.has(today) ? today : dateShift(today, -1), streak = 0;
+    while (cursor && set.has(cursor)) { streak++; cursor = dateShift(cursor, -1); }
+    c.streak = streak;
+    if (!c.last && c.days.length) c.last = c.days[c.days.length - 1];
+  }
+  /* 打开程序 / 练完一局：把今天打卡，并补齐过去只练过拼写的日子 */
+  function doCheckin() {
+    const c = save.checkin, day = todayStr();
+    const fresh = !checkinDates().has(day) && c.last !== day;
+    c.days = Array.from(checkinDates().add(day)).sort();
+    c.last = day;
+    refreshCheckinStats();
     persist();
-    return true;
+    return fresh;
+  }
+  /* 主程序每次写入练习记录时同步一次日历，不把今天强行算成打卡 */
+  function syncPracticeCheckin() {
+    const before = checkinDates().size;
+    refreshCheckinStats();
+    if (save.checkin.days.length !== before) persist();
   }
 
   /* ---------- 打卡日历 ---------- */
@@ -7811,8 +7857,25 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
         dom.blindBtn.classList.toggle('on', !!save.blind);
         dom.blindBtn.textContent = save.blind ? '👀' : '🙈';
       }
+      syncPracticeCheckin();
       applySkin(); applyBlindVisual(); renderDuck(); renderCalendar(); renderBadges();
       renderUnitProgress();
+    },
+    /* 主存档从 SQLite / IndexedDB 加载完成后再打卡一次：
+       模块 init 时主存档尚未就位，那次只能写临时 localStorage。 */
+    checkinAfterLoad: function(){
+      const fresh = doCheckin();
+      renderCalendar();
+      if (dom.streakVal) dom.streakVal.textContent = save.checkin.streak;
+      if (dom.checkinTip) dom.checkinTip.textContent = fresh
+        ? '打卡成功！连续 ' + save.checkin.streak + ' 天 🎉'
+        : '今天已打卡，明天见！';
+    },
+    /* 拼写练习写入 history 后调用，补上那天的日历标记 */
+    syncPracticeCheckin: function(){
+      syncPracticeCheckin();
+      renderCalendar();
+      if (dom.streakVal) dom.streakVal.textContent = save.checkin.streak;
     }
   };
   init();
