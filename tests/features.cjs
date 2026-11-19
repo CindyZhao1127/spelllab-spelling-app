@@ -1348,6 +1348,35 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     return 'home-row / mode-grid / unit-progress-card 同宽同边距';
   });
 
+  check('教材库按小学/初中 → 教材类别 → 年级(上/下) 分层显示', () => {
+    const o = JSON.parse(run(`(function(){
+      var old=state.textbooks.slice(), oldGrades=state.grades.slice(), oldBooks=state.books.slice();
+      // 真实导入时 ensureCat 会给初中重建分类 id，名称才是一致的依据
+      state.grades=oldGrades.concat([{id:'g7x',name:'初中七年级'}]);
+      state.books=oldBooks.concat([{id:'bpepj',name:'人教版初中英语（2024修订版）'}]);
+      state.textbooks=[
+        {id:'tree1',name:'人教版 PEP 三年级上册',gradeId:'g3',bookId:'b_pep',volume:'upper',units:[]},
+        {id:'tree2',name:'人教版 PEP 三年级下册',gradeId:'g3',bookId:'b_pep',volume:'lower',units:[]},
+        {id:'tree3',name:'人教版初中英语 七年级上册',gradeId:'g7x',bookId:'bpepj',volume:'upper',units:[]}
+      ];
+      renderLibrary();
+      var h=document.getElementById('tbList').innerHTML;
+      function texts(re){ return (h.match(re)||[]).map(function(s){return s.replace(/.*>/,'');}); }
+      var res={stages:texts(/class="tb-stage"[^>]*>[^<]*/g),
+        bookNames:texts(/class="tb-bookname">[^<]*/g),
+        labels:texts(/class="tb-title"[^>]*>[^<]*/g),
+        cards:(h.match(/tb-card/g)||[]).length,
+        gradeGroups:(document.getElementById('gradeFilter').innerHTML.match(/<optgroup label="(小学|初中)">/g)||[]).length};
+      state.textbooks=old; state.grades=oldGrades; state.books=oldBooks; renderLibrary();
+      return JSON.stringify(res);
+    })()`));
+    assert(o.stages[0].trim() === '小学' && o.stages[1].trim() === '初中', '学段分组顺序错误: ' + JSON.stringify(o));
+    assert(o.bookNames.length === 2 && o.bookNames[1].indexOf('初中') >= 0, '教材类别未分组: ' + JSON.stringify(o));
+    assert(o.labels.join('|') === '三年级(上)|三年级(下)|七年级(上)', '册显示名未按年级(上/下): ' + JSON.stringify(o));
+    assert(o.cards === 3 && o.gradeGroups === 2, '卡片数或学段下拉分组异常: ' + JSON.stringify(o));
+    return o.stages.join(' / ') + ' · ' + o.labels.join('、');
+  });
+
   const failed = results.filter(r => r[1] === 'FAIL');
   results.forEach(r => console.log('[' + r[1] + ']   ' + r[0] + (r[2] ? '  -> ' + r[2] : '')));
   console.log('\n合计 ' + results.length + ' 项，失败 ' + failed.length + ' 项');
