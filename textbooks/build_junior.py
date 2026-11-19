@@ -33,7 +33,7 @@ GRADE_NAMES = {
     "g9": "初中九年级",
 }
 BOOK_ID = "b_pep_junior"
-BOOK_NAME = "人教版新目标（七年级起点）"
+BOOK_NAME = "人教版初中英语（2024修订版）"
 
 # Function words, inflections, contractions and proper names used by the junior
 # sentences but not present in any unit word list. Keep hints short (1st sense).
@@ -82,6 +82,14 @@ def load_books():
 def main():
     books = load_books()
     lex = build_lexicon(books)
+    # The practice sentences are hand-written, so some of their words are no
+    # longer in the (now authentic) unit word lists. Keep their Chinese hints
+    # from the previous lists without overriding the new textbook senses.
+    hints_path = SOURCE_DIR / "junior_hints.json"
+    if hints_path.exists():
+        for key, sense in json.loads(hints_path.read_text(encoding="utf-8")).items():
+            if key not in lex:
+                EXTRA.setdefault(key, sense)
     warnings = []
     packs = []
     counts = {"packs": 0, "units": 0, "words": 0, "sentences": 0}

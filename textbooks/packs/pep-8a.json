@@ -1,13 +1,13 @@
 {
   "format": "spelllab.textbook.v1",
-  "exportedAt": "2026-11-19T14:12:43Z",
+  "exportedAt": "2026-11-19T16:50:39Z",
   "packs": [
     {
-      "name": "人教版新目标八年级上册（2024版·七年级起点）",
+      "name": "人教版初中英语 八年级上册（2024修订版·2025秋启用）",
       "gradeId": "g8",
       "gradeName": "初中八年级",
       "bookId": "b_pep_junior",
-      "bookName": "人教版新目标（七年级起点）",
+      "bookName": "人教版初中英语（2024修订版）",
       "units": [
         {
           "name": "Unit 1 Happy Holiday",
@@ -39,7 +39,7 @@
               "en": "The view was beautiful.",
               "hints": [
                 "这个；那个",
-                "景色",
+                "景色；视野",
                 "是（过去）",
                 "美丽的"
               ]
@@ -68,84 +68,216 @@
           ],
           "words": [
             [
-              "holiday",
-              "假期"
+              "ancient",
+              "古代的"
+            ],
+            [
+              "camp",
+              "度假营"
+            ],
+            [
+              "landscape",
+              "风景"
+            ],
+            [
+              "strange",
+              "奇怪的"
             ],
             [
               "vacation",
               "假期"
             ],
             [
-              "trip",
-              "旅行"
+              "fantastic",
+              "极好的"
             ],
             [
-              "journey",
-              "旅程"
+              "town",
+              "镇"
             ],
             [
-              "visit",
-              "参观；拜访"
+              "breath",
+              "呼吸的空气"
             ],
             [
-              "place",
-              "地方"
+              "especially",
+              "尤其"
             ],
             [
-              "beautiful",
-              "美丽的"
+              "anywhere",
+              "在任何地方"
             ],
             [
-              "view",
-              "景色；视野"
-            ],
-            [
-              "photo",
-              "照片"
-            ],
-            [
-              "enjoy",
-              "享受；喜爱"
-            ],
-            [
-              "relax",
-              "放松"
-            ],
-            [
-              "exciting",
-              "令人激动的"
-            ],
-            [
-              "wonderful",
-              "精彩的"
-            ],
-            [
-              "memorable",
-              "难忘的"
-            ],
-            [
-              "experience",
-              "经历；经验"
-            ],
-            [
-              "travel",
-              "旅行"
+              "nothing",
+              "没有任何东西"
             ],
             [
               "guide",
-              "向导；指南"
+              "导游"
             ],
             [
-              "tourist",
-              "游客"
+              "scenery",
+              "风景"
             ],
             [
-              "culture",
-              "文化"
+              "silk",
+              "丝绸"
             ],
             [
-              "souvenir",
-              "纪念品"
+              "scarf",
+              "围巾"
+            ],
+            [
+              "ready",
+              "准备好的"
+            ],
+            [
+              "somewhere",
+              "在某处"
+            ],
+            [
+              "myself",
+              "我自己"
+            ],
+            [
+              "hotel",
+              "旅馆"
+            ],
+            [
+              "comfortable",
+              "使人舒服的"
+            ],
+            [
+              "bored",
+              "厌倦的"
+            ],
+            [
+              "sky",
+              "天"
+            ],
+            [
+              "towards",
+              "向"
+            ],
+            [
+              "rainbow",
+              "虹"
+            ],
+            [
+              "square",
+              "广场"
+            ],
+            [
+              "during",
+              "在......期间"
+            ],
+            [
+              "victory",
+              "胜利"
+            ],
+            [
+              "Russian",
+              "俄罗斯的"
+            ],
+            [
+              "fight",
+              "战斗"
+            ],
+            [
+              "against",
+              "反对"
+            ],
+            [
+              "artwork",
+              "艺术作品"
+            ],
+            [
+              "tear",
+              "眼泪"
+            ],
+            [
+              "remind",
+              "提醒"
+            ],
+            [
+              "peace",
+              "和平"
+            ],
+            [
+              "easily",
+              "容易地"
+            ],
+            [
+              "forget",
+              "忘记"
+            ],
+            [
+              "noon",
+              "正午"
+            ],
+            [
+              "sick",
+              "生病的"
+            ],
+            [
+              "metro",
+              "地下铁道系统"
+            ],
+            [
+              "station",
+              "火车站"
+            ],
+            [
+              "palace",
+              "王宫"
+            ],
+            [
+              "accordion",
+              "手风琴"
+            ],
+            [
+              "tower",
+              "塔"
+            ],
+            [
+              "might",
+              "可能"
+            ],
+            [
+              "budget",
+              "预算"
+            ],
+            [
+              "passport",
+              "护照"
+            ],
+            [
+              "forgetful",
+              "健忘的"
+            ],
+            [
+              "faraway",
+              "远方的"
+            ],
+            [
+              "regular",
+              "平常的"
+            ],
+            [
+              "countryside",
+              "乡村"
+            ],
+            [
+              "surprised",
+              "惊奇的"
+            ],
+            [
+              "deer",
+              "鹿"
+            ],
+            [
+              "probably",
+              "很可能"
             ]
           ]
         },
@@ -173,7 +305,7 @@
                 "是",
                 "温暖的",
                 "和；与",
-                "舒适的"
+                "使人舒服的"
               ]
             },
             {
@@ -182,7 +314,7 @@
               "hints": [
                 "我们",
                 "烹饪",
-                "一餐",
+                "一餐所吃的食物",
                 "在一起"
               ]
             },
@@ -203,90 +335,202 @@
                 "我",
                 "爱；喜爱",
                 "我的",
-                "家庭"
+                "家庭；家人"
               ]
             }
           ],
           "words": [
             [
-              "home",
-              "家"
+              "pack",
+              "打包"
             ],
             [
-              "house",
-              "房子"
+              "bathroom",
+              "浴室"
             ],
             [
-              "room",
+              "sort",
+              "把....分类"
+            ],
+            [
+              "bedroom",
+              "卧室"
+            ],
+            [
+              "balcony",
+              "阳台"
+            ],
+            [
+              "invite",
+              "邀请"
+            ],
+            [
+              "arrival",
+              "到达"
+            ],
+            [
+              "yet",
+              "还"
+            ],
+            [
+              "add",
+              "添加"
+            ],
+            [
+              "biscuit",
+              "饼干"
+            ],
+            [
+              "borrow",
+              "借"
+            ],
+            [
+              "plan",
+              "策划"
+            ],
+            [
+              "treasure",
+              "宝物"
+            ],
+            [
+              "hunt",
+              "搜寻"
+            ],
+            [
+              "lift",
+              "搭便车"
+            ],
+            [
+              "until",
+              "到......时"
+            ],
+            [
+              "movie",
+              "电影"
+            ],
+            [
+              "deat",
+              "不运行的"
+            ],
+            [
+              "note",
+              "笔记"
+            ],
+            [
+              "community",
+              "社区"
+            ],
+            [
+              "rubbish",
+              "垃圾"
+            ],
+            [
+              "almost",
+              "差不多"
+            ],
+            [
+              "journey",
+              "旅行"
+            ],
+            [
+              "pull",
+              "拉"
+            ],
+            [
+              "luggage",
+              "行李"
+            ],
+            [
+              "ah",
+              "啊"
+            ],
+            [
+              "mm",
+              "嗯"
+            ],
+            [
+              "familiar",
+              "熟悉的"
+            ],
+            [
+              "joke",
+              "笑话"
+            ],
+            [
+              "several",
+              "几个"
+            ],
+            [
+              "nod",
+              "点"
+            ],
+            [
+              "writer",
+              "作者"
+            ],
+            [
+              "text",
+              "正文"
+            ],
+            [
+              "describe",
+              "描述"
+            ],
+            [
+              "wherever",
+              "无论去哪里"
+            ],
+            [
+              "matter",
+              "要紧"
+            ],
+            [
+              "perhaps",
+              "也许"
+            ],
+            [
+              "plate",
+              "盘子"
+            ],
+            [
+              "freshly",
+              "刚刚"
+            ],
+            [
+              "smell",
+              "发臭"
+            ],
+            [
+              "joy",
+              "喜悦"
+            ],
+            [
+              "apartment",
               "房间"
             ],
             [
-              "clean",
-              "打扫；干净的"
+              "block",
+              "大楼"
             ],
             [
-              "tidy",
-              "整洁的"
+              "decorate",
+              "装饰"
             ],
             [
-              "comfortable",
-              "舒适的"
+              "cover",
+              "遮盖"
             ],
             [
-              "parent",
-              "父亲或母亲"
+              "poster",
+              "海报"
             ],
             [
-              "family",
-              "家庭；家人"
+              "scissors",
+              "剪刀"
             ],
             [
-              "chore",
-              "家务"
-            ],
-            [
-              "cook",
-              "烹饪"
-            ],
-            [
-              "meal",
-              "一餐；饭"
-            ],
-            [
-              "share",
-              "分享"
-            ],
-            [
-              "together",
-              "一起"
-            ],
-            [
-              "warm",
-              "温暖的"
-            ],
-            [
-              "love",
-              "爱"
-            ],
-            [
-              "help",
-              "帮助"
-            ],
-            [
-              "wash",
-              "洗"
-            ],
-            [
-              "sweep",
-              "扫"
-            ],
-            [
-              "floor",
-              "地板"
-            ],
-            [
-              "kitchen",
-              "厨房"
+              "glue",
+              "胶水"
             ]
           ]
         },
@@ -349,9 +593,9 @@
               "hints": [
                 "她",
                 "是",
-                "一；一个",
+                "如同",
                 "害羞的",
-                "一；一个",
+                "如同",
                 "她的",
                 "姐；妹"
               ]
@@ -359,80 +603,240 @@
           ],
           "words": [
             [
-              "same",
-              "相同的"
-            ],
-            [
-              "different",
-              "不同的"
-            ],
-            [
-              "difference",
-              "差别；不同"
-            ],
-            [
-              "similar",
-              "相似的"
-            ],
-            [
               "compare",
               "比较"
-            ],
-            [
-              "common",
-              "共同的；普通的"
-            ],
-            [
-              "both",
-              "两个都"
-            ],
-            [
-              "although",
-              "虽然；尽管"
-            ],
-            [
-              "however",
-              "然而"
-            ],
-            [
-              "other",
-              "其他的"
-            ],
-            [
-              "each",
-              "每个"
-            ],
-            [
-              "friend",
-              "朋友"
-            ],
-            [
-              "personality",
-              "性格"
-            ],
-            [
-              "outgoing",
-              "外向的"
             ],
             [
               "shy",
               "害羞的"
             ],
             [
-              "quiet",
-              "安静的"
+              "lazy",
+              "懒惰的"
+            ],
+            [
+              "loud",
+              "响亮地"
+            ],
+            [
+              "outgoing",
+              "外向的"
+            ],
+            [
+              "hard-working",
+              "勤奋的"
+            ],
+            [
+              "perform",
+              "表演"
+            ],
+            [
+              "alone",
+              "独自"
+            ],
+            [
+              "solve",
+              "解决"
+            ],
+            [
+              "flute",
+              "长笛"
+            ],
+            [
+              "congratulation",
+              "祝贺"
+            ],
+            [
+              "prize",
+              "奖"
+            ],
+            [
+              "attend",
+              "参加"
+            ],
+            [
+              "besides",
+              "除......之外"
+            ],
+            [
+              "spare",
+              "空闲的"
+            ],
+            [
+              "pleasure",
+              "乐事"
+            ],
+            [
+              "appearance",
+              "外表"
+            ],
+            [
+              "personality",
+              "性格"
             ],
             [
               "serious",
               "严肃的"
             ],
             [
-              "humorous",
-              "幽默的"
+              "strength",
+              "优势"
+            ],
+            [
+              "slim",
+              "苗条的"
+            ],
+            [
+              "fact",
+              "事实"
+            ],
+            [
+              "population",
+              "人口"
+            ],
+            [
+              "kilometre",
+              "千米"
+            ],
+            [
+              "kilometer",
+              "千米"
+            ],
+            [
+              "average",
+              "平均的"
+            ],
+            [
+              "rainfall",
+              "降雨量"
+            ],
+            [
+              "per",
+              "每"
+            ],
+            [
+              "millimetre",
+              "毫米"
+            ],
+            [
+              "millmeter",
+              "毫米"
+            ],
+            [
+              "pleasant",
+              "宜人的"
+            ],
+            [
+              "difference",
+              "差异"
+            ],
+            [
+              "alike",
+              "相像的"
+            ],
+            [
+              "mirror",
+              "镜子"
+            ],
+            [
+              "interest",
+              "业余爱好"
+            ],
+            [
+              "novel",
+              "小说"
+            ],
+            [
+              "sense",
+              "理解力"
+            ],
+            [
+              "humour",
+              "幽默"
+            ],
+            [
+              "humor",
+              "幽默"
+            ],
+            [
+              "opinion",
+              "看法"
+            ],
+            [
+              "less",
+              "较少的"
+            ],
+            [
+              "straightforward",
+              "坦率的"
+            ],
+            [
+              "honest",
+              "坦诚的"
+            ],
+            [
+              "direct",
+              "率直的"
+            ],
+            [
+              "similarity",
+              "相似之处"
             ],
             [
               "friendship",
               "友谊"
+            ],
+            [
+              "metre",
+              "米"
+            ],
+            [
+              "meter",
+              "米"
+            ],
+            [
+              "prince",
+              "王子"
+            ],
+            [
+              "character",
+              "人物"
+            ],
+            [
+              "pauper",
+              "贫民"
+            ],
+            [
+              "exchange",
+              "交换"
+            ],
+            [
+              "accident",
+              "意外"
+            ],
+            [
+              "expect",
+              "预料"
+            ],
+            [
+              "silver",
+              "银行的"
+            ],
+            [
+              "lining",
+              "内衬"
+            ],
+            [
+              "situation",
+              "情况"
+            ],
+            [
+              "reach",
+              "伸手"
+            ],
+            [
+              "touch",
+              "触动"
             ]
           ]
         },
@@ -447,7 +851,7 @@
                 "和；与",
                 "动物",
                 "是",
-                "令人惊奇的"
+                "令人惊奇 的"
               ]
             },
             {
@@ -497,80 +901,228 @@
           ],
           "words": [
             [
-              "plant",
-              "植物"
+              "moss",
+              "苔藓"
             ],
             [
-              "animal",
-              "动物"
+              "redwood",
+              "红杉"
             ],
             [
-              "amazing",
-              "令人惊奇的"
+              "cheetah",
+              "猎豹"
             ],
             [
-              "wonder",
-              "奇观；想知道"
+              "folding",
+              "折叠式的"
             ],
             [
-              "nature",
-              "大自然"
+              "bamboo",
+              "竹"
             ],
             [
-              "forest",
-              "森林"
+              "yeah",
+              "是的"
             ],
             [
-              "flower",
-              "花"
+              "popular",
+              "广受欢迎的"
             ],
             [
-              "leaf",
-              "叶子"
+              "goodness",
+              "美德"
             ],
             [
-              "root",
-              "根"
+              "tool",
+              "工具"
             ],
             [
-              "grow",
-              "生长"
+              "actually",
+              "实际上"
             ],
             [
-              "life",
-              "生命；生活"
+              "shoot",
+              "幼苗"
             ],
             [
-              "live",
-              "居住；生活"
+              "appear",
+              "出现"
+            ],
+            [
+              "land",
+              "陆地"
+            ],
+            [
+              "African",
+              "非洲的"
+            ],
+            [
+              "rose",
+              "玫瑰"
+            ],
+            [
+              "peony",
+              "牡丹"
+            ],
+            [
+              "lotus",
+              "莲花"
+            ],
+            [
+              "butterfly",
+              "蝴蝶"
+            ],
+            [
+              "wing",
+              "翅膀"
+            ],
+            [
+              "frog",
+              "蛙"
+            ],
+            [
+              "weigh",
+              "有……重"
+            ],
+            [
+              "ginkgo",
+              "银杏."
+            ],
+            [
+              "believe",
+              "相信"
+            ],
+            [
+              "province",
+              "省份"
+            ],
+            [
+              "connect",
+              "关联"
+            ],
+            [
+              "connected",
+              "连接的"
+            ],
+            [
+              "without",
+              "没有"
+            ],
+            [
+              "imagine",
+              "想象"
+            ],
+            [
+              "honey",
+              "蜂蜜"
+            ],
+            [
+              "disappointed",
+              "失望的"
+            ],
+            [
+              "connection",
+              "联系"
+            ],
+            [
+              "pollination",
+              "授粉"
+            ],
+            [
+              "pollen",
+              "花粉"
+            ],
+            [
+              "action",
+              "行动"
+            ],
+            [
+              "percent",
+              "百分之……"
+            ],
+            [
+              "planet",
+              "行星"
+            ],
+            [
+              "store",
+              "贮存"
+            ],
+            [
+              "honeycomb",
+              "蜂巢"
+            ],
+            [
+              "communicate",
+              "交流"
+            ],
+            [
+              "ecosystem",
+              "生态系统"
             ],
             [
               "protect",
               "保护"
             ],
             [
-              "environment",
-              "环境"
+              "importance",
+              "重要性"
             ],
             [
-              "strange",
-              "奇怪的"
+              "title",
+              "标题"
             ],
             [
-              "huge",
-              "巨大的"
+              "human",
+              "人"
             ],
             [
-              "strong",
-              "强壮的"
+              "ant",
+              "蚂蚁"
             ],
             [
-              "danger",
-              "危险"
+              "happiness",
+              "幸福"
             ],
             [
-              "save",
-              "拯救；节约"
+              "disappoint",
+              "使失望"
+            ],
+            [
+              "mushroom",
+              "蘑菇"
+            ],
+            [
+              "ton",
+              "吨"
+            ],
+            [
+              "role",
+              "作用"
+            ],
+            [
+              "pea",
+              "豌豆"
+            ],
+            [
+              "climate",
+              "气候"
+            ],
+            [
+              "ocean",
+              "大海"
+            ],
+            [
+              "except",
+              "除……之外"
+            ],
+            [
+              "tiny",
+              "极小的"
+            ],
+            [
+              "lively",
+              "精力充沛的"
             ]
           ]
         },
@@ -584,7 +1136,7 @@
                 "什么",
                 "一；一个",
                 "美味的",
-                "一餐"
+                "一餐所吃的食物"
               ]
             },
             {
@@ -595,7 +1147,7 @@
                 "能；可以",
                 "烹饪",
                 "一；一个",
-                "一餐"
+                "一餐所吃的食物"
               ]
             },
             {
@@ -616,7 +1168,7 @@
               "hints": [
                 "这个；那个",
                 "食物",
-                "尝",
+                "有……味道",
                 "很棒的"
               ]
             },
@@ -625,7 +1177,7 @@
               "en": "We enjoy the dinner together.",
               "hints": [
                 "我们",
-                "享受",
+                "享受……的乐趣",
                 "这个；那个",
                 "晚餐",
                 "在一起"
@@ -634,68 +1186,208 @@
           ],
           "words": [
             [
-              "delicious",
-              "美味的"
-            ],
-            [
-              "recipe",
-              "食谱"
-            ],
-            [
-              "food",
-              "食物"
-            ],
-            [
-              "taste",
-              "尝；味道"
-            ],
-            [
-              "dish",
-              "菜肴；盘子"
-            ],
-            [
-              "ingredient",
-              "配料；成分"
-            ],
-            [
-              "boil",
-              "煮沸"
-            ],
-            [
-              "fry",
-              "油炸；煎"
-            ],
-            [
-              "cut",
-              "切"
+              "pepper",
+              "胡椒粉"
             ],
             [
               "mix",
               "混合"
             ],
             [
-              "add",
-              "添加"
+              "bake",
+              "烘焙"
             ],
             [
-              "salt",
-              "盐"
+              "oven",
+              "烤箱"
             ],
             [
-              "sugar",
-              "糖"
+              "flour",
+              "面粉"
             ],
             [
-              "breakfast",
-              "早餐"
+              "boil",
+              "煮沸"
             ],
             [
-              "dinner",
-              "晚餐"
+              "butter",
+              "黄油"
             ],
             [
-              "flavour",
-              "味道；风味"
+              "cheese",
+              "奶酪"
+            ],
+            [
+              "tablespoon",
+              "一汤匙"
+            ],
+            [
+              "mash",
+              "捣烂"
+            ],
+            [
+              "stir-fry",
+              "翻炒"
+            ],
+            [
+              "bowl",
+              "碗"
+            ],
+            [
+              "heat",
+              "加热"
+            ],
+            [
+              "oil",
+              "食用油"
+            ],
+            [
+              "pan",
+              "平底锅"
+            ],
+            [
+              "simple",
+              "简单的"
+            ],
+            [
+              "ingredient",
+              "材料"
+            ],
+            [
+              "instruction",
+              "用法说明"
+            ],
+            [
+              "sour",
+              "酸的"
+            ],
+            [
+              "mess",
+              "脏乱"
+            ],
+            [
+              "pretty",
+              "漂亮的"
+            ],
+            [
+              "Christmas",
+              "圣诞节"
+            ],
+            [
+              "pancake",
+              "烙饼"
+            ],
+            [
+              "dream",
+              "梦想"
+            ],
+            [
+              "university",
+              "大学"
+            ],
+            [
+              "memory",
+              "回忆"
+            ],
+            [
+              "visible",
+              "看得见的"
+            ],
+            [
+              "pumpkin",
+              "南瓜"
+            ],
+            [
+              "pie",
+              "果馅饼"
+            ],
+            [
+              "cinnamon",
+              "肉桂皮"
+            ],
+            [
+              "sweetness",
+              "甜"
+            ],
+            [
+              "college",
+              "学院"
+            ],
+            [
+              "host",
+              "主人"
+            ],
+            [
+              "hostess",
+              "女主人"
+            ],
+            [
+              "recipe",
+              "食谱"
+            ],
+            [
+              "cream",
+              "奶油"
+            ],
+            [
+              "crust",
+              "糕饼酥皮"
+            ],
+            [
+              "mixture",
+              "混合物"
+            ],
+            [
+              "least",
+              "最小"
+            ],
+            [
+              "secret",
+              "诀窍"
+            ],
+            [
+              "according",
+              "根据"
+            ],
+            [
+              "whenever",
+              "每当"
+            ],
+            [
+              "item",
+              "项目"
+            ],
+            [
+              "spaghetti",
+              "意大利细面条"
+            ],
+            [
+              "spoon",
+              "一勺的量"
+            ],
+            [
+              "slice",
+              "薄片"
+            ],
+            [
+              "couple",
+              "夫妻"
+            ],
+            [
+              "island",
+              "岛"
+            ],
+            [
+              "wife",
+              "妻子"
+            ],
+            [
+              "separate",
+              "单独的"
+            ],
+            [
+              "born",
+              "出生"
             ]
           ]
         },
@@ -709,7 +1401,7 @@
                 "我",
                 "有",
                 "一；一个",
-                "计划",
+                "策划",
                 "为；给",
                 "这个；那个",
                 "将来"
@@ -734,7 +1426,7 @@
                 "我",
                 "想要",
                 "到；向",
-                "提高",
+                "改进",
                 "我的",
                 "英语"
               ]
@@ -744,7 +1436,7 @@
               "en": "Work hard and never give up.",
               "hints": [
                 "工作",
-                "努力地",
+                "努力地；困难的",
                 "和；与",
                 "从不",
                 "给予",
@@ -764,84 +1456,188 @@
           ],
           "words": [
             [
-              "plan",
-              "计划"
+              "yourself",
+              "你自己"
             ],
             [
-              "goal",
-              "目标"
+              "engineer",
+              "工程师"
             ],
             [
-              "future",
-              "将来"
+              "fashion",
+              "时装业"
             ],
             [
-              "dream",
-              "梦想"
+              "designer",
+              "设计师"
             ],
             [
-              "job",
-              "工作"
+              "director",
+              "导演"
             ],
             [
-              "career",
-              "职业"
+              "musician",
+              "音乐家"
             ],
             [
-              "study",
-              "学习；研究"
+              "fireman",
+              "消防队员"
             ],
             [
-              "work",
-              "工作"
+              "essay",
+              "小品文"
             ],
             [
-              "improve",
-              "提高；改善"
+              "classic",
+              "经典作品"
             ],
             [
-              "decide",
+              "literature",
+              "文学"
+            ],
+            [
+              "athlete",
+              "运动员"
+            ],
+            [
+              "photographer",
+              "摄影师"
+            ],
+            [
+              "painter",
+              "画家"
+            ],
+            [
+              "businessman",
+              "商界人士"
+            ],
+            [
+              "actress",
+              "女演员"
+            ],
+            [
+              "lawyer",
+              "律师"
+            ],
+            [
+              "law",
+              "法律"
+            ],
+            [
+              "bath",
+              "洗澡"
+            ],
+            [
+              "miss",
+              "想念"
+            ],
+            [
+              "able",
+              "能够"
+            ],
+            [
+              "stick",
+              "粘贴"
+            ],
+            [
+              "resolution",
               "决定"
             ],
             [
-              "choose",
-              "选择"
+              "mini-goal",
+              "小目标"
             ],
             [
-              "skill",
-              "技能"
+              "achieve",
+              "达到"
             ],
             [
-              "practice",
-              "练习"
+              "physical",
+              "身体的"
             ],
             [
-              "habit",
-              "习惯"
+              "health",
+              "健康"
             ],
             [
-              "successful",
-              "成功的"
+              "healthily",
+              "健康地"
             ],
             [
-              "hard",
-              "努力地；困难的"
+              "photography",
+              "照相术"
             ],
             [
-              "try",
-              "尝试"
+              "self-improvement",
+              "自我改进"
             ],
             [
-              "believe",
-              "相信"
+              "confident",
+              "自信的"
             ],
             [
-              "hope",
-              "希望"
+              "organized",
+              "有条理的"
             ],
             [
-              "wish",
-              "愿望"
+              "wisely",
+              "聪明地"
+            ],
+            [
+              "possible",
+              "可能的"
+            ],
+            [
+              "paragraph",
+              "段"
+            ],
+            [
+              "introduce",
+              "介绍"
+            ],
+            [
+              "meaning",
+              "意义"
+            ],
+            [
+              "fail",
+              "未能"
+            ],
+            [
+              "ahead",
+              "提前"
+            ],
+            [
+              "design",
+              "设计"
+            ],
+            [
+              "bridge",
+              "桥"
+            ],
+            [
+              "final",
+              "最后的"
+            ],
+            [
+              "confidence",
+              "信心"
+            ],
+            [
+              "form",
+              "形成"
+            ],
+            [
+              "relationship",
+              "关系"
+            ],
+            [
+              "push-up",
+              "俯卧撑"
+            ],
+            [
+              "energetic",
+              "精力充沛的"
             ]
           ]
         },
@@ -890,7 +1686,7 @@
               "hints": [
                 "人们",
                 "将；会",
-                "居住",
+                "居住；生活",
                 "更长的"
               ]
             },
@@ -903,74 +1699,246 @@
                 "将；会",
                 "旅行",
                 "到；向",
-                "太空"
+                "太空；空间"
               ]
             }
           ],
           "words": [
             [
-              "tomorrow",
-              "明天"
-            ],
-            [
-              "predict",
+              "prediction",
               "预测"
             ],
             [
-              "prediction",
-              "预言"
+              "outer",
+              "外围的"
             ],
             [
-              "robot",
-              "机器人"
+              "worse",
+              "更差的"
+            ],
+            [
+              "sci-fi",
+              "科幻小说."
+            ],
+            [
+              "ticket",
+              "票"
+            ],
+            [
+              "positive",
+              "乐观的"
+            ],
+            [
+              "traffic",
+              "交通"
             ],
             [
               "technology",
-              "技术"
+              "科技"
             ],
             [
-              "change",
-              "改变"
+              "video",
+              "视频"
             ],
             [
-              "world",
-              "世界"
+              "transport",
+              "交通运输系统"
             ],
             [
-              "possible",
-              "可能的"
+              "system",
+              "系统"
+            ],
+            [
+              "efficient",
+              "效率高的"
+            ],
+            [
+              "education",
+              "教育"
+            ],
+            [
+              "length",
+              "时长"
+            ],
+            [
+              "topic",
+              "话题"
+            ],
+            [
+              "partner",
+              "搭档"
+            ],
+            [
+              "shall",
+              "将要"
+            ],
+            [
+              "pass",
+              "及格"
+            ],
+            [
+              "winner",
+              "优胜者"
+            ],
+            [
+              "cure",
+              "药物"
+            ],
+            [
+              "cancer",
+              "癌症"
+            ],
+            [
+              "concert",
+              "音乐会"
+            ],
+            [
+              "cash",
+              "现金"
+            ],
+            [
+              "wallet",
+              "钱包"
+            ],
+            [
+              "guest",
+              "客人"
+            ],
+            [
+              "chief",
+              "首席的"
+            ],
+            [
+              "researcher",
+              "研究者"
+            ],
+            [
+              "research",
+              "研究"
+            ],
+            [
+              "futurist",
+              "未来学家"
+            ],
+            [
+              "everywhere",
+              "到处"
+            ],
+            [
+              "robotics",
+              "机器人学"
+            ],
+            [
+              "industry",
+              "行业"
+            ],
+            [
+              "service",
+              "服务"
+            ],
+            [
+              "disaster",
+              "灾难"
+            ],
+            [
+              "emergency",
+              "突发事件"
+            ],
+            [
+              "disappear",
+              "消失"
+            ],
+            [
+              "challenging",
+              "挑战性的"
+            ],
+            [
+              "pilot",
+              "飞行员"
+            ],
+            [
+              "expert",
+              "专家"
+            ],
+            [
+              "replace",
+              "代替"
+            ],
+            [
+              "creativity",
+              "创造力"
+            ],
+            [
+              "emotional",
+              "情感的"
+            ],
+            [
+              "intelligence",
+              "智力"
+            ],
+            [
+              "mention",
+              "提到"
+            ],
+            [
+              "refrigerator",
+              "冰箱"
+            ],
+            [
+              "low",
+              "向......底部"
+            ],
+            [
+              "accept",
+              "接受"
+            ],
+            [
+              "influence",
+              "影响"
+            ],
+            [
+              "creative",
+              "创造性的"
             ],
             [
               "impossible",
               "不可能的"
             ],
             [
-              "probably",
-              "大概；或许"
-            ],
-            [
-              "perhaps",
-              "也许"
-            ],
-            [
-              "machine",
-              "机器"
-            ],
-            [
-              "space",
-              "太空；空间"
-            ],
-            [
-              "trend",
-              "趋势"
+              "quality",
+              "素质"
             ],
             [
               "develop",
-              "发展"
+              "增强"
             ],
             [
-              "human",
-              "人类"
+              "German",
+              "德语"
+            ],
+            [
+              "valuable",
+              "很有用的"
+            ],
+            [
+              "challenge",
+              "挑战"
+            ],
+            [
+              "public",
+              "公共的"
+            ],
+            [
+              "medical",
+              "医学的"
+            ],
+            [
+              "task",
+              "任务"
+            ],
+            [
+              "depend",
+              "取决于"
             ]
           ]
         },
@@ -985,7 +1953,7 @@
                 "交流",
                 "和；用",
                 "每个",
-                "另外的"
+                "另外的人"
               ]
             },
             {
@@ -1015,7 +1983,7 @@
               "en": "Please reply to my message.",
               "hints": [
                 "请",
-                "回复",
+                "回答",
                 "到；向",
                 "我的",
                 "消息"
@@ -1026,7 +1994,7 @@
               "en": "Good communication is important.",
               "hints": [
                 "好的",
-                "交流",
+                "表达",
                 "是",
                 "重要的"
               ]
@@ -1034,80 +2002,208 @@
           ],
           "words": [
             [
-              "communicate",
-              "交流；沟通"
-            ],
-            [
               "communication",
-              "交流；沟通"
-            ],
-            [
-              "message",
-              "消息"
-            ],
-            [
-              "email",
-              "电子邮件"
-            ],
-            [
-              "letter",
-              "信；字母"
-            ],
-            [
-              "phone",
-              "电话"
-            ],
-            [
-              "call",
-              "打电话"
-            ],
-            [
-              "chat",
-              "聊天"
-            ],
-            [
-              "talk",
-              "交谈"
-            ],
-            [
-              "information",
-              "信息"
-            ],
-            [
-              "express",
               "表达"
             ],
             [
-              "feeling",
-              "感觉；情感"
+              "sign",
+              "手势"
             ],
             [
-              "idea",
-              "主意；想法"
+              "speaker",
+              "说话者"
             ],
             [
-              "opinion",
-              "观点；意见"
+              "rehearsal",
+              "排演"
             ],
             [
-              "listen",
-              "听"
+              "local",
+              "当地的"
             ],
             [
-              "understand",
-              "理解；明白"
+              "face-to-face",
+              "面对面的"
+            ],
+            [
+              "professor",
+              "教授"
+            ],
+            [
+              "speech",
+              "演说"
+            ],
+            [
+              "argue",
+              "争论"
+            ],
+            [
+              "prefer",
+              "较喜欢"
+            ],
+            [
+              "calm",
+              "镇静的"
+            ],
+            [
+              "expression",
+              "表达方式"
+            ],
+            [
+              "chance",
+              "机会"
+            ],
+            [
+              "meeting",
+              "会面"
+            ],
+            [
+              "difficulty",
+              "困难"
+            ],
+            [
+              "line",
+              "字行"
+            ],
+            [
+              "detail",
+              "细节"
+            ],
+            [
+              "reunion",
+              "团聚"
+            ],
+            [
+              "seriously",
+              "严肃地"
+            ],
+            [
+              "training",
+              "训练"
+            ],
+            [
+              "nervous",
+              "担忧的"
+            ],
+            [
+              "stranger",
+              "陌生人"
+            ],
+            [
+              "tip",
+              "指点"
+            ],
+            [
+              "carefully",
+              "认真地"
+            ],
+            [
+              "listener",
+              "听者"
+            ],
+            [
+              "point",
+              "观点"
+            ],
+            [
+              "surely",
+              "想必"
+            ],
+            [
+              "continue",
+              "持续"
+            ],
+            [
+              "impolite",
+              "不礼貌的"
+            ],
+            [
+              "personal",
+              "个人的"
+            ],
+            [
+              "sincere",
+              "真诚的"
+            ],
+            [
+              "pay",
+              "付费"
+            ],
+            [
+              "attention",
+              "注意"
+            ],
+            [
+              "offer",
+              "提供"
+            ],
+            [
+              "reasonable",
+              "公平的"
+            ],
+            [
+              "social",
+              "社会的"
+            ],
+            [
+              "medium",
+              "媒介"
+            ],
+            [
+              "trust",
+              "信任"
+            ],
+            [
+              "misunderstanding",
+              "误解"
+            ],
+            [
+              "event",
+              "公开活动"
+            ],
+            [
+              "cost",
+              "费用"
+            ],
+            [
+              "opportunity",
+              "机会"
+            ],
+            [
+              "benefit",
+              "对……有用"
             ],
             [
               "reply",
-              "回复"
+              "回答"
             ],
             [
-              "conversation",
-              "谈话；交谈"
+              "honour",
+              "荣幸"
             ],
             [
-              "polite",
-              "有礼貌的"
+              "sincerely",
+              "真诚地"
+            ],
+            [
+              "opening",
+              "开篇的"
+            ],
+            [
+              "closing",
+              "结尾的"
+            ],
+            [
+              "sentence",
+              "句子"
+            ],
+            [
+              "date",
+              "日期"
+            ],
+            [
+              "clause",
+              "从句"
             ]
           ]
         }

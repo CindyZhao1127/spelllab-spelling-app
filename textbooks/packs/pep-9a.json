@@ -1,13 +1,13 @@
 {
   "format": "spelllab.textbook.v1",
-  "exportedAt": "2026-11-19T14:12:43Z",
+  "exportedAt": "2026-11-19T16:50:39Z",
   "packs": [
     {
-      "name": "人教版新目标九年级上册（2024版·七年级起点）",
+      "name": "人教版初中英语 九年级上册（2024修订版·2026秋启用）",
       "gradeId": "g9",
       "gradeName": "初中九年级",
       "bookId": "b_pep_junior",
-      "bookName": "人教版新目标（七年级起点）",
+      "bookName": "人教版初中英语（2024修订版）",
       "units": [
         {
           "name": "Unit 1 The Changing World",
@@ -73,84 +73,196 @@
           ],
           "words": [
             [
-              "change",
-              "改变；变化"
+              "rough",
+              "崎岖的"
             ],
             [
-              "world",
-              "世界"
+              "sandstorm",
+              "沙尘暴"
             ],
             [
-              "hometown",
-              "家乡"
+              "farmland",
+              "耕地"
             ],
             [
-              "village",
-              "村庄"
+              "shortage",
+              "短缺"
             ],
             [
-              "city",
-              "城市"
+              "lack",
+              "缺乏"
             ],
             [
-              "building",
-              "建筑物"
+              "bush",
+              "灌木"
             ],
             [
-              "road",
-              "道路"
+              "root",
+              "根"
             ],
             [
-              "develop",
-              "发展"
+              "soil",
+              "土壤"
             ],
             [
-              "modern",
-              "现代的"
+              "sandy",
+              "铺满沙子的"
             ],
             [
-              "poor",
-              "贫穷的"
+              "government",
+              "政府"
             ],
             [
-              "rich",
-              "富裕的"
+              "support",
+              "支持"
             ],
             [
-              "grow",
-              "增长；生长"
+              "corn",
+              "玉米"
             ],
             [
-              "improve",
-              "改善；提高"
+              "high-tech",
+              "高科技的"
             ],
             [
-              "life",
-              "生活"
+              "greenhouse",
+              "温室"
             ],
             [
-              "past",
-              "过去"
+              "highway",
+              "公路"
             ],
             [
-              "present",
-              "现在；目前的"
+              "railway",
+              "铁路"
             ],
             [
-              "compare",
-              "比较"
+              "attraction",
+              "向往的地方"
             ],
             [
-              "experience",
-              "经历；经验"
+              "product",
+              "产品"
             ],
             [
-              "technology",
-              "技术"
+              "greatly",
+              "大大地"
             ],
             [
-              "transport",
-              "交通"
+              "socialist",
+              "社会主义的"
+            ],
+            [
+              "e-payment",
+              "电子支付"
+            ],
+            [
+              "housing",
+              "住房"
+            ],
+            [
+              "digital",
+              "电子的"
+            ],
+            [
+              "audio",
+              "音频的"
+            ],
+            [
+              "dirt",
+              "泥土"
+            ],
+            [
+              "track",
+              "小路"
+            ],
+            [
+              "wide",
+              "宽的"
+            ],
+            [
+              "link",
+              "交通路线"
+            ],
+            [
+              "port",
+              "港口"
+            ],
+            [
+              "capital",
+              "首都"
+            ],
+            [
+              "Kenyan",
+              "肯尼亚人"
+            ],
+            [
+              "benefit",
+              "得益于"
+            ],
+            [
+              "convenient",
+              "方便的"
+            ],
+            [
+              "business",
+              "生意"
+            ],
+            [
+              "ease",
+              "容易"
+            ],
+            [
+              "lorry",
+              "卡车"
+            ],
+            [
+              "manager",
+              "经理"
+            ],
+            [
+              "conclusion",
+              "总结"
+            ],
+            [
+              "narrow",
+              "狭窄的"
+            ],
+            [
+              "villager",
+              "村民"
+            ],
+            [
+              "theOlympics",
+              "奥林匹克运动会"
+            ],
+            [
+              "lead",
+              "带领"
+            ],
+            [
+              "man-made",
+              "人造的"
+            ],
+            [
+              "miracle",
+              "奇迹"
+            ],
+            [
+              "junior",
+              "低年级的"
+            ],
+            [
+              "flat",
+              "公寓"
+            ],
+            [
+              "discussion",
+              "讨论"
+            ],
+            [
+              "aspect",
+              "方面"
             ]
           ]
         },
@@ -184,7 +296,7 @@
               "hints": [
                 "他的",
                 "故事",
-                "鼓舞",
+                "激励",
                 "许多",
                 "人们"
               ]
@@ -215,84 +327,216 @@
           ],
           "words": [
             [
-              "admire",
-              "钦佩；羡慕"
-            ],
-            [
-              "inspire",
-              "鼓舞；激励"
-            ],
-            [
               "inspiring",
               "鼓舞人心的"
             ],
             [
-              "person",
-              "人"
+              "admire",
+              "钦佩"
             ],
             [
-              "hero",
-              "英雄"
+              "historian",
+              "历史学家"
             ],
             [
-              "scientist",
-              "科学家"
+              "researcher",
+              "研究人员"
             ],
             [
-              "profession",
-              "职业"
+              "chemist",
+              "化学家"
             ],
             [
-              "brave",
-              "勇敢的"
+              "physicist",
+              "物理学家"
             ],
             [
-              "strong",
-              "强壮的"
+              "hunger",
+              "饥饿"
             ],
             [
-              "work",
-              "工作"
+              "chemistry",
+              "化学"
             ],
             [
-              "achieve",
-              "实现；达到"
+              "calendar",
+              "日历"
             ],
             [
-              "success",
-              "成功"
+              "discovery",
+              "发现"
             ],
             [
-              "famous",
-              "著名的"
+              "century",
+              "世纪"
             ],
             [
-              "great",
-              "伟大的"
+              "wounded",
+              "受伤的"
             ],
             [
-              "respect",
-              "尊敬"
+              "soldier",
+              "士兵"
             ],
             [
-              "example",
-              "榜样；例子"
+              "British",
+              "英国的"
             ],
             [
-              "learn",
-              "学习"
+              "airway",
+              "航线"
+            ],
+            [
+              "nation",
+              "国家"
+            ],
+            [
+              "spread",
+              "传播"
+            ],
+            [
+              "disease",
+              "疾病"
+            ],
+            [
+              "pioneer",
+              "先驱"
+            ],
+            [
+              "admirable",
+              "令人钦佩的"
+            ],
+            [
+              "pyramid",
+              "金字塔"
+            ],
+            [
+              "balance",
+              "平衡"
             ],
             [
               "courage",
               "勇气"
             ],
             [
-              "effort",
-              "努力"
+              "wisdom",
+              "智慧"
             ],
             [
-              "dream",
-              "梦想"
+              "inspiration",
+              "鼓舞人心的人"
+            ],
+            [
+              "brave",
+              "勇敢的"
+            ],
+            [
+              "necessary",
+              "必要的"
+            ],
+            [
+              "seed",
+              "种子"
+            ],
+            [
+              "childhood",
+              "童年"
+            ],
+            [
+              "dynasty",
+              "朝代"
+            ],
+            [
+              "western",
+              "西方的"
+            ],
+            [
+              "scientific",
+              "科学的"
+            ],
+            [
+              "biologist",
+              "生物学家"
+            ],
+            [
+              "whole",
+              "整个的"
+            ],
+            [
+              "bank",
+              "银行"
+            ],
+            [
+              "forever",
+              "永远"
+            ],
+            [
+              "radio",
+              "收音机"
+            ],
+            [
+              "collection",
+              "收藏品"
+            ],
+            [
+              "exploration",
+              "探索"
+            ],
+            [
+              "universe",
+              "宇宙"
+            ],
+            [
+              "socialism",
+              "社会主义"
+            ],
+            [
+              "hole",
+              "洞"
+            ],
+            [
+              "daughter",
+              "女儿"
+            ],
+            [
+              "herself",
+              "她自己"
+            ],
+            [
+              "flight",
+              "飞行"
+            ],
+            [
+              "woodwork",
+              "木工"
+            ],
+            [
+              "inventor",
+              "发明者"
+            ],
+            [
+              "thinker",
+              "思想家"
+            ],
+            [
+              "period",
+              "时期"
+            ],
+            [
+              "kingdom",
+              "王国"
+            ],
+            [
+              "kindness",
+              "善良"
+            ],
+            [
+              "whether",
+              "是否"
+            ],
+            [
+              "mankind",
+              "人类"
             ]
           ]
         },
@@ -348,7 +592,7 @@
                 "我",
                 "想要",
                 "到；向",
-                "提高",
+                "改进",
                 "我的",
                 "技能"
               ]
@@ -356,76 +600,172 @@
           ],
           "words": [
             [
-              "learning",
-              "学习"
+              "learner",
+              "学习者"
             ],
             [
-              "smart",
-              "聪明的；智能的"
+              "flashcard",
+              "卡片"
             ],
             [
-              "method",
-              "方法"
+              "project",
+              "计划"
+            ],
+            [
+              "website",
+              "网站"
+            ],
+            [
+              "hands-on",
+              "动手的"
+            ],
+            [
+              "experiment",
+              "实验"
+            ],
+            [
+              "dictionary",
+              "词典"
+            ],
+            [
+              "aloud",
+              "出声地"
+            ],
+            [
+              "dialogue",
+              "对话"
+            ],
+            [
+              "suit",
+              "适合"
+            ],
+            [
+              "general",
+              "总的"
+            ],
+            [
+              "speed",
+              "速度"
+            ],
+            [
+              "grammar",
+              "语法"
+            ],
+            [
+              "podcast",
+              "播客"
+            ],
+            [
+              "zero",
+              "零"
+            ],
+            [
+              "actively",
+              "积极地"
+            ],
+            [
+              "enjoyable",
+              "有乐趣的"
             ],
             [
               "strategy",
               "策略"
             ],
             [
-              "skill",
-              "技能"
+              "correct",
+              "正确的"
             ],
             [
-              "practice",
-              "练习"
+              "suggest",
+              "建议"
             ],
             [
-              "remember",
-              "记住"
+              "method",
+              "方法"
             ],
             [
-              "understand",
-              "理解；明白"
+              "summarise",
+              "总结"
             ],
             [
-              "notice",
-              "注意"
+              "growth",
+              "成长"
             ],
             [
-              "review",
-              "复习"
+              "mindset",
+              "观念模式"
             ],
             [
-              "plan",
-              "计划"
+              "material",
+              "材料"
             ],
             [
-              "goal",
-              "目标"
+              "guidance",
+              "指导"
             ],
             [
-              "habit",
-              "习惯"
+              "feedback",
+              "反馈的意见"
             ],
             [
-              "mind",
-              "头脑"
+              "addition",
+              "添加"
             ],
             [
-              "brain",
-              "大脑"
+              "resource",
+              "资源"
             ],
             [
-              "question",
-              "问题"
+              "textbook",
+              "教科书"
             ],
             [
-              "think",
-              "思考"
+              "advantage",
+              "优势"
             ],
             [
-              "discover",
-              "发现"
+              "efficiently",
+              "效率高地"
+            ],
+            [
+              "valley",
+              "山谷"
+            ],
+            [
+              "pronunciation",
+              "发音"
+            ],
+            [
+              "click",
+              "点击"
+            ],
+            [
+              "magazine",
+              "杂志"
+            ],
+            [
+              "shelf",
+              "书架"
+            ],
+            [
+              "schoolwork",
+              "学校作业"
+            ],
+            [
+              "print",
+              "打印"
+            ],
+            [
+              "newspaper",
+              "报纸"
+            ],
+            [
+              "e-book",
+              "电子书"
+            ],
+            [
+              "recent",
+              "最近的"
             ]
           ]
         },
@@ -440,7 +780,7 @@
                 "有",
                 "一；一个",
                 "好的",
-                "记忆"
+                "回忆"
               ]
             },
             {
@@ -483,70 +823,194 @@
                 "能；可以",
                 "训练",
                 "我们的",
-                "记忆"
+                "回忆"
               ]
             }
           ],
           "words": [
             [
-              "memory",
-              "记忆；记忆力"
+              "position",
+              "位置"
             ],
             [
-              "forget",
-              "忘记"
+              "sadness",
+              "悲伤"
+            ],
+            [
+              "react",
+              "作出反应"
+            ],
+            [
+              "chain",
+              "链条"
+            ],
+            [
+              "stable",
+              "稳定的"
+            ],
+            [
+              "lecture",
+              "讲座"
+            ],
+            [
+              "retell",
+              "复述"
+            ],
+            [
+              "memorise",
+              "记忆"
+            ],
+            [
+              "tick",
+              "给……打钩"
+            ],
+            [
+              "grandson",
+              "孙子"
+            ],
+            [
+              "happen",
+              "发生"
+            ],
+            [
+              "case",
+              "情况"
+            ],
+            [
+              "opera",
+              "歌剧"
+            ],
+            [
+              "ticket",
+              "票"
+            ],
+            [
+              "wallet",
+              "钱包"
+            ],
+            [
+              "picnic",
+              "野餐"
+            ],
+            [
+              "pardon",
+              "原谅"
+            ],
+            [
+              "airport",
+              "机场"
+            ],
+            [
+              "gunshot",
+              "枪响"
+            ],
+            [
+              "grown-up",
+              "成年的"
             ],
             [
               "recall",
               "回忆起"
             ],
             [
+              "grapevine",
+              "葡萄藤"
+            ],
+            [
+              "boost",
+              "促进"
+            ],
+            [
+              "short-term",
+              "短期的"
+            ],
+            [
+              "long-term",
+              "长期的"
+            ],
+            [
+              "passage",
+              "段落"
+            ],
+            [
+              "likely",
+              "可能的"
+            ],
+            [
+              "discourage",
+              "使泄气"
+            ],
+            [
               "image",
-              "图像；形象"
+              "图像"
             ],
             [
-              "word",
-              "单词；词"
+              "graph",
+              "图"
             ],
             [
-              "list",
-              "列表；清单"
+              "effective",
+              "有效的"
             ],
             [
-              "story",
-              "故事"
+              "engine",
+              "发动机"
             ],
             [
-              "name",
-              "名字"
+              "address",
+              "地址"
             ],
             [
-              "face",
-              "脸；面部"
+              "passport",
+              "护照"
             ],
             [
-              "detail",
-              "细节"
+              "password",
+              "密码"
             ],
             [
-              "train",
-              "训练"
+              "increase",
+              "增长"
             ],
             [
-              "old",
-              "年老的"
+              "wild",
+              "野生的"
             ],
             [
-              "young",
-              "年轻的"
+              "wound",
+              "伤口"
             ],
             [
-              "picture",
-              "图片"
+              "mall",
+              "购物商场"
             ],
             [
-              "repeat",
-              "重复"
+              "notebook",
+              "笔记本"
+            ],
+            [
+              "squirrel",
+              "松鼠"
+            ],
+            [
+              "dolphin",
+              "海豚"
+            ],
+            [
+              "recognize",
+              "认出"
+            ],
+            [
+              "outline",
+              "大纲"
+            ],
+            [
+              "divide",
+              "分开"
+            ],
+            [
+              "one-size-fits-all",
+              "通用的"
             ]
           ]
         },
@@ -557,10 +1021,10 @@
               "cn": "发明改变了我们的生活。",
               "en": "Inventions change our lives.",
               "hints": [
-                "发明物",
+                "发明",
                 "改变",
                 "我们的",
-                "居住"
+                "居住；生活"
               ]
             },
             {
@@ -589,9 +1053,9 @@
               "en": "Good ideas need hard work.",
               "hints": [
                 "好的",
-                "主意",
+                "主意；想法",
                 "需要",
-                "努力地",
+                "努力地；困难的",
                 "工作"
               ]
             },
@@ -599,7 +1063,7 @@
               "cn": "技术让生活更轻松。",
               "en": "Technology makes life easier.",
               "hints": [
-                "技术",
+                "科技",
                 "制作",
                 "生活",
                 "更容易的"
@@ -608,68 +1072,212 @@
           ],
           "words": [
             [
-              "idea",
-              "主意；想法"
+              "invention",
+              "发明"
+            ],
+            [
+              "camera",
+              "照相机"
+            ],
+            [
+              "laptop",
+              "笔记本电脑"
+            ],
+            [
+              "high-speedtrain",
+              "高速列车"
+            ],
+            [
+              "super",
+              "超级的"
+            ],
+            [
+              "sunglasses",
+              "太阳镜"
+            ],
+            [
+              "mini-",
+              "微型的"
+            ],
+            [
+              "itself",
+              "它自己"
+            ],
+            [
+              "button",
+              "按钮"
+            ],
+            [
+              "produce",
+              "生产"
+            ],
+            [
+              "file",
+              "文件"
+            ],
+            [
+              "plastic",
+              "塑料"
+            ],
+            [
+              "printer",
+              "打印机"
             ],
             [
               "invent",
               "发明"
             ],
             [
-              "invention",
-              "发明物"
+              "suppose",
+              "认为"
             ],
             [
-              "inventor",
-              "发明家"
+              "wheel",
+              "车轮"
             ],
             [
-              "create",
+              "frozen",
+              "冻硬的"
+            ],
+            [
+              "complete",
+              "完成"
+            ],
+            [
+              "layer",
+              "层"
+            ],
+            [
+              "melt",
+              "融化"
+            ],
+            [
+              "pipe",
+              "管道"
+            ],
+            [
+              "tunnel",
+              "隧道"
+            ],
+            [
+              "tourism",
+              "旅游业"
+            ],
+            [
+              "gain",
+              "获得"
+            ],
+            [
+              "reality",
+              "现实"
+            ],
+            [
+              "papermaking",
+              "造纸术"
+            ],
+            [
+              "responsible",
+              "作为原因的"
+            ],
+            [
+              "rapid",
+              "快速的"
+            ],
+            [
+              "shape",
+              "形状"
+            ],
+            [
+              "bronze",
+              "青铜"
+            ],
+            [
+              "ware",
+              "制品"
+            ],
+            [
+              "stone",
+              "石头"
+            ],
+            [
+              "jute",
+              "黄麻"
+            ],
+            [
+              "fiber",
+              "纤维"
+            ],
+            [
+              "expensive",
+              "昂贵的"
+            ],
+            [
+              "officer",
+              "官员"
+            ],
+            [
+              "workshop",
+              "作坊"
+            ],
+            [
+              "none",
+              "没有一个"
+            ],
+            [
+              "ideal",
+              "最合适的"
+            ],
+            [
+              "certain",
+              "确定的"
+            ],
+            [
+              "suitable",
+              "合适的"
+            ],
+            [
+              "liquid",
+              "液体"
+            ],
+            [
+              "cheap",
+              "便宜的"
+            ],
+            [
+              "creation",
               "创造"
             ],
             [
-              "creative",
-              "有创造力的"
+              "birth",
+              "诞生"
             ],
             [
-              "power",
-              "力量"
+              "rapidly",
+              "快速地"
             ],
             [
-              "machine",
-              "机器"
+              "afford",
+              "买得起"
             ],
             [
-              "tool",
-              "工具"
+              "company",
+              "公司"
             ],
             [
-              "process",
-              "过程"
+              "sticky",
+              "黏的"
             ],
             [
-              "useful",
-              "有用的"
+              "production",
+              "生产"
             ],
             [
-              "future",
-              "将来"
+              "gradually",
+              "逐渐地"
             ],
             [
-              "imagine",
-              "想象"
-            ],
-            [
-              "paper",
-              "纸"
-            ],
-            [
-              "print",
-              "印刷"
-            ],
-            [
-              "electric",
-              "电的"
+              "widely",
+              "广泛地"
             ]
           ]
         },
@@ -684,7 +1292,7 @@
                 "想要",
                 "到；向",
                 "探索",
-                "太空"
+                "太空；空间"
               ]
             },
             {
@@ -696,7 +1304,7 @@
                 "是",
                 "远的；远",
                 "从；来自",
-                "地球"
+                "地球；土地"
               ]
             },
             {
@@ -706,14 +1314,14 @@
                 "宇航员",
                 "旅行",
                 "进入；到……里",
-                "太空"
+                "太空；空间"
               ]
             },
             {
               "cn": "太空探索令人激动。",
               "en": "Space exploration is exciting.",
               "hints": [
-                "太空",
+                "太空；空间",
                 "探索",
                 "是",
                 "令人激动的"
@@ -726,7 +1334,7 @@
                 "也许",
                 "我们",
                 "将；会",
-                "居住",
+                "居住；生活",
                 "在……上",
                 "火星"
               ]
@@ -734,68 +1342,152 @@
           ],
           "words": [
             [
-              "earth",
-              "地球；土地"
+              "beyond",
+              "超出"
             ],
             [
-              "space",
-              "太空；空间"
+              "mission",
+              "任务"
             ],
             [
-              "planet",
-              "行星"
+              "telescope",
+              "望远镜"
+            ],
+            [
+              "rover",
+              "探测器"
+            ],
+            [
+              "manned",
+              "需人操作的"
+            ],
+            [
+              "maintain",
+              "维修"
+            ],
+            [
+              "launch",
+              "发射"
+            ],
+            [
+              "weightless",
+              "失重的"
+            ],
+            [
+              "movement",
+              "运动"
+            ],
+            [
+              "asleep",
+              "睡着的"
+            ],
+            [
+              "tie",
+              "系上"
+            ],
+            [
+              "geology",
+              "地质"
+            ],
+            [
+              "satellite",
+              "人造卫星"
+            ],
+            [
+              "crazy",
+              "疯狂的"
+            ],
+            [
+              "humanbeing",
+              "人"
+            ],
+            [
+              "require",
+              "需要"
             ],
             [
               "rocket",
               "火箭"
             ],
             [
-              "satellite",
-              "卫星"
+              "cancel",
+              "取消"
             ],
             [
-              "universe",
-              "宇宙"
+              "publish",
+              "刊登"
             ],
             [
-              "moon",
-              "月亮"
+              "exoplanet",
+              "系外行星"
             ],
             [
-              "star",
-              "星星"
+              "solar",
+              "太阳的"
             ],
             [
-              "astronaut",
-              "宇航员"
+              "god",
+              "神"
             ],
             [
-              "explore",
-              "探索"
+              "mysterious",
+              "神秘的"
             ],
             [
-              "exploration",
-              "探索"
+              "spacecraft",
+              "宇宙飞船"
             ],
             [
-              "flight",
-              "飞行"
+              "board",
+              "板"
             ],
             [
-              "travel",
-              "旅行"
+              "onboard",
+              "在船上"
             ],
             [
-              "scientific",
-              "科学的"
+              "billion",
+              "十亿"
             ],
             [
-              "research",
-              "研究"
+              "trillion",
+              "万亿"
             ],
             [
-              "hope",
-              "希望"
+              "completely",
+              "彻底地"
+            ],
+            [
+              "cooperate",
+              "合作"
+            ],
+            [
+              "galaxy",
+              "星系"
+            ],
+            [
+              "unmanned",
+              "无人操作的"
+            ],
+            [
+              "craft",
+              "技艺"
+            ],
+            [
+              "spaceship",
+              "宇宙飞船"
+            ],
+            [
+              "survey",
+              "调查"
+            ],
+            [
+              "crowded",
+              "拥挤的"
+            ],
+            [
+              "operate",
+              "操作"
             ]
           ]
         },
@@ -857,84 +1549,192 @@
           ],
           "words": [
             [
-              "music",
-              "音乐"
-            ],
-            [
-              "musical",
-              "音乐的"
-            ],
-            [
               "rhythm",
-              "节奏；韵律"
+              "节奏"
             ],
             [
-              "song",
-              "歌曲"
+              "folk",
+              "民间的"
             ],
             [
-              "sing",
-              "唱歌"
+              "folkmusic",
+              "民间音乐"
             ],
             [
-              "singer",
-              "歌手"
+              "traditional",
+              "传统的"
             ],
             [
-              "instrument",
-              "乐器"
+              "popmusic",
+              "流行音乐"
             ],
             [
-              "guitar",
-              "吉他"
+              "jazz",
+              "爵士乐"
             ],
             [
-              "piano",
-              "钢琴"
+              "rap",
+              "说唱乐"
             ],
             [
-              "violin",
-              "小提琴"
+              "comment",
+              "评论"
             ],
             [
-              "drum",
-              "鼓"
+              "lyrics",
+              "歌词"
             ],
             [
-              "concert",
-              "音乐会"
+              "electric",
+              "电的"
             ],
             [
-              "band",
-              "乐队"
+              "electricguitar",
+              "电吉他"
             ],
             [
-              "beat",
-              "节拍"
+              "keyboard",
+              "键盘"
             ],
             [
-              "dance",
-              "跳舞"
+              "trumpet",
+              "小号"
             ],
             [
-              "feel",
-              "感觉"
+              "style",
+              "风格"
             ],
             [
-              "beautiful",
-              "美丽的"
+              "performance",
+              "表演"
             ],
             [
-              "wonderful",
-              "精彩的"
+              "golden",
+              "金色的"
             ],
             [
-              "enjoy",
-              "享受；喜爱"
+              "lover",
+              "爱好者"
+            ],
+            [
+              "romantic",
+              "浪漫的"
+            ],
+            [
+              "performer",
+              "表演者"
+            ],
+            [
+              "purple",
+              "紫色"
+            ],
+            [
+              "poet",
+              "诗人"
+            ],
+            [
+              "policewoman",
+              "女警察"
+            ],
+            [
+              "deaf",
+              "聋的"
             ],
             [
               "composer",
               "作曲家"
+            ],
+            [
+              "electronic",
+              "电子的"
+            ],
+            [
+              "download",
+              "下载"
+            ],
+            [
+              "rating",
+              "评分"
+            ],
+            [
+              "genius",
+              "天才"
+            ],
+            [
+              "pianist",
+              "钢琴家"
+            ],
+            [
+              "gifted",
+              "有天赋的"
+            ],
+            [
+              "outdo",
+              "超过"
+            ],
+            [
+              "widen",
+              "扩大"
+            ],
+            [
+              "soul",
+              "灵魂"
+            ],
+            [
+              "characteristic",
+              "特征"
+            ],
+            [
+              "valuable",
+              "有价值的"
+            ],
+            [
+              "proudly",
+              "自豪地"
+            ],
+            [
+              "funeral",
+              "葬礼"
+            ],
+            [
+              "profession",
+              "职业"
+            ],
+            [
+              "contribution",
+              "贡献"
+            ],
+            [
+              "cartoon",
+              "卡通"
+            ],
+            [
+              "fair",
+              "公平的"
+            ],
+            [
+              "tape",
+              "磁带"
+            ],
+            [
+              "champion",
+              "冠军"
+            ],
+            [
+              "finger",
+              "手指"
+            ],
+            [
+              "classmate",
+              "同学"
+            ],
+            [
+              "nowadays",
+              "如今"
+            ],
+            [
+              "imagination",
+              "想象力"
             ]
           ]
         },
@@ -959,14 +1759,14 @@
                 "运动员",
                 "赢（过去式）",
                 "一；一个",
-                "奖牌"
+                "奖章"
               ]
             },
             {
               "cn": "赢并不是一切。",
               "en": "Winning is not everything.",
               "hints": [
-                "赢",
+                "赢；获胜",
                 "是",
                 "不",
                 "一切"
@@ -988,7 +1788,7 @@
               "hints": [
                 "我",
                 "感觉",
-                "自豪的",
+                "骄傲的",
                 "……的",
                 "我的",
                 "队"
@@ -997,72 +1797,152 @@
           ],
           "words": [
             [
-              "game",
-              "比赛；游戏"
+              "pull-up",
+              "引体向上"
             ],
             [
-              "sport",
-              "运动"
+              "relay",
+              "接力赛"
             ],
             [
-              "event",
-              "赛事；事件"
+              "shot-put",
+              "推铅球"
             ],
             [
-              "Olympic",
-              "奥林匹克的"
-            ],
-            [
-              "athlete",
-              "运动员"
-            ],
-            [
-              "player",
-              "运动员；选手"
-            ],
-            [
-              "team",
-              "队；组"
-            ],
-            [
-              "win",
-              "赢；获胜"
-            ],
-            [
-              "lose",
-              "输；失败"
+              "boxing",
+              "拳击"
             ],
             [
               "competition",
-              "比赛；竞争"
-            ],
-            [
-              "match",
               "比赛"
             ],
             [
+              "tryout",
+              "预赛"
+            ],
+            [
+              "handoff",
+              "接力棒交接"
+            ],
+            [
+              "baton",
+              "接力棒"
+            ],
+            [
+              "judge",
+              "裁判员"
+            ],
+            [
+              "runner",
+              "参加赛跑的人"
+            ],
+            [
+              "smooth",
+              "顺利的；光滑的"
+            ],
+            [
+              "amaze",
+              "使惊奇"
+            ],
+            [
+              "truly",
+              "真正地"
+            ],
+            [
+              "swimming",
+              "游泳"
+            ],
+            [
+              "ceremony",
+              "典礼；仪式核心词汇"
+            ],
+            [
+              "neither",
+              "两者都不"
+            ],
+            [
+              "nor",
+              "也不"
+            ],
+            [
+              "unique",
+              "独一无二的"
+            ],
+            [
+              "bouldering",
+              "攀岩"
+            ],
+            [
+              "compete",
+              "参加比赛；竞争"
+            ],
+            [
+              "mascot",
+              "吉祥物"
+            ],
+            [
+              "motto",
+              "口号；格言"
+            ],
+            [
+              "dramatic",
+              "激动人心的；出乎意料的"
+            ],
+            [
+              "freestyle",
+              "自由式比赛"
+            ],
+            [
+              "talented",
+              "有才能的"
+            ],
+            [
               "medal",
-              "奖牌"
+              "奖章；勋章"
             ],
             [
-              "Champion",
-              "冠军"
+              "reform",
+              "改革；变革"
             ],
             [
-              "training",
-              "训练"
+              "worldwide",
+              "世界范围的"
             ],
             [
-              "spirit",
-              "精神"
+              "citizen",
+              "市民；公民"
             ],
             [
-              "fair",
-              "公平的"
+              "pride",
+              "自豪；骄傲"
             ],
             [
-              "proud",
-              "自豪的"
+              "harmony",
+              "和谐；和睦三、重点短语"
+            ],
+            [
+              "attend",
+              "参加；出席"
+            ],
+            [
+              "host",
+              "主办"
+            ],
+            [
+              "achievement",
+              "成就"
+            ],
+            [
+              "opportunity",
+              "机会；机遇"
+            ],
+            [
+              "purpose",
+              "目的"
+            ],
+            [
+              "volunteer",
+              "志愿者"
             ]
           ]
         }

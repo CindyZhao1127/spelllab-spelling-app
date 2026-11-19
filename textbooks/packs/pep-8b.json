@@ -1,13 +1,13 @@
 {
   "format": "spelllab.textbook.v1",
-  "exportedAt": "2026-11-19T14:12:43Z",
+  "exportedAt": "2026-11-19T16:50:39Z",
   "packs": [
     {
-      "name": "人教版新目标八年级下册（2024版·七年级起点）",
+      "name": "人教版初中英语 八年级下册（2024修订版·2026春启用）",
       "gradeId": "g8",
       "gradeName": "初中八年级",
       "bookId": "b_pep_junior",
-      "bookName": "人教版新目标（七年级起点）",
+      "bookName": "人教版初中英语（2024修订版）",
       "units": [
         {
           "name": "Unit 1 Time to Relax",
@@ -41,7 +41,7 @@
               "hints": [
                 "我",
                 "有",
-                "空闲的",
+                "空闲的；自由的",
                 "时间",
                 "在……上",
                 "周末"
@@ -63,7 +63,7 @@
               "hints": [
                 "我",
                 "感觉",
-                "平静的",
+                "镇静的",
                 "和；与",
                 "快乐的"
               ]
@@ -71,84 +71,168 @@
           ],
           "words": [
             [
-              "relax",
-              "放松"
+              "calligraphy",
+              "书法"
             ],
             [
-              "relaxing",
-              "令人放松的"
+              "ski",
+              "滑雪"
             ],
             [
-              "hobby",
-              "业余爱好"
+              "program",
+              "编写程序"
             ],
             [
-              "free",
-              "空闲的；自由的"
+              "express",
+              "表达"
             ],
             [
-              "time",
-              "时间"
+              "instructor",
+              "教练"
             ],
             [
-              "spare",
-              "空闲的"
+              "scared",
+              "害怕的"
             ],
             [
-              "enjoy",
-              "享受；喜爱"
+              "fear",
+              "害怕"
             ],
             [
-              "interest",
-              "兴趣"
+              "poem",
+              "诗"
             ],
             [
-              "activity",
-              "活动"
+              "single",
+              "单个的"
             ],
             [
-              "music",
-              "音乐"
+              "stroke",
+              "笔画"
             ],
             [
-              "art",
-              "艺术"
+              "ink",
+              "墨水"
             ],
             [
-              "read",
-              "阅读"
+              "return",
+              "回来"
             ],
             [
-              "book",
-              "书"
+              "deal",
+              "交易"
             ],
             [
-              "movie",
-              "电影"
+              "manage",
+              "完成"
             ],
             [
-              "game",
-              "游戏"
+              "push",
+              "督促"
             ],
             [
-              "sport",
-              "运动"
+              "myself",
+              "我自己"
             ],
             [
-              "fun",
-              "乐趣"
+              "chat",
+              "闲聊"
             ],
             [
-              "happy",
-              "快乐的"
+              "outing",
+              "出外游玩"
             ],
             [
-              "calm",
-              "平静的"
+              "reduce",
+              "减少"
             ],
             [
-              "peace",
-              "平静；和平"
+              "stress",
+              "精神压力"
+            ],
+            [
+              "yoga",
+              "瑜伽"
+            ],
+            [
+              "object",
+              "物品"
+            ],
+            [
+              "Italian",
+              "意大利的"
+            ],
+            [
+              "programmer",
+              "程序设计员"
+            ],
+            [
+              "allow",
+              "允许"
+            ],
+            [
+              "sense",
+              "感觉"
+            ],
+            [
+              "achievement",
+              "成就"
+            ],
+            [
+              "coin",
+              "硬币"
+            ],
+            [
+              "stamp",
+              "邮票"
+            ],
+            [
+              "teenage",
+              "青少年的"
+            ],
+            [
+              "postcard",
+              "明信片"
+            ],
+            [
+              "rather",
+              "相当"
+            ],
+            [
+              "old-fashioned",
+              "过时的"
+            ],
+            [
+              "foreign",
+              "外国的"
+            ],
+            [
+              "suggestion",
+              "建议"
+            ],
+            [
+              "failure",
+              "失败"
+            ],
+            [
+              "inspire",
+              "激励"
+            ],
+            [
+              "strict",
+              "严厉的"
+            ],
+            [
+              "surprisingly",
+              "出人意料地"
+            ],
+            [
+              "stage",
+              "舞台"
+            ],
+            [
+              "importantly",
+              "重要地"
             ]
           ]
         },
@@ -180,7 +264,7 @@
               "cn": "锻炼对你的健康有好处。",
               "en": "Exercise is good for your health.",
               "hints": [
-                "锻炼",
+                "锻炼；练习",
                 "是",
                 "好的",
                 "为；给",
@@ -214,84 +298,284 @@
           ],
           "words": [
             [
-              "health",
-              "健康"
+              "ourselves",
+              "我们自己"
             ],
             [
-              "healthy",
-              "健康的"
+              "sore",
+              "疼痛的"
             ],
             [
-              "ill",
-              "生病的"
+              "throat",
+              "喉咙"
             ],
             [
-              "sick",
-              "生病的"
+              "stomachache",
+              "胃痛"
             ],
             [
-              "doctor",
-              "医生"
+              "headache",
+              "头痛"
             ],
             [
-              "nurse",
-              "护士"
+              "toothache",
+              "牙痛"
             ],
             [
-              "hospital",
-              "医院"
+              "backache",
+              "背痛"
+            ],
+            [
+              "press",
+              "压"
+            ],
+            [
+              "nosebleed",
+              "鼻出血"
+            ],
+            [
+              "dentist",
+              "牙科医生"
+            ],
+            [
+              "fever",
+              "发烧"
+            ],
+            [
+              "stomach",
+              "胃"
+            ],
+            [
+              "avoid",
+              "避免"
+            ],
+            [
+              "gas",
+              "气体"
+            ],
+            [
+              "ache",
+              "疼痛"
+            ],
+            [
+              "X-ray",
+              "光照片"
+            ],
+            [
+              "careless",
+              "不小心的"
+            ],
+            [
+              "runny",
+              "流鼻涕的"
+            ],
+            [
+              "cough",
+              "咳嗽"
+            ],
+            [
+              "bruised",
+              "受了瘀伤的"
+            ],
+            [
+              "suffer",
+              "受苦"
+            ],
+            [
+              "test",
+              "检查"
+            ],
+            [
+              "flu",
+              "流行性感冒"
             ],
             [
               "medicine",
               "药"
             ],
             [
-              "exercise",
-              "锻炼；练习"
+              "mask",
+              "口罩"
             ],
             [
-              "habit",
-              "习惯"
+              "virus",
+              "病毒"
             ],
             [
-              "sleep",
-              "睡觉"
+              "stop",
+              "防止......"
             ],
             [
-              "rest",
-              "休息"
+              "description",
+              "描写"
             ],
             [
-              "diet",
-              "饮食"
+              "patient",
+              "病人"
             ],
             [
-              "vegetable",
-              "蔬菜"
+              "injury",
+              "伤害"
             ],
             [
-              "fruit",
-              "水果"
+              "illness",
+              "疾病"
             ],
             [
-              "strong",
-              "强壮的"
+              "knife",
+              "刀"
             ],
             [
-              "fit",
-              "健壮的"
+              "clear",
+              "清晰的"
             ],
             [
-              "prevent",
-              "预防"
+              "pain",
+              "疼痛"
             ],
             [
-              "care",
-              "关心；照顾"
+              "brightness",
+              "亮度"
             ],
             [
-              "body",
-              "身体"
+              "environment",
+              "环境"
+            ],
+            [
+              "cross",
+              "穿越"
+            ],
+            [
+              "themselves",
+              "他 们自己"
+            ],
+            [
+              "fry",
+              "油炸"
+            ],
+            [
+              "stove",
+              "厨房灶具"
+            ],
+            [
+              "happily",
+              "快乐地"
+            ],
+            [
+              "burn",
+              "燃烧"
+            ],
+            [
+              "flame",
+              "火焰"
+            ],
+            [
+              "panic",
+              "惊恐"
+            ],
+            [
+              "onto",
+              "向"
+            ],
+            [
+              "throw",
+              "猛动身体"
+            ],
+            [
+              "roll",
+              "翻滚"
+            ],
+            [
+              "quick",
+              "快的"
+            ],
+            [
+              "aid",
+              "帮助"
+            ],
+            [
+              "safety",
+              "安全"
+            ],
+            [
+              "extinguisher",
+              "灭火器"
+            ],
+            [
+              "tonight",
+              "在今晚"
+            ],
+            [
+              "sadly",
+              "伤心地"
+            ],
+            [
+              "smoke",
+              "烟"
+            ],
+            [
+              "unfortunately",
+              "不幸地"
+            ],
+            [
+              "luckily",
+              "幸运地"
+            ],
+            [
+              "badly",
+              "严重地"
+            ],
+            [
+              "harm",
+              "伤害"
+            ],
+            [
+              "pill",
+              "药丸"
+            ],
+            [
+              "painful",
+              "疼痛的"
+            ],
+            [
+              "lie",
+              "平躺"
+            ],
+            [
+              "harmful",
+              "有害的"
+            ],
+            [
+              "hit",
+              "碰撞"
+            ],
+            [
+              "shock",
+              "震惊"
+            ],
+            [
+              "bleed",
+              "流血"
+            ],
+            [
+              "check",
+              "检查"
+            ],
+            [
+              "tight",
+              "疼痛的"
+            ],
+            [
+              "peanut",
+              "花生"
+            ],
+            [
+              "nervously",
+              "紧张不安地"
+            ],
+            [
+              "allergic",
+              "过敏的"
             ]
           ]
         },
@@ -305,9 +589,9 @@
                 "我",
                 "想要",
                 "到；向",
-                "生长",
+                "成长",
                 "向上",
-                "迅速地"
+                "快速地"
               ]
             },
             {
@@ -326,9 +610,9 @@
               "cn": "成长意味着变化。",
               "en": "Growing up means changes.",
               "hints": [
-                "生长",
+                "成长",
                 "向上",
-                "意思是",
+                "方式",
                 "变化"
               ]
             },
@@ -355,84 +639,204 @@
           ],
           "words": [
             [
-              "grow",
-              "成长；生长"
+              "emotion",
+              "情感"
             ],
             [
-              "growth",
-              "成长"
+              "upset",
+              "难过的"
             ],
             [
-              "child",
-              "孩子"
+              "lonely",
+              "孤独的"
             ],
             [
-              "childhood",
-              "童年"
+              "shocked",
+              "震惊的"
             ],
             [
-              "teenager",
-              "青少年"
+              "alone",
+              "独自"
             ],
             [
-              "adult",
-              "成年人"
+              "control",
+              "控制"
             ],
             [
-              "parent",
-              "父亲或母亲"
+              "anger",
+              "怒火"
             ],
             [
-              "responsibility",
-              "责任"
+              "advise",
+              "建议"
             ],
             [
-              "independent",
-              "独立的"
+              "hurtful",
+              "伤感情的"
             ],
             [
-              "learn",
-              "学习"
+              "forgive",
+              "原谅"
             ],
             [
-              "experience",
-              "经历；经验"
+              "fault",
+              "过错"
             ],
             [
-              "change",
-              "改变"
+              "present",
+              "礼物"
             ],
             [
-              "age",
-              "年龄"
+              "standard",
+              "标准"
             ],
             [
-              "mature",
-              "成熟的"
+              "award",
+              "奖"
             ],
             [
-              "wise",
-              "明智的"
+              "clearly",
+              "清楚地"
             ],
             [
-              "decide",
+              "pressure",
+              "压力"
+            ],
+            [
+              "purpose",
+              "目的"
+            ],
+            [
+              "apologize",
+              "道歉"
+            ],
+            [
+              "shut",
+              "关闭"
+            ],
+            [
+              "lastly",
+              "最后"
+            ],
+            [
+              "plenty",
+              "充足"
+            ],
+            [
+              "low",
+              "沮丧的"
+            ],
+            [
+              "ring",
+              "发出铃声"
+            ],
+            [
+              "enter",
+              "进入"
+            ],
+            [
+              "dare",
+              "敢于"
+            ],
+            [
+              "everybody",
+              "每人"
+            ],
+            [
+              "player",
+              "运动员"
+            ],
+            [
+              "referee",
+              "裁判"
+            ],
+            [
+              "decision",
               "决定"
             ],
             [
-              "choice",
-              "选择"
+              "score",
+              "得分"
             ],
             [
-              "face",
-              "面对"
+              "proud",
+              "骄傲的"
             ],
             [
-              "problem",
-              "难题"
+              "coach",
+              "教练"
             ],
             [
-              "support",
-              "支持"
+              "bit",
+              "有点儿"
+            ],
+            [
+              "repeat",
+              "重复"
+            ],
+            [
+              "though",
+              "虽然"
+            ],
+            [
+              "solution",
+              "解决办法"
+            ],
+            [
+              "joyful",
+              "高兴的"
+            ],
+            [
+              "thankful",
+              "感谢的"
+            ],
+            [
+              "negative",
+              "否定的"
+            ],
+            [
+              "bully",
+              "霸凌"
+            ],
+            [
+              "behave",
+              "表现"
+            ],
+            [
+              "differently",
+              "不同地"
+            ],
+            [
+              "physics",
+              "物理"
+            ],
+            [
+              "awake",
+              "醒着的"
+            ],
+            [
+              "normal",
+              "正常的"
+            ],
+            [
+              "mad",
+              "发狂的"
+            ],
+            [
+              "mean",
+              "刻薄的"
+            ],
+            [
+              "deep",
+              "深的"
+            ],
+            [
+              "anybody",
+              "任何人"
+            ],
+            [
+              "remain",
+              "继续存在"
             ]
           ]
         },
@@ -444,7 +848,7 @@
               "en": "The mountains are beautiful.",
               "hints": [
                 "这个；那个",
-                "高山",
+                "山",
                 "是",
                 "美丽的"
               ]
@@ -465,7 +869,7 @@
               "en": "The ocean is deep and wide.",
               "hints": [
                 "这个；那个",
-                "海洋",
+                "大海",
                 "是",
                 "深的",
                 "和；与",
@@ -496,83 +900,251 @@
           "words": [
             [
               "wonder",
-              "奇观；想知道"
+              "奇观"
             ],
             [
-              "nature",
-              "大自然"
+              "measurement",
+              "数量"
             ],
             [
-              "mountain",
-              "高山"
+              "below",
+              "在……下面"
             ],
             [
-              "river",
-              "河流"
+              "level",
+              "高度"
             ],
             [
-              "lake",
-              "湖泊"
+              "surface",
+              "表面"
             ],
             [
-              "sea",
-              "海"
+              "depth",
+              "深"
             ],
             [
-              "ocean",
-              "海洋"
+              "dive",
+              "潜水"
             ],
             [
-              "forest",
-              "森林"
+              "research",
+              "研究"
             ],
             [
-              "desert",
-              "沙漠"
+              "vessel",
+              "大船"
+            ],
+            [
+              "unusual",
+              "特别的"
+            ],
+            [
+              "bottom",
+              "底部"
             ],
             [
               "waterfall",
               "瀑布"
             ],
             [
-              "valley",
-              "山谷"
+              "civilization",
+              "文明"
             ],
             [
-              "beautiful",
-              "美丽的"
+              "means",
+              "方式"
             ],
             [
-              "amazing",
-              "令人惊奇的"
+              "development",
+              "发展"
             ],
             [
-              "grand",
-              "宏伟的"
+              "desert",
+              "沙漠"
             ],
             [
-              "high",
-              "高的"
+              "cubic",
+              "立方的"
             ],
             [
-              "deep",
-              "深的"
+              "mile",
+              "英里"
             ],
             [
-              "wide",
-              "宽的"
+              "pool",
+              "池塘"
             ],
             [
-              "explore",
-              "探索"
+              "climber",
+              "攀登者"
             ],
             [
-              "protect",
-              "保护"
+              "northern",
+              "北部的"
             ],
             [
-              "wonderful",
-              "精彩的"
+              "distance",
+              "距离"
+            ],
+            [
+              "survive",
+              "生存"
+            ],
+            [
+              "condition",
+              "状态"
+            ],
+            [
+              "degree",
+              "度"
+            ],
+            [
+              "cliff",
+              "悬崖"
+            ],
+            [
+              "changeable",
+              "可能变化的"
+            ],
+            [
+              "death",
+              "死亡"
+            ],
+            [
+              "determined",
+              "有决心的"
+            ],
+            [
+              "above",
+              "在……上面"
+            ],
+            [
+              "teammate",
+              "同队队员"
+            ],
+            [
+              "shoulder",
+              "肩膀"
+            ],
+            [
+              "ladder",
+              "梯子"
+            ],
+            [
+              "measure",
+              "测量"
+            ],
+            [
+              "successfully",
+              "成功地"
+            ],
+            [
+              "risk",
+              "使……冒风险"
+            ],
+            [
+              "curiosity",
+              "好奇心"
+            ],
+            [
+              "ambition",
+              "追求的目标"
+            ],
+            [
+              "explorer",
+              "探险者"
+            ],
+            [
+              "simply",
+              "仅仅"
+            ],
+            [
+              "risky",
+              "有危险 的"
+            ],
+            [
+              "southern",
+              "南部的"
+            ],
+            [
+              "located",
+              "位于"
+            ],
+            [
+              "freshwater",
+              "淡水的"
+            ],
+            [
+              "type",
+              "类型"
+            ],
+            [
+              "attract",
+              "吸引"
+            ],
+            [
+              "curious",
+              "好奇的"
+            ],
+            [
+              "traveller",
+              "旅行者"
+            ],
+            [
+              "natural",
+              "自然的"
+            ],
+            [
+              "underwater",
+              "水下的"
+            ],
+            [
+              "northeastern",
+              "东北的"
+            ],
+            [
+              "coast",
+              "海岸"
+            ],
+            [
+              "coral",
+              "珊瑚"
+            ],
+            [
+              "reef",
+              "礁"
+            ],
+            [
+              "include",
+              "包含"
+            ],
+            [
+              "sand",
+              "沙子"
+            ],
+            [
+              "alive",
+              "活着"
+            ],
+            [
+              "structure",
+              "结构"
+            ],
+            [
+              "snorkel",
+              "使用呼吸管潜泳"
+            ],
+            [
+              "school",
+              "群"
+            ],
+            [
+              "turtle",
+              "海龟"
+            ],
+            [
+              "lifetime",
+              "一生"
             ]
           ]
         },
@@ -605,7 +1177,7 @@
               "hints": [
                 "我们",
                 "必须",
-                "保持",
+                "使不碰到",
                 "安全的",
                 "在……里",
                 "一；一个",
@@ -627,7 +1199,7 @@
               "cn": "洪水会损坏房屋。",
               "en": "Floods can damage homes.",
               "hints": [
-                "洪水",
+                "水灾",
                 "能；可以",
                 "损害",
                 "家"
@@ -637,67 +1209,239 @@
           "words": [
             [
               "temper",
-              "脾气；性情"
-            ],
-            [
-              "weather",
-              "天气"
-            ],
-            [
-              "storm",
-              "暴风雨"
-            ],
-            [
-              "thunder",
-              "雷"
-            ],
-            [
-              "lightning",
-              "闪电"
-            ],
-            [
-              "flood",
-              "洪水"
+              "脾气"
             ],
             [
               "earthquake",
               "地震"
             ],
             [
-              "wind",
-              "风"
+              "typhoon",
+              "台风"
             ],
             [
-              "rain",
-              "雨"
+              "wildfire",
+              "野火"
             ],
             [
-              "snow",
-              "雪"
+              "snowstorm",
+              "雪景"
             ],
             [
-              "hot",
-              "炎热的"
+              "flood",
+              "水灾"
             ],
             [
-              "cold",
-              "寒冷的"
+              "drought",
+              "久旱"
             ],
             [
-              "dangerous",
-              "危险的"
+              "warn",
+              "警告"
             ],
             [
-              "safe",
-              "安全的"
+              "wave",
+              "波浪"
             ],
             [
-              "damage",
-              "损害"
+              "tsunami",
+              "海啸"
             ],
             [
-              "fire",
-              "火"
+              "interview",
+              "采访"
+            ],
+            [
+              "possibly",
+              "可能"
+            ],
+            [
+              "report",
+              "汇报"
+            ],
+            [
+              "neighbourhood",
+              "街区"
+            ],
+            [
+              "roof",
+              "屋顶"
+            ],
+            [
+              "nearly",
+              "几乎"
+            ],
+            [
+              "trouble",
+              "苦恼"
+            ],
+            [
+              "relative",
+              "亲戚"
+            ],
+            [
+              "truck",
+              "卡车"
+            ],
+            [
+              "supply",
+              "供应"
+            ],
+            [
+              "preparation",
+              "准备"
+            ],
+            [
+              "power",
+              "电力供应"
+            ],
+            [
+              "soundly",
+              "酣畅地"
+            ],
+            [
+              "thick",
+              "厚的"
+            ],
+            [
+              "beat",
+              "敲"
+            ],
+            [
+              "hide",
+              "躲藏"
+            ],
+            [
+              "tornado",
+              "龙卷风"
+            ],
+            [
+              "worst",
+              "最坏"
+            ],
+            [
+              "schoolgirl",
+              "女生"
+            ],
+            [
+              "froth",
+              "泡"
+            ],
+            [
+              "refuse",
+              "拒绝"
+            ],
+            [
+              "security",
+              "安全"
+            ],
+            [
+              "guard",
+              "卫兵"
+            ],
+            [
+              "nearby",
+              "附近的"
+            ],
+            [
+              "scream",
+              "尖叫"
+            ],
+            [
+              "thankfully",
+              "幸亏"
+            ],
+            [
+              "knowledge",
+              "知识"
+            ],
+            [
+              "thinking",
+              "思考"
+            ],
+            [
+              "hero",
+              "英雄"
+            ],
+            [
+              "landslide",
+              "滑坡"
+            ],
+            [
+              "safeguard",
+              "保护"
+            ],
+            [
+              "floodwater",
+              "洪水"
+            ],
+            [
+              "manpower",
+              "劳动力"
+            ],
+            [
+              "heartbeat",
+              "心跳"
+            ],
+            [
+              "rescue",
+              "救援"
+            ],
+            [
+              "heatwave",
+              "热浪"
+            ],
+            [
+              "since",
+              "自……以后"
+            ],
+            [
+              "southwestern",
+              "西南的"
+            ],
+            [
+              "firefighter",
+              "消防队员"
+            ],
+            [
+              "volunteer",
+              "志愿者"
+            ],
+            [
+              "terribly",
+              "非常地"
+            ],
+            [
+              "alarm",
+              "警报"
+            ],
+            [
+              "review",
+              "复习"
+            ],
+            [
+              "sudden",
+              "突然的"
+            ],
+            [
+              "thunder",
+              "雷"
+            ],
+            [
+              "usual",
+              "通常的"
+            ],
+            [
+              "rainstorm",
+              "暴风雨"
+            ],
+            [
+              "unlucky",
+              "不幸的"
+            ],
+            [
+              "rainy",
+              "阴雨的"
             ]
           ]
         },
@@ -723,7 +1467,7 @@
                 "我们",
                 "应该",
                 "尊敬",
-                "另外的",
+                "另外的人",
                 "文化"
               ]
             },
@@ -763,84 +1507,232 @@
           ],
           "words": [
             [
-              "culture",
-              "文化"
+              "shake",
+              "与 握手"
             ],
             [
-              "cross",
-              "穿过"
+              "bow",
+              "鞠躬"
+            ],
+            [
+              "bump",
+              "碰"
+            ],
+            [
+              "fist",
+              "拳头"
+            ],
+            [
+              "rub",
+              "摩擦"
+            ],
+            [
+              "kiss",
+              "亲吻"
+            ],
+            [
+              "cheek",
+              "脸颊"
+            ],
+            [
+              "hug",
+              "拥抱"
+            ],
+            [
+              "embarrassed",
+              "尴尬的"
+            ],
+            [
+              "confused",
+              "困惑的"
+            ],
+            [
+              "formal",
+              "正式的"
+            ],
+            [
+              "curry",
+              "咖喱菜"
+            ],
+            [
+              "rude",
+              "粗鲁的"
+            ],
+            [
+              "uncommon",
+              "罕见的"
+            ],
+            [
+              "palm",
+              "手掌"
+            ],
+            [
+              "namaste",
+              "有礼了"
+            ],
+            [
+              "fork",
+              "叉子"
+            ],
+            [
+              "Indian",
+              "印度的"
+            ],
+            [
+              "manner",
+              "方式"
+            ],
+            [
+              "so",
+              "如此……以至于"
+            ],
+            [
+              "confusing",
+              "令人困惑的"
+            ],
+            [
+              "unless",
+              "除非"
+            ],
+            [
+              "proper",
+              "恰当的"
+            ],
+            [
+              "keep",
+              "使不碰到"
+            ],
+            [
+              "elbow",
+              "手肘"
+            ],
+            [
+              "serving",
+              "分菜用的"
+            ],
+            [
+              "chopstick",
+              "筷子"
+            ],
+            [
+              "embarrassing",
+              "使人难堪的"
+            ],
+            [
+              "be",
+              "习惯于"
+            ],
+            [
+              "cultural",
+              "与文化有关的"
             ],
             [
               "custom",
               "习俗"
             ],
             [
+              "occasion",
+              "场合"
+            ],
+            [
+              "nicely",
+              "漂亮地"
+            ],
+            [
+              "blouse",
+              "衬衫或短上衣"
+            ],
+            [
+              "private",
+              "不喜欢谈论私事的"
+            ],
+            [
+              "whether",
+              "是否"
+            ],
+            [
+              "married",
+              "已婚的"
+            ],
+            [
+              "merci",
+              "谢谢"
+            ],
+            [
+              "unsafe",
+              "不安全的"
+            ],
+            [
+              "improper",
+              "不合适的"
+            ],
+            [
+              "informal",
+              "非正式的"
+            ],
+            [
+              "jeans",
+              "牛仔裤"
+            ],
+            [
+              "marry",
+              "结婚"
+            ],
+            [
+              "congratulate",
+              "祝贺"
+            ],
+            [
+              "Asian",
+              "亚洲的"
+            ],
+            [
               "tradition",
               "传统"
             ],
             [
-              "foreign",
-              "外国的"
+              "firstly",
+              "第一"
             ],
             [
-              "country",
-              "国家"
+              "secondly",
+              "第二"
             ],
             [
-              "different",
-              "不同的"
+              "thirdly",
+              "第三"
             ],
             [
-              "believe",
-              "相信"
+              "correctly",
+              "正确地"
             ],
             [
-              "respect",
-              "尊重"
+              "receive",
+              "收到"
             ],
             [
-              "understand",
-              "理解；明白"
+              "sign-off",
+              "结束写信"
             ],
             [
-              "greet",
-              "问候"
+              "main",
+              "主要的"
             ],
             [
-              "polite",
-              "有礼貌的"
+              "false",
+              "错误的"
             ],
             [
-              "gift",
-              "礼物"
+              "impression",
+              "印象"
             ],
             [
-              "visit",
-              "拜访"
+              "cheer",
+              "欢呼"
             ],
             [
-              "guest",
-              "客人"
-            ],
-            [
-              "host",
-              "主人"
-            ],
-            [
-              "communication",
-              "交流"
-            ],
-            [
-              "difference",
-              "差别"
-            ],
-            [
-              "world",
-              "世界"
-            ],
-            [
-              "language",
-              "语言"
+              "cheers",
+              "再见"
             ]
           ]
         },
@@ -905,72 +1797,192 @@
           ],
           "words": [
             [
-              "story",
-              "故事"
-            ],
-            [
-              "novel",
-              "小说"
-            ],
-            [
-              "author",
-              "作者"
-            ],
-            [
-              "character",
-              "人物；角色"
-            ],
-            [
-              "writer",
-              "作家"
-            ],
-            [
-              "article",
-              "文章"
-            ],
-            [
-              "magazine",
-              "杂志"
-            ],
-            [
-              "interesting",
-              "有趣的"
-            ],
-            [
-              "boring",
-              "乏味的"
-            ],
-            [
-              "exciting",
-              "令人激动的"
-            ],
-            [
-              "meaning",
-              "意义"
-            ],
-            [
-              "knowledge",
-              "知识"
-            ],
-            [
-              "imagine",
-              "想象"
-            ],
-            [
               "adventure",
               "冒险"
             ],
             [
-              "hero",
-              "英雄"
+              "fantasy",
+              "幻想"
             ],
             [
-              "page",
-              "页"
+              "mystery",
+              "悬疑小说"
             ],
             [
-              "library",
-              "图书馆"
+              "fiction",
+              "小说"
+            ],
+            [
+              "detective",
+              "侦探"
+            ],
+            [
+              "alien",
+              "外星人"
+            ],
+            [
+              "attack",
+              "攻击"
+            ],
+            [
+              "historical",
+              "历史的"
+            ],
+            [
+              "force",
+              "强迫"
+            ],
+            [
+              "steal",
+              "偷"
+            ],
+            [
+              "punish",
+              "惩罚"
+            ],
+            [
+              "idiom",
+              "习语"
+            ],
+            [
+              "recently",
+              "最近"
+            ],
+            [
+              "lost",
+              "迷路的"
+            ],
+            [
+              "recommend",
+              "推荐"
+            ],
+            [
+              "society",
+              "社会"
+            ],
+            [
+              "literary",
+              "文学的"
+            ],
+            [
+              "base",
+              "把 设在"
+            ],
+            [
+              "summary",
+              "总结"
+            ],
+            [
+              "spoiled",
+              "宠坏的"
+            ],
+            [
+              "selfish",
+              "自私的"
+            ],
+            [
+              "lock",
+              "用锁锁上"
+            ],
+            [
+              "unlock",
+              "开……的锁"
+            ],
+            [
+              "hidden",
+              "隐藏的"
+            ],
+            [
+              "nobody",
+              "没有人"
+            ],
+            [
+              "therefore",
+              "因此"
+            ],
+            [
+              "state",
+              "状态"
+            ],
+            [
+              "weak",
+              "虚弱的"
+            ],
+            [
+              "secretly",
+              "秘密地"
+            ],
+            [
+              "prove",
+              "证明"
+            ],
+            [
+              "build",
+              "准备期"
+            ],
+            [
+              "climax",
+              "高潮"
+            ],
+            [
+              "effect",
+              "影响"
+            ],
+            [
+              "reader",
+              "读者"
+            ],
+            [
+              "librarian",
+              "图书管理员"
+            ],
+            [
+              "consider",
+              "认为"
+            ],
+            [
+              "enemy",
+              "敌人"
+            ],
+            [
+              "naughty",
+              "淘气的"
+            ],
+            [
+              "gentle",
+              "温柔的"
+            ],
+            [
+              "defeat",
+              "击败"
+            ],
+            [
+              "recommendation",
+              "推荐"
+            ],
+            [
+              "basic",
+              "基本的"
+            ],
+            [
+              "American",
+              "美国的"
+            ],
+            [
+              "bone",
+              "骨头"
+            ],
+            [
+              "doubt",
+              "怀疑"
+            ],
+            [
+              "destroy",
+              "破坏"
+            ],
+            [
+              "introduction",
+              "介绍"
             ]
           ]
         },
@@ -983,9 +1995,9 @@
               "hints": [
                 "我们",
                 "能；可以",
-                "制作",
+                "制作；使",
                 "一；一个",
-                "差别"
+                "差异"
               ]
             },
             {
@@ -1035,72 +2047,156 @@
           ],
           "words": [
             [
-              "make",
-              "制作；使"
+              "visitor",
+              "参观者"
             ],
             [
-              "help",
-              "帮助"
+              "elderly",
+              "年纪较大的"
             ],
             [
-              "volunteer",
-              "志愿者"
+              "organization",
+              "组织"
             ],
             [
-              "community",
-              "社区"
+              "stadium",
+              "体育馆"
+            ],
+            [
+              "provide",
+              "提供"
+            ],
+            [
+              "owner",
+              "主人"
+            ],
+            [
+              "cage",
+              "笼子"
+            ],
+            [
+              "donation",
+              "捐赠物"
+            ],
+            [
+              "interviewer",
+              "面试官"
+            ],
+            [
+              "shelter",
+              "庇护所"
+            ],
+            [
+              "youth",
+              "青年"
+            ],
+            [
+              "active",
+              "活跃的"
+            ],
+            [
+              "army",
+              "军队"
+            ],
+            [
+              "primary",
+              "小学教育的"
             ],
             [
               "charity",
               "慈善机构"
             ],
             [
+              "warmly",
+              "热情地"
+            ],
+            [
+              "lady",
+              "女士"
+            ],
+            [
+              "gentleman",
+              "先生"
+            ],
+            [
+              "bark",
+              "吠叫"
+            ],
+            [
+              "adult",
+              "成年人"
+            ],
+            [
+              "missing",
+              "失踪的"
+            ],
+            [
+              "practical",
+              "实用的"
+            ],
+            [
+              "life-saving",
+              "救命的"
+            ],
+            [
+              "teamwork",
+              "团队合作"
+            ],
+            [
+              "successful",
+              "成功的"
+            ],
+            [
+              "voluntary",
+              "自愿的"
+            ],
+            [
+              "ordinary",
+              "平凡的"
+            ],
+            [
+              "worth",
+              "值得"
+            ],
+            [
+              "audience",
+              "听众"
+            ],
+            [
+              "willing",
+              "乐意的"
+            ],
+            [
+              "success",
+              "成功"
+            ],
+            [
+              "elder",
+              "年龄较长的"
+            ],
+            [
               "donate",
               "捐赠"
             ],
             [
-              "kind",
-              "善良的"
-            ],
-            [
-              "improve",
-              "改善；提高"
-            ],
-            [
-              "people",
-              "人们"
-            ],
-            [
-              "solve",
-              "解决"
-            ],
-            [
-              "give",
-              "给予"
-            ],
-            [
-              "share",
-              "分享"
-            ],
-            [
-              "hope",
-              "希望"
+              "pocket",
+              "口袋"
             ],
             [
               "effort",
               "努力"
             ],
             [
-              "action",
-              "行动"
+              "talent",
+              "才能"
             ],
             [
-              "clean",
-              "清洁的；打扫"
+              "madam",
+              "女士"
             ],
             [
-              "green",
-              "绿色的"
+              "advertisement",
+              "广告"
             ]
           ]
         }

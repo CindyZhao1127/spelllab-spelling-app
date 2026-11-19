@@ -1,13 +1,13 @@
 {
   "format": "spelllab.textbook.v1",
-  "exportedAt": "2026-11-19T14:12:43Z",
+  "exportedAt": "2026-11-19T16:50:39Z",
   "packs": [
     {
-      "name": "人教版新目标九年级下册（2024版·七年级起点）",
+      "name": "人教版初中英语 九年级下册（2024修订版·2027春启用）",
       "gradeId": "g9",
       "gradeName": "初中九年级",
       "bookId": "b_pep_junior",
-      "bookName": "人教版新目标（七年级起点）",
+      "bookName": "人教版初中英语（2024修订版）",
       "units": [
         {
           "name": "Unit 1 Let's Celebrate!",
@@ -27,7 +27,7 @@
               "cn": "家人们为了节日聚在一起。",
               "en": "Families get together for the festival.",
               "hints": [
-                "家庭",
+                "家庭；家人",
                 "得到；到达",
                 "在一起",
                 "为；给",
@@ -57,7 +57,7 @@
                 "一；一个",
                 "时间",
                 "为；给",
-                "团圆"
+                "团聚"
               ]
             },
             {
@@ -73,48 +73,12 @@
           ],
           "words": [
             [
-              "celebrate",
-              "庆祝"
-            ],
-            [
-              "festival",
-              "节日"
-            ],
-            [
-              "celebration",
-              "庆祝；庆典"
-            ],
-            [
-              "tradition",
-              "传统"
-            ],
-            [
-              "custom",
-              "习俗"
-            ],
-            [
-              "holiday",
-              "假期"
-            ],
-            [
-              "gift",
-              "礼物"
-            ],
-            [
               "lantern",
               "灯笼"
             ],
             [
-              "mooncake",
-              "月饼"
-            ],
-            [
-              "reunion",
-              "团圆；重聚"
-            ],
-            [
-              "ancestor",
-              "祖先"
+              "eve",
+              "前夕"
             ],
             [
               "tomb",
@@ -125,32 +89,180 @@
               "游行"
             ],
             [
-              "costume",
-              "服装；戏装"
+              "steal",
+              "偷"
             ],
             [
-              "dragon",
-              "龙"
+              "regret",
+              "后悔"
             ],
             [
-              "poem",
-              "诗"
+              "mooncake",
+              "月饼"
             ],
             [
-              "honour",
-              "尊敬；荣誉"
+              "lunar",
+              "月球的"
             ],
             [
-              "wish",
-              "愿望"
+              "riddle",
+              "谜"
             ],
             [
-              "luck",
-              "幸运"
+              "celebration",
+              "庆祝"
             ],
             [
-              "ceremony",
-              "仪式；典礼"
+              "firework",
+              "烟火"
+            ],
+            [
+              "stranger",
+              "陌生人"
+            ],
+            [
+              "gather",
+              "聚集"
+            ],
+            [
+              "relative",
+              "亲属"
+            ],
+            [
+              "suggest",
+              "建议"
+            ],
+            [
+              "custom",
+              "风俗"
+            ],
+            [
+              "involve",
+              "包含"
+            ],
+            [
+              "crowd",
+              "人群"
+            ],
+            [
+              "bottom",
+              "底部"
+            ],
+            [
+              "dust",
+              "沙土"
+            ],
+            [
+              "couplet",
+              "对联"
+            ],
+            [
+              "express",
+              "表达"
+            ],
+            [
+              "reunion",
+              "团圆"
+            ],
+            [
+              "mark",
+              "标志"
+            ],
+            [
+              "smell",
+              "闻到"
+            ],
+            [
+              "breeze",
+              "微风"
+            ],
+            [
+              "picnic",
+              "野餐"
+            ],
+            [
+              "coming",
+              "即将发生的"
+            ],
+            [
+              "folk",
+              "民间的"
+            ],
+            [
+              "goddess",
+              "女神"
+            ],
+            [
+              "whoever",
+              "无论谁"
+            ],
+            [
+              "lay",
+              "放置"
+            ],
+            [
+              "dessert",
+              "甜点"
+            ],
+            [
+              "garden",
+              "花园"
+            ],
+            [
+              "tradition",
+              "传统"
+            ],
+            [
+              "admire",
+              "欣赏"
+            ],
+            [
+              "treat",
+              "款待"
+            ],
+            [
+              "tie",
+              "领带"
+            ],
+            [
+              "pound",
+              "磅"
+            ],
+            [
+              "dinosaur",
+              "恐龙"
+            ],
+            [
+              "mushroom",
+              "蘑菇"
+            ],
+            [
+              "togetherness",
+              "和睦相处"
+            ],
+            [
+              "happiness",
+              "快乐"
+            ],
+            [
+              "fool",
+              "蠢人"
+            ],
+            [
+              "powder",
+              "粉末"
+            ],
+            [
+              "background",
+              "背景"
+            ],
+            [
+              "carnival",
+              "狂欢节"
+            ],
+            [
+              "samba",
+              "桑巴舞"
             ]
           ]
         },
@@ -187,7 +299,7 @@
                 "博物馆",
                 "有",
                 "许多",
-                "珍宝"
+                "宝物"
               ]
             },
             {
@@ -216,80 +328,156 @@
           ],
           "words": [
             [
-              "history",
-              "历史"
+              "site",
+              "场所"
             ],
             [
-              "past",
-              "过去"
+              "artefact",
+              "人工制品"
             ],
             [
-              "ancient",
-              "古代的"
+              "horn",
+              "角"
+            ],
+            [
+              "jade",
+              "玉"
+            ],
+            [
+              "silk",
+              "丝绸"
+            ],
+            [
+              "mask",
+              "面具"
+            ],
+            [
+              "bone",
+              "骨头"
+            ],
+            [
+              "archaeologist",
+              "考古学家"
+            ],
+            [
+              "guide",
+              "导游"
+            ],
+            [
+              "wealth",
+              "财富"
+            ],
+            [
+              "wealthy",
+              "富有的"
+            ],
+            [
+              "unlikely",
+              "不大可能的"
+            ],
+            [
+              "trade",
+              "贸易"
+            ],
+            [
+              "aim",
+              "目标"
+            ],
+            [
+              "repair",
+              "修复"
+            ],
+            [
+              "era",
+              "时代"
+            ],
+            [
+              "experience",
+              "体验"
+            ],
+            [
+              "dig",
+              "挖掘"
             ],
             [
               "civilization",
               "文明"
             ],
             [
-              "pyramid",
-              "金字塔"
+              "advanced",
+              "先进的"
             ],
             [
-              "emperor",
-              "皇帝"
+              "skilled",
+              "熟练的"
             ],
             [
-              "treasure",
-              "珍宝；财富"
+              "bronze",
+              "青铜"
             ],
             [
-              "discover",
-              "发现"
+              "ivory",
+              "象牙"
             ],
             [
-              "excavation",
-              "挖掘"
+              "mystery",
+              "谜团"
+            ],
+            [
+              "connection",
+              "关联"
             ],
             [
               "museum",
               "博物馆"
             ],
             [
-              "artifact",
-              "文物；人工制品"
+              "examine",
+              "检查"
             ],
             [
-              "century",
-              "世纪"
+              "infer",
+              "推断"
             ],
             [
-              "dynasty",
-              "朝代"
+              "terracotta",
+              "陶土"
             ],
             [
-              "war",
-              "战争"
+              "exhibition",
+              "展览"
             ],
             [
-              "peace",
-              "和平"
+              "empress",
+              "女皇"
             ],
             [
-              "hero",
-              "英雄"
+              "unbelievable",
+              "难以置信的"
             ],
             [
-              "story",
-              "故事"
+              "fold",
+              "折叠"
             ],
             [
-              "remember",
-              "记住"
+              "matchbox",
+              "火柴盒"
             ],
             [
-              "learn",
-              "学习"
+              "ancient",
+              "古代的"
+            ],
+            [
+              "historian",
+              "历史学家"
+            ],
+            [
+              "disappear",
+              "消失"
+            ],
+            [
+              "record",
+              "记录"
             ]
           ]
         },
@@ -301,10 +489,10 @@
               "en": "I enjoy looking at paintings.",
               "hints": [
                 "我",
-                "享受",
+                "享受……的乐趣",
                 "看",
                 "在",
-                "绘画"
+                "绘画作品"
               ]
             },
             {
@@ -312,8 +500,8 @@
               "en": "The artist paints beautiful pictures.",
               "hints": [
                 "这个；那个",
-                "艺术家",
-                "绘画",
+                "美术家",
+                "用颜料画",
                 "美丽的",
                 "图画"
               ]
@@ -336,7 +524,7 @@
                 "这个",
                 "雕塑",
                 "是",
-                "令人惊奇的"
+                "令人惊奇 的"
               ]
             },
             {
@@ -354,84 +542,120 @@
           ],
           "words": [
             [
-              "art",
-              "艺术"
+              "shrimp",
+              "虾"
             ],
             [
-              "artist",
-              "艺术家"
+              "burst",
+              "冲"
             ],
             [
-              "painting",
-              "绘画；油画"
+              "calligraphy",
+              "书法"
+            ],
+            [
+              "landscape",
+              "山水"
+            ],
+            [
+              "brushstroke",
+              "笔触"
             ],
             [
               "sculpture",
               "雕塑"
             ],
             [
-              "music",
-              "音乐"
+              "portrait",
+              "肖像"
             ],
             [
-              "dance",
-              "舞蹈；跳舞"
+              "statue",
+              "雕像"
             ],
             [
-              "theatre",
-              "剧院；戏剧"
+              "passion",
+              "激情"
             ],
             [
-              "performance",
-              "表演"
+              "combine",
+              "结合"
             ],
             [
-              "beauty",
-              "美；美丽"
+              "unforgettable",
+              "难忘的"
             ],
             [
-              "style",
-              "风格"
+              "artistic",
+              "艺术的"
             ],
             [
-              "colour",
-              "颜色"
+              "fantastic",
+              "华丽的"
             ],
             [
-              "draw",
-              "画；绘制"
+              "version",
+              "版本"
             ],
             [
-              "paint",
-              "绘画；涂色"
+              "copy",
+              "临摹"
             ],
             [
-              "create",
-              "创造"
+              "original",
+              "原版的"
             ],
             [
-              "imagine",
-              "想象"
+              "lifelike",
+              "栩栩如生的"
             ],
             [
-              "feel",
-              "感觉"
+              "mysterious",
+              "神秘的"
             ],
             [
-              "emotion",
-              "情感；情绪"
+              "sculptor",
+              "雕塑家"
             ],
             [
-              "work",
-              "作品；工作"
+              "mix",
+              "混合"
             ],
             [
-              "masterpiece",
-              "杰作"
+              "inspire",
+              "启发"
             ],
             [
-              "appreciate",
-              "欣赏；感激"
+              "theme",
+              "主题"
+            ],
+            [
+              "traditional",
+              "传统的"
+            ],
+            [
+              "empty",
+              "空的"
+            ],
+            [
+              "porcelain",
+              "瓷器"
+            ],
+            [
+              "rare",
+              "稀有的"
+            ],
+            [
+              "surround",
+              "围绕"
+            ],
+            [
+              "quiet",
+              "安静的"
+            ],
+            [
+              "rock",
+              "岩石"
             ]
           ]
         },
@@ -445,7 +669,7 @@
                 "我们",
                 "应该",
                 "减少",
-                "浪费"
+                "废弃物"
               ]
             },
             {
@@ -463,7 +687,7 @@
               "en": "Don't throw rubbish everywhere.",
               "hints": [
                 "不",
-                "扔",
+                "猛动身体",
                 "垃圾",
                 "到处"
               ]
@@ -491,10 +715,6 @@
           ],
           "words": [
             [
-              "reduce",
-              "减少"
-            ],
-            [
               "reuse",
               "重复使用"
             ],
@@ -503,16 +723,52 @@
               "回收利用"
             ],
             [
-              "recycling",
-              "回收利用"
+              "pollution",
+              "污染"
+            ],
+            [
+              "chemical",
+              "化学品"
+            ],
+            [
+              "guardian",
+              "守护者"
+            ],
+            [
+              "smelly",
+              "发臭的"
+            ],
+            [
+              "ban",
+              "禁止"
+            ],
+            [
+              "riverbank",
+              "河岸"
+            ],
+            [
+              "steady",
+              "稳定的"
+            ],
+            [
+              "postman",
+              "邮递员"
+            ],
+            [
+              "reduce",
+              "减少"
+            ],
+            [
+              "cleanup",
+              "清扫行动"
+            ],
+            [
+              "fragrant",
+              "芳香的"
             ],
             [
               "waste",
-              "浪费；废物"
-            ],
-            [
-              "pollution",
-              "污染"
+              "废物"
             ],
             [
               "environment",
@@ -523,52 +779,132 @@
               "保护"
             ],
             [
+              "action",
+              "行动"
+            ],
+            [
+              "sort",
+              "分类"
+            ],
+            [
+              "bin",
+              "垃圾箱"
+            ],
+            [
               "plastic",
               "塑料"
             ],
             [
-              "paper",
-              "纸"
+              "garbage",
+              "垃圾"
             ],
             [
-              "glass",
-              "玻璃"
+              "rubbish",
+              "垃圾"
+            ],
+            [
+              "responsibility",
+              "责任"
+            ],
+            [
+              "purpose",
+              "目的"
+            ],
+            [
+              "trash",
+              "垃圾"
+            ],
+            [
+              "litter",
+              "垃圾"
+            ],
+            [
+              "material",
+              "材料"
+            ],
+            [
+              "create",
+              "创造"
+            ],
+            [
+              "amount",
+              "数量"
+            ],
+            [
+              "harmful",
+              "有害的"
+            ],
+            [
+              "solution",
+              "解决方案"
+            ],
+            [
+              "factory",
+              "工厂"
+            ],
+            [
+              "separate",
+              "分类"
+            ],
+            [
+              "burn",
+              "焚烧"
+            ],
+            [
+              "provide",
+              "提供"
+            ],
+            [
+              "pollute",
+              "污染"
+            ],
+            [
+              "cause",
+              "原因"
+            ],
+            [
+              "effect",
+              "结果"
+            ],
+            [
+              "leaflet",
+              "传单"
+            ],
+            [
+              "packaging",
+              "包装"
+            ],
+            [
+              "donate",
+              "捐赠"
+            ],
+            [
+              "disposal",
+              "处理"
+            ],
+            [
+              "environmental",
+              "环境的"
+            ],
+            [
+              "landfill",
+              "垃圾填埋场"
+            ],
+            [
+              "produce",
+              "生产"
+            ],
+            [
+              "fertilizer",
+              "肥料"
+            ],
+            [
+              "goods",
+              "商品"
             ],
             [
               "metal",
               "金属"
-            ],
-            [
-              "bottle",
-              "瓶子"
-            ],
-            [
-              "save",
-              "节约；拯救"
-            ],
-            [
-              "energy",
-              "能源；能量"
-            ],
-            [
-              "resource",
-              "资源"
-            ],
-            [
-              "earth",
-              "地球"
-            ],
-            [
-              "clean",
-              "干净的；打扫"
-            ],
-            [
-              "green",
-              "绿色的"
-            ],
-            [
-              "throw",
-              "扔；投掷"
             ]
           ]
         },
@@ -592,7 +928,7 @@
                 "这个；那个",
                 "将来",
                 "是",
-                "光明的"
+                "鲜艳的"
               ]
             },
             {
@@ -622,87 +958,127 @@
               "hints": [
                 "一；一个",
                 "新的",
-                "旅程",
+                "旅行",
                 "开始"
               ]
             }
           ],
           "words": [
             [
-              "beginning",
-              "开始；开端"
+              "protection",
+              "保护"
             ],
             [
-              "graduate",
-              "毕业；毕业生"
+              "tyre",
+              "轮胎"
+            ],
+            [
+              "bury",
+              "埋葬"
             ],
             [
               "graduation",
               "毕业"
             ],
             [
+              "graduate",
+              "毕业"
+            ],
+            [
+              "vote",
+              "投票"
+            ],
+            [
+              "leader",
+              "领导者"
+            ],
+            [
+              "vocational",
+              "职业的"
+            ],
+            [
+              "path",
+              "道路"
+            ],
+            [
+              "ceremony",
+              "典礼"
+            ],
+            [
+              "silence",
+              "沉默"
+            ],
+            [
+              "honest",
+              "诚实的"
+            ],
+            [
+              "achieve",
+              "实现"
+            ],
+            [
+              "confidence",
+              "信心"
+            ],
+            [
+              "forward",
+              "向前"
+            ],
+            [
+              "speech",
+              "演讲"
+            ],
+            [
+              "choice",
+              "选择"
+            ],
+            [
+              "memory",
+              "记忆"
+            ],
+            [
+              "friendship",
+              "友谊"
+            ],
+            [
               "future",
-              "将来"
+              "未来"
             ],
             [
-              "dream",
-              "梦想"
+              "challenge",
+              "挑战"
             ],
             [
-              "hope",
-              "希望"
+              "overcome",
+              "克服"
             ],
             [
-              "plan",
-              "计划"
+              "decision",
+              "决定"
             ],
             [
-              "new",
-              "新的"
+              "goal",
+              "目标"
             ],
             [
-              "start",
-              "开始"
+              "abroad",
+              "在国外"
             ],
             [
-              "journey",
-              "旅程"
+              "scholarship",
+              "奖学金"
             ],
             [
-              "friend",
-              "朋友"
+              "career",
+              "职业"
             ],
             [
-              "teacher",
-              "老师"
+              "determined",
+              "坚定的"
             ],
             [
-              "thanks",
-              "感谢"
-            ],
-            [
-              "grow",
-              "成长"
-            ],
-            [
-              "change",
-              "改变"
-            ],
-            [
-              "world",
-              "世界"
-            ],
-            [
-              "open",
-              "打开的；打开"
-            ],
-            [
-              "heart",
-              "心；内心"
-            ],
-            [
-              "bright",
-              "光明的；明亮的"
+              "matter",
+              "要紧"
             ]
           ]
         }
