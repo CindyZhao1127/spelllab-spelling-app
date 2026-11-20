@@ -1686,6 +1686,33 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     return '自动兑换净扣 0 / 普通奖扣 10 且待兑换 / 未解锁可直接标记已兑换';
   });
 
+  check('老存档抽奖记录幂等迁移：普通奖恢复待兑换，谢谢参与不冒出', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      const now=Date.now();
+      const old={lottery:{prizes:clone(DEFAULT_PRIZES),log:[
+        {t:now-3000,cost:10,prize:'一张小贴纸'},
+        {t:now-2000,cost:10,prize:'再抽一次'},
+        {t:now-1000,cost:10,prize:'谢谢参与'}
+      ]}};
+      const a=normalizeState(old);
+      const snap1=a.lottery.log.map(function(x){return {prize:x.prize,pid:x.prizeId,
+        auto:x.autoRedeem,red:x.redeemed};});
+      /* 用户已把普通奖标记为已兑换后，再做一次归一化不能把它重置回待兑换 */
+      a.lottery.log[0].redeemed=true;
+      const b=normalizeState(a);
+      return {snap:snap1,after:b.lottery.log[0].redeemed,
+        pending:b.lottery.log.filter(function(x){return x.prizeId && !x.autoRedeem && !x.redeemed;}).length};
+    })())`));
+    assert(o.snap[0].pid === 'p2' && o.snap[0].auto === false && o.snap[0].red === false,
+      '老普通奖未恢复为待兑换: '+JSON.stringify(o.snap));
+    assert(o.snap[1].pid === 'p5' && o.snap[1].auto === true && o.snap[1].red === true,
+      '老自动兑换奖状态不对: '+JSON.stringify(o.snap));
+    assert(!o.snap[2].pid && o.snap[2].red === true,
+      '谢谢参与不应冒成待兑换: '+JSON.stringify(o.snap));
+    assert(o.after === true && o.pending === 0, '归一化不幂等，重置了已兑换状态: '+JSON.stringify(o));
+    return '老普通奖→待兑换 / 自动奖保持 / 谢谢参与不冒出 / 迁移幂等';
+  });
+
   check('新增奖项默认关闭自动兑换，家长解锁后才可勾选', () => {
     const o = JSON.parse(run(`JSON.stringify((function(){
       parentUnlocked=true; state.lottery.prizes=clone(DEFAULT_PRIZES);

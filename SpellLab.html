@@ -3267,10 +3267,24 @@ function normalizeState(s){
     p.autoRedeem=!!p.autoRedeem;
   });
   if(!Array.isArray(out.lottery.log)) out.lottery.log=[];
-  /* 老存档的抽奖记录没有兑换字段，按「自动兑现」处理，不突然冒出一堆待兑换；
-     新记录带着 autoRedeem / redeemed，用于「获得奖品」列表显示状态。 */
+  /* 老存档的抽奖记录只有 t/cost/prize，没有 prizeId/autoRedeem/redeemed。
+     一次性的幂等迁移：按奖品名匹配当前奖项表——普通奖补上 prizeId 并恢复为「待兑换」，
+     自动兑换奖保持「已生效」；匹配不到的（谢谢参与、已改名/删除的奖）仍按已兑换处理，
+     不冒出无关条目。迁移后记录带上布尔字段，下次加载不再重复处理。 */
   out.lottery.log.forEach(x=>{
     if(!x || typeof x!=='object') return;
+    if(typeof x.autoRedeem!=='boolean' || typeof x.redeemed!=='boolean'){
+      const name=String(x.prize||'').trim();
+      const hit=name?(out.lottery.prizes||[]).find(p=>p && String(p.name||'').trim()===name):null;
+      if(hit){
+        x.prizeId=hit.id;
+        x.autoRedeem=!!hit.autoRedeem;
+        x.redeemed=!!hit.autoRedeem;
+      }else{
+        x.autoRedeem=true;
+        x.redeemed=true;
+      }
+    }
     if(typeof x.autoRedeem!=='boolean') x.autoRedeem=true;
     if(typeof x.redeemed!=='boolean') x.redeemed=true;
     if(!Number.isFinite(Number(x.t))) x.t=Date.now();
