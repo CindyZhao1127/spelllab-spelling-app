@@ -206,33 +206,34 @@
     background:rgba(255,255,255,.12);color:#e8ecff}
   .modal-actions button:hover{background:rgba(255,255,255,.22)}
   .modal-actions button.primary{background:linear-gradient(135deg,#6a5cff,#4361ee);color:#fff}
-  /* 速度突破：不拦截输入，答完题自动弹 2.6 秒 */
-  .speed-mask{position:fixed;inset:0;z-index:90;display:grid;place-items:center;padding:18px;pointer-events:none}
+  /* 速度突破：不拦截输入，答完题自动弹 2.6 秒；缩为右上角小卡片，不遮挡中央单词 */
+  .speed-mask{position:fixed;inset:0;z-index:90;display:flex;align-items:flex-start;justify-content:flex-end;
+    padding:64px 14px 0;pointer-events:none}
   .speed-mask[hidden]{display:none}
-  .speed-card{position:relative;width:min(380px,92vw);padding:20px 18px 18px;text-align:center;overflow:hidden;
-    border-radius:22px;background:linear-gradient(160deg,#3b3173,#1b1f45 62%,#28205c);
+  .speed-card{position:relative;width:min(224px,70vw);padding:10px 12px 11px;text-align:center;overflow:hidden;
+    border-radius:16px;background:linear-gradient(160deg,#3b3173,#1b1f45 62%,#28205c);
     border:1px solid rgba(255,220,120,.55);
-    box-shadow:0 24px 80px rgba(0,0,0,.65),0 0 60px rgba(255,190,70,.22);
+    box-shadow:0 12px 34px rgba(0,0,0,.6),0 0 26px rgba(255,190,70,.2);
     animation:speedPop .5s cubic-bezier(.2,1.5,.4,1)}
-  .speed-card h2{margin:2px 0 4px;font-size:30px;font-weight:900;letter-spacing:2px;
+  .speed-card h2{margin:1px 0 3px;font-size:19px;font-weight:900;letter-spacing:1px;
     background:linear-gradient(90deg,#fff0b3,#ffd166,#fff);-webkit-background-clip:text;background-clip:text;
-    color:transparent;text-shadow:0 0 24px rgba(255,209,102,.35)}
-  .speed-badge{display:inline-block;padding:4px 12px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:1px;
+    color:transparent;text-shadow:0 0 16px rgba(255,209,102,.35)}
+  .speed-badge{display:inline-block;padding:2px 9px;border-radius:999px;font-size:9px;font-weight:800;letter-spacing:.5px;
     background:rgba(255,209,102,.18);border:1px solid rgba(255,209,102,.5);color:#ffe6a3}
-  .speed-icon{font-size:52px;line-height:1.1;margin:4px 0 -2px;
-    animation:speedBounce .9s ease-in-out infinite alternate;filter:drop-shadow(0 10px 14px rgba(0,0,0,.4))}
-  .speed-word{font-size:15px;color:#dfe4ff;max-width:100%;overflow-wrap:anywhere;margin:4px 0 12px;font-weight:700}
-  .speed-times{display:flex;align-items:center;justify-content:center;gap:16px;margin:6px 0}
-  .speed-times>div{display:flex;flex-direction:column;gap:3px;min-width:92px}
-  .speed-times span{font-size:11px;color:#a9b2e6}
-  .speed-times b{font-size:20px;color:#fff}
-  .speed-times>div:first-child b{color:#8ef2b8;font-size:24px}
-  .speed-arrow{font-size:20px;color:#ffd166;animation:speedNudge 1s ease-in-out infinite alternate}
-  .speed-gain{font-size:12px;color:#ffe6a3;margin-top:10px;min-height:17px}
-  .speed-rays{position:absolute;inset:-70px;pointer-events:none;opacity:.5;
+  .speed-icon{font-size:30px;line-height:1.1;margin:2px 0 -1px;
+    animation:speedBounce .9s ease-in-out infinite alternate;filter:drop-shadow(0 5px 9px rgba(0,0,0,.4))}
+  .speed-word{font-size:12px;color:#dfe4ff;max-width:100%;overflow-wrap:anywhere;margin:3px 0 7px;font-weight:700}
+  .speed-times{display:flex;align-items:center;justify-content:center;gap:10px;margin:4px 0}
+  .speed-times>div{display:flex;flex-direction:column;gap:2px;min-width:58px}
+  .speed-times span{font-size:10px;color:#a9b2e6}
+  .speed-times b{font-size:14px;color:#fff}
+  .speed-times>div:first-child b{color:#8ef2b8;font-size:16px}
+  .speed-arrow{font-size:14px;color:#ffd166;animation:speedNudge 1s ease-in-out infinite alternate}
+  .speed-gain{font-size:10px;color:#ffe6a3;margin-top:6px;min-height:13px;line-height:1.3}
+  .speed-rays{position:absolute;inset:-40px;pointer-events:none;opacity:.35;
     background:repeating-conic-gradient(from 0deg,rgba(255,209,102,.28) 0deg 6deg,transparent 6deg 22deg);
     animation:raysSpin 12s linear infinite}
-  .speed-confetti i{position:absolute;left:50%;top:46%;width:7px;height:12px;border-radius:2px;background:var(--c);
+  .speed-confetti i{position:absolute;left:50%;top:46%;width:5px;height:9px;border-radius:2px;background:var(--c);
     opacity:0;animation:speedFly 1.15s cubic-bezier(.15,.65,.3,1) var(--delay) forwards}
   @keyframes speedPop{0%{transform:scale(.55) rotate(-4deg);opacity:0}
     70%{transform:scale(1.06) rotate(1deg);opacity:1}100%{transform:none;opacity:1}}
@@ -5546,7 +5547,7 @@ function showSpeedBurst(info){
     const colors=['#ffd166','#ff6b9d','#6ee7b7','#8b7bff','#4cc9f0'];
     let parts='';
     for(let i=0;i<20;i++){
-      parts+='<i style="--a:'+(i*18)+'deg;--d:'+(80+(i*13)%120)+
+      parts+='<i style="--a:'+(i*18)+'deg;--d:'+(36+(i*7)%64)+
         'px;--c:'+colors[i%5]+';--delay:'+((i%5)*0.04).toFixed(2)+'s"></i>';
     }
     host.innerHTML=parts;

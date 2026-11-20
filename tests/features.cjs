@@ -280,10 +280,12 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     assert(o.covered===7,'有练习模式未统计用时: '+JSON.stringify(o));
     assert(/id="speedMask"/.test(html) && /id="speedConfetti"/.test(html) &&
       /@keyframes speedPop/.test(html) && /@keyframes speedFly/.test(html), '速度动画结构或样式缺失');
+    assert(/\.speed-mask\{[^}]*justify-content:flex-end/.test(html) &&
+      /\.speed-card\{[^}]*width:min\(224px,70vw\)/.test(html), '速度动画未缩为右上角小卡片');
     assert(o.record && o.maskHidden===false && o.now==='3.2 秒' && o.prev==='5.0 秒',
       '破纪录动画未弹出: '+JSON.stringify(o));
     assert(o.gain && o.gain.indexOf('快了')>=0 && o.confetti>0,'动画文案或彩带缺失: '+JSON.stringify(o));
-    return '8 种模式统一记速 · 无效过滤 · 5.0→3.2 秒弹动画';
+    return '8 种模式统一记速 · 无效过滤 · 5.0→3.2 秒弹右上角小卡片';
   });
 
   check('导出 CSV：BOM + 表头 + 全部记录', () => {
