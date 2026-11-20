@@ -1680,6 +1680,19 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     return 'cab·in / ta·ble / li·on / re·play / jump·ing 等 6 类规则全部命中';
   });
 
+  check('长词元音组合与辅音连缀：restaurant→res·tau·rant（拼写记忆友好）', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      var w=['restaurant','beautiful','autumn','because','sauce','blue','true','ready','real'];
+      var r={}; w.forEach(function(x){ r[x]=phonicsChunks(x).map(function(c){return c[0];}); }); return r;})())`));
+    assert(JSON.stringify(o.restaurant) === JSON.stringify(['res','tau','rant']),
+      'restaurant 应切 res·tau·rant（re 非前缀 + au 组合 + st 连缀拆开）: '+JSON.stringify(o.restaurant));
+    assert(JSON.stringify(o.beautiful) === JSON.stringify(['beau','ti','ful']), 'beautiful 音节错误: '+JSON.stringify(o.beautiful));
+    assert(JSON.stringify(o.because) === JSON.stringify(['be','cause']) && o.sauce.length===1 &&
+      o.blue.length===1 && o.true.length===1, 'au/ue 元音组合未整体成节: '+JSON.stringify(o));
+    assert(o.ready.length===1 && o.real.length===1, 're 非前缀词被误剥: '+JSON.stringify(o));
+    return 'res·tau·rant / beau·ti·ful / be·cause / au·tumn 拼写记忆友好切分正确';
+  });
+
   check('拼读教材来源复用顶部学习范围：无独立学段/教材/册下拉', () => {
     /* 结构断言放 Node 侧：教材面板里不再有 phStage/phBook/phPack，改为只读范围说明 */
     const noDrops = !/id="phStage"/.test(html) && !/id="phBook"/.test(html) && !/id="phPack"/.test(html);

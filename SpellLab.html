@@ -2866,10 +2866,12 @@ function phonicsCount(){
 const PH_LETTER_SOUND={a:'æ',b:'b',c:'k',d:'d',e:'e',f:'f',g:'g',h:'h',i:'ɪ',j:'dʒ',k:'k',
   l:'l',m:'m',n:'n',o:'ɒ',p:'p',q:'kw',r:'r',s:'s',t:'t',u:'ʌ',v:'v',w:'w',x:'ks',y:'j',z:'z'};
 const PH_PATTERNS=[
+  ['eau','juː'],
   ['tion','ʃn'],['ture','tʃə'],['dge','dʒ'],
   ['sh','ʃ'],['ch','tʃ'],['th','θ'],['ph','f'],['wh','w'],['ck','k'],['ng','ŋ'],['qu','kw'],
   ['ee','iː'],['ea','iː'],['ai','eɪ'],['ay','eɪ'],['oa','əʊ'],['oo','uː'],['ou','aʊ'],['ow','əʊ'],
-  ['oi','ɔɪ'],['oy','ɔɪ'],['ar','ɑː'],['er','ɜː'],['ir','ɜː'],['or','ɔː'],['ur','ɜː'],
+  ['oi','ɔɪ'],['oy','ɔɪ'],['au','ɔː'],['aw','ɔː'],['ew','juː'],['ue','uː'],
+  ['ar','ɑː'],['er','ɜː'],['ir','ɜː'],['or','ɔː'],['ur','ɜː'],
   ['bl','bl'],['br','br'],['cl','kl'],['cr','kr'],['dr','dr'],['fl','fl'],['fr','fr'],['gl','gl'],
   ['gr','gr'],['pl','pl'],['pr','pr'],['sl','sl'],['sm','sm'],['sn','sn'],['sp','sp'],['st','st'],
   ['tr','tr'],['tw','tw']
@@ -2885,7 +2887,7 @@ function phMagicE(w){
 /* 先把单词切成最小读音单元：{t:字母/字母组合, s:音素, v:是否元音核心}。
    元音组合（ee/ea/ai…）与辅音组合（sh/ch/bl…）都优先整体识别；
    神奇 e 里的末尾 e 记为静音，与前面的元音同属一个音节。 */
-const PH_VOWEL_TEAMS=['ee','ea','ai','ay','oa','oo','ou','ow','oi','oy','au','aw','ie','ue',
+const PH_VOWEL_TEAMS=['ee','ea','ai','ay','oa','oo','ou','ow','oi','oy','au','aw','ie','ue','ew','eau',
   'ar','er','ir','or','ur'];
 function phVowelTeam(t){ return PH_VOWEL_TEAMS.indexOf(t)>=0 || /^[aeiou]$/.test(t); }
 function phUnits(word){
@@ -2911,7 +2913,8 @@ function phUnits(word){
   return out;
 }
 /* 音节切分规则（主流 Structured Literacy / 音节六分法）：
-   1) VC/CV：两元音间 2 个辅音从中间切，但二合辅音（bl/st/sh/ch/th/ck…）不拆、整体归后
+   1) VC/CV：两元音间 2 个辅音从中间切；digraph（sh/ch/th/ck… 一音二字母）不拆，
+      但 st/bl/tr 这类辅音连缀要拆（res·tau·rant）；词尾 C+le（ta·ble）除外
    2) V/CV 先试前切（元音读长音）：1 个辅音归后一节（ba-na / ti-ger / ro-bot）
       —— 主流策略是「先试前切，读起来不像学过的词再改后切」，本程序按先试前切处理
    3) VC/V 后切（元音读短音）：词首若为常见短元音闭音节词（cab-in / sev-en / nev-er），
@@ -2936,6 +2939,9 @@ function phonicsChunks(word){
   /* 先剥词缀：前缀、后缀整体成节，词根再按音节规则切 */
   let pre='', suf='', root=src;
   for(const p of PH_PREFIXES){
+    /* re 是高频前缀，但 ready/real/restaurant 等 re 属于词根，不能剥；
+       这些词靠 VCV 规则照样切对（re·cent / res·tau·rant）。 */
+    if(p==='re' && /^(restaurant|ready|really|real|reason|recent|result|rest|respect)/.test(src)) continue;
     if(src.length-p.length>=3 && src.indexOf(p)===0){
       pre=p; root=src.slice(p.length); break;
     }
@@ -2946,7 +2952,16 @@ function phonicsChunks(word){
       suf=s; root=root.slice(0,-s.length); break;
     }
   }
-  const units=phUnits(root);
+  /* 切分单元：辅音连缀（bl/st/tr…）主流要拆到两音节里（res·tau·rant），
+     只有词尾 C+le（ta·ble / ap·ple）的 l 连缀整体留末节；digraph（sh/ch/th）不拆。 */
+  const rawU=phUnits(root), units=[];
+  rawU.forEach((u,ix)=>{
+    if(/^(bl|br|cl|cr|dr|fl|fr|gl|gr|pl|pr|sl|sm|sn|sp|st|tr|tw)$/.test(u.t)){
+      const cle=/l$/.test(u.t)&&ix===rawU.length-2&&rawU[ix+1]&&rawU[ix+1].t==='e';
+      if(!cle){ units.push({t:u.t[0],s:u.t[0],v:false},{t:u.t[1],s:u.t[1],v:false}); return; }
+    }
+    units.push(u);
+  });
   const out=[];
   if(pre) out.push([pre,phAffixSound(pre)]);
   if(!units.length){ if(suf) out.push([suf,phAffixSound(suf)]); return out; }
@@ -2971,7 +2986,9 @@ function phonicsChunks(word){
       else if(gap===1) end=(k===0&&lateVcv)?next:next-1; /* V/CV 前切；短音词后切 */
       else if(gap===2){
         const pair=units[next-2].t+units[next-1].t;
-        const cluster=PH_PATTERNS.some(p=>!phVowelTeam(p[0])&&p[0].length===2&&p[0]===pair);
+        /* 只有 digraph（sh/ch/th/ph/wh/ck/ng/qu 等一音二字母）不可拆；
+           st/bl/tr 这类辅音连缀已在上面展开，VCCV 从中间切开。 */
+        const cluster=/^(tion|ture|dge|sh|ch|th|ph|wh|ck|ng|qu)$/.test(pair);
         end=cluster?next-2:next-1;          /* 二合辅音不拆 */
       } else end=next-2;                    /* 三辅音以上：首辅音归前 */
     }
