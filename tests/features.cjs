@@ -1646,7 +1646,7 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     return 'UK ma·ra·thon/en-GB · US mar·a·thon/en-US · soundwhy 数据';
   });
 
-  check('奖品自动兑换：抽到不扣分、即时已兑换；普通奖待家长兑换', () => {
+  check('奖品自动兑换：抽到不扣分、即时已兑换；普通奖线下发放后直接标记', () => {
     /* 自动兑换奖：必中且返还消耗 */
     run(`(function(){ state.plan.points=100;
       state.lottery={cost:10,typingPoints:1,dailyLimit:10,
@@ -1669,13 +1669,12 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     const go = JSON.parse(run(`JSON.stringify({p:state.plan.points,log:state.lottery.log[0]})`));
     assert(go.p === 90 && go.log.autoRedeem === false && go.log.redeemed === false && go.log.cost === 10,
       '普通奖状态不对: '+JSON.stringify(go));
-    /* 家长确认兑换：未解锁触发家长中心，解锁后可标记 */
+    /* 线下发放后直接点标记：无需家长解锁 */
     const t = go.log.t;
-    const before = run(`(function(){ parentUnlocked=false; redeemPrize(${t}); return state.lottery.log[0].redeemed; })()`);
-    assert(before === false, '未解锁就被兑换了');
-    const after = run(`(function(){ parentUnlocked=true; const r=redeemPrize(${t});
-      parentUnlocked=false; return {r:r, redeemed:state.lottery.log[0].redeemed}; })()`);
-    assert(after.r === true && after.redeemed === true, '家长兑换失败: '+JSON.stringify(after));
+    const direct = run(`(function(){ parentUnlocked=false; const r=redeemPrize(${t});
+      return {r:r, redeemed:state.lottery.log[0].redeemed, locked:parentUnlocked}; })()`);
+    assert(direct.r === true && direct.redeemed === true && direct.locked === false,
+      '未解锁无法直接标记兑换: '+JSON.stringify(direct));
     /* 获得奖品列表显示待兑换 / 已兑换 / 自动兑换 */
     run(`(function(){ state.lottery.log=[state.lottery.log[0],
       {t:Date.now()+1,cost:10,prize:'再抽一次',prizeId:'a2',autoRedeem:true,redeemed:true}];
@@ -1684,7 +1683,7 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     assert(list.indexOf('已兑换') >= 0 && list.indexOf('自动兑换') >= 0, '奖品列表缺兑换状态: '+list.slice(0,300));
     assert(run("$('prizePending').textContent").indexOf('0 待兑换') >= 0, '待兑换计数不对');
     run('state.lottery=clone(DEFAULT_LOTTERY); state.plan.points=0;');
-    return '自动兑换净扣 0 / 普通奖扣 10 且待兑换 / 家长解锁后确认';
+    return '自动兑换净扣 0 / 普通奖扣 10 且待兑换 / 未解锁可直接标记已兑换';
   });
 
   check('新增奖项默认关闭自动兑换，家长解锁后才可勾选', () => {

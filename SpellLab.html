@@ -2299,7 +2299,7 @@ body.td-typing #typingView { height: 100%; }
       </div>
       <div class="panel">
         <h3>获得的奖品 <span class="count-pill" id="prizePending">0 待兑换</span></h3>
-        <div class="panel-note">「自动兑换」的奖品（如再抽一次）抽到即生效、<b>不扣本次积分</b>；其余奖品显示「待兑换」，请家长在下方点「已兑换」确认。孩子也能看到自己的奖品，但兑换确认需家长解锁。</div>
+        <div class="panel-note">「自动兑换」的奖品（如再抽一次）抽到即生效、<b>不扣本次积分</b>；其余奖品显示「待兑换」，<b>线下发给孩子的奖品（如现金），直接点右侧「标记已兑换」即可</b>，无需家长解锁。奖项内容与概率的修改仍受家长锁保护。</div>
         <div id="prizeWonList"></div>
       </div>
       <div class="panel"><h3>最近抽奖</h3><div id="lotteryLog"></div></div>
@@ -2771,7 +2771,7 @@ const DIFFICULTY = {
   hard:  {label:'困难', seconds:35,  hints:1, bonusReveal:0}
 };
 /* 奖项 autoRedeem：true = 抽到即自动兑现、不扣本次积分（如「再抽一次」）；
-   false = 抽到后记为「待兑换」，由家长在获得奖品列表里点兑换。 */
+   false = 抽到后记为「待兑换」，线下发放后在获得奖品列表里点「标记已兑换」。 */
 const DEFAULT_PRIZES = [
   {id:'p1',name:'免写一次抄写',prob:5,autoRedeem:false},
   {id:'p2',name:'一张小贴纸',prob:10,autoRedeem:false},
@@ -5996,7 +5996,7 @@ function finishSpin(res){
   $('wheelResult').textContent=(res.index>=0?'恭喜抽中：':'本次结果：')+res.prize;
   $('wheelResult').className='wheel-result win';
   $('wheelPrizeTag').textContent=res.autoRedeem?'自动兑换 · 不扣分':
-    (res.index>=0?'待家长兑换':'本次结果');
+    (res.index>=0?'待兑换 · 线下发放后标记':'本次结果');
   $('wheelPrizeName').textContent=res.prize;
   $('wheelPrizeDot').style.background=res.color||WHEEL_THANKS;
   $('wheelPrize').classList.add('show');
@@ -6004,7 +6004,7 @@ function finishSpin(res){
   if($('boxPrizeTag')) $('boxPrizeTag').textContent=res.autoRedeem?'🎉 自动兑换':
     (res.index>=0?'🎉 恭喜抽中':'本次结果');
   if($('boxPrizeNote')) $('boxPrizeNote').textContent=res.autoRedeem?'已经生效，未消耗积分':
-    (res.index>=0?'待家长在「抽奖」页兑换':'别灰心，再来一次');
+    (res.index>=0?'到「抽奖」页点「标记已兑换」':'别灰心，再来一次');
   const scene=$('boxScene'); if(scene) scene.className='box-scene reveal';
   renderPoints(); renderDrawer();
 }
@@ -6031,14 +6031,14 @@ function renderLottery(){
   const prizes=Array.isArray(L.prizes)?L.prizes:[];
   $('prizeLockedList').innerHTML=prizes.length?prizes.map(p=>
     '<span>'+esc(p.name||'奖项')+' · '+(Number(p.prob)||0)+'% · '+
-    (p.autoRedeem?'自动兑换':'待家长兑换')+'</span>').join(''):
+    (p.autoRedeem?'自动兑换':'待兑换')+'</span>').join(''):
     '<span>暂无奖项</span>';
   $('prizeList').innerHTML=prizes.length?prizes.map(p=>
     '<div class="prize-row">'+
       '<input class="field" data-prize-name="'+esc(p.id)+'" value="'+esc(p.name)+'" placeholder="奖项内容">'+
       '<input class="field prob" type="number" min="0" max="100" step="1" data-prize-prob="'+esc(p.id)+'" value="'+(Number(p.prob)||0)+'" aria-label="中奖概率 %">'+
       '<span class="unit">%</span>'+
-      '<label class="prize-auto" title="自动兑换：抽到即生效、不扣本次积分；关闭则由家长兑换">'+
+      '<label class="prize-auto" title="自动兑换：抽到即生效、不扣本次积分；关闭则抽到后标记为待兑换，线下发放后点标记已兑换">'+
         '<input type="checkbox" data-prize-auto="'+esc(p.id)+'"'+(p.autoRedeem?' checked':'')+'> 自动兑换</label>'+
       '<button class="mini-btn danger sm" data-prize-del="'+esc(p.id)+'">删</button>'+
     '</div>').join(''):'<div class="empty">还没有奖项，点「添加奖项」新建一个。</div>';
@@ -6066,10 +6066,10 @@ function renderLottery(){
     '<div class="ledger-item"><span>'+esc(new Date(x.t).toLocaleString('zh-CN'))+'</span><b>'+esc(x.prize||'谢谢参与')+'</b></div>'
   ).join(''):'<div class="empty">还没有抽奖记录。</div>';
 }
-/* 家长确认兑换一件待兑换奖品（时间作唯一标识，抽奖写日志时保证不重复）。
-   写操作本身经 guardParent 兜底：即便从测试/控制台直接调用也不会被孩子绕过。 */
+/* 标记一件待兑换奖品为已兑换（时间作唯一标识，抽奖写日志时保证不重复）。
+   线下发放（如现金）后直接点按钮即可确认，不受家长锁限制；
+   奖项内容、概率、积分等设置仍由 PARENT_SCOPES.lottery 保护。 */
 function redeemPrize(t){
-  if(!parentUnlocked){ guardParent('lottery'); return false; }
   const L=state.lottery, hit=(L.log||[]).find(x=>x && Number(x.t)===Number(t));
   if(!hit || hit.autoRedeem || hit.redeemed){ toast('这件奖品已兑换或不存在','bad'); return false; }
   hit.redeemed=true;
@@ -6149,7 +6149,7 @@ function drawLottery(){
     }
   }
   /* 自动兑换的奖品抽到即生效、返还本次积分：净消耗为 0。
-     其余奖品扣积分后记为「待兑换」，由家长在获得奖品列表确认。 */
+     其余奖品扣积分后记为「待兑换」，线下发放后在获得奖品列表点「标记已兑换」确认。 */
   const prizes=Array.isArray(L.prizes)?L.prizes:[];
   const prize=hit.index>=0?prizes[hit.index]:null;
   const autoRedeem=!!(prize && prize.autoRedeem);
@@ -6907,7 +6907,7 @@ function bind(){
     else if(d.prizeProb!=null) guardParent('lottery',()=>updatePrizeField(d.prizeProb,'prob',v));
     else if(d.prizeAuto!=null) guardParent('lottery',()=>updatePrizeField(d.prizeAuto,'autoRedeem',!!t.checked));
   });
-  /* 兑换确认属于家长权限：孩子能看到待兑换，但不能自己标记已兑换 */
+  /* 线下发放后直接点「标记已兑换」即可，无需家长解锁（设置类操作仍受家长锁保护） */
   if($('prizeWonList')) $('prizeWonList').addEventListener('click',e=>{
     const b=e.target.closest&&e.target.closest('button[data-prize-redeem]');
     if(b) redeemPrize(b.dataset.prizeRedeem);
