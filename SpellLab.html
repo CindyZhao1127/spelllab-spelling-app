@@ -3805,13 +3805,23 @@ function toast(msg,type){
 }
 /* 语音朗读者：英文口音跟随全局 accent（uk=en-GB / us=en-US）；
    纸笔听写可指定中文读音（听中文写英文）。 */
+/* 专有名词发音修正：TTS 常把带撇号/缩写的专名拆开乱读（如 Xi'an 读成「xi an」）。
+   只在送入语音引擎前替换文本，不影响屏幕显示、拼写判定与教材原文。 */
+const SPEECH_PRON_FIX = [
+  [/\bXi'?an\b/gi, 'Shee-ahn']
+];
+function speechText(text){
+  let s = text==null ? '' : String(text);
+  SPEECH_PRON_FIX.forEach(pair => { s = s.replace(pair[0], pair[1]); });
+  return s;
+}
 function speechAccent(){ return state.settings.accent==='us' ? 'us' : 'uk'; }
 function englishLang(){ return speechAccent()==='us' ? 'en-US' : 'en-GB'; }
 function speakLang(text, lang, rate){
   if(!('speechSynthesis' in window)){ toast('当前浏览器不支持朗读','bad'); return; }
   try{
     window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
+    const u = new SpeechSynthesisUtterance(speechText(text));
     const isZh = /^zh/i.test(lang||'');
     u.lang = lang || englishLang();
     u.rate = typeof rate==='number' ? rate : (isZh ? 1 : (Number(state.settings.rate)||0.9));
@@ -8836,7 +8846,7 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
     try {
       if (!window.speechSynthesis) { toast('当前浏览器不支持朗读'); return; }
       window.speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(text);
+      const u = new SpeechSynthesisUtterance(speechText(text));
       u.lang = (typeof englishLang==='function') ? englishLang() : 'en-US';
       u.rate = 0.75;
       window.speechSynthesis.speak(u);

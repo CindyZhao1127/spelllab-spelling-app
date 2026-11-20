@@ -1646,6 +1646,21 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     return 'UK ma·ra·thon/en-GB · US mar·a·thon/en-US · soundwhy 数据';
   });
 
+  check('专名发音修正：Xi’an 朗读改音、教材原文与拼写判定不变', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      var src='I went to Xi\\'an.';
+      var fixed=speechText(src);
+      speak(src);
+      return {src:src, fixed:fixed,
+        normalization:speechText('XI’AN and Xian')};})())`));
+    assert(o.src.indexOf("Xi'an")>=0, '原文应保留撇号');
+    assert(o.fixed.indexOf('Shee-ahn')>=0 && o.fixed.indexOf("Xi'an")<0,
+      '朗读文本应替换为谐音: '+o.fixed);
+    assert(spoken[spoken.length-1]===o.fixed, '语音引擎收到的不是修正后文本: '+spoken[spoken.length-1]);
+    assert(o.normalization.indexOf('Shee-ahn')>=0, '无撇号/弯撇号也应修正: '+o.normalization);
+    return "Xi'an → Shee-ahn（仅朗读）";
+  });
+
   check('奖品自动兑换：抽到不扣分、即时已兑换；普通奖线下发放后直接标记', () => {
     /* 自动兑换奖：必中且返还消耗 */
     run(`(function(){ state.plan.points=100;
