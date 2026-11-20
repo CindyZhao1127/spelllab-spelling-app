@@ -1462,6 +1462,21 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     return o.groups.join('/')+' · '+o.lessons+' 课 '+o.words+' 词';
   });
 
+  check('自然拼读：作为主练习模式与句子拼写并列，可从侧边栏跳转', () => {
+    const btn=/<button[^>]*data-mode="phonics"[^>]*>[^<]*自然拼读/.test(html);
+    const view=/<section[^>]*id="phonicsView"/.test(html);
+    const entry=/id="phOpenMain"/.test(html);
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      setMode('phonics');
+      const on=$('phonicsView').hidden===false && $('sentenceView').hidden===true;
+      setMode('sentence');
+      const off=$('phonicsView').hidden===true && $('sentenceView').hidden===false;
+      return {on:on,off:off};})())`));
+    assert(btn && view && entry, '缺主模式按钮 / 主视图 / 侧边栏入口');
+    assert(o.on && o.off, '拼读模式与句子视图切换失败: '+JSON.stringify(o));
+    return '顶栏模式按钮 + 主视图切换 + 侧边栏入口均正常';
+  });
+
   check('自然拼读：两种练法、答对计分、答错看答案，进度落盘', () => {
     run(`(function(){
       state.phonics=normalizeState({phonics:{done:{},correct:0,attempted:0}}).phonics;
@@ -1545,16 +1560,26 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     return '新奖默认关闭 · 可勾选 · 默认再抽一次自动兑换';
   });
 
-  check('教材单词音素分块与拼读归类', () => {
+  check('教材单词按音节切分（一元音一节）与拼读归类', () => {
     const o = JSON.parse(run(`JSON.stringify({
+      apple:phonicsChunks('apple'), banana:phonicsChunks('banana'),
+      computer:phonicsChunks('computer'), cat:phonicsChunks('cat'),
       ship:phonicsChunks('ship'), cake:phonicsChunks('cake'), teacher:phonicsChunks('teacher'),
       sheep:phonicsGroup('sheep').name, cakeGroup:phonicsGroup('cake').name,
       catGroup:phonicsGroup('cat').name})`));
-    assert(JSON.stringify(o.ship) === JSON.stringify([['sh','ʃ'],['i','ɪ'],['p','p']]), 'sh 分块错误: '+JSON.stringify(o));
-    assert(JSON.stringify(o.cake) === JSON.stringify([['c','k'],['a','eɪ'],['k','k'],['e','不发音']]), '神奇 e 分块错误: '+JSON.stringify(o));
-    assert(JSON.stringify(o.teacher) === JSON.stringify([['t','t'],['ea','iː'],['ch','tʃ'],['er','ɜː']]), 'ea/ch/er 分块错误: '+JSON.stringify(o));
+    const letters = chunks => chunks.map(c=>c[0]);
+    assert(JSON.stringify(letters(o.apple)) === JSON.stringify(['ap','ple']), 'apple 音节错误: '+JSON.stringify(o.apple));
+    assert(JSON.stringify(letters(o.banana)) === JSON.stringify(['ba','na','na']), 'banana 音节错误: '+JSON.stringify(o.banana));
+    assert(JSON.stringify(letters(o.computer)) === JSON.stringify(['com','pu','ter']), 'computer 音节错误: '+JSON.stringify(o.computer));
+    assert(JSON.stringify(letters(o.cat)) === JSON.stringify(['cat']), 'cat 音节错误: '+JSON.stringify(o.cat));
+    assert(JSON.stringify(letters(o.ship)) === JSON.stringify(['ship']), 'ship 音节错误: '+JSON.stringify(o.ship));
+    assert(JSON.stringify(letters(o.cake)) === JSON.stringify(['cake']), '神奇 e 应与元音同节: '+JSON.stringify(o.cake));
+    assert(JSON.stringify(letters(o.teacher)) === JSON.stringify(['tea','cher']), 'teacher 音节错误: '+JSON.stringify(o.teacher));
+    o.apple.concat(o.banana,o.computer,o.cat,o.ship,o.cake,o.teacher).forEach(c=>{
+      assert(c[1] && c[1].indexOf('不发音')<0, '音节音素提示缺失: '+JSON.stringify(c));
+    });
     assert(o.sheep === 'sh /ʃ/' && o.cakeGroup === 'a_e /eɪ/' && o.catGroup === '短元音 a /æ/', '归类错误: '+JSON.stringify(o));
-    return 'sh/ea/ch/a_e/短元音 均正确识别';
+    return 'apple→ap·ple / banana→ba·na·na / computer→com·pu·ter 等按音节切分正确';
   });
 
   check('教材单词按单元与拼读规律归类并随学段级联', () => {

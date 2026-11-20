@@ -1442,6 +1442,18 @@ body.td-typing #typingView { height: 100%; }
 .ph-hint{font-size:11px;color:var(--muted);min-height:16px;margin:4px 0 8px}
 .ph-feedback{min-height:24px;margin-top:10px;font-weight:800;font-size:13px}
 .ph-feedback.ok{color:var(--ok)} .ph-feedback.bad{color:var(--err)}
+/* 自然拼读主视图：与句子拼写并列的练习模式，不再藏在侧边栏 */
+#phonicsView{width:100%;max-width:940px;margin:0 auto;align-self:flex-start}
+#phonicsView .ph-wrap{width:100%;max-width:760px;margin:0 auto}
+#phonicsView .panel{background:var(--card);border:1px solid rgba(226,232,255,.12);border-radius:18px;
+  padding:18px 20px;margin-bottom:16px;box-shadow:var(--shadow)}
+#phonicsView .panel h3{font-size:15px;letter-spacing:.5px}
+#phonicsView .ph-head h3{font-size:15px;letter-spacing:0}
+#phonicsView .ph-prompt,#phonicsView #phChunks,#phonicsView .ph-hint,#phonicsView .ph-feedback{text-align:center}
+#phonicsView #phChunks{justify-content:center}
+#phonicsView #phInput{text-align:center}
+#phonicsView .ph-practice-btns{justify-content:center;flex-wrap:wrap}
+@media(max-width:720px){#phonicsView .panel{padding:14px 12px}}
 /* ---------- 获得奖品 ---------- */
 .prize-won{display:flex;align-items:center;gap:10px;padding:9px 10px;border:1px solid rgba(226,232,255,.12);
   border-radius:12px;background:rgba(255,255,255,.04);margin-bottom:6px;font-size:12px}
@@ -1468,6 +1480,7 @@ body.td-typing #typingView { height: 100%; }
       <button data-mode="sentence" class="active">句子拼写</button>
       <button data-mode="chunk">分步记忆</button>
       <button data-mode="word">单词速记</button>
+      <button data-mode="phonics">自然拼读 🔤</button>
       <button data-mode="growth">成长中心 🚀</button>
       <button data-mode="typing">打字练习 🦆</button>
     </div>
@@ -1533,6 +1546,56 @@ body.td-typing #typingView { height: 100%; }
         <div class="feedback" id="wordFeedback"></div>
         <div class="word-progress" id="wordProgress"></div>
         <div class="tips">可以直接敲键盘字母 · 点击已填字母可撤回 · 退格删除</div>
+      </div>
+    </section>
+
+    <!-- ============ 自然拼读（主练习模式，与句子拼写并列）============ -->
+    <section class="view" id="phonicsView" hidden>
+      <div class="ph-wrap">
+        <div class="panel">
+          <h3>自然拼读 <span class="count-pill" id="phStat">0 / 0</span></h3>
+          <div class="panel-note">两种来源：<b>内置课程</b>循序渐进打基础；<b>教材单词</b>直接练已导入课本的词，可按单元练，也可按拼读规律自动归类（sh / ee / a_e / 短元音…）。拼读块按<b>音节</b>切开，每个音节一个元音；「听音拼词」先给音节空格，点「拼读提示」再看字母组合和读音；「看词拼读」直接显示。词组与带撇号、连字符的词不参与音节拆分。</div>
+          <div class="ph-source" id="phSourceTabs">
+            <button class="on" data-phsource="builtin">内置课程</button>
+            <button data-phsource="textbook">教材单词 <span class="count-pill" id="phTbStat">0 / 0</span></button>
+          </div>
+          <div class="field-row">
+            <span class="sel"><select id="phMode"><option value="listen">听音拼词</option><option value="read">看词拼读</option></select></span>
+            <button class="mini-btn primary sm" id="phContinue">继续上次</button>
+          </div>
+          <div id="phBuiltinPanel">
+            <div id="phGroupList"></div>
+          </div>
+          <div id="phTextbookPanel" hidden>
+            <div class="field-row">
+              <span class="sel"><select id="phStage" aria-label="学段"></select></span>
+              <span class="sel"><select id="phBook" aria-label="教材"></select></span>
+              <span class="sel"><select id="phPack" aria-label="教材包"></select></span>
+            </div>
+            <div class="field-row">
+              <span class="sel"><select id="phGroupBy" aria-label="分组方式"><option value="unit">按单元</option><option value="pattern">按拼读规律</option></select></span>
+              <span class="sel"><select id="phUnit" aria-label="单元或拼读组"></select></span>
+              <button class="mini-btn primary sm" id="phTbStart">开始练习</button>
+            </div>
+            <div id="phUnitList"></div>
+          </div>
+        </div>
+        <div class="panel" id="phPracticePanel" hidden>
+          <div class="ph-head"><h3 id="phLessonTitle">—</h3><button class="mini-btn sm" id="phBack">← 返回列表</button></div>
+          <div class="ph-progress"><i id="phBar"></i></div>
+          <div class="ph-prompt" id="phPrompt"></div>
+          <div class="ph-chunks" id="phChunks"></div>
+          <div class="ph-hint" id="phHint"></div>
+          <input class="gfield" id="phInput" placeholder="拼出英文单词，回车提交" autocomplete="off" spellcheck="false">
+          <div class="ph-feedback" id="phFeedback"></div>
+          <div class="btn-row tight ph-practice-btns">
+            <button class="mini-btn sm" id="phSpeak">🔊 再听一遍</button>
+            <button class="mini-btn sm" id="phChunkBtn">拼读提示</button>
+            <button class="mini-btn sm" id="phShow">看答案</button>
+            <button class="mini-btn sm" id="phShuffle">换一题</button>
+            <button class="mini-btn primary sm" id="phNext" hidden>下一题 →</button>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -2080,48 +2143,9 @@ body.td-typing #typingView { height: 100%; }
 
     <div class="tab-page" id="pagePhonics" hidden>
       <div class="panel">
-        <h3>自然拼读 <span class="count-pill" id="phStat">0 / 0</span></h3>
-        <div class="panel-note">两种来源：<b>内置课程</b>循序渐进打基础；<b>教材单词</b>直接练已导入课本的词，可按单元练，也可按拼读规律自动归类（sh / ee / a_e / 短元音…）。「听音拼词」先按音素分块给出空格，点「拼读提示」再看字母组合和读音；「看词拼读」直接显示。词组与带撇号、连字符的词不参与音素拆分。</div>
-        <div class="ph-source" id="phSourceTabs">
-          <button class="on" data-phsource="builtin">内置课程</button>
-          <button data-phsource="textbook">教材单词 <span class="count-pill" id="phTbStat">0 / 0</span></button>
-        </div>
-        <div class="field-row">
-          <span class="sel"><select id="phMode"><option value="listen">听音拼词</option><option value="read">看词拼读</option></select></span>
-          <button class="mini-btn primary sm" id="phContinue">继续上次</button>
-        </div>
-        <div id="phBuiltinPanel">
-          <div id="phGroupList"></div>
-        </div>
-        <div id="phTextbookPanel" hidden>
-          <div class="field-row">
-            <span class="sel"><select id="phStage" aria-label="学段"></select></span>
-            <span class="sel"><select id="phBook" aria-label="教材"></select></span>
-            <span class="sel"><select id="phPack" aria-label="教材包"></select></span>
-          </div>
-          <div class="field-row">
-            <span class="sel"><select id="phGroupBy" aria-label="分组方式"><option value="unit">按单元</option><option value="pattern">按拼读规律</option></select></span>
-            <span class="sel"><select id="phUnit" aria-label="单元或拼读组"></select></span>
-            <button class="mini-btn primary sm" id="phTbStart">开始练习</button>
-          </div>
-          <div id="phUnitList"></div>
-        </div>
-      </div>
-      <div class="panel" id="phPracticePanel" hidden>
-        <div class="ph-head"><h3 id="phLessonTitle">—</h3><button class="mini-btn sm" id="phBack">← 返回列表</button></div>
-        <div class="ph-progress"><i id="phBar"></i></div>
-        <div class="ph-prompt" id="phPrompt"></div>
-        <div class="ph-chunks" id="phChunks"></div>
-        <div class="ph-hint" id="phHint"></div>
-        <input class="gfield" id="phInput" placeholder="拼出英文单词，回车提交" autocomplete="off" spellcheck="false">
-        <div class="ph-feedback" id="phFeedback"></div>
-        <div class="btn-row tight">
-          <button class="mini-btn sm" id="phSpeak">🔊 再听一遍</button>
-          <button class="mini-btn sm" id="phChunkBtn">拼读提示</button>
-          <button class="mini-btn sm" id="phShow">看答案</button>
-          <button class="mini-btn sm" id="phShuffle">换一题</button>
-          <button class="mini-btn primary sm" id="phNext" hidden>下一题 →</button>
-        </div>
+        <h3>自然拼读</h3>
+        <div class="panel-note">拼读练习已经移到主界面，和「句子拼写 / 单词速记」并排显示，练习时不用再打开这个面板。点下面的按钮直接开始。</div>
+        <button class="mini-btn primary" id="phOpenMain">前往拼读练习 →</button>
       </div>
     </div>
 
@@ -2736,9 +2760,10 @@ function phonicsCount(){
   PHONICS_GROUPS.forEach(g=>g.lessons.forEach(l=>{lessons++;words+=l.w.length;}));
   return {lessons:lessons,words:words};
 }
-/* ---------- 教材单词的音素分块与自动归类 ----------
-   把任意英文单词切成「字母组合 / 常见读音」小块，用于拼写提示；
-   同一个词典也用于按 sh / ee / a_e / 短元音 等规律给课本单词分组。
+/* ---------- 教材单词的音节分块与自动归类 ----------
+   phonicsChunks() 按音节切开：每个音节含一个元音核心，辅音按
+   VCV 归后 / VCCV 中间切 / 辅音丛不拆 / 神奇 e 同音节 的规则归位。
+   phonicsGroup() 仍按 sh / ee / a_e / 短元音 等规律给课本单词分组。
    音素取最常见读音，仅作学习提示，不追求词典级精确。 */
 const PH_LETTER_SOUND={a:'æ',b:'b',c:'k',d:'d',e:'e',f:'f',g:'g',h:'h',i:'ɪ',j:'dʒ',k:'k',
   l:'l',m:'m',n:'n',o:'ɒ',p:'p',q:'kw',r:'r',s:'s',t:'t',u:'ʌ',v:'v',w:'w',x:'ks',y:'j',z:'z'};
@@ -2759,25 +2784,70 @@ function phMagicE(w){
   if(!PH_MAGIC[v]||!/[b-df-hj-np-tv-z]/.test(c)) return null;
   return {v:v,c:c,s:PH_MAGIC[v]};
 }
-function phonicsChunks(word){
+/* 先把单词切成最小读音单元：{t:字母/字母组合, s:音素, v:是否元音核心}。
+   元音组合（ee/ea/ai…）与辅音组合（sh/ch/bl…）都优先整体识别；
+   神奇 e 里的末尾 e 记为静音，与前面的元音同属一个音节。 */
+const PH_VOWEL_TEAMS=['ee','ea','ai','ay','oa','oo','ou','ow','oi','oy','au','aw','ie','ue',
+  'ar','er','ir','or','ur'];
+function phVowelTeam(t){ return PH_VOWEL_TEAMS.indexOf(t)>=0 || /^[aeiou]$/.test(t); }
+function phUnits(word){
   const src=String(word||'').toLowerCase(),out=[];
   const me=phMagicE(src),end=me?src.length-1:src.length;
   let i=0;
   while(i<end){
-    if(me&&i===src.length-3){ out.push([src[i],me.s]); i++; continue; }
+    if(me&&i===src.length-3){ out.push({t:src[i],s:me.s,v:true}); i++; continue; }
     let hit=null;
     for(let k=0;k<PH_PATTERNS.length;k++){
       const p=PH_PATTERNS[k];
       if(src.substr(i,p[0].length)===p[0]){ hit=p; break; }
     }
-    if(hit&&i+hit[0].length<=end){ out.push([hit[0],hit[1]]); i+=hit[0].length; continue; }
+    if(hit&&i+hit[0].length<=end){
+      const t=hit[0]; out.push({t:t,s:hit[1],v:phVowelTeam(t)}); i+=t.length; continue;
+    }
     const ch=src[i];
-    out.push([ch,PH_LETTER_SOUND[ch]||'']); i++;
+    out.push({t:ch,s:PH_LETTER_SOUND[ch]||'',v:phVowelTeam(ch)}); i++;
   }
-  if(me) out.push(['e','不发音']);
-  /* 连字符、撇号原样保留，不参与拼读提示 */
-  for(;i<src.length;i++) if(!/[a-z]/.test(src[i])) out.push([src[i],'']);
+  if(me) out.push({t:'e',s:'不发音',v:false,silent:true});
+  /* 连字符、撇号原样保留，不参与音节拆分 */
+  for(;i<src.length;i++) if(!/[a-z]/.test(src[i])) out.push({t:src[i],s:'',v:false});
   return out;
+}
+/* 音节切分：逐段处理两个元音核心之间的辅音。
+   - 0 个辅音：两个元音分属两音节（road 之类由元音组合合成一个核心）
+   - 1 个辅音：VCV，辅音归后一个音节（ba-na / ti-ger）
+   - 2 个辅音：VCCV，中间切开（ap-ple / win-ter）；辅音丛（bl/st/sh…）不拆，整体归后
+   - 3 个及以上：首辅音归前，其余归后（in-struct / chil-dren）
+   词首辅音归首音节，词尾辅音（含静音 e）归末音节。 */
+function phonicsChunks(word){
+  const units=phUnits(word);
+  if(!units.length) return [];
+  const vowelIdx=[];
+  units.forEach((u,i)=>{ if(u.v) vowelIdx.push(i); });
+  if(!vowelIdx.length) return [[units.map(u=>u.t).join(''),'']];
+  const groups=[];
+  let start=0;
+  for(let k=0;k<vowelIdx.length;k++){
+    const v=vowelIdx[k], next=vowelIdx[k+1];
+    let end=units.length;
+    if(next!==undefined){
+      const gap=next-v-1;
+      if(gap<=0) end=next;
+      else if(gap===1) end=next-1;
+      else if(gap===2){
+        const pair=units[next-2].t+units[next-1].t;
+        const cluster=PH_PATTERNS.some(p=>!phVowelTeam(p[0])&&p[0].length===2&&p[0]===pair);
+        end=cluster?next-2:next-1;
+      } else end=next-2;
+    }
+    if(end<=start) end=start+1;
+    groups.push(units.slice(start,end));
+    start=end;
+  }
+  return groups.filter(g=>g.length).map(g=>{
+    const letters=g.map(u=>u.t).join('');
+    const sound=g.filter(u=>!u.silent).map(u=>u.s).filter(Boolean).join(' ');
+    return [letters,sound];
+  });
 }
 function phonicsGroup(word){
   const w=String(word||'').toLowerCase().replace(/[^a-z]/g,'');
@@ -3543,8 +3613,9 @@ function renderHeader(){
   renderPoints();
   $('diffChip').textContent='难度 · '+difficulty().label;
   $('stage').classList.toggle('hide-hints',!state.settings.showHints);
-  $('sentenceView').hidden = (mode==='word' || mode==='typing' || mode==='growth');
+  $('sentenceView').hidden = (mode==='word' || mode==='phonics' || mode==='typing' || mode==='growth');
   $('wordView').hidden = mode!=='word';
+  $('phonicsView').hidden = mode!=='phonics';
   $('typingView').hidden = mode!=='typing';
   $('growthView').hidden = mode!=='growth';
   if (document.body && document.body.classList) document.body.classList.toggle('td-typing', mode==='typing');
@@ -6253,6 +6324,7 @@ function setMode(m){
   } else {
     if(prev==='typing' && typeof window.TypingDuck!=='undefined') window.TypingDuck.leave();
     if(m==='growth'){ try{ growthEnter(); }catch(e){} }
+    else if(m==='phonics'){ try{ phRender(); }catch(e){} }
     else if(m==='word'){ if(!wordCur) pickWord(); else renderWord(); }
     else if(m==='chunk') startChunk();
     else renderSentence();
@@ -6272,7 +6344,9 @@ function bind(){
   $('drawerClose').addEventListener('click',()=>openDrawer(false));
   $('mask').addEventListener('click',()=>openDrawer(false));
   $('drawerTabs').addEventListener('click',e=>{
-    const b=e.target.closest('button[data-tab]'); if(b) switchTab(b.dataset.tab);
+    const b=e.target.closest('button[data-tab]'); if(!b) return;
+    if(b.dataset.tab==='phonics'){ openDrawer(false); setMode('phonics'); return; }
+    switchTab(b.dataset.tab);
   });
   $('btnPoints').addEventListener('click',()=>openDrawer(true,'plan'));
   $('btnWheel').addEventListener('click',openWheel);
@@ -6556,6 +6630,7 @@ function bind(){
   });
 
   /* 自然拼读 */
+  $('phOpenMain').addEventListener('click',()=>{ openDrawer(false); setMode('phonics'); });
   $('phSourceTabs').addEventListener('click',e=>{
     const b=e.target.closest&&e.target.closest('[data-phsource]');
     if(b) phSourceSwitch(b.dataset.phsource);
