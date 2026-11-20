@@ -1474,7 +1474,11 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
       return {on:on,off:off};})())`));
     assert(btn && view && entry, '缺主模式按钮 / 主视图 / 侧边栏入口');
     assert(o.on && o.off, '拼读模式与句子视图切换失败: '+JSON.stringify(o));
-    return '顶栏模式按钮 + 主视图切换 + 侧边栏入口均正常';
+    const big = /\.ph-chunks\{[^}]*font-size:clamp\(25px/.test(html);
+    const gap = /\.ph-chunks\{[^}]*--word-gap/.test(html);
+    const blank = /class="ph-blank" style="width:'/.test(html);
+    assert(big && gap && blank, '音节槽未放大到词槽尺寸 / 未共用词间距 / 空格缺宽度');
+    return '顶栏模式按钮 + 主视图切换 + 侧边栏入口 + 音节槽大字号均正常';
   });
 
   check('自然拼读：两种练法、答对计分、答错看答案，进度落盘', () => {
