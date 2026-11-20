@@ -1569,8 +1569,8 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
       reason:state.plan.ledger.length?state.plan.ledger[state.plan.ledger.length-1].reason:''})`));
     assert(ok.right === 1 && ok.att === 1 && ok.cls.indexOf('ok') >= 0, '答对未计分: '+JSON.stringify(ok));
     assert(ok.hist >= 1 && ok.done, '答题未记历史或未锁定输入');
-    assert(ok.points === Number(run('state.plan.perCorrect')||0) && ok.reason === '自然拼读答对',
-      '自然拼读答对未发积分: '+JSON.stringify(ok));
+    assert(ok.points === 0 && ok.reason === '',
+      '答对一题不应立即发积分（每累计 5 词才发一次）: '+JSON.stringify(ok));
     /* 看词拼读：答错后显示答案 */
     run(`(function(){ phAdvance(); $('phMode').value='read'; phShow();
       $('phInput').value='zzzzwrong'; phCheck(); })()`);
@@ -1578,9 +1578,33 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
       cls:$('phFeedback').className,hint:$('phHint').textContent,points:state.plan.points})`));
     assert(bad.cls.indexOf('bad') >= 0 && bad.fb.indexOf('正确答案') >= 0, '答错未显示答案: '+JSON.stringify(bad));
     assert(bad.hint.indexOf('音素') >= 0, '看词拼读缺音素提示');
-    assert(bad.points === ok.points, '答错不应再发积分: '+JSON.stringify(bad));
+    assert(bad.points === ok.points, '答错不应发积分: '+JSON.stringify(bad));
     run(`(function(){ phBack(); state.plan.points=window.__spOldPoints; state.plan.ledger=window.__spOldLedger; })()`);
-    return '听音拼词对 1 题发 '+ok.points+' 分 / 看词拼读错 1 题 · 历史与进度已记录';
+    return '听音拼词对 1 题 / 看词拼读错 1 题 · 积分按 5 词节流 · 历史与进度已记录';
+  });
+
+  check('自然拼读积分节流：每累计答对 5 词发一次分', () => {
+    run(`(function(){
+      window.__spOldPts=state.plan.points; window.__spOldLed=state.plan.ledger.slice();
+      window.__spOldHist=state.history.slice();
+      window.__spOldCor=state.phonics.correct; window.__spOldAtt=state.phonics.attempted;
+      state.plan.points=0; state.plan.ledger=[];
+      state.phonics=normalizeState({phonics:{done:{},correct:4,attempted:4}}).phonics;
+      phStart('fm-at'); $('phMode').value='listen';
+      $('phInput').value=phLast[0]; phCheck();
+    })()`);
+    const o = JSON.parse(run(`JSON.stringify({correct:state.phonics.correct,points:state.plan.points,
+      reason:state.plan.ledger.length?state.plan.ledger[state.plan.ledger.length-1].reason:''})`));
+    const per = Number(run('state.plan.perCorrect')||0);
+    assert(o.correct===5 && o.points===per && o.reason==='自然拼读答对',
+      '第 5 个答对词未发积分: '+JSON.stringify(o));
+    run(`(function(){ phAdvance(); $('phInput').value=phLast[0]; phCheck(); })()`);
+    const o2 = JSON.parse(run(`JSON.stringify({correct:state.phonics.correct,points:state.plan.points})`));
+    assert(o2.correct===6 && o2.points===per, '第 6 个词不应再发积分: '+JSON.stringify(o2));
+    run(`(function(){ phBack(); state.plan.points=window.__spOldPts; state.plan.ledger=window.__spOldLed;
+      state.history=window.__spOldHist; state.phonics.correct=window.__spOldCor;
+      state.phonics.attempted=window.__spOldAtt; })()`);
+    return '第 5 词发 '+per+' 分 · 第 6 词不发';
   });
 
   check('听音打字：结果字母保持正常大小写，不强制全大写', () => {
