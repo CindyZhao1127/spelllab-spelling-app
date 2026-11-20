@@ -68,6 +68,9 @@
   }
   .mode-switch button.active{background:linear-gradient(135deg,#6a5cff,#4361ee);color:#fff;box-shadow:0 4px 14px rgba(74,84,240,.45)}
   .top-right{display:flex;align-items:center;gap:14px}
+  .accent-switch{display:flex;gap:2px;padding:3px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.08)}
+  .accent-switch button{padding:5px 11px;border-radius:999px;font-size:11px;font-weight:800;color:var(--muted);transition:.2s}
+  .accent-switch button.active{background:rgba(139,123,255,.28);color:#fff}
   .stat{text-align:center;line-height:1.1;min-width:44px}
   .stat b{display:block;font-size:17px;font-weight:800}
   .stat span{font-size:10px;color:var(--muted)}
@@ -1541,6 +1544,7 @@ body.td-typing #typingView { height: 100%; }
       <button data-mode="typing">打字练习 🦆</button>
     </div>
     <div class="top-right">
+      <div class="accent-switch" id="accentSwitch" title="朗读口音与拼读音节标准（英式 / 美式）"><button data-accent="uk" class="active">UK</button><button data-accent="us">US</button></div>
       <div class="stat"><b id="statStreak">0</b><span>连对</span></div>
       <div class="stat"><b id="statAcc">--</b><span>正确率</span></div>
       <button class="points-chip" id="btnPoints" title="学习计划与积分"><b id="statPoints">0</b><span>积分</span></button>
@@ -2130,6 +2134,8 @@ body.td-typing #typingView { height: 100%; }
         <div class="subtle" style="margin-top:8px">中文提示现在显示在各自单词的正下方，过长时自动换行、不会挤到相邻单词；加大间距后整句更易读。</div>
         <div class="setting-row"><span>按键 / 判定音效</span><button class="switch" data-set="sound" id="swSound"></button></div>
         <div class="setting-row"><span>音效音量 <b id="volVal">35</b></span><input class="rate" type="range" id="volRange" min="0" max="100" step="5" value="35"></div>
+        <div class="setting-row"><span>朗读口音 / 拼读标准</span><span class="sel"><select id="accentSel"><option value="uk">英式 UK</option><option value="us">美式 US</option></select></span></div>
+        <div class="subtle" style="margin-top:8px">统一控制朗读发音与拼读音节切分（音节数据来自 soundwhy.com）。如 marathon：英式 ma / ra / thon，美式 mar / a / thon。</div>
         <div class="setting-row"><span>拼完句子后自动朗读整句</span><button class="switch" data-set="speakOnFinish" id="swSpeakOnFinish"></button></div>
         <div class="setting-row"><span>朗读延迟 <b id="speakDelayVal">120</b> ms</span><input class="rate" type="range" id="speakDelayRange" min="0" max="600" step="20" value="120"></div>
         <div class="subtle" style="margin-top:8px">完成音效播完后朗读完整英文句子；默认 120ms，调到 0 可几乎立即朗读。成功卡片上也能重听。</div>
@@ -2947,6 +2953,9 @@ const PH_SYLLABLE_DICT={
   computer:'com|pu|ter', dictionary:'dic|tion|ary', diet:'di|et', family:'fam|i|ly',
   gingerbread:'gin|ger|bread', happy:'hap|py', hopeful:'hope|ful', information:'in|for|ma|tion',
   instruct:'in|struct', jumping:'jump|ing', kilometer:'ki|lo|me|ter',
+  /* 英美音节不同的词：值写成 {uk,us}，数据来自 soundwhy.com 对齐结果。
+     marathon 英式 ma/ra/thon（r 归后一节），美式 mar/a/thon（ar 读 /er/ 成节）。 */
+  marathon:{uk:'ma|ra|thon',us:'mar|a|thon'},
   kilometre:'ki|lo|me|tre', lion:'li|on', little:'lit|tle', meter:'me|ter', metre:'me|tre',
   millimeter:'mil|li|me|ter', millimetre:'mil|li|me|tre', never:'nev|er',
   purple:'pur|ple', quickly:'quick|ly', rabbit:'rab|bit', readable:'read|able',
@@ -2963,17 +2972,24 @@ const PH_SOUND_FIX={
   'meter|0':'m iː', 'metre|0':'m iː',
   'millimeter|2':'m iː', 'millimetre|2':'m iː',
   'ready|0':'r e d', 'ready|1':'ɪ', 'readable|0':'r iː d',
-  'reading|0':'r iː d', 'tiger|0':'t aɪ'
+  'reading|0':'r iː d', 'tiger|0':'t aɪ',
+  /* soundwhy.com 英美对齐：marathon 三节的音素随口音不同 */
+  'marathon|0':{uk:'m æ',us:'m er'}, 'marathon|1':{uk:'r ə',us:'ə'},
+  'marathon|2':{uk:'θ ə n',us:'θ ɑː n'}
 };
+/* 校订值可能是 {uk,us}（英美不同）或字符串（通用），按当前口音取。 */
+function phPick(v){ return (v && typeof v==='object' && !Array.isArray(v))
+  ? (v[speechAccent()]||v.uk||v.us||'') : v; }
 function phChunkSound(word,part,i){
   const fixed=PH_SOUND_FIX[word+'|'+i]||PH_SOUND_FIX[part];
-  if(fixed) return fixed;
+  const picked=phPick(fixed);
+  if(picked) return picked;
   return phUnits(part).filter(u=>!u.silent).map(u=>u.s).filter(Boolean).join(' ');
 }
 function phonicsChunks(word){
   const src=String(word||'').toLowerCase();
   if(!src) return [];
-  const dict=PH_SYLLABLE_DICT[src];
+  const dict=phPick(PH_SYLLABLE_DICT[src]);
   if(dict) return dict.split('|').map((part,i)=>[part,phChunkSound(src,part,i)]);
   /* 先剥词缀：前缀、后缀整体成节，词根再按音节规则切 */
   let pre='', suf='', root=src;
@@ -3113,7 +3129,7 @@ const DEFAULT_STATE = {
   stats:{attempted:0,correct:0,streak:0,best:0,today:'',todayDone:0,todayRight:0,wordRight:0},
   settings:{showHints:true,speakOnFinish:true,speakDelayMs:120,ignoreCase:true,smart:true,
     rate:0.9,sound:true,volume:0.35,letterBoxes:true,revealLetters:0,wordGap:22,
-    timerMode:'count',difficulty:'normal',autoVocab:true,askResume:true,askNextUnit:true},
+    timerMode:'count',difficulty:'normal',autoVocab:true,askResume:true,askNextUnit:true,accent:'uk'},
   custom:[], customMeta:{gradeId:'g4',bookId:'b_hj'},
   grades:DEFAULT_GRADES, books:DEFAULT_BOOKS, unitMeta:{},
   system:'63',
@@ -3298,6 +3314,8 @@ function normalizeState(s){
   if(typeof out.parent.hash!=='string' || !/^[0-9a-f]{32}$/i.test(out.parent.hash))
     out.parent.hash=hashPassword(INITIAL_PARENT_PASSWORD,out.parent.salt);
   const st=out.settings;
+  /* 英美口音：影响朗读 voice 和拼读音节/音素校订（数据源 soundwhy.com） */
+  if(st.accent!=='us') st.accent='uk';
   st.wordGap=Math.max(10,Math.min(44,Number(st.wordGap)||22));
   st.speakDelayMs=Math.max(0,Math.min(600,Number(st.speakDelayMs)||0));
   st.revealLetters=Math.max(0,Math.min(3,Number(st.revealLetters)||0));
@@ -3687,25 +3705,29 @@ function toast(msg,type){
   const el=$('toast'); el.textContent=msg; el.className='toast show'+(type?' '+type:'');
   clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.className='toast',1900);
 }
-/* 语音朗读者：默认英文；纸笔听写可指定中文读音（听中文写英文） */
+/* 语音朗读者：英文口音跟随全局 accent（uk=en-GB / us=en-US）；
+   纸笔听写可指定中文读音（听中文写英文）。 */
+function speechAccent(){ return state.settings.accent==='us' ? 'us' : 'uk'; }
+function englishLang(){ return speechAccent()==='us' ? 'en-US' : 'en-GB'; }
 function speakLang(text, lang, rate){
   if(!('speechSynthesis' in window)){ toast('当前浏览器不支持朗读','bad'); return; }
   try{
     window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
     const isZh = /^zh/i.test(lang||'');
-    u.lang = lang || 'en-US';
+    u.lang = lang || englishLang();
     u.rate = typeof rate==='number' ? rate : (isZh ? 1 : (Number(state.settings.rate)||0.9));
     u.pitch = 1;
     const voices = (window.speechSynthesis.getVoices && window.speechSynthesis.getVoices()) || [];
+    const want = speechAccent()==='us' ? /en[-_]US/i : /en[-_]GB/i;
     const v = isZh
       ? (voices.find(v=>/zh[-_]CN/i.test(v.lang)) || voices.find(v=>/^zh/i.test(v.lang)))
-      : voices.find(v=>/en[-_]US/i.test(v.lang));
+      : (voices.find(v=>want.test(v.lang)) || voices.find(v=>/^en[-_]/i.test(v.lang)));
     if(v) u.voice=v;
     window.speechSynthesis.speak(u);
   }catch(e){ toast('朗读暂不可用','bad'); }
 }
-function speak(text){ speakLang(text,'en-US'); }
+function speak(text){ speakLang(text, englishLang()); }
 function tokenize(en,hints,cn){
   const raw = String(en).match(/[A-Za-z][A-Za-z'-]*|[^A-Za-z\s]/g) || [];
   let hi=0;
@@ -6656,6 +6678,9 @@ function renderDrawer(){
   $('speakDelayRange').value=delay; $('speakDelayVal').textContent=delay;
   $('timerModeSel').value=state.settings.timerMode;
   $('difficultySel').value=state.settings.difficulty;
+  if($('accentSel')) $('accentSel').value=speechAccent();
+  if($('accentSwitch')) $('accentSwitch').querySelectorAll('button').forEach(b=>
+    b.classList.toggle('active',b.dataset.accent===speechAccent()));
   $('rateRange').value=state.settings.rate;
   $('rateVal').textContent=Number(state.settings.rate).toFixed(1);
   renderHistory(); renderSaveBadge(); renderPlan(); renderLottery();
@@ -6821,6 +6846,22 @@ function bind(){
   });
   $('timerModeSel').addEventListener('change',e=>setSetting('timerMode',e.target.value));
   $('difficultySel').addEventListener('change',e=>setSetting('difficulty',e.target.value));
+  /* 英美口音：顶栏切换与设置下拉双向同步，重绘当前拼读题的音节格 */
+  const setAccent=a=>{
+    state.settings.accent=(a==='us')?'us':'uk';
+    if($('accentSel')) $('accentSel').value=state.settings.accent;
+    if($('accentSwitch')) $('accentSwitch').querySelectorAll('button').forEach(b=>
+      b.classList.toggle('active',b.dataset.accent===state.settings.accent));
+    saveState(true);
+    if(typeof phShow==='function' && phLesson && phLast && !phSolved)
+      phBuildSlots(phLast[0], $('phMode')&&$('phMode').value==='read');
+    if(typeof speak==='function' && phLast) speak(phLast[0]);
+  };
+  if($('accentSel')) $('accentSel').addEventListener('change',e=>setAccent(e.target.value));
+  if($('accentSwitch')) $('accentSwitch').addEventListener('click',e=>{
+    const b=e.target.closest && e.target.closest('button[data-accent]');
+    if(b) setAccent(b.dataset.accent);
+  });
 
   /* 学习计划 */
   $('planGoLottery').addEventListener('click',()=>switchTab('lottery'));
@@ -8698,7 +8739,7 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
       if (!window.speechSynthesis) { toast('当前浏览器不支持朗读'); return; }
       window.speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(text);
-      u.lang = 'en-US';
+      u.lang = (typeof englishLang==='function') ? englishLang() : 'en-US';
       u.rate = 0.75;
       window.speechSynthesis.speak(u);
     } catch (e) { toast('朗读失败，请看屏幕提示'); }

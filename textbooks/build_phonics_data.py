@@ -139,6 +139,15 @@ def main() -> None:
             "note": "hyphenation 服务于断行，不等于教学音节；reference 仅供人工校对，app 使用 curated。",
         },
         "curated": {k: v.split("|") for k, v in sorted(CURATED.items())},
+        # Words whose syllable split differs by accent (source: soundwhy.com /api/align).
+        # The app reads the same map from PH_SYLLABLE_DICT; kept here for provenance.
+        "accent_splits": {
+            "marathon": {
+                "uk": ["ma", "ra", "thon"],
+                "us": ["mar", "a", "thon"],
+                "source": "https://soundwhy.com/ (api/align, alignment-rules-v12)",
+            }
+        },
         "reference": reference,
     }
     OUT.write_text(

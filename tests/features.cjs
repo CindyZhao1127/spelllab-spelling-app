@@ -1615,6 +1615,35 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     return '打出的字母按原样（小写）显示';
   });
 
+  check('英美口音切换：marathon 英式 ma/ra/thon、美式 mar/a/thon，朗读语言随之变化', () => {
+    /* 结构断言放 Node 侧：顶栏 UK/US 切换 + 设置下拉都在 */
+    assert(/id="accentSwitch"/.test(html) && /data-accent="uk"/.test(html) && /data-accent="us"/.test(html),
+      '顶栏缺英美口音切换按钮');
+    assert(/id="accentSel"/.test(html) && /<option value="uk">英式 UK<\/option>/.test(html),
+      '设置面板缺英美口音下拉');
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      var old=state.settings.accent, r={};
+      ['uk','us'].forEach(function(a){
+        state.settings.accent=a;
+        r[a]={lang:englishLang(),
+          chunks:phonicsChunks('marathon').map(function(c){return c[0];}),
+          sounds:phonicsChunks('marathon').map(function(c){return c[1];})};
+      });
+      state.settings.accent=old;
+      /* 归一化把非法值回退 uk */
+      r.bad=normalizeState({settings:{accent:'xx'}}).settings.accent;
+      return r;})())`));
+    assert(JSON.stringify(o.uk.chunks)===JSON.stringify(['ma','ra','thon']),
+      '英式 marathon 应为 ma/ra/thon: '+JSON.stringify(o.uk));
+    assert(JSON.stringify(o.us.chunks)===JSON.stringify(['mar','a','thon']),
+      '美式 marathon 应为 mar/a/thon: '+JSON.stringify(o.us));
+    assert(o.uk.sounds[2].indexOf('θ ə n')>=0 && o.us.sounds[2].indexOf('θ ɑː n')>=0,
+      'marathon 末节英美音素未按 soundwhy 区分: '+JSON.stringify(o));
+    assert(o.uk.lang==='en-GB' && o.us.lang==='en-US', '朗读语言未随口音变化: '+JSON.stringify(o));
+    assert(o.bad==='uk', '非法口音应回退 uk: '+JSON.stringify(o));
+    return 'UK ma·ra·thon/en-GB · US mar·a·thon/en-US · soundwhy 数据';
+  });
+
   check('奖品自动兑换：抽到不扣分、即时已兑换；普通奖待家长兑换', () => {
     /* 自动兑换奖：必中且返还消耗 */
     run(`(function(){ state.plan.points=100;

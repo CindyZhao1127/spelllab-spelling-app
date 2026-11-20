@@ -265,6 +265,21 @@
       "dow"
     ]
   },
+  "accent_splits": {
+    "marathon": {
+      "uk": [
+        "ma",
+        "ra",
+        "thon"
+      ],
+      "us": [
+        "mar",
+        "a",
+        "thon"
+      ],
+      "source": "https://soundwhy.com/ (api/align, alignment-rules-v12)"
+    }
+  },
   "reference": {
     "ability": {
       "en_US": "abil-i-ty",
