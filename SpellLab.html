@@ -2859,8 +2859,10 @@ function phonicsCount(){
   return {lessons:lessons,words:words};
 }
 /* ---------- 教材单词的音节分块与自动归类 ----------
-   phonicsChunks() 按音节切开：每个音节含一个元音核心，辅音按
-   VCV 归后 / VCCV 中间切 / 辅音丛不拆 / 神奇 e 同音节 的规则归位。
+   phonicsChunks() 先查 PH_SYLLABLE_DICT：由 Merriam-Webster / Cambridge 的
+   点分音节人工校订，批量候选来自 LibreOffice/Pyphen 连字符词典，数据文件在
+   textbooks/phonics-syllables.json。未收录的词再按「一个元音核心 = 一个音节」
+   和 VCV / VCCV / C+le / V/V / 词缀边界规则兜底。
    phonicsGroup() 仍按 sh / ee / a_e / 短元音 等规律给课本单词分组。
    音素取最常见读音，仅作学习提示，不追求词典级精确。 */
 const PH_LETTER_SOUND={a:'æ',b:'b',c:'k',d:'d',e:'e',f:'f',g:'g',h:'h',i:'ɪ',j:'dʒ',k:'k',
@@ -2933,9 +2935,38 @@ const PH_SUFFIXES=['ness','ment','less','ful','ous','ive','able','ible','tion','
 function phAffixSound(t){
   return phUnits(t).filter(u=>!u.silent).map(u=>u.s).filter(Boolean).join(' ');
 }
+/* 词典校订表（与 textbooks/phonics-syllables.json 的 curated 字段同步）。
+   Pyphen 的断行结果只作参考：gingerbread→gin-ger-bread 可用，
+   但 restaurant→restau-rant / tiger 不断行，不能直接当教学音节用。 */
+const PH_SYLLABLE_DICT={
+  ability:'a|bil|i|ty', activity:'ac|tiv|i|ty', apple:'ap|ple', autumn:'au|tumn',
+  banana:'ba|na|na', basket:'bas|ket', beautiful:'beau|ti|ful', because:'be|cause',
+  blue:'blue', bread:'bread', breakfast:'break|fast', cabin:'cab|in', children:'chil|dren',
+  computer:'com|pu|ter', dictionary:'dic|tion|ary', diet:'di|et', family:'fam|i|ly',
+  gingerbread:'gin|ger|bread', happy:'hap|py', hopeful:'hope|ful', information:'in|for|ma|tion',
+  instruct:'in|struct', jumping:'jump|ing', lion:'li|on', little:'lit|tle', never:'nev|er',
+  purple:'pur|ple', quickly:'quick|ly', rabbit:'rab|bit', readable:'read|able',
+  reading:'read|ing', ready:'read|y', real:'real', really:'re|al|ly', recent:'re|cent',
+  replay:'re|play', respect:'re|spect', rest:'rest', result:'re|sult',
+  restaurant:'res|tau|rant', sauce:'sauce', seven:'sev|en', table:'ta|ble',
+  teacher:'tea|cher', tiger:'ti|ger', true:'true', window:'win|dow'
+};
+/* 少量发音例外：字母组合与常见音不一致时，避免拆分正确但提示音误导。 */
+const PH_SOUND_FIX={
+  bread:'b r e d', 'breakfast|0':'b r e k', 'gingerbread|2':'b r e d',
+  'ready|0':'r e d', 'ready|1':'ɪ', 'readable|0':'r iː d',
+  'reading|0':'r iː d', 'tiger|0':'t aɪ'
+};
+function phChunkSound(word,part,i){
+  const fixed=PH_SOUND_FIX[word+'|'+i]||PH_SOUND_FIX[part];
+  if(fixed) return fixed;
+  return phUnits(part).filter(u=>!u.silent).map(u=>u.s).filter(Boolean).join(' ');
+}
 function phonicsChunks(word){
   const src=String(word||'').toLowerCase();
   if(!src) return [];
+  const dict=PH_SYLLABLE_DICT[src];
+  if(dict) return dict.split('|').map((part,i)=>[part,phChunkSound(src,part,i)]);
   /* 先剥词缀：前缀、后缀整体成节，词根再按音节规则切 */
   let pre='', suf='', root=src;
   for(const p of PH_PREFIXES){

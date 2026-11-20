@@ -1,0 +1,9610 @@
+{
+  "meta": {
+    "purpose": "SpellLab 拼读音节拆分参考数据 / syllable reference",
+    "sourcePriority": [
+      "Merriam-Webster / Cambridge headword dots: 人工校订依据",
+      "Pyphen + LibreOffice hyphenation dictionaries: 批量候选",
+      "Current phonicsChunks rules: 无词典条目时的兜底"
+    ],
+    "sources": [
+      {
+        "name": "Pyphen (LibreOffice hyphenation dictionaries)",
+        "url": "https://pyphen.org/",
+        "license": "GPL-2.0+ / LGPL-2.1+ / MPL-1.1"
+      },
+      {
+        "name": "Merriam-Webster Dictionary",
+        "url": "https://www.merriam-webster.com/"
+      },
+      {
+        "name": "Cambridge Dictionary",
+        "url": "https://dictionary.cambridge.org/"
+      }
+    ],
+    "note": "hyphenation 服务于断行，不等于教学音节；reference 仅供人工校对，app 使用 curated。"
+  },
+  "curated": {
+    "ability": [
+      "a",
+      "bil",
+      "i",
+      "ty"
+    ],
+    "activity": [
+      "ac",
+      "tiv",
+      "i",
+      "ty"
+    ],
+    "apple": [
+      "ap",
+      "ple"
+    ],
+    "autumn": [
+      "au",
+      "tumn"
+    ],
+    "banana": [
+      "ba",
+      "na",
+      "na"
+    ],
+    "basket": [
+      "bas",
+      "ket"
+    ],
+    "beautiful": [
+      "beau",
+      "ti",
+      "ful"
+    ],
+    "because": [
+      "be",
+      "cause"
+    ],
+    "blue": [
+      "blue"
+    ],
+    "bread": [
+      "bread"
+    ],
+    "breakfast": [
+      "break",
+      "fast"
+    ],
+    "cabin": [
+      "cab",
+      "in"
+    ],
+    "children": [
+      "chil",
+      "dren"
+    ],
+    "computer": [
+      "com",
+      "pu",
+      "ter"
+    ],
+    "dictionary": [
+      "dic",
+      "tion",
+      "ary"
+    ],
+    "diet": [
+      "di",
+      "et"
+    ],
+    "family": [
+      "fam",
+      "i",
+      "ly"
+    ],
+    "gingerbread": [
+      "gin",
+      "ger",
+      "bread"
+    ],
+    "happy": [
+      "hap",
+      "py"
+    ],
+    "hopeful": [
+      "hope",
+      "ful"
+    ],
+    "information": [
+      "in",
+      "for",
+      "ma",
+      "tion"
+    ],
+    "instruct": [
+      "in",
+      "struct"
+    ],
+    "jumping": [
+      "jump",
+      "ing"
+    ],
+    "lion": [
+      "li",
+      "on"
+    ],
+    "little": [
+      "lit",
+      "tle"
+    ],
+    "never": [
+      "nev",
+      "er"
+    ],
+    "purple": [
+      "pur",
+      "ple"
+    ],
+    "quickly": [
+      "quick",
+      "ly"
+    ],
+    "rabbit": [
+      "rab",
+      "bit"
+    ],
+    "readable": [
+      "read",
+      "able"
+    ],
+    "reading": [
+      "read",
+      "ing"
+    ],
+    "ready": [
+      "read",
+      "y"
+    ],
+    "real": [
+      "real"
+    ],
+    "really": [
+      "re",
+      "al",
+      "ly"
+    ],
+    "recent": [
+      "re",
+      "cent"
+    ],
+    "replay": [
+      "re",
+      "play"
+    ],
+    "respect": [
+      "re",
+      "spect"
+    ],
+    "rest": [
+      "rest"
+    ],
+    "restaurant": [
+      "res",
+      "tau",
+      "rant"
+    ],
+    "result": [
+      "re",
+      "sult"
+    ],
+    "sauce": [
+      "sauce"
+    ],
+    "seven": [
+      "sev",
+      "en"
+    ],
+    "table": [
+      "ta",
+      "ble"
+    ],
+    "teacher": [
+      "tea",
+      "cher"
+    ],
+    "tiger": [
+      "ti",
+      "ger"
+    ],
+    "true": [
+      "true"
+    ],
+    "window": [
+      "win",
+      "dow"
+    ]
+  },
+  "reference": {
+    "ability": {
+      "en_US": "abil-i-ty",
+      "en_GB": "abil-ity"
+    },
+    "able": {
+      "en_US": "able",
+      "en_GB": "able"
+    },
+    "about": {
+      "en_US": "about",
+      "en_GB": "about"
+    },
+    "above": {
+      "en_US": "above",
+      "en_GB": "above"
+    },
+    "abroad": {
+      "en_US": "abroad",
+      "en_GB": "abroad"
+    },
+    "absent": {
+      "en_US": "ab-sent",
+      "en_GB": "ab-sent"
+    },
+    "accept": {
+      "en_US": "ac-cept",
+      "en_GB": "ac-cept"
+    },
+    "accident": {
+      "en_US": "ac-ci-dent",
+      "en_GB": "ac-ci-dent"
+    },
+    "according": {
+      "en_US": "ac-cord-ing",
+      "en_GB": "ac-cord-ing"
+    },
+    "accordion": {
+      "en_US": "ac-cor-dion",
+      "en_GB": "ac-cor-di-on"
+    },
+    "ache": {
+      "en_US": "ache",
+      "en_GB": "ache"
+    },
+    "achieve": {
+      "en_US": "achieve",
+      "en_GB": "achieve"
+    },
+    "achievement": {
+      "en_US": "achieve-ment",
+      "en_GB": "achieve-ment"
+    },
+    "across": {
+      "en_US": "across",
+      "en_GB": "across"
+    },
+    "act": {
+      "en_US": "act",
+      "en_GB": "act"
+    },
+    "action": {
+      "en_US": "ac-tion",
+      "en_GB": "ac-tion"
+    },
+    "active": {
+      "en_US": "ac-tive",
+      "en_GB": "act-ive"
+    },
+    "actively": {
+      "en_US": "ac-tive-ly",
+      "en_GB": "act-ively"
+    },
+    "activity": {
+      "en_US": "ac-tiv-i-ty",
+      "en_GB": "activ-ity"
+    },
+    "actor": {
+      "en_US": "ac-tor",
+      "en_GB": "act-or"
+    },
+    "actress": {
+      "en_US": "ac-tress",
+      "en_GB": "act-ress"
+    },
+    "actually": {
+      "en_US": "ac-tu-al-ly",
+      "en_GB": "ac-tu-ally"
+    },
+    "ad": {
+      "en_US": "ad",
+      "en_GB": "ad"
+    },
+    "add": {
+      "en_US": "add",
+      "en_GB": "add"
+    },
+    "addition": {
+      "en_US": "ad-di-tion",
+      "en_GB": "ad-di-tion"
+    },
+    "address": {
+      "en_US": "ad-dress",
+      "en_GB": "ad-dress"
+    },
+    "admirable": {
+      "en_US": "ad-mirable",
+      "en_GB": "ad-mir-able"
+    },
+    "admire": {
+      "en_US": "ad-mire",
+      "en_GB": "ad-mire"
+    },
+    "adult": {
+      "en_US": "adult",
+      "en_GB": "adult"
+    },
+    "advanced": {
+      "en_US": "ad-vanced",
+      "en_GB": "ad-vanced"
+    },
+    "advantage": {
+      "en_US": "ad-van-tage",
+      "en_GB": "ad-vant-age"
+    },
+    "adventure": {
+      "en_US": "ad-ven-ture",
+      "en_GB": "ad-ven-ture"
+    },
+    "advertisement": {
+      "en_US": "ad-ver-tise-ment",
+      "en_GB": "ad-vert-ise-ment"
+    },
+    "advice": {
+      "en_US": "ad-vice",
+      "en_GB": "ad-vice"
+    },
+    "advise": {
+      "en_US": "ad-vise",
+      "en_GB": "ad-vise"
+    },
+    "affect": {
+      "en_US": "af-fect",
+      "en_GB": "af-fect"
+    },
+    "afford": {
+      "en_US": "af-ford",
+      "en_GB": "af-ford"
+    },
+    "afraid": {
+      "en_US": "afraid",
+      "en_GB": "afraid"
+    },
+    "african": {
+      "en_US": "african",
+      "en_GB": "afric-an"
+    },
+    "after": {
+      "en_US": "af-ter",
+      "en_GB": "after"
+    },
+    "afternoon": {
+      "en_US": "af-ter-noon",
+      "en_GB": "af-ter-noon"
+    },
+    "against": {
+      "en_US": "against",
+      "en_GB": "against"
+    },
+    "ago": {
+      "en_US": "ago",
+      "en_GB": "ago"
+    },
+    "agree": {
+      "en_US": "agree",
+      "en_GB": "agree"
+    },
+    "ah": {
+      "en_US": "ah",
+      "en_GB": "ah"
+    },
+    "ahead": {
+      "en_US": "ahead",
+      "en_GB": "ahead"
+    },
+    "aid": {
+      "en_US": "aid",
+      "en_GB": "aid"
+    },
+    "aim": {
+      "en_US": "aim",
+      "en_GB": "aim"
+    },
+    "air": {
+      "en_US": "air",
+      "en_GB": "air"
+    },
+    "airport": {
+      "en_US": "air-port",
+      "en_GB": "air-port"
+    },
+    "airway": {
+      "en_US": "air-way",
+      "en_GB": "air-way"
+    },
+    "alarm": {
+      "en_US": "alarm",
+      "en_GB": "alarm"
+    },
+    "alien": {
+      "en_US": "alien",
+      "en_GB": "ali-en"
+    },
+    "alike": {
+      "en_US": "alike",
+      "en_GB": "alike"
+    },
+    "alive": {
+      "en_US": "alive",
+      "en_GB": "alive"
+    },
+    "all": {
+      "en_US": "all",
+      "en_GB": "all"
+    },
+    "allergic": {
+      "en_US": "al-ler-gic",
+      "en_GB": "al-ler-gic"
+    },
+    "allow": {
+      "en_US": "al-low",
+      "en_GB": "al-low"
+    },
+    "almost": {
+      "en_US": "al-most",
+      "en_GB": "al-most"
+    },
+    "alone": {
+      "en_US": "alone",
+      "en_GB": "alone"
+    },
+    "along": {
+      "en_US": "along",
+      "en_GB": "along"
+    },
+    "aloud": {
+      "en_US": "aloud",
+      "en_GB": "aloud"
+    },
+    "already": {
+      "en_US": "al-ready",
+      "en_GB": "already"
+    },
+    "also": {
+      "en_US": "al-so",
+      "en_GB": "also"
+    },
+    "although": {
+      "en_US": "al-though",
+      "en_GB": "al-though"
+    },
+    "always": {
+      "en_US": "al-ways",
+      "en_GB": "al-ways"
+    },
+    "amaze": {
+      "en_US": "amaze",
+      "en_GB": "amaze"
+    },
+    "amazing": {
+      "en_US": "amaz-ing",
+      "en_GB": "amaz-ing"
+    },
+    "ambition": {
+      "en_US": "am-bi-tion",
+      "en_GB": "am-bi-tion"
+    },
+    "american": {
+      "en_US": "amer-i-can",
+      "en_GB": "amer-ic-an"
+    },
+    "among": {
+      "en_US": "among",
+      "en_GB": "among"
+    },
+    "amount": {
+      "en_US": "amount",
+      "en_GB": "amount"
+    },
+    "ancient": {
+      "en_US": "an-cient",
+      "en_GB": "an-cient"
+    },
+    "and": {
+      "en_US": "and",
+      "en_GB": "and"
+    },
+    "anger": {
+      "en_US": "anger",
+      "en_GB": "an-ger"
+    },
+    "angry": {
+      "en_US": "an-gry",
+      "en_GB": "angry"
+    },
+    "another": {
+      "en_US": "an-oth-er",
+      "en_GB": "an-oth-er"
+    },
+    "answer": {
+      "en_US": "an-swer",
+      "en_GB": "an-swer"
+    },
+    "ant": {
+      "en_US": "ant",
+      "en_GB": "ant"
+    },
+    "any": {
+      "en_US": "any",
+      "en_GB": "any"
+    },
+    "anybody": {
+      "en_US": "any-body",
+      "en_GB": "any-body"
+    },
+    "anyone": {
+      "en_US": "any-one",
+      "en_GB": "any-one"
+    },
+    "anything": {
+      "en_US": "any-thing",
+      "en_GB": "any-thing"
+    },
+    "anywhere": {
+      "en_US": "any-where",
+      "en_GB": "any-where"
+    },
+    "apartment": {
+      "en_US": "apart-ment",
+      "en_GB": "apart-ment"
+    },
+    "apologize": {
+      "en_US": "apol-o-gize",
+      "en_GB": "apo-lo-gize"
+    },
+    "app": {
+      "en_US": "app",
+      "en_GB": "app"
+    },
+    "appear": {
+      "en_US": "ap-pear",
+      "en_GB": "ap-pear"
+    },
+    "appearance": {
+      "en_US": "ap-pear-ance",
+      "en_GB": "ap-pear-ance"
+    },
+    "apple": {
+      "en_US": "ap-ple",
+      "en_GB": "apple"
+    },
+    "april": {
+      "en_US": "april",
+      "en_GB": "april"
+    },
+    "archaeologist": {
+      "en_US": "ar-chae-ol-o-gist",
+      "en_GB": "ar-chae-olo-gist"
+    },
+    "area": {
+      "en_US": "area",
+      "en_GB": "area"
+    },
+    "argue": {
+      "en_US": "ar-gue",
+      "en_GB": "ar-gue"
+    },
+    "arm": {
+      "en_US": "arm",
+      "en_GB": "arm"
+    },
+    "army": {
+      "en_US": "army",
+      "en_GB": "army"
+    },
+    "around": {
+      "en_US": "around",
+      "en_GB": "around"
+    },
+    "arrival": {
+      "en_US": "ar-rival",
+      "en_GB": "ar-rival"
+    },
+    "arrive": {
+      "en_US": "ar-rive",
+      "en_GB": "ar-rive"
+    },
+    "art": {
+      "en_US": "art",
+      "en_GB": "art"
+    },
+    "artefact": {
+      "en_US": "arte-fact",
+      "en_GB": "arte-fact"
+    },
+    "article": {
+      "en_US": "ar-ti-cle",
+      "en_GB": "art-icle"
+    },
+    "artist": {
+      "en_US": "artist",
+      "en_GB": "artist"
+    },
+    "artistic": {
+      "en_US": "artis-tic",
+      "en_GB": "artist-ic"
+    },
+    "artwork": {
+      "en_US": "art-work",
+      "en_GB": "art-work"
+    },
+    "as": {
+      "en_US": "as",
+      "en_GB": "as"
+    },
+    "asian": {
+      "en_US": "asian",
+      "en_GB": "asi-an"
+    },
+    "ask": {
+      "en_US": "ask",
+      "en_GB": "ask"
+    },
+    "asleep": {
+      "en_US": "asleep",
+      "en_GB": "asleep"
+    },
+    "aspect": {
+      "en_US": "as-pect",
+      "en_GB": "as-pect"
+    },
+    "astronaut": {
+      "en_US": "as-tro-naut",
+      "en_GB": "as-tro-naut"
+    },
+    "at": {
+      "en_US": "at",
+      "en_GB": "at"
+    },
+    "ate": {
+      "en_US": "ate",
+      "en_GB": "ate"
+    },
+    "athlete": {
+      "en_US": "ath-lete",
+      "en_GB": "ath-lete"
+    },
+    "attack": {
+      "en_US": "at-tack",
+      "en_GB": "at-tack"
+    },
+    "attend": {
+      "en_US": "at-tend",
+      "en_GB": "at-tend"
+    },
+    "attention": {
+      "en_US": "at-ten-tion",
+      "en_GB": "at-ten-tion"
+    },
+    "attract": {
+      "en_US": "at-tract",
+      "en_GB": "at-tract"
+    },
+    "attraction": {
+      "en_US": "at-trac-tion",
+      "en_GB": "at-trac-tion"
+    },
+    "audience": {
+      "en_US": "au-di-ence",
+      "en_GB": "audi-ence"
+    },
+    "audio": {
+      "en_US": "au-dio",
+      "en_GB": "au-dio"
+    },
+    "august": {
+      "en_US": "au-gust",
+      "en_GB": "au-gust"
+    },
+    "aunt": {
+      "en_US": "aunt",
+      "en_GB": "aunt"
+    },
+    "australia": {
+      "en_US": "aus-tralia",
+      "en_GB": "aus-tralia"
+    },
+    "autumn": {
+      "en_US": "au-tumn",
+      "en_GB": "au-tumn"
+    },
+    "average": {
+      "en_US": "av-er-age",
+      "en_GB": "av-er-age"
+    },
+    "avoid": {
+      "en_US": "avoid",
+      "en_GB": "avoid"
+    },
+    "awake": {
+      "en_US": "awake",
+      "en_GB": "awake"
+    },
+    "award": {
+      "en_US": "award",
+      "en_GB": "award"
+    },
+    "away": {
+      "en_US": "away",
+      "en_GB": "away"
+    },
+    "awful": {
+      "en_US": "aw-ful",
+      "en_GB": "aw-ful"
+    },
+    "baby": {
+      "en_US": "ba-by",
+      "en_GB": "baby"
+    },
+    "back": {
+      "en_US": "back",
+      "en_GB": "back"
+    },
+    "backache": {
+      "en_US": "back-ache",
+      "en_GB": "back-ache"
+    },
+    "background": {
+      "en_US": "back-ground",
+      "en_GB": "back-ground"
+    },
+    "bad": {
+      "en_US": "bad",
+      "en_GB": "bad"
+    },
+    "badly": {
+      "en_US": "bad-ly",
+      "en_GB": "badly"
+    },
+    "badminton": {
+      "en_US": "bad-minton",
+      "en_GB": "bad-min-ton"
+    },
+    "bag": {
+      "en_US": "bag",
+      "en_GB": "bag"
+    },
+    "bake": {
+      "en_US": "bake",
+      "en_GB": "bake"
+    },
+    "balance": {
+      "en_US": "bal-ance",
+      "en_GB": "bal-ance"
+    },
+    "balanced": {
+      "en_US": "bal-anced",
+      "en_GB": "bal-anced"
+    },
+    "balcony": {
+      "en_US": "bal-cony",
+      "en_GB": "bal-cony"
+    },
+    "ball": {
+      "en_US": "ball",
+      "en_GB": "ball"
+    },
+    "balloon": {
+      "en_US": "bal-loon",
+      "en_GB": "bal-loon"
+    },
+    "bamboo": {
+      "en_US": "bam-boo",
+      "en_GB": "bam-boo"
+    },
+    "ban": {
+      "en_US": "ban",
+      "en_GB": "ban"
+    },
+    "banana": {
+      "en_US": "ba-nana",
+      "en_GB": "ba-nana"
+    },
+    "band": {
+      "en_US": "band",
+      "en_GB": "band"
+    },
+    "bank": {
+      "en_US": "bank",
+      "en_GB": "bank"
+    },
+    "bark": {
+      "en_US": "bark",
+      "en_GB": "bark"
+    },
+    "base": {
+      "en_US": "base",
+      "en_GB": "base"
+    },
+    "baseball": {
+      "en_US": "base-ball",
+      "en_GB": "base-ball"
+    },
+    "basic": {
+      "en_US": "ba-sic",
+      "en_GB": "ba-sic"
+    },
+    "basket": {
+      "en_US": "bas-ket",
+      "en_GB": "bas-ket"
+    },
+    "basketball": {
+      "en_US": "bas-ket-ball",
+      "en_GB": "bas-ket-ball"
+    },
+    "bat": {
+      "en_US": "bat",
+      "en_GB": "bat"
+    },
+    "bath": {
+      "en_US": "bath",
+      "en_GB": "bath"
+    },
+    "bathroom": {
+      "en_US": "bath-room",
+      "en_GB": "bath-room"
+    },
+    "baton": {
+      "en_US": "ba-ton",
+      "en_GB": "bat-on"
+    },
+    "be": {
+      "en_US": "be",
+      "en_GB": "be"
+    },
+    "beach": {
+      "en_US": "beach",
+      "en_GB": "beach"
+    },
+    "bean": {
+      "en_US": "bean",
+      "en_GB": "bean"
+    },
+    "bear": {
+      "en_US": "bear",
+      "en_GB": "bear"
+    },
+    "beat": {
+      "en_US": "beat",
+      "en_GB": "beat"
+    },
+    "beautiful": {
+      "en_US": "beau-ti-ful",
+      "en_GB": "beau-ti-ful"
+    },
+    "because": {
+      "en_US": "be-cause",
+      "en_GB": "be-cause"
+    },
+    "become": {
+      "en_US": "be-come",
+      "en_GB": "be-come"
+    },
+    "bedroom": {
+      "en_US": "bed-room",
+      "en_GB": "bed-room"
+    },
+    "bee": {
+      "en_US": "bee",
+      "en_GB": "bee"
+    },
+    "beef": {
+      "en_US": "beef",
+      "en_GB": "beef"
+    },
+    "before": {
+      "en_US": "be-fore",
+      "en_GB": "be-fore"
+    },
+    "begin": {
+      "en_US": "be-gin",
+      "en_GB": "be-gin"
+    },
+    "behave": {
+      "en_US": "be-have",
+      "en_GB": "be-have"
+    },
+    "believe": {
+      "en_US": "be-lieve",
+      "en_GB": "be-lieve"
+    },
+    "bell": {
+      "en_US": "bell",
+      "en_GB": "bell"
+    },
+    "belong": {
+      "en_US": "be-long",
+      "en_GB": "be-long"
+    },
+    "below": {
+      "en_US": "be-low",
+      "en_GB": "be-low"
+    },
+    "belt": {
+      "en_US": "belt",
+      "en_GB": "belt"
+    },
+    "benefit": {
+      "en_US": "ben-e-fit",
+      "en_GB": "be-ne-fit"
+    },
+    "besides": {
+      "en_US": "be-sides",
+      "en_GB": "be-sides"
+    },
+    "best": {
+      "en_US": "best",
+      "en_GB": "best"
+    },
+    "better": {
+      "en_US": "bet-ter",
+      "en_GB": "bet-ter"
+    },
+    "beyond": {
+      "en_US": "be-yond",
+      "en_GB": "bey-ond"
+    },
+    "big": {
+      "en_US": "big",
+      "en_GB": "big"
+    },
+    "bigger": {
+      "en_US": "big-ger",
+      "en_GB": "big-ger"
+    },
+    "billion": {
+      "en_US": "bil-lion",
+      "en_GB": "bil-lion"
+    },
+    "bin": {
+      "en_US": "bin",
+      "en_GB": "bin"
+    },
+    "biologist": {
+      "en_US": "bi-ol-o-gist",
+      "en_GB": "bio-lo-gist"
+    },
+    "biology": {
+      "en_US": "bi-ol-o-gy",
+      "en_GB": "bio-logy"
+    },
+    "bird": {
+      "en_US": "bird",
+      "en_GB": "bird"
+    },
+    "birth": {
+      "en_US": "birth",
+      "en_GB": "birth"
+    },
+    "biscuit": {
+      "en_US": "bis-cuit",
+      "en_GB": "bis-cuit"
+    },
+    "bit": {
+      "en_US": "bit",
+      "en_GB": "bit"
+    },
+    "bite": {
+      "en_US": "bite",
+      "en_GB": "bite"
+    },
+    "black": {
+      "en_US": "black",
+      "en_GB": "black"
+    },
+    "blackboard": {
+      "en_US": "black-board",
+      "en_GB": "black-board"
+    },
+    "bleed": {
+      "en_US": "bleed",
+      "en_GB": "bleed"
+    },
+    "blind": {
+      "en_US": "blind",
+      "en_GB": "blind"
+    },
+    "block": {
+      "en_US": "block",
+      "en_GB": "block"
+    },
+    "blouse": {
+      "en_US": "blouse",
+      "en_GB": "blouse"
+    },
+    "blow": {
+      "en_US": "blow",
+      "en_GB": "blow"
+    },
+    "blue": {
+      "en_US": "blue",
+      "en_GB": "blue"
+    },
+    "board": {
+      "en_US": "board",
+      "en_GB": "board"
+    },
+    "boat": {
+      "en_US": "boat",
+      "en_GB": "boat"
+    },
+    "body": {
+      "en_US": "body",
+      "en_GB": "body"
+    },
+    "boil": {
+      "en_US": "boil",
+      "en_GB": "boil"
+    },
+    "bone": {
+      "en_US": "bone",
+      "en_GB": "bone"
+    },
+    "book": {
+      "en_US": "book",
+      "en_GB": "book"
+    },
+    "bookcase": {
+      "en_US": "book-case",
+      "en_GB": "book-case"
+    },
+    "boost": {
+      "en_US": "boost",
+      "en_GB": "boost"
+    },
+    "bored": {
+      "en_US": "bored",
+      "en_GB": "bored"
+    },
+    "boring": {
+      "en_US": "bor-ing",
+      "en_GB": "bor-ing"
+    },
+    "born": {
+      "en_US": "born",
+      "en_GB": "born"
+    },
+    "borrow": {
+      "en_US": "bor-row",
+      "en_GB": "bor-row"
+    },
+    "both": {
+      "en_US": "both",
+      "en_GB": "both"
+    },
+    "bottle": {
+      "en_US": "bot-tle",
+      "en_GB": "bottle"
+    },
+    "bottom": {
+      "en_US": "bot-tom",
+      "en_GB": "bot-tom"
+    },
+    "bought": {
+      "en_US": "bought",
+      "en_GB": "bought"
+    },
+    "bouldering": {
+      "en_US": "boul-der-ing",
+      "en_GB": "boul-der-ing"
+    },
+    "bow": {
+      "en_US": "bow",
+      "en_GB": "bow"
+    },
+    "bowl": {
+      "en_US": "bowl",
+      "en_GB": "bowl"
+    },
+    "box": {
+      "en_US": "box",
+      "en_GB": "box"
+    },
+    "boxing": {
+      "en_US": "box-ing",
+      "en_GB": "box-ing"
+    },
+    "boy": {
+      "en_US": "boy",
+      "en_GB": "boy"
+    },
+    "branch": {
+      "en_US": "branch",
+      "en_GB": "branch"
+    },
+    "brave": {
+      "en_US": "brave",
+      "en_GB": "brave"
+    },
+    "bread": {
+      "en_US": "bread",
+      "en_GB": "bread"
+    },
+    "break": {
+      "en_US": "break",
+      "en_GB": "break"
+    },
+    "breakfast": {
+      "en_US": "break-fast",
+      "en_GB": "break-fast"
+    },
+    "breath": {
+      "en_US": "breath",
+      "en_GB": "breath"
+    },
+    "breeze": {
+      "en_US": "breeze",
+      "en_GB": "breeze"
+    },
+    "bridge": {
+      "en_US": "bridge",
+      "en_GB": "bridge"
+    },
+    "bright": {
+      "en_US": "bright",
+      "en_GB": "bright"
+    },
+    "brightly": {
+      "en_US": "bright-ly",
+      "en_GB": "brightly"
+    },
+    "brightness": {
+      "en_US": "bright-ness",
+      "en_GB": "bright-ness"
+    },
+    "bring": {
+      "en_US": "bring",
+      "en_GB": "bring"
+    },
+    "british": {
+      "en_US": "british",
+      "en_GB": "brit-ish"
+    },
+    "broken": {
+      "en_US": "bro-ken",
+      "en_GB": "broken"
+    },
+    "bronze": {
+      "en_US": "bronze",
+      "en_GB": "bronze"
+    },
+    "brother": {
+      "en_US": "broth-er",
+      "en_GB": "broth-er"
+    },
+    "brown": {
+      "en_US": "brown",
+      "en_GB": "brown"
+    },
+    "bruised": {
+      "en_US": "bruised",
+      "en_GB": "bruised"
+    },
+    "brush": {
+      "en_US": "brush",
+      "en_GB": "brush"
+    },
+    "brushstroke": {
+      "en_US": "brush-stroke",
+      "en_GB": "brush-stroke"
+    },
+    "budget": {
+      "en_US": "bud-get",
+      "en_GB": "budget"
+    },
+    "build": {
+      "en_US": "build",
+      "en_GB": "build"
+    },
+    "building": {
+      "en_US": "build-ing",
+      "en_GB": "build-ing"
+    },
+    "bully": {
+      "en_US": "bul-ly",
+      "en_GB": "bully"
+    },
+    "bump": {
+      "en_US": "bump",
+      "en_GB": "bump"
+    },
+    "bunny": {
+      "en_US": "bun-ny",
+      "en_GB": "bunny"
+    },
+    "burn": {
+      "en_US": "burn",
+      "en_GB": "burn"
+    },
+    "burst": {
+      "en_US": "burst",
+      "en_GB": "burst"
+    },
+    "bury": {
+      "en_US": "bury",
+      "en_GB": "bury"
+    },
+    "bush": {
+      "en_US": "bush",
+      "en_GB": "bush"
+    },
+    "business": {
+      "en_US": "busi-ness",
+      "en_GB": "busi-ness"
+    },
+    "businessman": {
+      "en_US": "busi-ness-man",
+      "en_GB": "busi-ness-man"
+    },
+    "busy": {
+      "en_US": "busy",
+      "en_GB": "busy"
+    },
+    "butter": {
+      "en_US": "but-ter",
+      "en_GB": "but-ter"
+    },
+    "butterfly": {
+      "en_US": "but-ter-fly",
+      "en_GB": "but-ter-fly"
+    },
+    "button": {
+      "en_US": "but-ton",
+      "en_GB": "but-ton"
+    },
+    "buy": {
+      "en_US": "buy",
+      "en_GB": "buy"
+    },
+    "by": {
+      "en_US": "by",
+      "en_GB": "by"
+    },
+    "bye": {
+      "en_US": "bye",
+      "en_GB": "bye"
+    },
+    "cabbage": {
+      "en_US": "cab-bage",
+      "en_GB": "cab-bage"
+    },
+    "cage": {
+      "en_US": "cage",
+      "en_GB": "cage"
+    },
+    "cake": {
+      "en_US": "cake",
+      "en_GB": "cake"
+    },
+    "calendar": {
+      "en_US": "cal-en-dar",
+      "en_GB": "cal-en-dar"
+    },
+    "call": {
+      "en_US": "call",
+      "en_GB": "call"
+    },
+    "calligraphy": {
+      "en_US": "cal-lig-ra-phy",
+      "en_GB": "cal-li-graphy"
+    },
+    "calm": {
+      "en_US": "calm",
+      "en_GB": "calm"
+    },
+    "camera": {
+      "en_US": "cam-era",
+      "en_GB": "cam-era"
+    },
+    "camp": {
+      "en_US": "camp",
+      "en_GB": "camp"
+    },
+    "can": {
+      "en_US": "can",
+      "en_GB": "can"
+    },
+    "canada": {
+      "en_US": "cana-da",
+      "en_GB": "canada"
+    },
+    "canadian": {
+      "en_US": "cana-di-an",
+      "en_GB": "ca-na-dian"
+    },
+    "cancel": {
+      "en_US": "can-cel",
+      "en_GB": "can-cel"
+    },
+    "cancer": {
+      "en_US": "can-cer",
+      "en_GB": "can-cer"
+    },
+    "candy": {
+      "en_US": "can-dy",
+      "en_GB": "candy"
+    },
+    "cap": {
+      "en_US": "cap",
+      "en_GB": "cap"
+    },
+    "capital": {
+      "en_US": "cap-i-tal",
+      "en_GB": "cap-it-al"
+    },
+    "car": {
+      "en_US": "car",
+      "en_GB": "car"
+    },
+    "card": {
+      "en_US": "card",
+      "en_GB": "card"
+    },
+    "care": {
+      "en_US": "care",
+      "en_GB": "care"
+    },
+    "career": {
+      "en_US": "ca-reer",
+      "en_GB": "ca-reer"
+    },
+    "carefully": {
+      "en_US": "care-ful-ly",
+      "en_GB": "care-fully"
+    },
+    "careless": {
+      "en_US": "care-less",
+      "en_GB": "care-less"
+    },
+    "carnival": {
+      "en_US": "car-ni-val",
+      "en_GB": "car-ni-val"
+    },
+    "carrot": {
+      "en_US": "car-rot",
+      "en_GB": "car-rot"
+    },
+    "carry": {
+      "en_US": "car-ry",
+      "en_GB": "carry"
+    },
+    "cartoon": {
+      "en_US": "car-toon",
+      "en_GB": "car-toon"
+    },
+    "case": {
+      "en_US": "case",
+      "en_GB": "case"
+    },
+    "cash": {
+      "en_US": "cash",
+      "en_GB": "cash"
+    },
+    "cat": {
+      "en_US": "cat",
+      "en_GB": "cat"
+    },
+    "cause": {
+      "en_US": "cause",
+      "en_GB": "cause"
+    },
+    "cave": {
+      "en_US": "cave",
+      "en_GB": "cave"
+    },
+    "celebrate": {
+      "en_US": "cel-e-brate",
+      "en_GB": "cel-eb-rate"
+    },
+    "celebration": {
+      "en_US": "cel-e-bra-tion",
+      "en_GB": "cel-eb-ra-tion"
+    },
+    "central": {
+      "en_US": "cen-tral",
+      "en_GB": "cent-ral"
+    },
+    "centre": {
+      "en_US": "cen-tre",
+      "en_GB": "centre"
+    },
+    "century": {
+      "en_US": "cen-tu-ry",
+      "en_GB": "cen-tury"
+    },
+    "ceremony": {
+      "en_US": "cer-e-mo-ny",
+      "en_GB": "ce-re-mony"
+    },
+    "certain": {
+      "en_US": "cer-tain",
+      "en_GB": "cer-tain"
+    },
+    "certainly": {
+      "en_US": "cer-tain-ly",
+      "en_GB": "cer-tainly"
+    },
+    "chain": {
+      "en_US": "chain",
+      "en_GB": "chain"
+    },
+    "chair": {
+      "en_US": "chair",
+      "en_GB": "chair"
+    },
+    "challenge": {
+      "en_US": "chal-lenge",
+      "en_GB": "chal-lenge"
+    },
+    "challenging": {
+      "en_US": "chal-leng-ing",
+      "en_GB": "chal-len-ging"
+    },
+    "champion": {
+      "en_US": "cham-pi-on",
+      "en_GB": "cham-pi-on"
+    },
+    "chance": {
+      "en_US": "chance",
+      "en_GB": "chance"
+    },
+    "change": {
+      "en_US": "change",
+      "en_GB": "change"
+    },
+    "changeable": {
+      "en_US": "change-able",
+      "en_GB": "change-able"
+    },
+    "character": {
+      "en_US": "char-ac-ter",
+      "en_GB": "char-ac-ter"
+    },
+    "characteristic": {
+      "en_US": "char-ac-ter-is-tic",
+      "en_GB": "char-ac-ter-ist-ic"
+    },
+    "charity": {
+      "en_US": "char-i-ty",
+      "en_GB": "char-ity"
+    },
+    "chat": {
+      "en_US": "chat",
+      "en_GB": "chat"
+    },
+    "cheap": {
+      "en_US": "cheap",
+      "en_GB": "cheap"
+    },
+    "check": {
+      "en_US": "check",
+      "en_GB": "check"
+    },
+    "cheek": {
+      "en_US": "cheek",
+      "en_GB": "cheek"
+    },
+    "cheer": {
+      "en_US": "cheer",
+      "en_GB": "cheer"
+    },
+    "cheers": {
+      "en_US": "cheers",
+      "en_GB": "cheers"
+    },
+    "cheese": {
+      "en_US": "cheese",
+      "en_GB": "cheese"
+    },
+    "cheetah": {
+      "en_US": "chee-tah",
+      "en_GB": "chee-tah"
+    },
+    "chemical": {
+      "en_US": "chem-i-cal",
+      "en_GB": "chem-ic-al"
+    },
+    "chemist": {
+      "en_US": "chemist",
+      "en_GB": "chem-ist"
+    },
+    "chemistry": {
+      "en_US": "chem-istry",
+      "en_GB": "chem-istry"
+    },
+    "chess": {
+      "en_US": "chess",
+      "en_GB": "chess"
+    },
+    "chicken": {
+      "en_US": "chick-en",
+      "en_GB": "chick-en"
+    },
+    "chief": {
+      "en_US": "chief",
+      "en_GB": "chief"
+    },
+    "child": {
+      "en_US": "child",
+      "en_GB": "child"
+    },
+    "childhood": {
+      "en_US": "child-hood",
+      "en_GB": "child-hood"
+    },
+    "china": {
+      "en_US": "chi-na",
+      "en_GB": "china"
+    },
+    "chinese": {
+      "en_US": "chi-nese",
+      "en_GB": "chinese"
+    },
+    "chip": {
+      "en_US": "chip",
+      "en_GB": "chip"
+    },
+    "chocolate": {
+      "en_US": "choco-late",
+      "en_GB": "chocol-ate"
+    },
+    "choice": {
+      "en_US": "choice",
+      "en_GB": "choice"
+    },
+    "choose": {
+      "en_US": "choose",
+      "en_GB": "choose"
+    },
+    "chopstick": {
+      "en_US": "chop-stick",
+      "en_GB": "chop-stick"
+    },
+    "chore": {
+      "en_US": "chore",
+      "en_GB": "chore"
+    },
+    "christmas": {
+      "en_US": "christ-mas",
+      "en_GB": "christ-mas"
+    },
+    "cinnamon": {
+      "en_US": "cin-na-mon",
+      "en_GB": "cin-na-mon"
+    },
+    "citizen": {
+      "en_US": "cit-i-zen",
+      "en_GB": "cit-izen"
+    },
+    "civilization": {
+      "en_US": "civ-i-liza-tion",
+      "en_GB": "civil-iz-a-tion"
+    },
+    "class": {
+      "en_US": "class",
+      "en_GB": "class"
+    },
+    "classic": {
+      "en_US": "clas-sic",
+      "en_GB": "clas-sic"
+    },
+    "classmate": {
+      "en_US": "class-mate",
+      "en_GB": "class-mate"
+    },
+    "classroom": {
+      "en_US": "class-room",
+      "en_GB": "classroom"
+    },
+    "clause": {
+      "en_US": "clause",
+      "en_GB": "clause"
+    },
+    "clay": {
+      "en_US": "clay",
+      "en_GB": "clay"
+    },
+    "clean": {
+      "en_US": "clean",
+      "en_GB": "clean"
+    },
+    "cleaned": {
+      "en_US": "cleaned",
+      "en_GB": "cleaned"
+    },
+    "cleaner": {
+      "en_US": "clean-er",
+      "en_GB": "clean-er"
+    },
+    "cleanup": {
+      "en_US": "cleanup",
+      "en_GB": "cleanup"
+    },
+    "clear": {
+      "en_US": "clear",
+      "en_GB": "clear"
+    },
+    "clearly": {
+      "en_US": "clear-ly",
+      "en_GB": "clearly"
+    },
+    "clever": {
+      "en_US": "clever",
+      "en_GB": "clev-er"
+    },
+    "click": {
+      "en_US": "click",
+      "en_GB": "click"
+    },
+    "cliff": {
+      "en_US": "cliff",
+      "en_GB": "cliff"
+    },
+    "climate": {
+      "en_US": "cli-mate",
+      "en_GB": "cli-mate"
+    },
+    "climax": {
+      "en_US": "cli-max",
+      "en_GB": "cli-max"
+    },
+    "climb": {
+      "en_US": "climb",
+      "en_GB": "climb"
+    },
+    "climber": {
+      "en_US": "climber",
+      "en_GB": "climber"
+    },
+    "climbing": {
+      "en_US": "climb-ing",
+      "en_GB": "climb-ing"
+    },
+    "clock": {
+      "en_US": "clock",
+      "en_GB": "clock"
+    },
+    "close": {
+      "en_US": "close",
+      "en_GB": "close"
+    },
+    "closed": {
+      "en_US": "closed",
+      "en_GB": "closed"
+    },
+    "closing": {
+      "en_US": "clos-ing",
+      "en_GB": "clos-ing"
+    },
+    "cloth": {
+      "en_US": "cloth",
+      "en_GB": "cloth"
+    },
+    "clothes": {
+      "en_US": "clothes",
+      "en_GB": "clothes"
+    },
+    "cloud": {
+      "en_US": "cloud",
+      "en_GB": "cloud"
+    },
+    "cloudy": {
+      "en_US": "cloudy",
+      "en_GB": "cloudy"
+    },
+    "club": {
+      "en_US": "club",
+      "en_GB": "club"
+    },
+    "coach": {
+      "en_US": "coach",
+      "en_GB": "coach"
+    },
+    "coast": {
+      "en_US": "coast",
+      "en_GB": "coast"
+    },
+    "coat": {
+      "en_US": "coat",
+      "en_GB": "coat"
+    },
+    "coconut": {
+      "en_US": "co-conut",
+      "en_GB": "coconut"
+    },
+    "coffee": {
+      "en_US": "cof-fee",
+      "en_GB": "cof-fee"
+    },
+    "coin": {
+      "en_US": "coin",
+      "en_GB": "coin"
+    },
+    "cold": {
+      "en_US": "cold",
+      "en_GB": "cold"
+    },
+    "collect": {
+      "en_US": "col-lect",
+      "en_GB": "col-lect"
+    },
+    "collection": {
+      "en_US": "col-lec-tion",
+      "en_GB": "col-lec-tion"
+    },
+    "college": {
+      "en_US": "col-lege",
+      "en_GB": "col-lege"
+    },
+    "colour": {
+      "en_US": "colour",
+      "en_GB": "col-our"
+    },
+    "colourful": {
+      "en_US": "colour-ful",
+      "en_GB": "col-our-ful"
+    },
+    "combine": {
+      "en_US": "com-bine",
+      "en_GB": "com-bine"
+    },
+    "comfortable": {
+      "en_US": "com-fort-able",
+      "en_GB": "com-fort-able"
+    },
+    "coming": {
+      "en_US": "com-ing",
+      "en_GB": "com-ing"
+    },
+    "comment": {
+      "en_US": "com-ment",
+      "en_GB": "com-ment"
+    },
+    "common": {
+      "en_US": "com-mon",
+      "en_GB": "com-mon"
+    },
+    "communicate": {
+      "en_US": "com-mu-ni-cate",
+      "en_GB": "com-mu-nic-ate"
+    },
+    "communication": {
+      "en_US": "com-mu-ni-ca-tion",
+      "en_GB": "com-mu-nic-a-tion"
+    },
+    "community": {
+      "en_US": "com-mu-ni-ty",
+      "en_GB": "com-munity"
+    },
+    "company": {
+      "en_US": "com-pa-ny",
+      "en_GB": "com-pany"
+    },
+    "compare": {
+      "en_US": "com-pare",
+      "en_GB": "com-pare"
+    },
+    "compete": {
+      "en_US": "com-pete",
+      "en_GB": "com-pete"
+    },
+    "competition": {
+      "en_US": "com-pe-ti-tion",
+      "en_GB": "com-pet-i-tion"
+    },
+    "complete": {
+      "en_US": "com-plete",
+      "en_GB": "com-plete"
+    },
+    "completely": {
+      "en_US": "com-plete-ly",
+      "en_GB": "com-pletely"
+    },
+    "composer": {
+      "en_US": "com-pos-er",
+      "en_GB": "com-poser"
+    },
+    "computer": {
+      "en_US": "com-put-er",
+      "en_GB": "com-puter"
+    },
+    "concert": {
+      "en_US": "con-cert",
+      "en_GB": "con-cert"
+    },
+    "conclusion": {
+      "en_US": "con-clu-sion",
+      "en_GB": "con-clu-sion"
+    },
+    "condition": {
+      "en_US": "con-di-tion",
+      "en_GB": "con-di-tion"
+    },
+    "confidence": {
+      "en_US": "con-fi-dence",
+      "en_GB": "con-fid-ence"
+    },
+    "confident": {
+      "en_US": "con-fi-dent",
+      "en_GB": "con-fid-ent"
+    },
+    "confused": {
+      "en_US": "con-fused",
+      "en_GB": "con-fused"
+    },
+    "confusing": {
+      "en_US": "con-fus-ing",
+      "en_GB": "con-fus-ing"
+    },
+    "congratulate": {
+      "en_US": "con-grat-u-late",
+      "en_GB": "con-grat-u-late"
+    },
+    "congratulation": {
+      "en_US": "con-grat-u-la-tion",
+      "en_GB": "con-grat-u-la-tion"
+    },
+    "connect": {
+      "en_US": "con-nect",
+      "en_GB": "con-nect"
+    },
+    "connected": {
+      "en_US": "con-nect-ed",
+      "en_GB": "con-nec-ted"
+    },
+    "connection": {
+      "en_US": "con-nec-tion",
+      "en_GB": "con-nec-tion"
+    },
+    "consider": {
+      "en_US": "con-sid-er",
+      "en_GB": "con-sider"
+    },
+    "contest": {
+      "en_US": "con-test",
+      "en_GB": "con-test"
+    },
+    "continue": {
+      "en_US": "con-tin-ue",
+      "en_GB": "con-tin-ue"
+    },
+    "contribution": {
+      "en_US": "con-tri-bu-tion",
+      "en_GB": "con-tri-bu-tion"
+    },
+    "control": {
+      "en_US": "con-trol",
+      "en_GB": "con-trol"
+    },
+    "convenient": {
+      "en_US": "con-ve-nient",
+      "en_GB": "con-veni-ent"
+    },
+    "conversation": {
+      "en_US": "con-ver-sa-tion",
+      "en_GB": "con-ver-sa-tion"
+    },
+    "cook": {
+      "en_US": "cook",
+      "en_GB": "cook"
+    },
+    "cookie": {
+      "en_US": "cook-ie",
+      "en_GB": "cook-ie"
+    },
+    "cool": {
+      "en_US": "cool",
+      "en_GB": "cool"
+    },
+    "cooperate": {
+      "en_US": "co-op-er-ate",
+      "en_GB": "co-oper-ate"
+    },
+    "copy": {
+      "en_US": "copy",
+      "en_GB": "copy"
+    },
+    "coral": {
+      "en_US": "coral",
+      "en_GB": "cor-al"
+    },
+    "corn": {
+      "en_US": "corn",
+      "en_GB": "corn"
+    },
+    "corner": {
+      "en_US": "cor-ner",
+      "en_GB": "corner"
+    },
+    "correct": {
+      "en_US": "cor-rect",
+      "en_GB": "cor-rect"
+    },
+    "correctly": {
+      "en_US": "cor-rect-ly",
+      "en_GB": "cor-rectly"
+    },
+    "cost": {
+      "en_US": "cost",
+      "en_GB": "cost"
+    },
+    "cough": {
+      "en_US": "cough",
+      "en_GB": "cough"
+    },
+    "could": {
+      "en_US": "could",
+      "en_GB": "could"
+    },
+    "count": {
+      "en_US": "count",
+      "en_GB": "count"
+    },
+    "country": {
+      "en_US": "coun-try",
+      "en_GB": "coun-try"
+    },
+    "countryside": {
+      "en_US": "coun-try-side",
+      "en_GB": "coun-tryside"
+    },
+    "couple": {
+      "en_US": "cou-ple",
+      "en_GB": "couple"
+    },
+    "couplet": {
+      "en_US": "cou-plet",
+      "en_GB": "couplet"
+    },
+    "courage": {
+      "en_US": "courage",
+      "en_GB": "cour-age"
+    },
+    "cousin": {
+      "en_US": "cousin",
+      "en_GB": "cous-in"
+    },
+    "cover": {
+      "en_US": "cov-er",
+      "en_GB": "cov-er"
+    },
+    "cow": {
+      "en_US": "cow",
+      "en_GB": "cow"
+    },
+    "craft": {
+      "en_US": "craft",
+      "en_GB": "craft"
+    },
+    "crazy": {
+      "en_US": "crazy",
+      "en_GB": "crazy"
+    },
+    "cream": {
+      "en_US": "cream",
+      "en_GB": "cream"
+    },
+    "create": {
+      "en_US": "cre-ate",
+      "en_GB": "cre-ate"
+    },
+    "creation": {
+      "en_US": "cre-ation",
+      "en_GB": "cre-ation"
+    },
+    "creative": {
+      "en_US": "cre-ative",
+      "en_GB": "cre-at-ive"
+    },
+    "creativity": {
+      "en_US": "cre-ativ-i-ty",
+      "en_GB": "cre-ativ-ity"
+    },
+    "cross": {
+      "en_US": "cross",
+      "en_GB": "cross"
+    },
+    "crowd": {
+      "en_US": "crowd",
+      "en_GB": "crowd"
+    },
+    "crowded": {
+      "en_US": "crowd-ed",
+      "en_GB": "crowded"
+    },
+    "crust": {
+      "en_US": "crust",
+      "en_GB": "crust"
+    },
+    "cry": {
+      "en_US": "cry",
+      "en_GB": "cry"
+    },
+    "cubic": {
+      "en_US": "cu-bic",
+      "en_GB": "cu-bic"
+    },
+    "cucumber": {
+      "en_US": "cu-cum-ber",
+      "en_GB": "cu-cum-ber"
+    },
+    "cultural": {
+      "en_US": "cul-tur-al",
+      "en_GB": "cul-tur-al"
+    },
+    "culture": {
+      "en_US": "cul-ture",
+      "en_GB": "cul-ture"
+    },
+    "cure": {
+      "en_US": "cure",
+      "en_GB": "cure"
+    },
+    "curiosity": {
+      "en_US": "cu-rios-i-ty",
+      "en_GB": "curi-os-ity"
+    },
+    "curious": {
+      "en_US": "cu-ri-ous",
+      "en_GB": "curi-ous"
+    },
+    "curry": {
+      "en_US": "cur-ry",
+      "en_GB": "curry"
+    },
+    "custom": {
+      "en_US": "cus-tom",
+      "en_GB": "cus-tom"
+    },
+    "customer": {
+      "en_US": "cus-tomer",
+      "en_GB": "cus-tom-er"
+    },
+    "cut": {
+      "en_US": "cut",
+      "en_GB": "cut"
+    },
+    "cute": {
+      "en_US": "cute",
+      "en_GB": "cute"
+    },
+    "cycling": {
+      "en_US": "cy-cling",
+      "en_GB": "cyc-ling"
+    },
+    "dad": {
+      "en_US": "dad",
+      "en_GB": "dad"
+    },
+    "daily": {
+      "en_US": "dai-ly",
+      "en_GB": "daily"
+    },
+    "dance": {
+      "en_US": "dance",
+      "en_GB": "dance"
+    },
+    "dancing": {
+      "en_US": "danc-ing",
+      "en_GB": "dan-cing"
+    },
+    "danger": {
+      "en_US": "dan-ger",
+      "en_GB": "danger"
+    },
+    "dangerous": {
+      "en_US": "dan-ger-ous",
+      "en_GB": "dan-ger-ous"
+    },
+    "dare": {
+      "en_US": "dare",
+      "en_GB": "dare"
+    },
+    "dark": {
+      "en_US": "dark",
+      "en_GB": "dark"
+    },
+    "darling": {
+      "en_US": "dar-ling",
+      "en_GB": "darling"
+    },
+    "date": {
+      "en_US": "date",
+      "en_GB": "date"
+    },
+    "daughter": {
+      "en_US": "daugh-ter",
+      "en_GB": "daugh-ter"
+    },
+    "daytime": {
+      "en_US": "day-time",
+      "en_GB": "day-time"
+    },
+    "deaf": {
+      "en_US": "deaf",
+      "en_GB": "deaf"
+    },
+    "deal": {
+      "en_US": "deal",
+      "en_GB": "deal"
+    },
+    "dear": {
+      "en_US": "dear",
+      "en_GB": "dear"
+    },
+    "deat": {
+      "en_US": "deat",
+      "en_GB": "deat"
+    },
+    "death": {
+      "en_US": "death",
+      "en_GB": "death"
+    },
+    "december": {
+      "en_US": "de-cem-ber",
+      "en_GB": "decem-ber"
+    },
+    "decide": {
+      "en_US": "de-cide",
+      "en_GB": "de-cide"
+    },
+    "decision": {
+      "en_US": "de-ci-sion",
+      "en_GB": "de-cision"
+    },
+    "decorate": {
+      "en_US": "dec-o-rate",
+      "en_GB": "dec-or-ate"
+    },
+    "deep": {
+      "en_US": "deep",
+      "en_GB": "deep"
+    },
+    "deer": {
+      "en_US": "deer",
+      "en_GB": "deer"
+    },
+    "defeat": {
+      "en_US": "de-feat",
+      "en_GB": "de-feat"
+    },
+    "degree": {
+      "en_US": "de-gree",
+      "en_GB": "de-gree"
+    },
+    "delicious": {
+      "en_US": "de-li-cious",
+      "en_GB": "de-li-cious"
+    },
+    "dentist": {
+      "en_US": "den-tist",
+      "en_GB": "dent-ist"
+    },
+    "depend": {
+      "en_US": "de-pend",
+      "en_GB": "de-pend"
+    },
+    "depth": {
+      "en_US": "depth",
+      "en_GB": "depth"
+    },
+    "describe": {
+      "en_US": "de-scribe",
+      "en_GB": "de-scribe"
+    },
+    "description": {
+      "en_US": "de-scrip-tion",
+      "en_GB": "de-scrip-tion"
+    },
+    "desert": {
+      "en_US": "desert",
+      "en_GB": "desert"
+    },
+    "design": {
+      "en_US": "de-sign",
+      "en_GB": "design"
+    },
+    "designer": {
+      "en_US": "de-sign-er",
+      "en_GB": "de-sign-er"
+    },
+    "desk": {
+      "en_US": "desk",
+      "en_GB": "desk"
+    },
+    "dessert": {
+      "en_US": "dessert",
+      "en_GB": "dessert"
+    },
+    "destroy": {
+      "en_US": "de-stroy",
+      "en_GB": "des-troy"
+    },
+    "detail": {
+      "en_US": "de-tail",
+      "en_GB": "de-tail"
+    },
+    "detective": {
+      "en_US": "de-tec-tive",
+      "en_GB": "de-tect-ive"
+    },
+    "determined": {
+      "en_US": "de-ter-mined",
+      "en_GB": "de-term-ined"
+    },
+    "develop": {
+      "en_US": "de-vel-op",
+      "en_GB": "de-vel-op"
+    },
+    "development": {
+      "en_US": "de-vel-op-ment",
+      "en_GB": "de-vel-op-ment"
+    },
+    "dialogue": {
+      "en_US": "di-a-logue",
+      "en_GB": "dia-logue"
+    },
+    "diary": {
+      "en_US": "di-ary",
+      "en_GB": "di-ary"
+    },
+    "dictionary": {
+      "en_US": "dic-tio-nary",
+      "en_GB": "dic-tion-ary"
+    },
+    "die": {
+      "en_US": "die",
+      "en_GB": "die"
+    },
+    "diet": {
+      "en_US": "di-et",
+      "en_GB": "diet"
+    },
+    "difference": {
+      "en_US": "dif-fer-ence",
+      "en_GB": "dif-fer-ence"
+    },
+    "different": {
+      "en_US": "dif-fer-ent",
+      "en_GB": "dif-fer-ent"
+    },
+    "differently": {
+      "en_US": "dif-fer-ent-ly",
+      "en_GB": "dif-fer-ently"
+    },
+    "difficult": {
+      "en_US": "dif-fi-cult",
+      "en_GB": "dif-fi-cult"
+    },
+    "difficulty": {
+      "en_US": "dif-fi-cul-ty",
+      "en_GB": "dif-fi-culty"
+    },
+    "dig": {
+      "en_US": "dig",
+      "en_GB": "dig"
+    },
+    "digital": {
+      "en_US": "dig-i-tal",
+      "en_GB": "di-git-al"
+    },
+    "dinner": {
+      "en_US": "din-ner",
+      "en_GB": "din-ner"
+    },
+    "dinosaur": {
+      "en_US": "di-nosaur",
+      "en_GB": "di-no-saur"
+    },
+    "direct": {
+      "en_US": "di-rect",
+      "en_GB": "dir-ect"
+    },
+    "direction": {
+      "en_US": "di-rec-tion",
+      "en_GB": "dir-ec-tion"
+    },
+    "director": {
+      "en_US": "di-rec-tor",
+      "en_GB": "dir-ect-or"
+    },
+    "dirt": {
+      "en_US": "dirt",
+      "en_GB": "dirt"
+    },
+    "dirty": {
+      "en_US": "dirty",
+      "en_GB": "dirty"
+    },
+    "disappear": {
+      "en_US": "dis-ap-pear",
+      "en_GB": "dis-ap-pear"
+    },
+    "disappoint": {
+      "en_US": "dis-ap-point",
+      "en_GB": "dis-ap-point"
+    },
+    "disappointed": {
+      "en_US": "dis-ap-point-ed",
+      "en_GB": "dis-ap-poin-ted"
+    },
+    "disaster": {
+      "en_US": "dis-as-ter",
+      "en_GB": "dis-aster"
+    },
+    "discourage": {
+      "en_US": "dis-cour-age",
+      "en_GB": "dis-cour-age"
+    },
+    "discover": {
+      "en_US": "dis-cov-er",
+      "en_GB": "dis-cov-er"
+    },
+    "discovery": {
+      "en_US": "dis-cov-ery",
+      "en_GB": "dis-cov-ery"
+    },
+    "discuss": {
+      "en_US": "dis-cuss",
+      "en_GB": "dis-cuss"
+    },
+    "discussion": {
+      "en_US": "dis-cus-sion",
+      "en_GB": "dis-cus-sion"
+    },
+    "disease": {
+      "en_US": "dis-ease",
+      "en_GB": "dis-ease"
+    },
+    "dish": {
+      "en_US": "dish",
+      "en_GB": "dish"
+    },
+    "dislike": {
+      "en_US": "dis-like",
+      "en_GB": "dis-like"
+    },
+    "disposal": {
+      "en_US": "dis-pos-al",
+      "en_GB": "dis-pos-al"
+    },
+    "distance": {
+      "en_US": "dis-tance",
+      "en_GB": "dis-tance"
+    },
+    "dive": {
+      "en_US": "dive",
+      "en_GB": "dive"
+    },
+    "divide": {
+      "en_US": "di-vide",
+      "en_GB": "di-vide"
+    },
+    "doctor": {
+      "en_US": "doc-tor",
+      "en_GB": "doc-tor"
+    },
+    "dog": {
+      "en_US": "dog",
+      "en_GB": "dog"
+    },
+    "doll": {
+      "en_US": "doll",
+      "en_GB": "doll"
+    },
+    "dolphin": {
+      "en_US": "dol-phin",
+      "en_GB": "dol-phin"
+    },
+    "donate": {
+      "en_US": "do-nate",
+      "en_GB": "donate"
+    },
+    "donation": {
+      "en_US": "do-na-tion",
+      "en_GB": "dona-tion"
+    },
+    "door": {
+      "en_US": "door",
+      "en_GB": "door"
+    },
+    "double": {
+      "en_US": "dou-ble",
+      "en_GB": "double"
+    },
+    "doubt": {
+      "en_US": "doubt",
+      "en_GB": "doubt"
+    },
+    "download": {
+      "en_US": "down-load",
+      "en_GB": "down-load"
+    },
+    "dragon": {
+      "en_US": "drag-on",
+      "en_GB": "dragon"
+    },
+    "drama": {
+      "en_US": "dra-ma",
+      "en_GB": "drama"
+    },
+    "dramatic": {
+      "en_US": "dra-mat-ic",
+      "en_GB": "dra-mat-ic"
+    },
+    "drank": {
+      "en_US": "drank",
+      "en_GB": "drank"
+    },
+    "draw": {
+      "en_US": "draw",
+      "en_GB": "draw"
+    },
+    "drawer": {
+      "en_US": "draw-er",
+      "en_GB": "draw-er"
+    },
+    "dream": {
+      "en_US": "dream",
+      "en_GB": "dream"
+    },
+    "dress": {
+      "en_US": "dress",
+      "en_GB": "dress"
+    },
+    "drink": {
+      "en_US": "drink",
+      "en_GB": "drink"
+    },
+    "drinking": {
+      "en_US": "drink-ing",
+      "en_GB": "drink-ing"
+    },
+    "drive": {
+      "en_US": "drive",
+      "en_GB": "drive"
+    },
+    "driver": {
+      "en_US": "driv-er",
+      "en_GB": "driver"
+    },
+    "drop": {
+      "en_US": "drop",
+      "en_GB": "drop"
+    },
+    "drought": {
+      "en_US": "drought",
+      "en_GB": "drought"
+    },
+    "drum": {
+      "en_US": "drum",
+      "en_GB": "drum"
+    },
+    "dry": {
+      "en_US": "dry",
+      "en_GB": "dry"
+    },
+    "duck": {
+      "en_US": "duck",
+      "en_GB": "duck"
+    },
+    "duckling": {
+      "en_US": "duck-ling",
+      "en_GB": "duck-ling"
+    },
+    "dumpling": {
+      "en_US": "dumpling",
+      "en_GB": "dump-ling"
+    },
+    "during": {
+      "en_US": "dur-ing",
+      "en_GB": "dur-ing"
+    },
+    "dust": {
+      "en_US": "dust",
+      "en_GB": "dust"
+    },
+    "duty": {
+      "en_US": "du-ty",
+      "en_GB": "duty"
+    },
+    "dynasty": {
+      "en_US": "dy-nasty",
+      "en_GB": "dyn-asty"
+    },
+    "each": {
+      "en_US": "each",
+      "en_GB": "each"
+    },
+    "eagle": {
+      "en_US": "ea-gle",
+      "en_GB": "eagle"
+    },
+    "ear": {
+      "en_US": "ear",
+      "en_GB": "ear"
+    },
+    "earth": {
+      "en_US": "earth",
+      "en_GB": "earth"
+    },
+    "earthquake": {
+      "en_US": "earth-quake",
+      "en_GB": "earth-quake"
+    },
+    "ease": {
+      "en_US": "ease",
+      "en_GB": "ease"
+    },
+    "easily": {
+      "en_US": "eas-i-ly",
+      "en_GB": "eas-ily"
+    },
+    "east": {
+      "en_US": "east",
+      "en_GB": "east"
+    },
+    "easter": {
+      "en_US": "east-er",
+      "en_GB": "east-er"
+    },
+    "easy": {
+      "en_US": "easy",
+      "en_GB": "easy"
+    },
+    "eat": {
+      "en_US": "eat",
+      "en_GB": "eat"
+    },
+    "eating": {
+      "en_US": "eat-ing",
+      "en_GB": "eat-ing"
+    },
+    "ecosystem": {
+      "en_US": "ecosys-tem",
+      "en_GB": "eco-sys-tem"
+    },
+    "education": {
+      "en_US": "ed-u-ca-tion",
+      "en_GB": "edu-ca-tion"
+    },
+    "effect": {
+      "en_US": "ef-fect",
+      "en_GB": "ef-fect"
+    },
+    "effective": {
+      "en_US": "ef-fec-tive",
+      "en_GB": "ef-fect-ive"
+    },
+    "efficient": {
+      "en_US": "ef-fi-cient",
+      "en_GB": "ef-fi-cient"
+    },
+    "efficiently": {
+      "en_US": "ef-fi-cient-ly",
+      "en_GB": "ef-fi-ciently"
+    },
+    "effort": {
+      "en_US": "ef-fort",
+      "en_GB": "ef-fort"
+    },
+    "egg": {
+      "en_US": "egg",
+      "en_GB": "egg"
+    },
+    "eight": {
+      "en_US": "eight",
+      "en_GB": "eight"
+    },
+    "eighteen": {
+      "en_US": "eigh-teen",
+      "en_GB": "eight-een"
+    },
+    "either": {
+      "en_US": "ei-ther",
+      "en_GB": "either"
+    },
+    "elbow": {
+      "en_US": "el-bow",
+      "en_GB": "el-bow"
+    },
+    "elder": {
+      "en_US": "el-der",
+      "en_GB": "eld-er"
+    },
+    "elderly": {
+      "en_US": "el-der-ly",
+      "en_GB": "eld-erly"
+    },
+    "electric": {
+      "en_US": "elec-tric",
+      "en_GB": "elec-tric"
+    },
+    "electricguitar": {
+      "en_US": "elec-tric-gui-tar",
+      "en_GB": "elec-tric-gui-tar"
+    },
+    "electricity": {
+      "en_US": "elec-tric-i-ty",
+      "en_GB": "elec-tri-city"
+    },
+    "electronic": {
+      "en_US": "elec-tron-ic",
+      "en_GB": "elec-tron-ic"
+    },
+    "elephant": {
+      "en_US": "ele-phant",
+      "en_GB": "ele-phant"
+    },
+    "eleven": {
+      "en_US": "eleven",
+      "en_GB": "el-ev-en"
+    },
+    "else": {
+      "en_US": "else",
+      "en_GB": "else"
+    },
+    "email": {
+      "en_US": "email",
+      "en_GB": "email"
+    },
+    "embarrassed": {
+      "en_US": "em-bar-rassed",
+      "en_GB": "em-bar-rassed"
+    },
+    "embarrassing": {
+      "en_US": "em-bar-rass-ing",
+      "en_GB": "em-bar-rass-ing"
+    },
+    "emergency": {
+      "en_US": "emer-gen-cy",
+      "en_GB": "emer-gency"
+    },
+    "emotion": {
+      "en_US": "emo-tion",
+      "en_GB": "emo-tion"
+    },
+    "emotional": {
+      "en_US": "emo-tion-al",
+      "en_GB": "emo-tion-al"
+    },
+    "emperor": {
+      "en_US": "em-per-or",
+      "en_GB": "em-per-or"
+    },
+    "empress": {
+      "en_US": "em-press",
+      "en_GB": "empress"
+    },
+    "empty": {
+      "en_US": "emp-ty",
+      "en_GB": "empty"
+    },
+    "encourage": {
+      "en_US": "en-cour-age",
+      "en_GB": "en-cour-age"
+    },
+    "end": {
+      "en_US": "end",
+      "en_GB": "end"
+    },
+    "enemy": {
+      "en_US": "en-e-my",
+      "en_GB": "en-emy"
+    },
+    "energetic": {
+      "en_US": "en-er-get-ic",
+      "en_GB": "en-er-get-ic"
+    },
+    "energy": {
+      "en_US": "en-er-gy",
+      "en_GB": "en-ergy"
+    },
+    "engine": {
+      "en_US": "en-gine",
+      "en_GB": "en-gine"
+    },
+    "engineer": {
+      "en_US": "en-gi-neer",
+      "en_GB": "en-gin-eer"
+    },
+    "english": {
+      "en_US": "eng-lish",
+      "en_GB": "eng-lish"
+    },
+    "enjoy": {
+      "en_US": "en-joy",
+      "en_GB": "en-joy"
+    },
+    "enjoyable": {
+      "en_US": "en-joy-able",
+      "en_GB": "en-joy-able"
+    },
+    "enough": {
+      "en_US": "enough",
+      "en_GB": "enough"
+    },
+    "enter": {
+      "en_US": "en-ter",
+      "en_GB": "enter"
+    },
+    "entry": {
+      "en_US": "en-try",
+      "en_GB": "entry"
+    },
+    "environment": {
+      "en_US": "en-vi-ron-ment",
+      "en_GB": "en-vir-on-ment"
+    },
+    "environmental": {
+      "en_US": "en-vi-ron-men-tal",
+      "en_GB": "en-vir-on-ment-al"
+    },
+    "era": {
+      "en_US": "era",
+      "en_GB": "era"
+    },
+    "eraser": {
+      "en_US": "eras-er",
+      "en_GB": "eraser"
+    },
+    "especially": {
+      "en_US": "es-pe-cial-ly",
+      "en_GB": "es-pe-cially"
+    },
+    "essay": {
+      "en_US": "es-say",
+      "en_GB": "es-say"
+    },
+    "eve": {
+      "en_US": "eve",
+      "en_GB": "eve"
+    },
+    "even": {
+      "en_US": "even",
+      "en_GB": "even"
+    },
+    "evening": {
+      "en_US": "evening",
+      "en_GB": "even-ing"
+    },
+    "event": {
+      "en_US": "event",
+      "en_GB": "event"
+    },
+    "ever": {
+      "en_US": "ev-er",
+      "en_GB": "ever"
+    },
+    "everybody": {
+      "en_US": "ev-ery-body",
+      "en_GB": "every-body"
+    },
+    "everyone": {
+      "en_US": "ev-ery-one",
+      "en_GB": "every-one"
+    },
+    "everything": {
+      "en_US": "ev-ery-thing",
+      "en_GB": "everything"
+    },
+    "everywhere": {
+      "en_US": "ev-ery-where",
+      "en_GB": "every-where"
+    },
+    "exactly": {
+      "en_US": "ex-act-ly",
+      "en_GB": "ex-actly"
+    },
+    "exam": {
+      "en_US": "ex-am",
+      "en_GB": "ex-am"
+    },
+    "examine": {
+      "en_US": "ex-am-ine",
+      "en_GB": "ex-am-ine"
+    },
+    "example": {
+      "en_US": "ex-am-ple",
+      "en_GB": "ex-ample"
+    },
+    "excellent": {
+      "en_US": "ex-cel-lent",
+      "en_GB": "ex-cel-lent"
+    },
+    "except": {
+      "en_US": "ex-cept",
+      "en_GB": "ex-cept"
+    },
+    "exchange": {
+      "en_US": "ex-change",
+      "en_GB": "ex-change"
+    },
+    "excited": {
+      "en_US": "ex-cit-ed",
+      "en_GB": "ex-cited"
+    },
+    "exciting": {
+      "en_US": "ex-cit-ing",
+      "en_GB": "ex-cit-ing"
+    },
+    "excuse": {
+      "en_US": "ex-cuse",
+      "en_GB": "ex-cuse"
+    },
+    "exercise": {
+      "en_US": "ex-er-cise",
+      "en_GB": "ex-er-cise"
+    },
+    "exhibition": {
+      "en_US": "ex-hi-bi-tion",
+      "en_GB": "ex-hib-i-tion"
+    },
+    "exoplanet": {
+      "en_US": "ex-o-plan-et",
+      "en_GB": "exo-plan-et"
+    },
+    "expect": {
+      "en_US": "ex-pect",
+      "en_GB": "ex-pect"
+    },
+    "expensive": {
+      "en_US": "ex-pen-sive",
+      "en_GB": "ex-pens-ive"
+    },
+    "experience": {
+      "en_US": "ex-pe-ri-ence",
+      "en_GB": "ex-per-i-ence"
+    },
+    "experiment": {
+      "en_US": "ex-per-i-ment",
+      "en_GB": "ex-per-i-ment"
+    },
+    "expert": {
+      "en_US": "ex-pert",
+      "en_GB": "ex-pert"
+    },
+    "exploration": {
+      "en_US": "ex-plo-ration",
+      "en_GB": "ex-plor-a-tion"
+    },
+    "explore": {
+      "en_US": "ex-plore",
+      "en_GB": "ex-plore"
+    },
+    "explorer": {
+      "en_US": "ex-plor-er",
+      "en_GB": "ex-plorer"
+    },
+    "express": {
+      "en_US": "ex-press",
+      "en_GB": "ex-press"
+    },
+    "expression": {
+      "en_US": "ex-pres-sion",
+      "en_GB": "ex-pres-sion"
+    },
+    "extinguisher": {
+      "en_US": "ex-tin-guish-er",
+      "en_GB": "ex-tin-guish-er"
+    },
+    "eye": {
+      "en_US": "eye",
+      "en_GB": "eye"
+    },
+    "face": {
+      "en_US": "face",
+      "en_GB": "face"
+    },
+    "fact": {
+      "en_US": "fact",
+      "en_GB": "fact"
+    },
+    "factory": {
+      "en_US": "fac-to-ry",
+      "en_GB": "fact-ory"
+    },
+    "fail": {
+      "en_US": "fail",
+      "en_GB": "fail"
+    },
+    "failure": {
+      "en_US": "fail-ure",
+      "en_GB": "fail-ure"
+    },
+    "fair": {
+      "en_US": "fair",
+      "en_GB": "fair"
+    },
+    "fall": {
+      "en_US": "fall",
+      "en_GB": "fall"
+    },
+    "false": {
+      "en_US": "false",
+      "en_GB": "false"
+    },
+    "familiar": {
+      "en_US": "fa-mil-iar",
+      "en_GB": "fa-mil-i-ar"
+    },
+    "family": {
+      "en_US": "fam-i-ly",
+      "en_GB": "fam-ily"
+    },
+    "famous": {
+      "en_US": "fa-mous",
+      "en_GB": "fam-ous"
+    },
+    "fan": {
+      "en_US": "fan",
+      "en_GB": "fan"
+    },
+    "fantastic": {
+      "en_US": "fan-tas-tic",
+      "en_GB": "fant-ast-ic"
+    },
+    "fantasy": {
+      "en_US": "fan-ta-sy",
+      "en_GB": "fantasy"
+    },
+    "faraway": {
+      "en_US": "far-away",
+      "en_GB": "faraway"
+    },
+    "farm": {
+      "en_US": "farm",
+      "en_GB": "farm"
+    },
+    "farmer": {
+      "en_US": "farmer",
+      "en_GB": "farm-er"
+    },
+    "farmland": {
+      "en_US": "farm-land",
+      "en_GB": "farm-land"
+    },
+    "fashion": {
+      "en_US": "fash-ion",
+      "en_GB": "fash-ion"
+    },
+    "fast": {
+      "en_US": "fast",
+      "en_GB": "fast"
+    },
+    "faster": {
+      "en_US": "faster",
+      "en_GB": "faster"
+    },
+    "fat": {
+      "en_US": "fat",
+      "en_GB": "fat"
+    },
+    "father": {
+      "en_US": "fa-ther",
+      "en_GB": "fath-er"
+    },
+    "fault": {
+      "en_US": "fault",
+      "en_GB": "fault"
+    },
+    "favourite": {
+      "en_US": "favourite",
+      "en_GB": "fa-vour-ite"
+    },
+    "fear": {
+      "en_US": "fear",
+      "en_GB": "fear"
+    },
+    "feather": {
+      "en_US": "feath-er",
+      "en_GB": "feath-er"
+    },
+    "february": {
+      "en_US": "feb-ru-ary",
+      "en_GB": "feb-ru-ary"
+    },
+    "feed": {
+      "en_US": "feed",
+      "en_GB": "feed"
+    },
+    "feedback": {
+      "en_US": "feed-back",
+      "en_GB": "feed-back"
+    },
+    "feel": {
+      "en_US": "feel",
+      "en_GB": "feel"
+    },
+    "feeling": {
+      "en_US": "feel-ing",
+      "en_GB": "feel-ing"
+    },
+    "fell": {
+      "en_US": "fell",
+      "en_GB": "fell"
+    },
+    "felt": {
+      "en_US": "felt",
+      "en_GB": "felt"
+    },
+    "fertilizer": {
+      "en_US": "fer-til-iz-er",
+      "en_GB": "fer-til-izer"
+    },
+    "festival": {
+      "en_US": "fes-ti-val",
+      "en_GB": "fest-iv-al"
+    },
+    "fever": {
+      "en_US": "fever",
+      "en_GB": "fever"
+    },
+    "few": {
+      "en_US": "few",
+      "en_GB": "few"
+    },
+    "fiber": {
+      "en_US": "fiber",
+      "en_GB": "fiber"
+    },
+    "fiction": {
+      "en_US": "fic-tion",
+      "en_GB": "fic-tion"
+    },
+    "field": {
+      "en_US": "field",
+      "en_GB": "field"
+    },
+    "fifteen": {
+      "en_US": "fif-teen",
+      "en_GB": "fif-teen"
+    },
+    "fifth": {
+      "en_US": "fifth",
+      "en_GB": "fifth"
+    },
+    "fight": {
+      "en_US": "fight",
+      "en_GB": "fight"
+    },
+    "file": {
+      "en_US": "file",
+      "en_GB": "file"
+    },
+    "fill": {
+      "en_US": "fill",
+      "en_GB": "fill"
+    },
+    "film": {
+      "en_US": "film",
+      "en_GB": "film"
+    },
+    "final": {
+      "en_US": "fi-nal",
+      "en_GB": "fi-nal"
+    },
+    "finally": {
+      "en_US": "fi-nal-ly",
+      "en_GB": "fi-nally"
+    },
+    "find": {
+      "en_US": "find",
+      "en_GB": "find"
+    },
+    "fine": {
+      "en_US": "fine",
+      "en_GB": "fine"
+    },
+    "finger": {
+      "en_US": "fin-ger",
+      "en_GB": "fin-ger"
+    },
+    "finish": {
+      "en_US": "fin-ish",
+      "en_GB": "fin-ish"
+    },
+    "fire": {
+      "en_US": "fire",
+      "en_GB": "fire"
+    },
+    "firefighter": {
+      "en_US": "fire-fight-er",
+      "en_GB": "fire-fight-er"
+    },
+    "fireman": {
+      "en_US": "fire-man",
+      "en_GB": "fire-man"
+    },
+    "firework": {
+      "en_US": "fire-work",
+      "en_GB": "fire-work"
+    },
+    "first": {
+      "en_US": "first",
+      "en_GB": "first"
+    },
+    "firstly": {
+      "en_US": "first-ly",
+      "en_GB": "firstly"
+    },
+    "fish": {
+      "en_US": "fish",
+      "en_GB": "fish"
+    },
+    "fisherman": {
+      "en_US": "fish-er-man",
+      "en_GB": "fish-er-man"
+    },
+    "fishing": {
+      "en_US": "fish-ing",
+      "en_GB": "fish-ing"
+    },
+    "fist": {
+      "en_US": "fist",
+      "en_GB": "fist"
+    },
+    "fit": {
+      "en_US": "fit",
+      "en_GB": "fit"
+    },
+    "five": {
+      "en_US": "five",
+      "en_GB": "five"
+    },
+    "fixed": {
+      "en_US": "fixed",
+      "en_GB": "fixed"
+    },
+    "flag": {
+      "en_US": "flag",
+      "en_GB": "flag"
+    },
+    "flame": {
+      "en_US": "flame",
+      "en_GB": "flame"
+    },
+    "flashcard": {
+      "en_US": "flash-card",
+      "en_GB": "flash-card"
+    },
+    "flat": {
+      "en_US": "flat",
+      "en_GB": "flat"
+    },
+    "flight": {
+      "en_US": "flight",
+      "en_GB": "flight"
+    },
+    "flood": {
+      "en_US": "flood",
+      "en_GB": "flood"
+    },
+    "floodwater": {
+      "en_US": "flood-wa-ter",
+      "en_GB": "flood-wa-ter"
+    },
+    "floor": {
+      "en_US": "floor",
+      "en_GB": "floor"
+    },
+    "flour": {
+      "en_US": "flour",
+      "en_GB": "flour"
+    },
+    "flower": {
+      "en_US": "flow-er",
+      "en_GB": "flower"
+    },
+    "flu": {
+      "en_US": "flu",
+      "en_GB": "flu"
+    },
+    "flute": {
+      "en_US": "flute",
+      "en_GB": "flute"
+    },
+    "fly": {
+      "en_US": "fly",
+      "en_GB": "fly"
+    },
+    "focus": {
+      "en_US": "fo-cus",
+      "en_GB": "fo-cus"
+    },
+    "fog": {
+      "en_US": "fog",
+      "en_GB": "fog"
+    },
+    "fold": {
+      "en_US": "fold",
+      "en_GB": "fold"
+    },
+    "folding": {
+      "en_US": "fold-ing",
+      "en_GB": "fold-ing"
+    },
+    "folk": {
+      "en_US": "folk",
+      "en_GB": "folk"
+    },
+    "folkmusic": {
+      "en_US": "folk-mu-sic",
+      "en_GB": "folk-music"
+    },
+    "follow": {
+      "en_US": "fol-low",
+      "en_GB": "fol-low"
+    },
+    "food": {
+      "en_US": "food",
+      "en_GB": "food"
+    },
+    "fool": {
+      "en_US": "fool",
+      "en_GB": "fool"
+    },
+    "football": {
+      "en_US": "foot-ball",
+      "en_GB": "foot-ball"
+    },
+    "force": {
+      "en_US": "force",
+      "en_GB": "force"
+    },
+    "foreign": {
+      "en_US": "for-eign",
+      "en_GB": "for-eign"
+    },
+    "forest": {
+      "en_US": "for-est",
+      "en_GB": "forest"
+    },
+    "forever": {
+      "en_US": "for-ev-er",
+      "en_GB": "forever"
+    },
+    "forget": {
+      "en_US": "for-get",
+      "en_GB": "for-get"
+    },
+    "forgetful": {
+      "en_US": "for-get-ful",
+      "en_GB": "for-get-ful"
+    },
+    "forgive": {
+      "en_US": "for-give",
+      "en_GB": "for-give"
+    },
+    "fork": {
+      "en_US": "fork",
+      "en_GB": "fork"
+    },
+    "form": {
+      "en_US": "form",
+      "en_GB": "form"
+    },
+    "formal": {
+      "en_US": "for-mal",
+      "en_GB": "form-al"
+    },
+    "forward": {
+      "en_US": "for-ward",
+      "en_GB": "for-ward"
+    },
+    "found": {
+      "en_US": "found",
+      "en_GB": "found"
+    },
+    "four": {
+      "en_US": "four",
+      "en_GB": "four"
+    },
+    "fourteen": {
+      "en_US": "four-teen",
+      "en_GB": "four-teen"
+    },
+    "fourth": {
+      "en_US": "fourth",
+      "en_GB": "fourth"
+    },
+    "fox": {
+      "en_US": "fox",
+      "en_GB": "fox"
+    },
+    "fragrant": {
+      "en_US": "fra-grant",
+      "en_GB": "fra-grant"
+    },
+    "free": {
+      "en_US": "free",
+      "en_GB": "free"
+    },
+    "freestyle": {
+      "en_US": "freestyle",
+      "en_GB": "free-style"
+    },
+    "freezing": {
+      "en_US": "freez-ing",
+      "en_GB": "freez-ing"
+    },
+    "french": {
+      "en_US": "french",
+      "en_GB": "french"
+    },
+    "fresh": {
+      "en_US": "fresh",
+      "en_GB": "fresh"
+    },
+    "freshly": {
+      "en_US": "fresh-ly",
+      "en_GB": "freshly"
+    },
+    "freshwater": {
+      "en_US": "fresh-wa-ter",
+      "en_GB": "fresh-wa-ter"
+    },
+    "friday": {
+      "en_US": "fri-day",
+      "en_GB": "fri-day"
+    },
+    "friend": {
+      "en_US": "friend",
+      "en_GB": "friend"
+    },
+    "friendly": {
+      "en_US": "friend-ly",
+      "en_GB": "friendly"
+    },
+    "friendship": {
+      "en_US": "friend-ship",
+      "en_GB": "friend-ship"
+    },
+    "frog": {
+      "en_US": "frog",
+      "en_GB": "frog"
+    },
+    "from": {
+      "en_US": "from",
+      "en_GB": "from"
+    },
+    "front": {
+      "en_US": "front",
+      "en_GB": "front"
+    },
+    "froth": {
+      "en_US": "froth",
+      "en_GB": "froth"
+    },
+    "frozen": {
+      "en_US": "frozen",
+      "en_GB": "frozen"
+    },
+    "fruit": {
+      "en_US": "fruit",
+      "en_GB": "fruit"
+    },
+    "fry": {
+      "en_US": "fry",
+      "en_GB": "fry"
+    },
+    "full": {
+      "en_US": "full",
+      "en_GB": "full"
+    },
+    "fun": {
+      "en_US": "fun",
+      "en_GB": "fun"
+    },
+    "funeral": {
+      "en_US": "fu-ner-al",
+      "en_GB": "fu-ner-al"
+    },
+    "funny": {
+      "en_US": "fun-ny",
+      "en_GB": "funny"
+    },
+    "fur": {
+      "en_US": "fur",
+      "en_GB": "fur"
+    },
+    "future": {
+      "en_US": "fu-ture",
+      "en_GB": "fu-ture"
+    },
+    "futurist": {
+      "en_US": "fu-tur-ist",
+      "en_GB": "fu-tur-ist"
+    },
+    "gain": {
+      "en_US": "gain",
+      "en_GB": "gain"
+    },
+    "gala": {
+      "en_US": "gala",
+      "en_GB": "gala"
+    },
+    "galaxy": {
+      "en_US": "gal-axy",
+      "en_GB": "galaxy"
+    },
+    "game": {
+      "en_US": "game",
+      "en_GB": "game"
+    },
+    "garbage": {
+      "en_US": "garbage",
+      "en_GB": "garbage"
+    },
+    "garden": {
+      "en_US": "gar-den",
+      "en_GB": "garden"
+    },
+    "gas": {
+      "en_US": "gas",
+      "en_GB": "gas"
+    },
+    "gather": {
+      "en_US": "gath-er",
+      "en_GB": "gath-er"
+    },
+    "general": {
+      "en_US": "gen-er-al",
+      "en_GB": "gen-er-al"
+    },
+    "genie": {
+      "en_US": "ge-nie",
+      "en_GB": "genie"
+    },
+    "genius": {
+      "en_US": "ge-nius",
+      "en_GB": "geni-us"
+    },
+    "gentle": {
+      "en_US": "gen-tle",
+      "en_GB": "gentle"
+    },
+    "gentleman": {
+      "en_US": "gen-tle-man",
+      "en_GB": "gen-tle-man"
+    },
+    "geography": {
+      "en_US": "ge-og-ra-phy",
+      "en_GB": "geo-graphy"
+    },
+    "geology": {
+      "en_US": "ge-ol-o-gy",
+      "en_GB": "geo-logy"
+    },
+    "germ": {
+      "en_US": "germ",
+      "en_GB": "germ"
+    },
+    "german": {
+      "en_US": "ger-man",
+      "en_GB": "ger-man"
+    },
+    "gift": {
+      "en_US": "gift",
+      "en_GB": "gift"
+    },
+    "gifted": {
+      "en_US": "gift-ed",
+      "en_GB": "gif-ted"
+    },
+    "gingerbread": {
+      "en_US": "gin-ger-bread",
+      "en_GB": "ginger-bread"
+    },
+    "ginkgo": {
+      "en_US": "gink-go",
+      "en_GB": "ginkgo"
+    },
+    "giraffe": {
+      "en_US": "gi-raffe",
+      "en_GB": "gir-affe"
+    },
+    "girl": {
+      "en_US": "girl",
+      "en_GB": "girl"
+    },
+    "give": {
+      "en_US": "give",
+      "en_GB": "give"
+    },
+    "glad": {
+      "en_US": "glad",
+      "en_GB": "glad"
+    },
+    "glass": {
+      "en_US": "glass",
+      "en_GB": "glass"
+    },
+    "glove": {
+      "en_US": "glove",
+      "en_GB": "glove"
+    },
+    "glue": {
+      "en_US": "glue",
+      "en_GB": "glue"
+    },
+    "go": {
+      "en_US": "go",
+      "en_GB": "go"
+    },
+    "goal": {
+      "en_US": "goal",
+      "en_GB": "goal"
+    },
+    "god": {
+      "en_US": "god",
+      "en_GB": "god"
+    },
+    "goddess": {
+      "en_US": "god-dess",
+      "en_GB": "god-dess"
+    },
+    "golden": {
+      "en_US": "gold-en",
+      "en_GB": "golden"
+    },
+    "good": {
+      "en_US": "good",
+      "en_GB": "good"
+    },
+    "goodbye": {
+      "en_US": "good-bye",
+      "en_GB": "good-bye"
+    },
+    "goodness": {
+      "en_US": "good-ness",
+      "en_GB": "good-ness"
+    },
+    "goods": {
+      "en_US": "goods",
+      "en_GB": "goods"
+    },
+    "goose": {
+      "en_US": "goose",
+      "en_GB": "goose"
+    },
+    "government": {
+      "en_US": "gov-ern-ment",
+      "en_GB": "gov-ern-ment"
+    },
+    "grade": {
+      "en_US": "grade",
+      "en_GB": "grade"
+    },
+    "gradually": {
+      "en_US": "grad-u-al-ly",
+      "en_GB": "gradu-ally"
+    },
+    "graduate": {
+      "en_US": "grad-u-ate",
+      "en_GB": "gradu-ate"
+    },
+    "graduation": {
+      "en_US": "grad-u-a-tion",
+      "en_GB": "gradu-ation"
+    },
+    "grain": {
+      "en_US": "grain",
+      "en_GB": "grain"
+    },
+    "grammar": {
+      "en_US": "gram-mar",
+      "en_GB": "gram-mar"
+    },
+    "grandchild": {
+      "en_US": "grand-child",
+      "en_GB": "grand-child"
+    },
+    "grandfather": {
+      "en_US": "grand-fa-ther",
+      "en_GB": "grand-fath-er"
+    },
+    "grandma": {
+      "en_US": "grand-ma",
+      "en_GB": "grandma"
+    },
+    "grandmother": {
+      "en_US": "grand-moth-er",
+      "en_GB": "grand-moth-er"
+    },
+    "grandpa": {
+      "en_US": "grand-pa",
+      "en_GB": "grandpa"
+    },
+    "grandparent": {
+      "en_US": "grand-par-ent",
+      "en_GB": "grand-par-ent"
+    },
+    "grandson": {
+      "en_US": "grand-son",
+      "en_GB": "grand-son"
+    },
+    "grape": {
+      "en_US": "grape",
+      "en_GB": "grape"
+    },
+    "grapevine": {
+      "en_US": "grapevine",
+      "en_GB": "grapev-ine"
+    },
+    "graph": {
+      "en_US": "graph",
+      "en_GB": "graph"
+    },
+    "grass": {
+      "en_US": "grass",
+      "en_GB": "grass"
+    },
+    "greatly": {
+      "en_US": "great-ly",
+      "en_GB": "greatly"
+    },
+    "green": {
+      "en_US": "green",
+      "en_GB": "green"
+    },
+    "greenhouse": {
+      "en_US": "green-house",
+      "en_GB": "green-house"
+    },
+    "greet": {
+      "en_US": "greet",
+      "en_GB": "greet"
+    },
+    "grey": {
+      "en_US": "grey",
+      "en_GB": "grey"
+    },
+    "ground": {
+      "en_US": "ground",
+      "en_GB": "ground"
+    },
+    "group": {
+      "en_US": "group",
+      "en_GB": "group"
+    },
+    "grow": {
+      "en_US": "grow",
+      "en_GB": "grow"
+    },
+    "growth": {
+      "en_US": "growth",
+      "en_GB": "growth"
+    },
+    "guard": {
+      "en_US": "guard",
+      "en_GB": "guard"
+    },
+    "guardian": {
+      "en_US": "guardian",
+      "en_GB": "guard-i-an"
+    },
+    "guess": {
+      "en_US": "guess",
+      "en_GB": "guess"
+    },
+    "guest": {
+      "en_US": "guest",
+      "en_GB": "guest"
+    },
+    "guidance": {
+      "en_US": "guid-ance",
+      "en_GB": "guid-ance"
+    },
+    "guide": {
+      "en_US": "guide",
+      "en_GB": "guide"
+    },
+    "guitar": {
+      "en_US": "gui-tar",
+      "en_GB": "gui-tar"
+    },
+    "gun": {
+      "en_US": "gun",
+      "en_GB": "gun"
+    },
+    "gunshot": {
+      "en_US": "gun-shot",
+      "en_GB": "gun-shot"
+    },
+    "gym": {
+      "en_US": "gym",
+      "en_GB": "gym"
+    },
+    "habit": {
+      "en_US": "habit",
+      "en_GB": "habit"
+    },
+    "had": {
+      "en_US": "had",
+      "en_GB": "had"
+    },
+    "hair": {
+      "en_US": "hair",
+      "en_GB": "hair"
+    },
+    "haircut": {
+      "en_US": "hair-cut",
+      "en_GB": "hair-cut"
+    },
+    "half": {
+      "en_US": "half",
+      "en_GB": "half"
+    },
+    "hall": {
+      "en_US": "hall",
+      "en_GB": "hall"
+    },
+    "hallway": {
+      "en_US": "hall-way",
+      "en_GB": "hall-way"
+    },
+    "hamburger": {
+      "en_US": "ham-burg-er",
+      "en_GB": "ham-burger"
+    },
+    "hand": {
+      "en_US": "hand",
+      "en_GB": "hand"
+    },
+    "handoff": {
+      "en_US": "hand-off",
+      "en_GB": "han-doff"
+    },
+    "handsome": {
+      "en_US": "hand-some",
+      "en_GB": "hand-some"
+    },
+    "hang": {
+      "en_US": "hang",
+      "en_GB": "hang"
+    },
+    "happen": {
+      "en_US": "hap-pen",
+      "en_GB": "hap-pen"
+    },
+    "happily": {
+      "en_US": "hap-pi-ly",
+      "en_GB": "hap-pily"
+    },
+    "happiness": {
+      "en_US": "hap-pi-ness",
+      "en_GB": "hap-pi-ness"
+    },
+    "hard": {
+      "en_US": "hard",
+      "en_GB": "hard"
+    },
+    "hardly": {
+      "en_US": "hard-ly",
+      "en_GB": "hardly"
+    },
+    "harm": {
+      "en_US": "harm",
+      "en_GB": "harm"
+    },
+    "harmful": {
+      "en_US": "harm-ful",
+      "en_GB": "harm-ful"
+    },
+    "harmony": {
+      "en_US": "har-mo-ny",
+      "en_GB": "har-mony"
+    },
+    "has": {
+      "en_US": "has",
+      "en_GB": "has"
+    },
+    "hat": {
+      "en_US": "hat",
+      "en_GB": "hat"
+    },
+    "hate": {
+      "en_US": "hate",
+      "en_GB": "hate"
+    },
+    "have": {
+      "en_US": "have",
+      "en_GB": "have"
+    },
+    "he": {
+      "en_US": "he",
+      "en_GB": "he"
+    },
+    "head": {
+      "en_US": "head",
+      "en_GB": "head"
+    },
+    "headache": {
+      "en_US": "headache",
+      "en_GB": "head-ache"
+    },
+    "health": {
+      "en_US": "health",
+      "en_GB": "health"
+    },
+    "healthily": {
+      "en_US": "healthi-ly",
+      "en_GB": "health-ily"
+    },
+    "healthy": {
+      "en_US": "healthy",
+      "en_GB": "healthy"
+    },
+    "hear": {
+      "en_US": "hear",
+      "en_GB": "hear"
+    },
+    "hearing": {
+      "en_US": "hear-ing",
+      "en_GB": "hear-ing"
+    },
+    "heart": {
+      "en_US": "heart",
+      "en_GB": "heart"
+    },
+    "heartbeat": {
+      "en_US": "heart-beat",
+      "en_GB": "heart-beat"
+    },
+    "heat": {
+      "en_US": "heat",
+      "en_GB": "heat"
+    },
+    "heatwave": {
+      "en_US": "heat-wave",
+      "en_GB": "heat-wave"
+    },
+    "heavier": {
+      "en_US": "heav-ier",
+      "en_GB": "heav-ier"
+    },
+    "heavily": {
+      "en_US": "heav-i-ly",
+      "en_GB": "heav-ily"
+    },
+    "heavy": {
+      "en_US": "heavy",
+      "en_GB": "heavy"
+    },
+    "height": {
+      "en_US": "height",
+      "en_GB": "height"
+    },
+    "help": {
+      "en_US": "help",
+      "en_GB": "help"
+    },
+    "helpful": {
+      "en_US": "help-ful",
+      "en_GB": "help-ful"
+    },
+    "hen": {
+      "en_US": "hen",
+      "en_GB": "hen"
+    },
+    "her": {
+      "en_US": "her",
+      "en_GB": "her"
+    },
+    "hero": {
+      "en_US": "hero",
+      "en_GB": "hero"
+    },
+    "hers": {
+      "en_US": "hers",
+      "en_GB": "hers"
+    },
+    "herself": {
+      "en_US": "her-self",
+      "en_GB": "her-self"
+    },
+    "hey": {
+      "en_US": "hey",
+      "en_GB": "hey"
+    },
+    "hidden": {
+      "en_US": "hid-den",
+      "en_GB": "hid-den"
+    },
+    "hide": {
+      "en_US": "hide",
+      "en_GB": "hide"
+    },
+    "high": {
+      "en_US": "high",
+      "en_GB": "high"
+    },
+    "highway": {
+      "en_US": "high-way",
+      "en_GB": "high-way"
+    },
+    "hike": {
+      "en_US": "hike",
+      "en_GB": "hike"
+    },
+    "him": {
+      "en_US": "him",
+      "en_GB": "him"
+    },
+    "himself": {
+      "en_US": "him-self",
+      "en_GB": "him-self"
+    },
+    "his": {
+      "en_US": "his",
+      "en_GB": "his"
+    },
+    "historian": {
+      "en_US": "his-to-ri-an",
+      "en_GB": "his-tor-i-an"
+    },
+    "historical": {
+      "en_US": "his-tor-i-cal",
+      "en_GB": "his-tor-ic-al"
+    },
+    "history": {
+      "en_US": "his-to-ry",
+      "en_GB": "his-tory"
+    },
+    "hit": {
+      "en_US": "hit",
+      "en_GB": "hit"
+    },
+    "hobby": {
+      "en_US": "hob-by",
+      "en_GB": "hobby"
+    },
+    "hockey": {
+      "en_US": "hock-ey",
+      "en_GB": "hockey"
+    },
+    "hold": {
+      "en_US": "hold",
+      "en_GB": "hold"
+    },
+    "hole": {
+      "en_US": "hole",
+      "en_GB": "hole"
+    },
+    "holiday": {
+      "en_US": "hol-i-day",
+      "en_GB": "hol-i-day"
+    },
+    "home": {
+      "en_US": "home",
+      "en_GB": "home"
+    },
+    "homework": {
+      "en_US": "home-work",
+      "en_GB": "home-work"
+    },
+    "honest": {
+      "en_US": "hon-est",
+      "en_GB": "hon-est"
+    },
+    "honey": {
+      "en_US": "hon-ey",
+      "en_GB": "honey"
+    },
+    "honeycomb": {
+      "en_US": "hon-ey-comb",
+      "en_GB": "hon-ey-comb"
+    },
+    "honour": {
+      "en_US": "hon-our",
+      "en_GB": "hon-our"
+    },
+    "hope": {
+      "en_US": "hope",
+      "en_GB": "hope"
+    },
+    "hopefully": {
+      "en_US": "hope-ful-ly",
+      "en_GB": "hope-fully"
+    },
+    "horn": {
+      "en_US": "horn",
+      "en_GB": "horn"
+    },
+    "horse": {
+      "en_US": "horse",
+      "en_GB": "horse"
+    },
+    "hospital": {
+      "en_US": "hos-pi-tal",
+      "en_GB": "hos-pit-al"
+    },
+    "host": {
+      "en_US": "host",
+      "en_GB": "host"
+    },
+    "hostess": {
+      "en_US": "host-ess",
+      "en_GB": "host-ess"
+    },
+    "hot": {
+      "en_US": "hot",
+      "en_GB": "hot"
+    },
+    "hotel": {
+      "en_US": "ho-tel",
+      "en_GB": "hotel"
+    },
+    "hour": {
+      "en_US": "hour",
+      "en_GB": "hour"
+    },
+    "housework": {
+      "en_US": "house-work",
+      "en_GB": "house-work"
+    },
+    "housing": {
+      "en_US": "hous-ing",
+      "en_GB": "hous-ing"
+    },
+    "however": {
+      "en_US": "how-ev-er",
+      "en_GB": "how-ever"
+    },
+    "hug": {
+      "en_US": "hug",
+      "en_GB": "hug"
+    },
+    "huge": {
+      "en_US": "huge",
+      "en_GB": "huge"
+    },
+    "human": {
+      "en_US": "hu-man",
+      "en_GB": "hu-man"
+    },
+    "humanbeing": {
+      "en_US": "hu-man-be-ing",
+      "en_GB": "hu-man-be-ing"
+    },
+    "humor": {
+      "en_US": "hu-mor",
+      "en_GB": "hu-mor"
+    },
+    "humour": {
+      "en_US": "hu-mour",
+      "en_GB": "hu-mour"
+    },
+    "hunger": {
+      "en_US": "hunger",
+      "en_GB": "hun-ger"
+    },
+    "hungry": {
+      "en_US": "hun-gry",
+      "en_GB": "hungry"
+    },
+    "hunt": {
+      "en_US": "hunt",
+      "en_GB": "hunt"
+    },
+    "hunter": {
+      "en_US": "hunter",
+      "en_GB": "hunter"
+    },
+    "hurt": {
+      "en_US": "hurt",
+      "en_GB": "hurt"
+    },
+    "hurtful": {
+      "en_US": "hurt-ful",
+      "en_GB": "hurt-ful"
+    },
+    "husband": {
+      "en_US": "hus-band",
+      "en_GB": "hus-band"
+    },
+    "idea": {
+      "en_US": "idea",
+      "en_GB": "idea"
+    },
+    "ideal": {
+      "en_US": "ide-al",
+      "en_GB": "ideal"
+    },
+    "idiom": {
+      "en_US": "id-iom",
+      "en_GB": "idiom"
+    },
+    "if": {
+      "en_US": "if",
+      "en_GB": "if"
+    },
+    "ill": {
+      "en_US": "ill",
+      "en_GB": "ill"
+    },
+    "illness": {
+      "en_US": "ill-ness",
+      "en_GB": "ill-ness"
+    },
+    "image": {
+      "en_US": "im-age",
+      "en_GB": "im-age"
+    },
+    "imagination": {
+      "en_US": "imag-i-na-tion",
+      "en_GB": "ima-gin-a-tion"
+    },
+    "imagine": {
+      "en_US": "imag-ine",
+      "en_GB": "ima-gine"
+    },
+    "impolite": {
+      "en_US": "im-po-lite",
+      "en_GB": "im-pol-ite"
+    },
+    "importance": {
+      "en_US": "im-por-tance",
+      "en_GB": "im-port-ance"
+    },
+    "important": {
+      "en_US": "im-por-tant",
+      "en_GB": "im-port-ant"
+    },
+    "importantly": {
+      "en_US": "im-por-tant-ly",
+      "en_GB": "im-port-antly"
+    },
+    "impossible": {
+      "en_US": "im-pos-si-ble",
+      "en_GB": "im-possible"
+    },
+    "impression": {
+      "en_US": "im-pres-sion",
+      "en_GB": "im-pres-sion"
+    },
+    "improper": {
+      "en_US": "im-prop-er",
+      "en_GB": "im-prop-er"
+    },
+    "improve": {
+      "en_US": "im-prove",
+      "en_GB": "im-prove"
+    },
+    "in": {
+      "en_US": "in",
+      "en_GB": "in"
+    },
+    "include": {
+      "en_US": "in-clude",
+      "en_GB": "in-clude"
+    },
+    "increase": {
+      "en_US": "in-crease",
+      "en_GB": "in-crease"
+    },
+    "indian": {
+      "en_US": "in-di-an",
+      "en_GB": "in-di-an"
+    },
+    "industry": {
+      "en_US": "in-dus-try",
+      "en_GB": "in-dustry"
+    },
+    "infer": {
+      "en_US": "in-fer",
+      "en_GB": "in-fer"
+    },
+    "influence": {
+      "en_US": "in-flu-ence",
+      "en_GB": "in-flu-ence"
+    },
+    "informal": {
+      "en_US": "in-for-mal",
+      "en_GB": "in-form-al"
+    },
+    "information": {
+      "en_US": "in-for-ma-tion",
+      "en_GB": "in-form-a-tion"
+    },
+    "ingredient": {
+      "en_US": "in-gre-di-ent",
+      "en_GB": "in-gredi-ent"
+    },
+    "injury": {
+      "en_US": "in-jury",
+      "en_GB": "in-jury"
+    },
+    "ink": {
+      "en_US": "ink",
+      "en_GB": "ink"
+    },
+    "insect": {
+      "en_US": "in-sect",
+      "en_GB": "in-sect"
+    },
+    "inside": {
+      "en_US": "in-side",
+      "en_GB": "in-side"
+    },
+    "inspiration": {
+      "en_US": "in-spi-ra-tion",
+      "en_GB": "in-spir-a-tion"
+    },
+    "inspire": {
+      "en_US": "in-spire",
+      "en_GB": "in-spire"
+    },
+    "inspiring": {
+      "en_US": "in-spir-ing",
+      "en_GB": "in-spir-ing"
+    },
+    "instead": {
+      "en_US": "in-stead",
+      "en_GB": "in-stead"
+    },
+    "instruction": {
+      "en_US": "in-struc-tion",
+      "en_GB": "in-struc-tion"
+    },
+    "instructor": {
+      "en_US": "in-struc-tor",
+      "en_GB": "in-struct-or"
+    },
+    "instrument": {
+      "en_US": "in-stru-ment",
+      "en_GB": "in-stru-ment"
+    },
+    "intelligence": {
+      "en_US": "in-tel-li-gence",
+      "en_GB": "in-tel-li-gence"
+    },
+    "interest": {
+      "en_US": "in-ter-est",
+      "en_GB": "in-terest"
+    },
+    "interested": {
+      "en_US": "in-ter-est-ed",
+      "en_GB": "in-ter-ested"
+    },
+    "interesting": {
+      "en_US": "in-ter-est-ing",
+      "en_GB": "in-ter-est-ing"
+    },
+    "international": {
+      "en_US": "in-ter-na-tion-al",
+      "en_GB": "in-ter-na-tion-al"
+    },
+    "internet": {
+      "en_US": "in-ter-net",
+      "en_GB": "in-ter-net"
+    },
+    "interview": {
+      "en_US": "in-ter-view",
+      "en_GB": "in-ter-view"
+    },
+    "interviewer": {
+      "en_US": "in-ter-view-er",
+      "en_GB": "in-ter-view-er"
+    },
+    "into": {
+      "en_US": "in-to",
+      "en_GB": "in-to"
+    },
+    "introduce": {
+      "en_US": "in-tro-duce",
+      "en_GB": "in-tro-duce"
+    },
+    "introduction": {
+      "en_US": "in-tro-duc-tion",
+      "en_GB": "in-tro-duc-tion"
+    },
+    "invent": {
+      "en_US": "in-vent",
+      "en_GB": "in-vent"
+    },
+    "invention": {
+      "en_US": "in-ven-tion",
+      "en_GB": "in-ven-tion"
+    },
+    "inventor": {
+      "en_US": "in-ven-tor",
+      "en_GB": "in-vent-or"
+    },
+    "invite": {
+      "en_US": "in-vite",
+      "en_GB": "in-vite"
+    },
+    "involve": {
+      "en_US": "in-volve",
+      "en_GB": "in-volve"
+    },
+    "island": {
+      "en_US": "is-land",
+      "en_GB": "is-land"
+    },
+    "italian": {
+      "en_US": "ital-ian",
+      "en_GB": "itali-an"
+    },
+    "item": {
+      "en_US": "item",
+      "en_GB": "item"
+    },
+    "its": {
+      "en_US": "its",
+      "en_GB": "its"
+    },
+    "itself": {
+      "en_US": "it-self",
+      "en_GB": "it-self"
+    },
+    "ivory": {
+      "en_US": "ivory",
+      "en_GB": "ivory"
+    },
+    "jacket": {
+      "en_US": "jack-et",
+      "en_GB": "jack-et"
+    },
+    "jade": {
+      "en_US": "jade",
+      "en_GB": "jade"
+    },
+    "january": {
+      "en_US": "jan-u-ary",
+      "en_GB": "janu-ary"
+    },
+    "jar": {
+      "en_US": "jar",
+      "en_GB": "jar"
+    },
+    "jazz": {
+      "en_US": "jazz",
+      "en_GB": "jazz"
+    },
+    "jeans": {
+      "en_US": "jeans",
+      "en_GB": "jeans"
+    },
+    "job": {
+      "en_US": "job",
+      "en_GB": "job"
+    },
+    "jog": {
+      "en_US": "jog",
+      "en_GB": "jog"
+    },
+    "join": {
+      "en_US": "join",
+      "en_GB": "join"
+    },
+    "joke": {
+      "en_US": "joke",
+      "en_GB": "joke"
+    },
+    "journey": {
+      "en_US": "jour-ney",
+      "en_GB": "jour-ney"
+    },
+    "joy": {
+      "en_US": "joy",
+      "en_GB": "joy"
+    },
+    "joyful": {
+      "en_US": "joy-ful",
+      "en_GB": "joy-ful"
+    },
+    "judge": {
+      "en_US": "judge",
+      "en_GB": "judge"
+    },
+    "juice": {
+      "en_US": "juice",
+      "en_GB": "juice"
+    },
+    "july": {
+      "en_US": "ju-ly",
+      "en_GB": "ju-ly"
+    },
+    "jump": {
+      "en_US": "jump",
+      "en_GB": "jump"
+    },
+    "jumping": {
+      "en_US": "jump-ing",
+      "en_GB": "jump-ing"
+    },
+    "june": {
+      "en_US": "june",
+      "en_GB": "june"
+    },
+    "junior": {
+      "en_US": "ju-nior",
+      "en_GB": "ju-ni-or"
+    },
+    "just": {
+      "en_US": "just",
+      "en_GB": "just"
+    },
+    "jute": {
+      "en_US": "jute",
+      "en_GB": "jute"
+    },
+    "keep": {
+      "en_US": "keep",
+      "en_GB": "keep"
+    },
+    "kenyan": {
+      "en_US": "kenyan",
+      "en_GB": "kenyan"
+    },
+    "key": {
+      "en_US": "key",
+      "en_GB": "key"
+    },
+    "keyboard": {
+      "en_US": "key-board",
+      "en_GB": "key-board"
+    },
+    "kick": {
+      "en_US": "kick",
+      "en_GB": "kick"
+    },
+    "kid": {
+      "en_US": "kid",
+      "en_GB": "kid"
+    },
+    "kill": {
+      "en_US": "kill",
+      "en_GB": "kill"
+    },
+    "kilo": {
+      "en_US": "ki-lo",
+      "en_GB": "kilo"
+    },
+    "kilogram": {
+      "en_US": "kilo-gram",
+      "en_GB": "kilo-gram"
+    },
+    "kilometer": {
+      "en_US": "kilo-me-ter",
+      "en_GB": "kilo-met-er"
+    },
+    "kilometre": {
+      "en_US": "kilo-me-tre",
+      "en_GB": "kilo-metre"
+    },
+    "kind": {
+      "en_US": "kind",
+      "en_GB": "kind"
+    },
+    "kindness": {
+      "en_US": "kind-ness",
+      "en_GB": "kind-ness"
+    },
+    "king": {
+      "en_US": "king",
+      "en_GB": "king"
+    },
+    "kingdom": {
+      "en_US": "king-dom",
+      "en_GB": "king-dom"
+    },
+    "kiss": {
+      "en_US": "kiss",
+      "en_GB": "kiss"
+    },
+    "kitchen": {
+      "en_US": "kitchen",
+      "en_GB": "kit-chen"
+    },
+    "kite": {
+      "en_US": "kite",
+      "en_GB": "kite"
+    },
+    "kitten": {
+      "en_US": "kit-ten",
+      "en_GB": "kit-ten"
+    },
+    "knee": {
+      "en_US": "knee",
+      "en_GB": "knee"
+    },
+    "knife": {
+      "en_US": "knife",
+      "en_GB": "knife"
+    },
+    "know": {
+      "en_US": "know",
+      "en_GB": "know"
+    },
+    "knowledge": {
+      "en_US": "knowl-edge",
+      "en_GB": "know-ledge"
+    },
+    "lack": {
+      "en_US": "lack",
+      "en_GB": "lack"
+    },
+    "ladder": {
+      "en_US": "lad-der",
+      "en_GB": "lad-der"
+    },
+    "lady": {
+      "en_US": "la-dy",
+      "en_GB": "lady"
+    },
+    "lake": {
+      "en_US": "lake",
+      "en_GB": "lake"
+    },
+    "lamp": {
+      "en_US": "lamp",
+      "en_GB": "lamp"
+    },
+    "land": {
+      "en_US": "land",
+      "en_GB": "land"
+    },
+    "landfill": {
+      "en_US": "land-fill",
+      "en_GB": "land-fill"
+    },
+    "landscape": {
+      "en_US": "land-scape",
+      "en_GB": "land-scape"
+    },
+    "landslide": {
+      "en_US": "land-slide",
+      "en_GB": "land-slide"
+    },
+    "language": {
+      "en_US": "lan-guage",
+      "en_GB": "lan-guage"
+    },
+    "lantern": {
+      "en_US": "lantern",
+      "en_GB": "lan-tern"
+    },
+    "laptop": {
+      "en_US": "lap-top",
+      "en_GB": "laptop"
+    },
+    "large": {
+      "en_US": "large",
+      "en_GB": "large"
+    },
+    "last": {
+      "en_US": "last",
+      "en_GB": "last"
+    },
+    "lastly": {
+      "en_US": "last-ly",
+      "en_GB": "lastly"
+    },
+    "late": {
+      "en_US": "late",
+      "en_GB": "late"
+    },
+    "later": {
+      "en_US": "lat-er",
+      "en_GB": "later"
+    },
+    "laugh": {
+      "en_US": "laugh",
+      "en_GB": "laugh"
+    },
+    "laughed": {
+      "en_US": "laughed",
+      "en_GB": "laughed"
+    },
+    "launch": {
+      "en_US": "launch",
+      "en_GB": "launch"
+    },
+    "law": {
+      "en_US": "law",
+      "en_GB": "law"
+    },
+    "lawyer": {
+      "en_US": "lawyer",
+      "en_GB": "law-yer"
+    },
+    "lay": {
+      "en_US": "lay",
+      "en_GB": "lay"
+    },
+    "layer": {
+      "en_US": "lay-er",
+      "en_GB": "lay-er"
+    },
+    "lazy": {
+      "en_US": "lazy",
+      "en_GB": "lazy"
+    },
+    "lead": {
+      "en_US": "lead",
+      "en_GB": "lead"
+    },
+    "leader": {
+      "en_US": "lead-er",
+      "en_GB": "lead-er"
+    },
+    "leaf": {
+      "en_US": "leaf",
+      "en_GB": "leaf"
+    },
+    "leaflet": {
+      "en_US": "leaflet",
+      "en_GB": "leaf-let"
+    },
+    "learn": {
+      "en_US": "learn",
+      "en_GB": "learn"
+    },
+    "learner": {
+      "en_US": "learn-er",
+      "en_GB": "learner"
+    },
+    "least": {
+      "en_US": "least",
+      "en_GB": "least"
+    },
+    "leave": {
+      "en_US": "leave",
+      "en_GB": "leave"
+    },
+    "lecture": {
+      "en_US": "lec-ture",
+      "en_GB": "lec-ture"
+    },
+    "leg": {
+      "en_US": "leg",
+      "en_GB": "leg"
+    },
+    "lend": {
+      "en_US": "lend",
+      "en_GB": "lend"
+    },
+    "length": {
+      "en_US": "length",
+      "en_GB": "length"
+    },
+    "less": {
+      "en_US": "less",
+      "en_GB": "less"
+    },
+    "lesson": {
+      "en_US": "les-son",
+      "en_GB": "les-son"
+    },
+    "letter": {
+      "en_US": "let-ter",
+      "en_GB": "let-ter"
+    },
+    "level": {
+      "en_US": "lev-el",
+      "en_GB": "level"
+    },
+    "librarian": {
+      "en_US": "li-brar-i-an",
+      "en_GB": "lib-rar-i-an"
+    },
+    "library": {
+      "en_US": "li-brary",
+      "en_GB": "lib-rary"
+    },
+    "licked": {
+      "en_US": "licked",
+      "en_GB": "licked"
+    },
+    "lie": {
+      "en_US": "lie",
+      "en_GB": "lie"
+    },
+    "life": {
+      "en_US": "life",
+      "en_GB": "life"
+    },
+    "lifelike": {
+      "en_US": "life-like",
+      "en_GB": "life-like"
+    },
+    "lifetime": {
+      "en_US": "life-time",
+      "en_GB": "life-time"
+    },
+    "lift": {
+      "en_US": "lift",
+      "en_GB": "lift"
+    },
+    "light": {
+      "en_US": "light",
+      "en_GB": "light"
+    },
+    "lightning": {
+      "en_US": "light-ning",
+      "en_GB": "light-ning"
+    },
+    "like": {
+      "en_US": "like",
+      "en_GB": "like"
+    },
+    "likely": {
+      "en_US": "like-ly",
+      "en_GB": "likely"
+    },
+    "line": {
+      "en_US": "line",
+      "en_GB": "line"
+    },
+    "lining": {
+      "en_US": "lin-ing",
+      "en_GB": "lin-ing"
+    },
+    "link": {
+      "en_US": "link",
+      "en_GB": "link"
+    },
+    "lion": {
+      "en_US": "li-on",
+      "en_GB": "li-on"
+    },
+    "liquid": {
+      "en_US": "liq-uid",
+      "en_GB": "li-quid"
+    },
+    "list": {
+      "en_US": "list",
+      "en_GB": "list"
+    },
+    "listen": {
+      "en_US": "lis-ten",
+      "en_GB": "listen"
+    },
+    "listener": {
+      "en_US": "lis-ten-er",
+      "en_GB": "listen-er"
+    },
+    "literary": {
+      "en_US": "lit-er-ary",
+      "en_GB": "lit-er-ary"
+    },
+    "literature": {
+      "en_US": "lit-er-a-ture",
+      "en_GB": "lit-er-at-ure"
+    },
+    "litter": {
+      "en_US": "lit-ter",
+      "en_GB": "lit-ter"
+    },
+    "little": {
+      "en_US": "lit-tle",
+      "en_GB": "little"
+    },
+    "live": {
+      "en_US": "live",
+      "en_GB": "live"
+    },
+    "lively": {
+      "en_US": "live-ly",
+      "en_GB": "lively"
+    },
+    "local": {
+      "en_US": "lo-cal",
+      "en_GB": "loc-al"
+    },
+    "located": {
+      "en_US": "lo-cat-ed",
+      "en_GB": "loc-ated"
+    },
+    "lock": {
+      "en_US": "lock",
+      "en_GB": "lock"
+    },
+    "locker": {
+      "en_US": "lock-er",
+      "en_GB": "lock-er"
+    },
+    "lonely": {
+      "en_US": "lone-ly",
+      "en_GB": "lonely"
+    },
+    "long": {
+      "en_US": "long",
+      "en_GB": "long"
+    },
+    "longer": {
+      "en_US": "longer",
+      "en_GB": "longer"
+    },
+    "lorry": {
+      "en_US": "lor-ry",
+      "en_GB": "lorry"
+    },
+    "lose": {
+      "en_US": "lose",
+      "en_GB": "lose"
+    },
+    "lost": {
+      "en_US": "lost",
+      "en_GB": "lost"
+    },
+    "lotus": {
+      "en_US": "lo-tus",
+      "en_GB": "lo-tus"
+    },
+    "loud": {
+      "en_US": "loud",
+      "en_GB": "loud"
+    },
+    "love": {
+      "en_US": "love",
+      "en_GB": "love"
+    },
+    "lovely": {
+      "en_US": "love-ly",
+      "en_GB": "lovely"
+    },
+    "lover": {
+      "en_US": "lover",
+      "en_GB": "lov-er"
+    },
+    "low": {
+      "en_US": "low",
+      "en_GB": "low"
+    },
+    "lower": {
+      "en_US": "low-er",
+      "en_GB": "lower"
+    },
+    "luck": {
+      "en_US": "luck",
+      "en_GB": "luck"
+    },
+    "luckily": {
+      "en_US": "luck-i-ly",
+      "en_GB": "luck-ily"
+    },
+    "lucky": {
+      "en_US": "lucky",
+      "en_GB": "lucky"
+    },
+    "luggage": {
+      "en_US": "lug-gage",
+      "en_GB": "lug-gage"
+    },
+    "lunar": {
+      "en_US": "lu-nar",
+      "en_GB": "lun-ar"
+    },
+    "lunch": {
+      "en_US": "lunch",
+      "en_GB": "lunch"
+    },
+    "lyrics": {
+      "en_US": "lyrics",
+      "en_GB": "lyr-ics"
+    },
+    "machine": {
+      "en_US": "ma-chine",
+      "en_GB": "ma-chine"
+    },
+    "mad": {
+      "en_US": "mad",
+      "en_GB": "mad"
+    },
+    "madam": {
+      "en_US": "madam",
+      "en_GB": "madam"
+    },
+    "magazine": {
+      "en_US": "mag-a-zine",
+      "en_GB": "magazine"
+    },
+    "magic": {
+      "en_US": "mag-ic",
+      "en_GB": "ma-gic"
+    },
+    "magical": {
+      "en_US": "mag-i-cal",
+      "en_GB": "ma-gic-al"
+    },
+    "main": {
+      "en_US": "main",
+      "en_GB": "main"
+    },
+    "maintain": {
+      "en_US": "main-tain",
+      "en_GB": "main-tain"
+    },
+    "make": {
+      "en_US": "make",
+      "en_GB": "make"
+    },
+    "mall": {
+      "en_US": "mall",
+      "en_GB": "mall"
+    },
+    "man": {
+      "en_US": "man",
+      "en_GB": "man"
+    },
+    "manage": {
+      "en_US": "man-age",
+      "en_GB": "man-age"
+    },
+    "manager": {
+      "en_US": "man-ag-er",
+      "en_GB": "man-ager"
+    },
+    "mankind": {
+      "en_US": "mankind",
+      "en_GB": "man-kind"
+    },
+    "manned": {
+      "en_US": "manned",
+      "en_GB": "manned"
+    },
+    "manner": {
+      "en_US": "man-ner",
+      "en_GB": "man-ner"
+    },
+    "manpower": {
+      "en_US": "man-pow-er",
+      "en_GB": "man-power"
+    },
+    "map": {
+      "en_US": "map",
+      "en_GB": "map"
+    },
+    "marathon": {
+      "en_US": "marathon",
+      "en_GB": "mara-thon"
+    },
+    "marble": {
+      "en_US": "mar-ble",
+      "en_GB": "marble"
+    },
+    "march": {
+      "en_US": "march",
+      "en_GB": "march"
+    },
+    "mark": {
+      "en_US": "mark",
+      "en_GB": "mark"
+    },
+    "market": {
+      "en_US": "mar-ket",
+      "en_GB": "mar-ket"
+    },
+    "married": {
+      "en_US": "mar-ried",
+      "en_GB": "mar-ried"
+    },
+    "marry": {
+      "en_US": "mar-ry",
+      "en_GB": "marry"
+    },
+    "mars": {
+      "en_US": "mars",
+      "en_GB": "mars"
+    },
+    "mascot": {
+      "en_US": "mas-cot",
+      "en_GB": "mas-cot"
+    },
+    "mash": {
+      "en_US": "mash",
+      "en_GB": "mash"
+    },
+    "mask": {
+      "en_US": "mask",
+      "en_GB": "mask"
+    },
+    "mat": {
+      "en_US": "mat",
+      "en_GB": "mat"
+    },
+    "match": {
+      "en_US": "match",
+      "en_GB": "match"
+    },
+    "matchbox": {
+      "en_US": "match-box",
+      "en_GB": "match-box"
+    },
+    "material": {
+      "en_US": "ma-te-ri-al",
+      "en_GB": "ma-ter-i-al"
+    },
+    "maths": {
+      "en_US": "maths",
+      "en_GB": "maths"
+    },
+    "matter": {
+      "en_US": "mat-ter",
+      "en_GB": "mat-ter"
+    },
+    "may": {
+      "en_US": "may",
+      "en_GB": "may"
+    },
+    "maybe": {
+      "en_US": "maybe",
+      "en_GB": "maybe"
+    },
+    "me": {
+      "en_US": "me",
+      "en_GB": "me"
+    },
+    "meal": {
+      "en_US": "meal",
+      "en_GB": "meal"
+    },
+    "mean": {
+      "en_US": "mean",
+      "en_GB": "mean"
+    },
+    "meaning": {
+      "en_US": "mean-ing",
+      "en_GB": "mean-ing"
+    },
+    "meaningful": {
+      "en_US": "mean-ing-ful",
+      "en_GB": "mean-ing-ful"
+    },
+    "means": {
+      "en_US": "means",
+      "en_GB": "means"
+    },
+    "measure": {
+      "en_US": "mea-sure",
+      "en_GB": "meas-ure"
+    },
+    "measurement": {
+      "en_US": "mea-sure-ment",
+      "en_GB": "meas-ure-ment"
+    },
+    "meat": {
+      "en_US": "meat",
+      "en_GB": "meat"
+    },
+    "medal": {
+      "en_US": "medal",
+      "en_GB": "medal"
+    },
+    "medical": {
+      "en_US": "med-i-cal",
+      "en_GB": "med-ic-al"
+    },
+    "medicine": {
+      "en_US": "medicine",
+      "en_GB": "medi-cine"
+    },
+    "medium": {
+      "en_US": "medi-um",
+      "en_GB": "me-di-um"
+    },
+    "meet": {
+      "en_US": "meet",
+      "en_GB": "meet"
+    },
+    "meeting": {
+      "en_US": "meet-ing",
+      "en_GB": "meet-ing"
+    },
+    "melt": {
+      "en_US": "melt",
+      "en_GB": "melt"
+    },
+    "memorise": {
+      "en_US": "mem-o-rise",
+      "en_GB": "mem-or-ise"
+    },
+    "memory": {
+      "en_US": "mem-o-ry",
+      "en_GB": "memory"
+    },
+    "mention": {
+      "en_US": "men-tion",
+      "en_GB": "men-tion"
+    },
+    "menu": {
+      "en_US": "menu",
+      "en_GB": "menu"
+    },
+    "merci": {
+      "en_US": "mer-ci",
+      "en_GB": "merci"
+    },
+    "mess": {
+      "en_US": "mess",
+      "en_GB": "mess"
+    },
+    "message": {
+      "en_US": "mes-sage",
+      "en_GB": "mes-sage"
+    },
+    "metal": {
+      "en_US": "met-al",
+      "en_GB": "met-al"
+    },
+    "meter": {
+      "en_US": "me-ter",
+      "en_GB": "meter"
+    },
+    "method": {
+      "en_US": "method",
+      "en_GB": "meth-od"
+    },
+    "metre": {
+      "en_US": "me-tre",
+      "en_GB": "metre"
+    },
+    "metro": {
+      "en_US": "metro",
+      "en_GB": "metro"
+    },
+    "microscope": {
+      "en_US": "mi-cro-scope",
+      "en_GB": "mi-cro-scope"
+    },
+    "might": {
+      "en_US": "might",
+      "en_GB": "might"
+    },
+    "mile": {
+      "en_US": "mile",
+      "en_GB": "mile"
+    },
+    "milk": {
+      "en_US": "milk",
+      "en_GB": "milk"
+    },
+    "millimetre": {
+      "en_US": "mil-lime-tre",
+      "en_GB": "mil-li-metre"
+    },
+    "millmeter": {
+      "en_US": "mill-me-ter",
+      "en_GB": "mill-met-er"
+    },
+    "mind": {
+      "en_US": "mind",
+      "en_GB": "mind"
+    },
+    "mindset": {
+      "en_US": "mind-set",
+      "en_GB": "mind-set"
+    },
+    "mine": {
+      "en_US": "mine",
+      "en_GB": "mine"
+    },
+    "minute": {
+      "en_US": "minute",
+      "en_GB": "minute"
+    },
+    "miracle": {
+      "en_US": "mir-a-cle",
+      "en_GB": "mir-acle"
+    },
+    "mirror": {
+      "en_US": "mir-ror",
+      "en_GB": "mir-ror"
+    },
+    "miss": {
+      "en_US": "miss",
+      "en_GB": "miss"
+    },
+    "missing": {
+      "en_US": "miss-ing",
+      "en_GB": "miss-ing"
+    },
+    "mission": {
+      "en_US": "mis-sion",
+      "en_GB": "mis-sion"
+    },
+    "mistake": {
+      "en_US": "mis-take",
+      "en_GB": "mis-take"
+    },
+    "misunderstanding": {
+      "en_US": "mis-un-der-stand-ing",
+      "en_GB": "mis-un-der-stand-ing"
+    },
+    "mix": {
+      "en_US": "mix",
+      "en_GB": "mix"
+    },
+    "mixture": {
+      "en_US": "mix-ture",
+      "en_GB": "mix-ture"
+    },
+    "mm": {
+      "en_US": "mm",
+      "en_GB": "mm"
+    },
+    "mobile": {
+      "en_US": "mo-bile",
+      "en_GB": "mo-bile"
+    },
+    "modern": {
+      "en_US": "mod-ern",
+      "en_GB": "mod-ern"
+    },
+    "moment": {
+      "en_US": "mo-ment",
+      "en_GB": "mo-ment"
+    },
+    "monday": {
+      "en_US": "mon-day",
+      "en_GB": "monday"
+    },
+    "money": {
+      "en_US": "mon-ey",
+      "en_GB": "money"
+    },
+    "monkey": {
+      "en_US": "mon-key",
+      "en_GB": "mon-key"
+    },
+    "month": {
+      "en_US": "month",
+      "en_GB": "month"
+    },
+    "moon": {
+      "en_US": "moon",
+      "en_GB": "moon"
+    },
+    "mooncake": {
+      "en_US": "moon-cake",
+      "en_GB": "moon-cake"
+    },
+    "more": {
+      "en_US": "more",
+      "en_GB": "more"
+    },
+    "moss": {
+      "en_US": "moss",
+      "en_GB": "moss"
+    },
+    "most": {
+      "en_US": "most",
+      "en_GB": "most"
+    },
+    "mother": {
+      "en_US": "moth-er",
+      "en_GB": "moth-er"
+    },
+    "motto": {
+      "en_US": "mot-to",
+      "en_GB": "motto"
+    },
+    "mount": {
+      "en_US": "mount",
+      "en_GB": "mount"
+    },
+    "mountain": {
+      "en_US": "moun-tain",
+      "en_GB": "moun-tain"
+    },
+    "mouse": {
+      "en_US": "mouse",
+      "en_GB": "mouse"
+    },
+    "mouth": {
+      "en_US": "mouth",
+      "en_GB": "mouth"
+    },
+    "move": {
+      "en_US": "move",
+      "en_GB": "move"
+    },
+    "movement": {
+      "en_US": "move-ment",
+      "en_GB": "move-ment"
+    },
+    "movie": {
+      "en_US": "movie",
+      "en_GB": "movie"
+    },
+    "mr": {
+      "en_US": "mr",
+      "en_GB": "mr"
+    },
+    "mrs": {
+      "en_US": "mrs",
+      "en_GB": "mrs"
+    },
+    "ms": {
+      "en_US": "ms",
+      "en_GB": "ms"
+    },
+    "much": {
+      "en_US": "much",
+      "en_GB": "much"
+    },
+    "mule": {
+      "en_US": "mule",
+      "en_GB": "mule"
+    },
+    "mum": {
+      "en_US": "mum",
+      "en_GB": "mum"
+    },
+    "museum": {
+      "en_US": "mu-se-um",
+      "en_GB": "mu-seum"
+    },
+    "mushroom": {
+      "en_US": "mush-room",
+      "en_GB": "mush-room"
+    },
+    "music": {
+      "en_US": "mu-sic",
+      "en_GB": "mu-sic"
+    },
+    "musical": {
+      "en_US": "mu-si-cal",
+      "en_GB": "mu-sic-al"
+    },
+    "musician": {
+      "en_US": "mu-si-cian",
+      "en_GB": "mu-si-cian"
+    },
+    "mutton": {
+      "en_US": "mut-ton",
+      "en_GB": "mut-ton"
+    },
+    "myself": {
+      "en_US": "my-self",
+      "en_GB": "my-self"
+    },
+    "mysterious": {
+      "en_US": "mys-te-ri-ous",
+      "en_GB": "mys-ter-i-ous"
+    },
+    "mystery": {
+      "en_US": "mys-tery",
+      "en_GB": "mys-tery"
+    },
+    "namaste": {
+      "en_US": "na-maste",
+      "en_GB": "na-maste"
+    },
+    "narrow": {
+      "en_US": "nar-row",
+      "en_GB": "nar-row"
+    },
+    "nation": {
+      "en_US": "na-tion",
+      "en_GB": "na-tion"
+    },
+    "national": {
+      "en_US": "na-tion-al",
+      "en_GB": "na-tion-al"
+    },
+    "natural": {
+      "en_US": "nat-u-ral",
+      "en_GB": "nat-ur-al"
+    },
+    "nature": {
+      "en_US": "na-ture",
+      "en_GB": "nature"
+    },
+    "naughty": {
+      "en_US": "naughty",
+      "en_GB": "naughty"
+    },
+    "nearby": {
+      "en_US": "near-by",
+      "en_GB": "nearby"
+    },
+    "nearly": {
+      "en_US": "near-ly",
+      "en_GB": "nearly"
+    },
+    "necessary": {
+      "en_US": "nec-es-sary",
+      "en_GB": "ne-ces-sary"
+    },
+    "neck": {
+      "en_US": "neck",
+      "en_GB": "neck"
+    },
+    "need": {
+      "en_US": "need",
+      "en_GB": "need"
+    },
+    "negative": {
+      "en_US": "neg-a-tive",
+      "en_GB": "neg-at-ive"
+    },
+    "neighbour": {
+      "en_US": "neigh-bour",
+      "en_GB": "neigh-bour"
+    },
+    "neighbourhood": {
+      "en_US": "neigh-bour-hood",
+      "en_GB": "neigh-bour-hood"
+    },
+    "neither": {
+      "en_US": "nei-ther",
+      "en_GB": "neither"
+    },
+    "nervous": {
+      "en_US": "ner-vous",
+      "en_GB": "nervous"
+    },
+    "nervously": {
+      "en_US": "ner-vous-ly",
+      "en_GB": "nervously"
+    },
+    "net": {
+      "en_US": "net",
+      "en_GB": "net"
+    },
+    "new": {
+      "en_US": "new",
+      "en_GB": "new"
+    },
+    "news": {
+      "en_US": "news",
+      "en_GB": "news"
+    },
+    "newspaper": {
+      "en_US": "news-pa-per",
+      "en_GB": "news-pa-per"
+    },
+    "nice": {
+      "en_US": "nice",
+      "en_GB": "nice"
+    },
+    "nicely": {
+      "en_US": "nice-ly",
+      "en_GB": "nicely"
+    },
+    "night": {
+      "en_US": "night",
+      "en_GB": "night"
+    },
+    "nine": {
+      "en_US": "nine",
+      "en_GB": "nine"
+    },
+    "nineteen": {
+      "en_US": "nine-teen",
+      "en_GB": "nine-teen"
+    },
+    "nobody": {
+      "en_US": "no-body",
+      "en_GB": "nobody"
+    },
+    "nod": {
+      "en_US": "nod",
+      "en_GB": "nod"
+    },
+    "noise": {
+      "en_US": "noise",
+      "en_GB": "noise"
+    },
+    "none": {
+      "en_US": "none",
+      "en_GB": "none"
+    },
+    "noodle": {
+      "en_US": "noo-dle",
+      "en_GB": "noodle"
+    },
+    "noon": {
+      "en_US": "noon",
+      "en_GB": "noon"
+    },
+    "nor": {
+      "en_US": "nor",
+      "en_GB": "nor"
+    },
+    "normal": {
+      "en_US": "nor-mal",
+      "en_GB": "nor-mal"
+    },
+    "north": {
+      "en_US": "north",
+      "en_GB": "north"
+    },
+    "northeastern": {
+      "en_US": "north-east-ern",
+      "en_GB": "north-east-ern"
+    },
+    "northern": {
+      "en_US": "north-ern",
+      "en_GB": "north-ern"
+    },
+    "nose": {
+      "en_US": "nose",
+      "en_GB": "nose"
+    },
+    "nosebleed": {
+      "en_US": "nose-bleed",
+      "en_GB": "nosebleed"
+    },
+    "not": {
+      "en_US": "not",
+      "en_GB": "not"
+    },
+    "note": {
+      "en_US": "note",
+      "en_GB": "note"
+    },
+    "notebook": {
+      "en_US": "note-book",
+      "en_GB": "note-book"
+    },
+    "nothing": {
+      "en_US": "noth-ing",
+      "en_GB": "noth-ing"
+    },
+    "notice": {
+      "en_US": "no-tice",
+      "en_GB": "no-tice"
+    },
+    "novel": {
+      "en_US": "nov-el",
+      "en_GB": "nov-el"
+    },
+    "november": {
+      "en_US": "no-vem-ber",
+      "en_GB": "novem-ber"
+    },
+    "now": {
+      "en_US": "now",
+      "en_GB": "now"
+    },
+    "nowadays": {
+      "en_US": "nowa-days",
+      "en_GB": "nowadays"
+    },
+    "number": {
+      "en_US": "num-ber",
+      "en_GB": "num-ber"
+    },
+    "nurse": {
+      "en_US": "nurse",
+      "en_GB": "nurse"
+    },
+    "object": {
+      "en_US": "ob-ject",
+      "en_GB": "ob-ject"
+    },
+    "occasion": {
+      "en_US": "oc-ca-sion",
+      "en_GB": "oc-ca-sion"
+    },
+    "ocean": {
+      "en_US": "ocean",
+      "en_GB": "ocean"
+    },
+    "october": {
+      "en_US": "oc-to-ber",
+      "en_GB": "oc-to-ber"
+    },
+    "offer": {
+      "en_US": "of-fer",
+      "en_GB": "of-fer"
+    },
+    "office": {
+      "en_US": "of-fice",
+      "en_GB": "of-fice"
+    },
+    "officer": {
+      "en_US": "of-fi-cer",
+      "en_GB": "of-ficer"
+    },
+    "official": {
+      "en_US": "of-fi-cial",
+      "en_GB": "of-fi-cial"
+    },
+    "oh": {
+      "en_US": "oh",
+      "en_GB": "oh"
+    },
+    "oil": {
+      "en_US": "oil",
+      "en_GB": "oil"
+    },
+    "old": {
+      "en_US": "old",
+      "en_GB": "old"
+    },
+    "older": {
+      "en_US": "old-er",
+      "en_GB": "older"
+    },
+    "on": {
+      "en_US": "on",
+      "en_GB": "on"
+    },
+    "onboard": {
+      "en_US": "on-board",
+      "en_GB": "on-board"
+    },
+    "once": {
+      "en_US": "once",
+      "en_GB": "once"
+    },
+    "one": {
+      "en_US": "one",
+      "en_GB": "one"
+    },
+    "onion": {
+      "en_US": "onion",
+      "en_GB": "onion"
+    },
+    "online": {
+      "en_US": "on-line",
+      "en_GB": "on-line"
+    },
+    "only": {
+      "en_US": "on-ly",
+      "en_GB": "only"
+    },
+    "onto": {
+      "en_US": "on-to",
+      "en_GB": "onto"
+    },
+    "open": {
+      "en_US": "open",
+      "en_GB": "open"
+    },
+    "opening": {
+      "en_US": "open-ing",
+      "en_GB": "open-ing"
+    },
+    "opera": {
+      "en_US": "opera",
+      "en_GB": "op-era"
+    },
+    "operate": {
+      "en_US": "op-er-ate",
+      "en_GB": "op-er-ate"
+    },
+    "opinion": {
+      "en_US": "opin-ion",
+      "en_GB": "opin-ion"
+    },
+    "opportunity": {
+      "en_US": "op-por-tu-ni-ty",
+      "en_GB": "op-por-tun-ity"
+    },
+    "or": {
+      "en_US": "or",
+      "en_GB": "or"
+    },
+    "orange": {
+      "en_US": "or-ange",
+      "en_GB": "or-ange"
+    },
+    "order": {
+      "en_US": "or-der",
+      "en_GB": "or-der"
+    },
+    "ordinary": {
+      "en_US": "or-di-nary",
+      "en_GB": "or-din-ary"
+    },
+    "organization": {
+      "en_US": "or-ga-ni-za-tion",
+      "en_GB": "or-gan-iz-a-tion"
+    },
+    "organized": {
+      "en_US": "or-ga-nized",
+      "en_GB": "or-gan-ized"
+    },
+    "original": {
+      "en_US": "orig-i-nal",
+      "en_GB": "ori-gin-al"
+    },
+    "other": {
+      "en_US": "oth-er",
+      "en_GB": "oth-er"
+    },
+    "ours": {
+      "en_US": "ours",
+      "en_GB": "ours"
+    },
+    "ourselves": {
+      "en_US": "our-selves",
+      "en_GB": "ourselves"
+    },
+    "outdo": {
+      "en_US": "out-do",
+      "en_GB": "outdo"
+    },
+    "outer": {
+      "en_US": "out-er",
+      "en_GB": "out-er"
+    },
+    "outgoing": {
+      "en_US": "out-go-ing",
+      "en_GB": "out-go-ing"
+    },
+    "outing": {
+      "en_US": "out-ing",
+      "en_GB": "out-ing"
+    },
+    "outline": {
+      "en_US": "out-line",
+      "en_GB": "out-line"
+    },
+    "outside": {
+      "en_US": "out-side",
+      "en_GB": "out-side"
+    },
+    "oven": {
+      "en_US": "oven",
+      "en_GB": "oven"
+    },
+    "over": {
+      "en_US": "over",
+      "en_GB": "over"
+    },
+    "overcome": {
+      "en_US": "over-come",
+      "en_GB": "over-come"
+    },
+    "own": {
+      "en_US": "own",
+      "en_GB": "own"
+    },
+    "owner": {
+      "en_US": "own-er",
+      "en_GB": "own-er"
+    },
+    "pack": {
+      "en_US": "pack",
+      "en_GB": "pack"
+    },
+    "packaging": {
+      "en_US": "pack-ag-ing",
+      "en_GB": "pack-aging"
+    },
+    "pain": {
+      "en_US": "pain",
+      "en_GB": "pain"
+    },
+    "painful": {
+      "en_US": "painful",
+      "en_GB": "pain-ful"
+    },
+    "paint": {
+      "en_US": "paint",
+      "en_GB": "paint"
+    },
+    "painter": {
+      "en_US": "painter",
+      "en_GB": "paint-er"
+    },
+    "painting": {
+      "en_US": "paint-ing",
+      "en_GB": "paint-ing"
+    },
+    "pair": {
+      "en_US": "pair",
+      "en_GB": "pair"
+    },
+    "palace": {
+      "en_US": "palace",
+      "en_GB": "palace"
+    },
+    "palm": {
+      "en_US": "palm",
+      "en_GB": "palm"
+    },
+    "pan": {
+      "en_US": "pan",
+      "en_GB": "pan"
+    },
+    "pancake": {
+      "en_US": "pan-cake",
+      "en_GB": "pan-cake"
+    },
+    "panda": {
+      "en_US": "pan-da",
+      "en_GB": "panda"
+    },
+    "panic": {
+      "en_US": "pan-ic",
+      "en_GB": "pan-ic"
+    },
+    "paper": {
+      "en_US": "pa-per",
+      "en_GB": "pa-per"
+    },
+    "papermaking": {
+      "en_US": "pa-per-mak-ing",
+      "en_GB": "pa-per-mak-ing"
+    },
+    "parade": {
+      "en_US": "pa-rade",
+      "en_GB": "parade"
+    },
+    "paragraph": {
+      "en_US": "para-graph",
+      "en_GB": "para-graph"
+    },
+    "pardon": {
+      "en_US": "par-don",
+      "en_GB": "par-don"
+    },
+    "parent": {
+      "en_US": "par-ent",
+      "en_GB": "par-ent"
+    },
+    "paris": {
+      "en_US": "paris",
+      "en_GB": "par-is"
+    },
+    "park": {
+      "en_US": "park",
+      "en_GB": "park"
+    },
+    "parrot": {
+      "en_US": "par-rot",
+      "en_GB": "par-rot"
+    },
+    "part": {
+      "en_US": "part",
+      "en_GB": "part"
+    },
+    "partner": {
+      "en_US": "part-ner",
+      "en_GB": "part-ner"
+    },
+    "pass": {
+      "en_US": "pass",
+      "en_GB": "pass"
+    },
+    "passage": {
+      "en_US": "pas-sage",
+      "en_GB": "pas-sage"
+    },
+    "passenger": {
+      "en_US": "pas-sen-ger",
+      "en_GB": "pas-sen-ger"
+    },
+    "passion": {
+      "en_US": "pas-sion",
+      "en_GB": "pas-sion"
+    },
+    "passport": {
+      "en_US": "pass-port",
+      "en_GB": "pass-port"
+    },
+    "password": {
+      "en_US": "pass-word",
+      "en_GB": "pass-word"
+    },
+    "past": {
+      "en_US": "past",
+      "en_GB": "past"
+    },
+    "paste": {
+      "en_US": "paste",
+      "en_GB": "paste"
+    },
+    "path": {
+      "en_US": "path",
+      "en_GB": "path"
+    },
+    "patient": {
+      "en_US": "pa-tient",
+      "en_GB": "pa-tient"
+    },
+    "pauper": {
+      "en_US": "pau-per",
+      "en_GB": "pau-per"
+    },
+    "pay": {
+      "en_US": "pay",
+      "en_GB": "pay"
+    },
+    "pe": {
+      "en_US": "pe",
+      "en_GB": "pe"
+    },
+    "pea": {
+      "en_US": "pea",
+      "en_GB": "pea"
+    },
+    "peace": {
+      "en_US": "peace",
+      "en_GB": "peace"
+    },
+    "peak": {
+      "en_US": "peak",
+      "en_GB": "peak"
+    },
+    "peanut": {
+      "en_US": "peanut",
+      "en_GB": "pea-nut"
+    },
+    "pear": {
+      "en_US": "pear",
+      "en_GB": "pear"
+    },
+    "pen": {
+      "en_US": "pen",
+      "en_GB": "pen"
+    },
+    "pencil": {
+      "en_US": "pen-cil",
+      "en_GB": "pen-cil"
+    },
+    "penguin": {
+      "en_US": "pen-guin",
+      "en_GB": "pen-guin"
+    },
+    "peony": {
+      "en_US": "pe-ony",
+      "en_GB": "pe-ony"
+    },
+    "people": {
+      "en_US": "peo-ple",
+      "en_GB": "people"
+    },
+    "pepper": {
+      "en_US": "pep-per",
+      "en_GB": "pep-per"
+    },
+    "per": {
+      "en_US": "per",
+      "en_GB": "per"
+    },
+    "percent": {
+      "en_US": "per-cent",
+      "en_GB": "per-cent"
+    },
+    "perfect": {
+      "en_US": "per-fect",
+      "en_GB": "per-fect"
+    },
+    "perform": {
+      "en_US": "per-form",
+      "en_GB": "per-form"
+    },
+    "performance": {
+      "en_US": "per-for-mance",
+      "en_GB": "per-form-ance"
+    },
+    "performer": {
+      "en_US": "per-former",
+      "en_GB": "per-former"
+    },
+    "perhaps": {
+      "en_US": "per-haps",
+      "en_GB": "per-haps"
+    },
+    "period": {
+      "en_US": "pe-ri-od",
+      "en_GB": "peri-od"
+    },
+    "person": {
+      "en_US": "per-son",
+      "en_GB": "per-son"
+    },
+    "personal": {
+      "en_US": "per-son-al",
+      "en_GB": "per-son-al"
+    },
+    "personality": {
+      "en_US": "per-son-al-i-ty",
+      "en_GB": "per-son-al-ity"
+    },
+    "pet": {
+      "en_US": "pet",
+      "en_GB": "pet"
+    },
+    "phone": {
+      "en_US": "phone",
+      "en_GB": "phone"
+    },
+    "photo": {
+      "en_US": "pho-to",
+      "en_GB": "photo"
+    },
+    "photographer": {
+      "en_US": "pho-tog-ra-pher",
+      "en_GB": "pho-to-graph-er"
+    },
+    "photography": {
+      "en_US": "pho-tog-ra-phy",
+      "en_GB": "pho-to-graphy"
+    },
+    "physical": {
+      "en_US": "phys-i-cal",
+      "en_GB": "phys-ic-al"
+    },
+    "physicist": {
+      "en_US": "physi-cist",
+      "en_GB": "phys-i-cist"
+    },
+    "physics": {
+      "en_US": "physics",
+      "en_GB": "phys-ics"
+    },
+    "pianist": {
+      "en_US": "pi-anist",
+      "en_GB": "pi-an-ist"
+    },
+    "piano": {
+      "en_US": "pi-ano",
+      "en_GB": "pi-ano"
+    },
+    "pick": {
+      "en_US": "pick",
+      "en_GB": "pick"
+    },
+    "picnic": {
+      "en_US": "pic-nic",
+      "en_GB": "pic-nic"
+    },
+    "picture": {
+      "en_US": "pic-ture",
+      "en_GB": "pic-ture"
+    },
+    "pie": {
+      "en_US": "pie",
+      "en_GB": "pie"
+    },
+    "piece": {
+      "en_US": "piece",
+      "en_GB": "piece"
+    },
+    "pig": {
+      "en_US": "pig",
+      "en_GB": "pig"
+    },
+    "pill": {
+      "en_US": "pill",
+      "en_GB": "pill"
+    },
+    "pilot": {
+      "en_US": "pi-lot",
+      "en_GB": "pi-lot"
+    },
+    "pink": {
+      "en_US": "pink",
+      "en_GB": "pink"
+    },
+    "pioneer": {
+      "en_US": "pi-o-neer",
+      "en_GB": "pi-on-eer"
+    },
+    "pipe": {
+      "en_US": "pipe",
+      "en_GB": "pipe"
+    },
+    "pizza": {
+      "en_US": "piz-za",
+      "en_GB": "pizza"
+    },
+    "place": {
+      "en_US": "place",
+      "en_GB": "place"
+    },
+    "plan": {
+      "en_US": "plan",
+      "en_GB": "plan"
+    },
+    "planet": {
+      "en_US": "plan-et",
+      "en_GB": "plan-et"
+    },
+    "plant": {
+      "en_US": "plant",
+      "en_GB": "plant"
+    },
+    "plastic": {
+      "en_US": "plas-tic",
+      "en_GB": "plastic"
+    },
+    "plate": {
+      "en_US": "plate",
+      "en_GB": "plate"
+    },
+    "play": {
+      "en_US": "play",
+      "en_GB": "play"
+    },
+    "player": {
+      "en_US": "play-er",
+      "en_GB": "play-er"
+    },
+    "playful": {
+      "en_US": "play-ful",
+      "en_GB": "play-ful"
+    },
+    "playground": {
+      "en_US": "play-ground",
+      "en_GB": "play-ground"
+    },
+    "playing": {
+      "en_US": "play-ing",
+      "en_GB": "play-ing"
+    },
+    "pleasant": {
+      "en_US": "pleas-ant",
+      "en_GB": "pleas-ant"
+    },
+    "pleasure": {
+      "en_US": "plea-sure",
+      "en_GB": "pleas-ure"
+    },
+    "plenty": {
+      "en_US": "plen-ty",
+      "en_GB": "plenty"
+    },
+    "pocket": {
+      "en_US": "pock-et",
+      "en_GB": "pock-et"
+    },
+    "podcast": {
+      "en_US": "pod-cast",
+      "en_GB": "pod-cast"
+    },
+    "poem": {
+      "en_US": "po-em",
+      "en_GB": "poem"
+    },
+    "poet": {
+      "en_US": "po-et",
+      "en_GB": "poet"
+    },
+    "point": {
+      "en_US": "point",
+      "en_GB": "point"
+    },
+    "policewoman": {
+      "en_US": "po-lice-wom-an",
+      "en_GB": "po-lice-wo-man"
+    },
+    "polite": {
+      "en_US": "po-lite",
+      "en_GB": "po-lite"
+    },
+    "pollen": {
+      "en_US": "pollen",
+      "en_GB": "pol-len"
+    },
+    "pollination": {
+      "en_US": "pol-li-na-tion",
+      "en_GB": "pol-lin-a-tion"
+    },
+    "pollute": {
+      "en_US": "pol-lute",
+      "en_GB": "pol-lute"
+    },
+    "pollution": {
+      "en_US": "pol-lu-tion",
+      "en_GB": "pol-lu-tion"
+    },
+    "pool": {
+      "en_US": "pool",
+      "en_GB": "pool"
+    },
+    "poor": {
+      "en_US": "poor",
+      "en_GB": "poor"
+    },
+    "popmusic": {
+      "en_US": "pop-mu-sic",
+      "en_GB": "pop-music"
+    },
+    "popular": {
+      "en_US": "pop-u-lar",
+      "en_GB": "pop-u-lar"
+    },
+    "population": {
+      "en_US": "pop-u-la-tion",
+      "en_GB": "pop-u-la-tion"
+    },
+    "porcelain": {
+      "en_US": "porce-lain",
+      "en_GB": "por-cel-ain"
+    },
+    "pork": {
+      "en_US": "pork",
+      "en_GB": "pork"
+    },
+    "porridge": {
+      "en_US": "por-ridge",
+      "en_GB": "por-ridge"
+    },
+    "port": {
+      "en_US": "port",
+      "en_GB": "port"
+    },
+    "portrait": {
+      "en_US": "por-trait",
+      "en_GB": "por-trait"
+    },
+    "position": {
+      "en_US": "po-si-tion",
+      "en_GB": "po-s-i-tion"
+    },
+    "positive": {
+      "en_US": "pos-i-tive",
+      "en_GB": "pos-it-ive"
+    },
+    "possible": {
+      "en_US": "pos-si-ble",
+      "en_GB": "pos-sible"
+    },
+    "possibly": {
+      "en_US": "pos-si-bly",
+      "en_GB": "pos-sibly"
+    },
+    "post": {
+      "en_US": "post",
+      "en_GB": "post"
+    },
+    "postcard": {
+      "en_US": "post-card",
+      "en_GB": "post-card"
+    },
+    "poster": {
+      "en_US": "poster",
+      "en_GB": "poster"
+    },
+    "postman": {
+      "en_US": "post-man",
+      "en_GB": "post-man"
+    },
+    "pot": {
+      "en_US": "pot",
+      "en_GB": "pot"
+    },
+    "potato": {
+      "en_US": "pota-to",
+      "en_GB": "potato"
+    },
+    "pound": {
+      "en_US": "pound",
+      "en_GB": "pound"
+    },
+    "pour": {
+      "en_US": "pour",
+      "en_GB": "pour"
+    },
+    "powder": {
+      "en_US": "pow-der",
+      "en_GB": "powder"
+    },
+    "power": {
+      "en_US": "pow-er",
+      "en_GB": "power"
+    },
+    "powerful": {
+      "en_US": "pow-er-ful",
+      "en_GB": "power-ful"
+    },
+    "practical": {
+      "en_US": "prac-ti-cal",
+      "en_GB": "prac-tic-al"
+    },
+    "practice": {
+      "en_US": "prac-tice",
+      "en_GB": "prac-tice"
+    },
+    "practise": {
+      "en_US": "prac-tise",
+      "en_GB": "prac-tise"
+    },
+    "praise": {
+      "en_US": "praise",
+      "en_GB": "praise"
+    },
+    "prediction": {
+      "en_US": "pre-dic-tion",
+      "en_GB": "pre-dic-tion"
+    },
+    "prefer": {
+      "en_US": "pre-fer",
+      "en_GB": "prefer"
+    },
+    "preparation": {
+      "en_US": "prepa-ra-tion",
+      "en_GB": "pre-par-a-tion"
+    },
+    "prepare": {
+      "en_US": "pre-pare",
+      "en_GB": "pre-pare"
+    },
+    "present": {
+      "en_US": "present",
+      "en_GB": "present"
+    },
+    "press": {
+      "en_US": "press",
+      "en_GB": "press"
+    },
+    "pressure": {
+      "en_US": "pres-sure",
+      "en_GB": "pres-sure"
+    },
+    "pretend": {
+      "en_US": "pre-tend",
+      "en_GB": "pre-tend"
+    },
+    "pretty": {
+      "en_US": "pret-ty",
+      "en_GB": "pretty"
+    },
+    "price": {
+      "en_US": "price",
+      "en_GB": "price"
+    },
+    "pride": {
+      "en_US": "pride",
+      "en_GB": "pride"
+    },
+    "primary": {
+      "en_US": "pri-ma-ry",
+      "en_GB": "primary"
+    },
+    "prince": {
+      "en_US": "prince",
+      "en_GB": "prince"
+    },
+    "print": {
+      "en_US": "print",
+      "en_GB": "print"
+    },
+    "printer": {
+      "en_US": "print-er",
+      "en_GB": "print-er"
+    },
+    "private": {
+      "en_US": "pri-vate",
+      "en_GB": "private"
+    },
+    "prize": {
+      "en_US": "prize",
+      "en_GB": "prize"
+    },
+    "probably": {
+      "en_US": "prob-a-bly",
+      "en_GB": "prob-ably"
+    },
+    "problem": {
+      "en_US": "prob-lem",
+      "en_GB": "prob-lem"
+    },
+    "process": {
+      "en_US": "process",
+      "en_GB": "pro-cess"
+    },
+    "produce": {
+      "en_US": "pro-duce",
+      "en_GB": "pro-duce"
+    },
+    "product": {
+      "en_US": "prod-uct",
+      "en_GB": "product"
+    },
+    "production": {
+      "en_US": "pro-duc-tion",
+      "en_GB": "pro-duc-tion"
+    },
+    "profession": {
+      "en_US": "pro-fes-sion",
+      "en_GB": "pro-fes-sion"
+    },
+    "professor": {
+      "en_US": "pro-fes-sor",
+      "en_GB": "pro-fess-or"
+    },
+    "program": {
+      "en_US": "pro-gram",
+      "en_GB": "pro-gram"
+    },
+    "programmer": {
+      "en_US": "pro-gram-mer",
+      "en_GB": "pro-gram-mer"
+    },
+    "progress": {
+      "en_US": "progress",
+      "en_GB": "pro-gress"
+    },
+    "project": {
+      "en_US": "project",
+      "en_GB": "pro-ject"
+    },
+    "promise": {
+      "en_US": "prom-ise",
+      "en_GB": "prom-ise"
+    },
+    "pronunciation": {
+      "en_US": "pro-nun-ci-a-tion",
+      "en_GB": "pro-nun-ci-ation"
+    },
+    "proper": {
+      "en_US": "prop-er",
+      "en_GB": "prop-er"
+    },
+    "protect": {
+      "en_US": "pro-tect",
+      "en_GB": "pro-tect"
+    },
+    "protection": {
+      "en_US": "pro-tec-tion",
+      "en_GB": "pro-tec-tion"
+    },
+    "proud": {
+      "en_US": "proud",
+      "en_GB": "proud"
+    },
+    "proudly": {
+      "en_US": "proud-ly",
+      "en_GB": "proudly"
+    },
+    "prove": {
+      "en_US": "prove",
+      "en_GB": "prove"
+    },
+    "provide": {
+      "en_US": "pro-vide",
+      "en_GB": "provide"
+    },
+    "province": {
+      "en_US": "prov-ince",
+      "en_GB": "province"
+    },
+    "public": {
+      "en_US": "pub-lic",
+      "en_GB": "pub-lic"
+    },
+    "publish": {
+      "en_US": "pub-lish",
+      "en_GB": "pub-lish"
+    },
+    "pull": {
+      "en_US": "pull",
+      "en_GB": "pull"
+    },
+    "pumpkin": {
+      "en_US": "pump-kin",
+      "en_GB": "pump-kin"
+    },
+    "punish": {
+      "en_US": "pun-ish",
+      "en_GB": "pun-ish"
+    },
+    "purple": {
+      "en_US": "pur-ple",
+      "en_GB": "purple"
+    },
+    "purpose": {
+      "en_US": "pur-pose",
+      "en_GB": "pur-pose"
+    },
+    "purr": {
+      "en_US": "purr",
+      "en_GB": "purr"
+    },
+    "push": {
+      "en_US": "push",
+      "en_GB": "push"
+    },
+    "put": {
+      "en_US": "put",
+      "en_GB": "put"
+    },
+    "pyramid": {
+      "en_US": "pyra-mid",
+      "en_GB": "pyr-am-id"
+    },
+    "quality": {
+      "en_US": "qual-i-ty",
+      "en_GB": "qual-ity"
+    },
+    "question": {
+      "en_US": "ques-tion",
+      "en_GB": "ques-tion"
+    },
+    "queue": {
+      "en_US": "queue",
+      "en_GB": "queue"
+    },
+    "quick": {
+      "en_US": "quick",
+      "en_GB": "quick"
+    },
+    "quickly": {
+      "en_US": "quick-ly",
+      "en_GB": "quickly"
+    },
+    "quiet": {
+      "en_US": "qui-et",
+      "en_GB": "quiet"
+    },
+    "quietly": {
+      "en_US": "qui-et-ly",
+      "en_GB": "quietly"
+    },
+    "quite": {
+      "en_US": "quite",
+      "en_GB": "quite"
+    },
+    "rabbit": {
+      "en_US": "rab-bit",
+      "en_GB": "rab-bit"
+    },
+    "race": {
+      "en_US": "race",
+      "en_GB": "race"
+    },
+    "racket": {
+      "en_US": "rack-et",
+      "en_GB": "rack-et"
+    },
+    "radio": {
+      "en_US": "ra-dio",
+      "en_GB": "ra-dio"
+    },
+    "railway": {
+      "en_US": "rail-way",
+      "en_GB": "rail-way"
+    },
+    "rain": {
+      "en_US": "rain",
+      "en_GB": "rain"
+    },
+    "rainbow": {
+      "en_US": "rain-bow",
+      "en_GB": "rain-bow"
+    },
+    "raincoat": {
+      "en_US": "rain-coat",
+      "en_GB": "rain-coat"
+    },
+    "rainfall": {
+      "en_US": "rain-fall",
+      "en_GB": "rain-fall"
+    },
+    "rainstorm": {
+      "en_US": "rain-storm",
+      "en_GB": "rain-storm"
+    },
+    "rainy": {
+      "en_US": "rainy",
+      "en_GB": "rainy"
+    },
+    "raise": {
+      "en_US": "raise",
+      "en_GB": "raise"
+    },
+    "rap": {
+      "en_US": "rap",
+      "en_GB": "rap"
+    },
+    "rapid": {
+      "en_US": "rapid",
+      "en_GB": "rap-id"
+    },
+    "rapidly": {
+      "en_US": "rapid-ly",
+      "en_GB": "rap-idly"
+    },
+    "rare": {
+      "en_US": "rare",
+      "en_GB": "rare"
+    },
+    "rather": {
+      "en_US": "rather",
+      "en_GB": "rather"
+    },
+    "rating": {
+      "en_US": "rat-ing",
+      "en_GB": "rat-ing"
+    },
+    "reach": {
+      "en_US": "reach",
+      "en_GB": "reach"
+    },
+    "react": {
+      "en_US": "re-act",
+      "en_GB": "re-act"
+    },
+    "read": {
+      "en_US": "read",
+      "en_GB": "read"
+    },
+    "reader": {
+      "en_US": "read-er",
+      "en_GB": "read-er"
+    },
+    "ready": {
+      "en_US": "ready",
+      "en_GB": "ready"
+    },
+    "real": {
+      "en_US": "re-al",
+      "en_GB": "real"
+    },
+    "reality": {
+      "en_US": "re-al-i-ty",
+      "en_GB": "real-ity"
+    },
+    "realize": {
+      "en_US": "re-al-ize",
+      "en_GB": "real-ize"
+    },
+    "really": {
+      "en_US": "re-al-ly",
+      "en_GB": "really"
+    },
+    "reason": {
+      "en_US": "rea-son",
+      "en_GB": "reas-on"
+    },
+    "reasonable": {
+      "en_US": "rea-son-able",
+      "en_GB": "reas-on-able"
+    },
+    "recall": {
+      "en_US": "re-call",
+      "en_GB": "re-call"
+    },
+    "receive": {
+      "en_US": "re-ceive",
+      "en_GB": "re-ceive"
+    },
+    "recent": {
+      "en_US": "re-cent",
+      "en_GB": "re-cent"
+    },
+    "recently": {
+      "en_US": "re-cent-ly",
+      "en_GB": "re-cently"
+    },
+    "recipe": {
+      "en_US": "recipe",
+      "en_GB": "re-cipe"
+    },
+    "recognize": {
+      "en_US": "rec-og-nize",
+      "en_GB": "re-cog-nize"
+    },
+    "recommend": {
+      "en_US": "rec-om-mend",
+      "en_GB": "re-com-mend"
+    },
+    "recommendation": {
+      "en_US": "rec-om-men-da-tion",
+      "en_GB": "re-com-mend-a-tion"
+    },
+    "record": {
+      "en_US": "record",
+      "en_GB": "re-cord"
+    },
+    "recycle": {
+      "en_US": "re-cy-cle",
+      "en_GB": "re-cycle"
+    },
+    "red": {
+      "en_US": "red",
+      "en_GB": "red"
+    },
+    "reduce": {
+      "en_US": "re-duce",
+      "en_GB": "re-duce"
+    },
+    "redwood": {
+      "en_US": "red-wood",
+      "en_GB": "red-wood"
+    },
+    "reef": {
+      "en_US": "reef",
+      "en_GB": "reef"
+    },
+    "referee": {
+      "en_US": "ref-er-ee",
+      "en_GB": "ref-er-ee"
+    },
+    "reform": {
+      "en_US": "re-form",
+      "en_GB": "re-form"
+    },
+    "refrigerator": {
+      "en_US": "re-frig-er-a-tor",
+      "en_GB": "re-fri-ger-at-or"
+    },
+    "refuse": {
+      "en_US": "refuse",
+      "en_GB": "re-fuse"
+    },
+    "regret": {
+      "en_US": "re-gret",
+      "en_GB": "re-gret"
+    },
+    "regular": {
+      "en_US": "reg-u-lar",
+      "en_GB": "reg-u-lar"
+    },
+    "rehearsal": {
+      "en_US": "re-hearsal",
+      "en_GB": "re-hears-al"
+    },
+    "relationship": {
+      "en_US": "re-la-tion-ship",
+      "en_GB": "re-la-tion-ship"
+    },
+    "relative": {
+      "en_US": "rel-a-tive",
+      "en_GB": "re-l-at-ive"
+    },
+    "relax": {
+      "en_US": "re-lax",
+      "en_GB": "re-lax"
+    },
+    "relay": {
+      "en_US": "re-lay",
+      "en_GB": "re-lay"
+    },
+    "remain": {
+      "en_US": "re-main",
+      "en_GB": "re-main"
+    },
+    "remember": {
+      "en_US": "re-mem-ber",
+      "en_GB": "re-mem-ber"
+    },
+    "remind": {
+      "en_US": "re-mind",
+      "en_GB": "re-mind"
+    },
+    "remove": {
+      "en_US": "re-move",
+      "en_GB": "re-move"
+    },
+    "repair": {
+      "en_US": "re-pair",
+      "en_GB": "re-pair"
+    },
+    "repeat": {
+      "en_US": "re-peat",
+      "en_GB": "re-peat"
+    },
+    "replace": {
+      "en_US": "re-place",
+      "en_GB": "re-place"
+    },
+    "reply": {
+      "en_US": "re-ply",
+      "en_GB": "reply"
+    },
+    "report": {
+      "en_US": "re-port",
+      "en_GB": "re-port"
+    },
+    "reporter": {
+      "en_US": "re-porter",
+      "en_GB": "re-port-er"
+    },
+    "require": {
+      "en_US": "re-quire",
+      "en_GB": "re-quire"
+    },
+    "rescue": {
+      "en_US": "res-cue",
+      "en_GB": "res-cue"
+    },
+    "research": {
+      "en_US": "re-search",
+      "en_GB": "re-search"
+    },
+    "researcher": {
+      "en_US": "re-searcher",
+      "en_GB": "re-search-er"
+    },
+    "resolution": {
+      "en_US": "res-o-lu-tion",
+      "en_GB": "res-ol-u-tion"
+    },
+    "resource": {
+      "en_US": "re-source",
+      "en_GB": "re-source"
+    },
+    "respect": {
+      "en_US": "re-spect",
+      "en_GB": "re-spect"
+    },
+    "responsibility": {
+      "en_US": "re-spon-si-bil-i-ty",
+      "en_GB": "re-spons-ib-il-ity"
+    },
+    "responsible": {
+      "en_US": "re-spon-si-ble",
+      "en_GB": "re-spons-ible"
+    },
+    "rest": {
+      "en_US": "rest",
+      "en_GB": "rest"
+    },
+    "restaurant": {
+      "en_US": "restau-rant",
+      "en_GB": "res-taur-ant"
+    },
+    "result": {
+      "en_US": "re-sult",
+      "en_GB": "res-ult"
+    },
+    "retell": {
+      "en_US": "retell",
+      "en_GB": "re-tell"
+    },
+    "return": {
+      "en_US": "re-turn",
+      "en_GB": "re-turn"
+    },
+    "reunion": {
+      "en_US": "re-union",
+      "en_GB": "re-union"
+    },
+    "reuse": {
+      "en_US": "re-use",
+      "en_GB": "re-use"
+    },
+    "review": {
+      "en_US": "re-view",
+      "en_GB": "re-view"
+    },
+    "rhythm": {
+      "en_US": "rhythm",
+      "en_GB": "rhythm"
+    },
+    "rice": {
+      "en_US": "rice",
+      "en_GB": "rice"
+    },
+    "rich": {
+      "en_US": "rich",
+      "en_GB": "rich"
+    },
+    "riddle": {
+      "en_US": "rid-dle",
+      "en_GB": "riddle"
+    },
+    "ride": {
+      "en_US": "ride",
+      "en_GB": "ride"
+    },
+    "right": {
+      "en_US": "right",
+      "en_GB": "right"
+    },
+    "ring": {
+      "en_US": "ring",
+      "en_GB": "ring"
+    },
+    "rise": {
+      "en_US": "rise",
+      "en_GB": "rise"
+    },
+    "risk": {
+      "en_US": "risk",
+      "en_GB": "risk"
+    },
+    "risky": {
+      "en_US": "risky",
+      "en_GB": "risky"
+    },
+    "river": {
+      "en_US": "riv-er",
+      "en_GB": "river"
+    },
+    "riverbank": {
+      "en_US": "river-bank",
+      "en_GB": "ri-verb-ank"
+    },
+    "road": {
+      "en_US": "road",
+      "en_GB": "road"
+    },
+    "robot": {
+      "en_US": "ro-bot",
+      "en_GB": "ro-bot"
+    },
+    "robotics": {
+      "en_US": "ro-bot-ics",
+      "en_GB": "ro-bot-ics"
+    },
+    "rock": {
+      "en_US": "rock",
+      "en_GB": "rock"
+    },
+    "rocket": {
+      "en_US": "rock-et",
+      "en_GB": "rock-et"
+    },
+    "rode": {
+      "en_US": "rode",
+      "en_GB": "rode"
+    },
+    "role": {
+      "en_US": "role",
+      "en_GB": "role"
+    },
+    "roll": {
+      "en_US": "roll",
+      "en_GB": "roll"
+    },
+    "romantic": {
+      "en_US": "ro-man-tic",
+      "en_GB": "ro-mantic"
+    },
+    "roof": {
+      "en_US": "roof",
+      "en_GB": "roof"
+    },
+    "room": {
+      "en_US": "room",
+      "en_GB": "room"
+    },
+    "root": {
+      "en_US": "root",
+      "en_GB": "root"
+    },
+    "rope": {
+      "en_US": "rope",
+      "en_GB": "rope"
+    },
+    "rose": {
+      "en_US": "rose",
+      "en_GB": "rose"
+    },
+    "rough": {
+      "en_US": "rough",
+      "en_GB": "rough"
+    },
+    "round": {
+      "en_US": "round",
+      "en_GB": "round"
+    },
+    "routine": {
+      "en_US": "rou-tine",
+      "en_GB": "routine"
+    },
+    "rover": {
+      "en_US": "rover",
+      "en_GB": "rover"
+    },
+    "rsvp": {
+      "en_US": "rsvp",
+      "en_GB": "rs-vp"
+    },
+    "rub": {
+      "en_US": "rub",
+      "en_GB": "rub"
+    },
+    "rubbish": {
+      "en_US": "rub-bish",
+      "en_GB": "rub-bish"
+    },
+    "rude": {
+      "en_US": "rude",
+      "en_GB": "rude"
+    },
+    "rule": {
+      "en_US": "rule",
+      "en_GB": "rule"
+    },
+    "ruler": {
+      "en_US": "ruler",
+      "en_GB": "ruler"
+    },
+    "run": {
+      "en_US": "run",
+      "en_GB": "run"
+    },
+    "runner": {
+      "en_US": "run-ner",
+      "en_GB": "run-ner"
+    },
+    "runny": {
+      "en_US": "run-ny",
+      "en_GB": "runny"
+    },
+    "rush": {
+      "en_US": "rush",
+      "en_GB": "rush"
+    },
+    "russian": {
+      "en_US": "rus-sian",
+      "en_GB": "rus-si-an"
+    },
+    "sad": {
+      "en_US": "sad",
+      "en_GB": "sad"
+    },
+    "sadly": {
+      "en_US": "sad-ly",
+      "en_GB": "sadly"
+    },
+    "sadness": {
+      "en_US": "sad-ness",
+      "en_GB": "sad-ness"
+    },
+    "safe": {
+      "en_US": "safe",
+      "en_GB": "safe"
+    },
+    "safeguard": {
+      "en_US": "safe-guard",
+      "en_GB": "safe-guard"
+    },
+    "safety": {
+      "en_US": "safe-ty",
+      "en_GB": "safety"
+    },
+    "salad": {
+      "en_US": "sal-ad",
+      "en_GB": "salad"
+    },
+    "sale": {
+      "en_US": "sale",
+      "en_GB": "sale"
+    },
+    "salt": {
+      "en_US": "salt",
+      "en_GB": "salt"
+    },
+    "samba": {
+      "en_US": "sam-ba",
+      "en_GB": "samba"
+    },
+    "same": {
+      "en_US": "same",
+      "en_GB": "same"
+    },
+    "sand": {
+      "en_US": "sand",
+      "en_GB": "sand"
+    },
+    "sandstorm": {
+      "en_US": "sand-storm",
+      "en_GB": "sand-storm"
+    },
+    "sandwich": {
+      "en_US": "sand-wich",
+      "en_GB": "sand-wich"
+    },
+    "sandy": {
+      "en_US": "sandy",
+      "en_GB": "sandy"
+    },
+    "satellite": {
+      "en_US": "satel-lite",
+      "en_GB": "satel-lite"
+    },
+    "saturday": {
+      "en_US": "sat-ur-day",
+      "en_GB": "sat-urday"
+    },
+    "save": {
+      "en_US": "save",
+      "en_GB": "save"
+    },
+    "saw": {
+      "en_US": "saw",
+      "en_GB": "saw"
+    },
+    "say": {
+      "en_US": "say",
+      "en_GB": "say"
+    },
+    "saying": {
+      "en_US": "say-ing",
+      "en_GB": "say-ing"
+    },
+    "scared": {
+      "en_US": "scared",
+      "en_GB": "scared"
+    },
+    "scarf": {
+      "en_US": "scarf",
+      "en_GB": "scarf"
+    },
+    "scary": {
+      "en_US": "scary",
+      "en_GB": "scary"
+    },
+    "scenery": {
+      "en_US": "scenery",
+      "en_GB": "scenery"
+    },
+    "scholarship": {
+      "en_US": "schol-ar-ship",
+      "en_GB": "schol-ar-ship"
+    },
+    "school": {
+      "en_US": "school",
+      "en_GB": "school"
+    },
+    "schoolbag": {
+      "en_US": "school-bag",
+      "en_GB": "school-bag"
+    },
+    "schoolgirl": {
+      "en_US": "school-girl",
+      "en_GB": "school-girl"
+    },
+    "schoolwork": {
+      "en_US": "school-work",
+      "en_GB": "school-work"
+    },
+    "science": {
+      "en_US": "sci-ence",
+      "en_GB": "sci-ence"
+    },
+    "scientific": {
+      "en_US": "sci-en-tif-ic",
+      "en_GB": "sci-entif-ic"
+    },
+    "scientist": {
+      "en_US": "sci-en-tist",
+      "en_GB": "sci-ent-ist"
+    },
+    "scissors": {
+      "en_US": "scis-sors",
+      "en_GB": "scis-sors"
+    },
+    "score": {
+      "en_US": "score",
+      "en_GB": "score"
+    },
+    "scream": {
+      "en_US": "scream",
+      "en_GB": "scream"
+    },
+    "screen": {
+      "en_US": "screen",
+      "en_GB": "screen"
+    },
+    "sculptor": {
+      "en_US": "sculp-tor",
+      "en_GB": "sculptor"
+    },
+    "sculpture": {
+      "en_US": "sculp-ture",
+      "en_GB": "sculp-ture"
+    },
+    "sea": {
+      "en_US": "sea",
+      "en_GB": "sea"
+    },
+    "search": {
+      "en_US": "search",
+      "en_GB": "search"
+    },
+    "season": {
+      "en_US": "sea-son",
+      "en_GB": "sea-son"
+    },
+    "seat": {
+      "en_US": "seat",
+      "en_GB": "seat"
+    },
+    "second": {
+      "en_US": "sec-ond",
+      "en_GB": "second"
+    },
+    "secondly": {
+      "en_US": "sec-ond-ly",
+      "en_GB": "secondly"
+    },
+    "secret": {
+      "en_US": "se-cret",
+      "en_GB": "secret"
+    },
+    "secretly": {
+      "en_US": "se-cret-ly",
+      "en_GB": "secretly"
+    },
+    "section": {
+      "en_US": "sec-tion",
+      "en_GB": "sec-tion"
+    },
+    "security": {
+      "en_US": "se-cu-ri-ty",
+      "en_GB": "se-cur-ity"
+    },
+    "see": {
+      "en_US": "see",
+      "en_GB": "see"
+    },
+    "seed": {
+      "en_US": "seed",
+      "en_GB": "seed"
+    },
+    "seem": {
+      "en_US": "seem",
+      "en_GB": "seem"
+    },
+    "seldom": {
+      "en_US": "sel-dom",
+      "en_GB": "sel-dom"
+    },
+    "selfish": {
+      "en_US": "self-ish",
+      "en_GB": "selfish"
+    },
+    "sell": {
+      "en_US": "sell",
+      "en_GB": "sell"
+    },
+    "send": {
+      "en_US": "send",
+      "en_GB": "send"
+    },
+    "sense": {
+      "en_US": "sense",
+      "en_GB": "sense"
+    },
+    "sentence": {
+      "en_US": "sen-tence",
+      "en_GB": "sen-tence"
+    },
+    "separate": {
+      "en_US": "sep-a-rate",
+      "en_GB": "sep-ar-ate"
+    },
+    "september": {
+      "en_US": "sep-tem-ber",
+      "en_GB": "septem-ber"
+    },
+    "serious": {
+      "en_US": "se-ri-ous",
+      "en_GB": "ser-i-ous"
+    },
+    "seriously": {
+      "en_US": "se-ri-ous-ly",
+      "en_GB": "ser-i-ously"
+    },
+    "serve": {
+      "en_US": "serve",
+      "en_GB": "serve"
+    },
+    "service": {
+      "en_US": "ser-vice",
+      "en_GB": "ser-vice"
+    },
+    "serving": {
+      "en_US": "serv-ing",
+      "en_GB": "serving"
+    },
+    "set": {
+      "en_US": "set",
+      "en_GB": "set"
+    },
+    "seven": {
+      "en_US": "sev-en",
+      "en_GB": "sev-en"
+    },
+    "seventeen": {
+      "en_US": "sev-en-teen",
+      "en_GB": "sev-en-teen"
+    },
+    "several": {
+      "en_US": "sev-er-al",
+      "en_GB": "sev-er-al"
+    },
+    "shadow": {
+      "en_US": "shad-ow",
+      "en_GB": "shad-ow"
+    },
+    "shake": {
+      "en_US": "shake",
+      "en_GB": "shake"
+    },
+    "shall": {
+      "en_US": "shall",
+      "en_GB": "shall"
+    },
+    "shape": {
+      "en_US": "shape",
+      "en_GB": "shape"
+    },
+    "share": {
+      "en_US": "share",
+      "en_GB": "share"
+    },
+    "shark": {
+      "en_US": "shark",
+      "en_GB": "shark"
+    },
+    "she": {
+      "en_US": "she",
+      "en_GB": "she"
+    },
+    "sheep": {
+      "en_US": "sheep",
+      "en_GB": "sheep"
+    },
+    "shelf": {
+      "en_US": "shelf",
+      "en_GB": "shelf"
+    },
+    "shelter": {
+      "en_US": "shel-ter",
+      "en_GB": "shel-ter"
+    },
+    "shh": {
+      "en_US": "shh",
+      "en_GB": "shh"
+    },
+    "shine": {
+      "en_US": "shine",
+      "en_GB": "shine"
+    },
+    "shirt": {
+      "en_US": "shirt",
+      "en_GB": "shirt"
+    },
+    "shock": {
+      "en_US": "shock",
+      "en_GB": "shock"
+    },
+    "shocked": {
+      "en_US": "shocked",
+      "en_GB": "shocked"
+    },
+    "shoe": {
+      "en_US": "shoe",
+      "en_GB": "shoe"
+    },
+    "shoot": {
+      "en_US": "shoot",
+      "en_GB": "shoot"
+    },
+    "shop": {
+      "en_US": "shop",
+      "en_GB": "shop"
+    },
+    "short": {
+      "en_US": "short",
+      "en_GB": "short"
+    },
+    "shortage": {
+      "en_US": "short-age",
+      "en_GB": "short-age"
+    },
+    "shorter": {
+      "en_US": "short-er",
+      "en_GB": "short-er"
+    },
+    "shorts": {
+      "en_US": "shorts",
+      "en_GB": "shorts"
+    },
+    "should": {
+      "en_US": "should",
+      "en_GB": "should"
+    },
+    "shoulder": {
+      "en_US": "shoul-der",
+      "en_GB": "shoulder"
+    },
+    "shout": {
+      "en_US": "shout",
+      "en_GB": "shout"
+    },
+    "show": {
+      "en_US": "show",
+      "en_GB": "show"
+    },
+    "shower": {
+      "en_US": "show-er",
+      "en_GB": "shower"
+    },
+    "shrimp": {
+      "en_US": "shrimp",
+      "en_GB": "shrimp"
+    },
+    "shut": {
+      "en_US": "shut",
+      "en_GB": "shut"
+    },
+    "shuttlecock": {
+      "en_US": "shut-tle-cock",
+      "en_GB": "shuttle-cock"
+    },
+    "shy": {
+      "en_US": "shy",
+      "en_GB": "shy"
+    },
+    "sick": {
+      "en_US": "sick",
+      "en_GB": "sick"
+    },
+    "side": {
+      "en_US": "side",
+      "en_GB": "side"
+    },
+    "sight": {
+      "en_US": "sight",
+      "en_GB": "sight"
+    },
+    "sign": {
+      "en_US": "sign",
+      "en_GB": "sign"
+    },
+    "silence": {
+      "en_US": "si-lence",
+      "en_GB": "si-lence"
+    },
+    "silk": {
+      "en_US": "silk",
+      "en_GB": "silk"
+    },
+    "silly": {
+      "en_US": "sil-ly",
+      "en_GB": "silly"
+    },
+    "silver": {
+      "en_US": "sil-ver",
+      "en_GB": "sil-ver"
+    },
+    "similar": {
+      "en_US": "sim-i-lar",
+      "en_GB": "sim-il-ar"
+    },
+    "similarity": {
+      "en_US": "sim-i-lar-i-ty",
+      "en_GB": "sim-il-ar-ity"
+    },
+    "simple": {
+      "en_US": "sim-ple",
+      "en_GB": "simple"
+    },
+    "simply": {
+      "en_US": "sim-ply",
+      "en_GB": "simply"
+    },
+    "since": {
+      "en_US": "since",
+      "en_GB": "since"
+    },
+    "sincere": {
+      "en_US": "sin-cere",
+      "en_GB": "sin-cere"
+    },
+    "sincerely": {
+      "en_US": "sin-cere-ly",
+      "en_GB": "sin-cerely"
+    },
+    "sing": {
+      "en_US": "sing",
+      "en_GB": "sing"
+    },
+    "singer": {
+      "en_US": "singer",
+      "en_GB": "sing-er"
+    },
+    "single": {
+      "en_US": "sin-gle",
+      "en_GB": "single"
+    },
+    "sir": {
+      "en_US": "sir",
+      "en_GB": "sir"
+    },
+    "sister": {
+      "en_US": "sis-ter",
+      "en_GB": "sis-ter"
+    },
+    "site": {
+      "en_US": "site",
+      "en_GB": "site"
+    },
+    "situation": {
+      "en_US": "sit-u-a-tion",
+      "en_GB": "situ-ation"
+    },
+    "six": {
+      "en_US": "six",
+      "en_GB": "six"
+    },
+    "sixteen": {
+      "en_US": "six-teen",
+      "en_GB": "six-teen"
+    },
+    "size": {
+      "en_US": "size",
+      "en_GB": "size"
+    },
+    "skate": {
+      "en_US": "skate",
+      "en_GB": "skate"
+    },
+    "skateboard": {
+      "en_US": "skate-board",
+      "en_GB": "skate-board"
+    },
+    "skateboarding": {
+      "en_US": "skate-board-ing",
+      "en_GB": "skate-board-ing"
+    },
+    "ski": {
+      "en_US": "ski",
+      "en_GB": "ski"
+    },
+    "skill": {
+      "en_US": "skill",
+      "en_GB": "skill"
+    },
+    "skilled": {
+      "en_US": "skilled",
+      "en_GB": "skilled"
+    },
+    "skirt": {
+      "en_US": "skirt",
+      "en_GB": "skirt"
+    },
+    "sky": {
+      "en_US": "sky",
+      "en_GB": "sky"
+    },
+    "sleep": {
+      "en_US": "sleep",
+      "en_GB": "sleep"
+    },
+    "sleeping": {
+      "en_US": "sleep-ing",
+      "en_GB": "sleep-ing"
+    },
+    "sleepy": {
+      "en_US": "sleepy",
+      "en_GB": "sleepy"
+    },
+    "slept": {
+      "en_US": "slept",
+      "en_GB": "slept"
+    },
+    "slice": {
+      "en_US": "slice",
+      "en_GB": "slice"
+    },
+    "slim": {
+      "en_US": "slim",
+      "en_GB": "slim"
+    },
+    "slow": {
+      "en_US": "slow",
+      "en_GB": "slow"
+    },
+    "slowly": {
+      "en_US": "slow-ly",
+      "en_GB": "slowly"
+    },
+    "small": {
+      "en_US": "small",
+      "en_GB": "small"
+    },
+    "smaller": {
+      "en_US": "small-er",
+      "en_GB": "smal-ler"
+    },
+    "smart": {
+      "en_US": "smart",
+      "en_GB": "smart"
+    },
+    "smarter": {
+      "en_US": "smarter",
+      "en_GB": "smarter"
+    },
+    "smell": {
+      "en_US": "smell",
+      "en_GB": "smell"
+    },
+    "smelly": {
+      "en_US": "smelly",
+      "en_GB": "smelly"
+    },
+    "smile": {
+      "en_US": "smile",
+      "en_GB": "smile"
+    },
+    "smoke": {
+      "en_US": "smoke",
+      "en_GB": "smoke"
+    },
+    "smooth": {
+      "en_US": "smooth",
+      "en_GB": "smooth"
+    },
+    "snack": {
+      "en_US": "snack",
+      "en_GB": "snack"
+    },
+    "snake": {
+      "en_US": "snake",
+      "en_GB": "snake"
+    },
+    "snorkel": {
+      "en_US": "snorkel",
+      "en_GB": "snorkel"
+    },
+    "snow": {
+      "en_US": "snow",
+      "en_GB": "snow"
+    },
+    "snowman": {
+      "en_US": "snow-man",
+      "en_GB": "snow-man"
+    },
+    "snowstorm": {
+      "en_US": "snow-storm",
+      "en_GB": "snowstorm"
+    },
+    "snowy": {
+      "en_US": "snowy",
+      "en_GB": "snowy"
+    },
+    "so": {
+      "en_US": "so",
+      "en_GB": "so"
+    },
+    "social": {
+      "en_US": "so-cial",
+      "en_GB": "so-cial"
+    },
+    "socialism": {
+      "en_US": "so-cial-ism",
+      "en_GB": "so-cial-ism"
+    },
+    "socialist": {
+      "en_US": "so-cial-ist",
+      "en_GB": "so-cial-ist"
+    },
+    "society": {
+      "en_US": "so-ci-ety",
+      "en_GB": "so-ci-ety"
+    },
+    "sock": {
+      "en_US": "sock",
+      "en_GB": "sock"
+    },
+    "soft": {
+      "en_US": "soft",
+      "en_GB": "soft"
+    },
+    "soil": {
+      "en_US": "soil",
+      "en_GB": "soil"
+    },
+    "solar": {
+      "en_US": "so-lar",
+      "en_GB": "sol-ar"
+    },
+    "soldier": {
+      "en_US": "sol-dier",
+      "en_GB": "sol-dier"
+    },
+    "solution": {
+      "en_US": "so-lu-tion",
+      "en_GB": "solu-tion"
+    },
+    "solve": {
+      "en_US": "solve",
+      "en_GB": "solve"
+    },
+    "some": {
+      "en_US": "some",
+      "en_GB": "some"
+    },
+    "somebody": {
+      "en_US": "some-body",
+      "en_GB": "some-body"
+    },
+    "someone": {
+      "en_US": "some-one",
+      "en_GB": "someone"
+    },
+    "something": {
+      "en_US": "some-thing",
+      "en_GB": "some-thing"
+    },
+    "sometime": {
+      "en_US": "some-time",
+      "en_GB": "some-time"
+    },
+    "sometimes": {
+      "en_US": "some-times",
+      "en_GB": "some-times"
+    },
+    "somewhere": {
+      "en_US": "some-where",
+      "en_GB": "some-where"
+    },
+    "son": {
+      "en_US": "son",
+      "en_GB": "son"
+    },
+    "song": {
+      "en_US": "song",
+      "en_GB": "song"
+    },
+    "soon": {
+      "en_US": "soon",
+      "en_GB": "soon"
+    },
+    "sore": {
+      "en_US": "sore",
+      "en_GB": "sore"
+    },
+    "sorry": {
+      "en_US": "sor-ry",
+      "en_GB": "sorry"
+    },
+    "sort": {
+      "en_US": "sort",
+      "en_GB": "sort"
+    },
+    "soul": {
+      "en_US": "soul",
+      "en_GB": "soul"
+    },
+    "sound": {
+      "en_US": "sound",
+      "en_GB": "sound"
+    },
+    "soundly": {
+      "en_US": "sound-ly",
+      "en_GB": "soundly"
+    },
+    "soup": {
+      "en_US": "soup",
+      "en_GB": "soup"
+    },
+    "sour": {
+      "en_US": "sour",
+      "en_GB": "sour"
+    },
+    "source": {
+      "en_US": "source",
+      "en_GB": "source"
+    },
+    "south": {
+      "en_US": "south",
+      "en_GB": "south"
+    },
+    "southern": {
+      "en_US": "south-ern",
+      "en_GB": "south-ern"
+    },
+    "southwestern": {
+      "en_US": "south-west-ern",
+      "en_GB": "south-west-ern"
+    },
+    "space": {
+      "en_US": "space",
+      "en_GB": "space"
+    },
+    "spacecraft": {
+      "en_US": "space-craft",
+      "en_GB": "space-craft"
+    },
+    "spaceship": {
+      "en_US": "space-ship",
+      "en_GB": "space-ship"
+    },
+    "spaghetti": {
+      "en_US": "spaghet-ti",
+      "en_GB": "spa-ghetti"
+    },
+    "spain": {
+      "en_US": "spain",
+      "en_GB": "spain"
+    },
+    "spanish": {
+      "en_US": "span-ish",
+      "en_GB": "span-ish"
+    },
+    "spare": {
+      "en_US": "spare",
+      "en_GB": "spare"
+    },
+    "speak": {
+      "en_US": "speak",
+      "en_GB": "speak"
+    },
+    "speaker": {
+      "en_US": "speak-er",
+      "en_GB": "speak-er"
+    },
+    "special": {
+      "en_US": "spe-cial",
+      "en_GB": "spe-cial"
+    },
+    "speech": {
+      "en_US": "speech",
+      "en_GB": "speech"
+    },
+    "speed": {
+      "en_US": "speed",
+      "en_GB": "speed"
+    },
+    "spell": {
+      "en_US": "spell",
+      "en_GB": "spell"
+    },
+    "spend": {
+      "en_US": "spend",
+      "en_GB": "spend"
+    },
+    "spirit": {
+      "en_US": "spir-it",
+      "en_GB": "spir-it"
+    },
+    "spoiled": {
+      "en_US": "spoiled",
+      "en_GB": "spoiled"
+    },
+    "spoon": {
+      "en_US": "spoon",
+      "en_GB": "spoon"
+    },
+    "sport": {
+      "en_US": "sport",
+      "en_GB": "sport"
+    },
+    "spread": {
+      "en_US": "spread",
+      "en_GB": "spread"
+    },
+    "spring": {
+      "en_US": "spring",
+      "en_GB": "spring"
+    },
+    "square": {
+      "en_US": "square",
+      "en_GB": "square"
+    },
+    "squirrel": {
+      "en_US": "squir-rel",
+      "en_GB": "squir-rel"
+    },
+    "stable": {
+      "en_US": "sta-ble",
+      "en_GB": "stable"
+    },
+    "stadium": {
+      "en_US": "sta-di-um",
+      "en_GB": "sta-di-um"
+    },
+    "stage": {
+      "en_US": "stage",
+      "en_GB": "stage"
+    },
+    "stamp": {
+      "en_US": "stamp",
+      "en_GB": "stamp"
+    },
+    "standard": {
+      "en_US": "stan-dard",
+      "en_GB": "stand-ard"
+    },
+    "star": {
+      "en_US": "star",
+      "en_GB": "star"
+    },
+    "start": {
+      "en_US": "start",
+      "en_GB": "start"
+    },
+    "state": {
+      "en_US": "state",
+      "en_GB": "state"
+    },
+    "station": {
+      "en_US": "sta-tion",
+      "en_GB": "sta-tion"
+    },
+    "statue": {
+      "en_US": "stat-ue",
+      "en_GB": "statue"
+    },
+    "stay": {
+      "en_US": "stay",
+      "en_GB": "stay"
+    },
+    "stayed": {
+      "en_US": "stayed",
+      "en_GB": "stayed"
+    },
+    "steady": {
+      "en_US": "steady",
+      "en_GB": "steady"
+    },
+    "steal": {
+      "en_US": "steal",
+      "en_GB": "steal"
+    },
+    "stem": {
+      "en_US": "stem",
+      "en_GB": "stem"
+    },
+    "step": {
+      "en_US": "step",
+      "en_GB": "step"
+    },
+    "stick": {
+      "en_US": "stick",
+      "en_GB": "stick"
+    },
+    "sticky": {
+      "en_US": "sticky",
+      "en_GB": "sticky"
+    },
+    "still": {
+      "en_US": "still",
+      "en_GB": "still"
+    },
+    "stomach": {
+      "en_US": "stom-ach",
+      "en_GB": "stom-ach"
+    },
+    "stomachache": {
+      "en_US": "stom-achache",
+      "en_GB": "stom-achache"
+    },
+    "stone": {
+      "en_US": "stone",
+      "en_GB": "stone"
+    },
+    "stop": {
+      "en_US": "stop",
+      "en_GB": "stop"
+    },
+    "store": {
+      "en_US": "store",
+      "en_GB": "store"
+    },
+    "storm": {
+      "en_US": "storm",
+      "en_GB": "storm"
+    },
+    "stormy": {
+      "en_US": "stormy",
+      "en_GB": "stormy"
+    },
+    "story": {
+      "en_US": "sto-ry",
+      "en_GB": "story"
+    },
+    "stove": {
+      "en_US": "stove",
+      "en_GB": "stove"
+    },
+    "straight": {
+      "en_US": "straight",
+      "en_GB": "straight"
+    },
+    "straightforward": {
+      "en_US": "straight-for-ward",
+      "en_GB": "straight-for-ward"
+    },
+    "strange": {
+      "en_US": "strange",
+      "en_GB": "strange"
+    },
+    "stranger": {
+      "en_US": "stranger",
+      "en_GB": "stranger"
+    },
+    "strategy": {
+      "en_US": "strat-e-gy",
+      "en_GB": "strategy"
+    },
+    "strawberry": {
+      "en_US": "straw-ber-ry",
+      "en_GB": "straw-berry"
+    },
+    "strength": {
+      "en_US": "strength",
+      "en_GB": "strength"
+    },
+    "stress": {
+      "en_US": "stress",
+      "en_GB": "stress"
+    },
+    "strict": {
+      "en_US": "strict",
+      "en_GB": "strict"
+    },
+    "stroke": {
+      "en_US": "stroke",
+      "en_GB": "stroke"
+    },
+    "strong": {
+      "en_US": "strong",
+      "en_GB": "strong"
+    },
+    "stronger": {
+      "en_US": "stronger",
+      "en_GB": "stronger"
+    },
+    "structure": {
+      "en_US": "struc-ture",
+      "en_GB": "struc-ture"
+    },
+    "student": {
+      "en_US": "stu-dent",
+      "en_GB": "stu-dent"
+    },
+    "study": {
+      "en_US": "study",
+      "en_GB": "study"
+    },
+    "style": {
+      "en_US": "style",
+      "en_GB": "style"
+    },
+    "subject": {
+      "en_US": "sub-ject",
+      "en_GB": "sub-ject"
+    },
+    "subway": {
+      "en_US": "sub-way",
+      "en_GB": "sub-way"
+    },
+    "succeed": {
+      "en_US": "suc-ceed",
+      "en_GB": "suc-ceed"
+    },
+    "success": {
+      "en_US": "suc-cess",
+      "en_GB": "suc-cess"
+    },
+    "successful": {
+      "en_US": "suc-cess-ful",
+      "en_GB": "suc-cess-ful"
+    },
+    "successfully": {
+      "en_US": "suc-cess-ful-ly",
+      "en_GB": "suc-cess-fully"
+    },
+    "such": {
+      "en_US": "such",
+      "en_GB": "such"
+    },
+    "sudden": {
+      "en_US": "sud-den",
+      "en_GB": "sud-den"
+    },
+    "suddenly": {
+      "en_US": "sud-den-ly",
+      "en_GB": "sud-denly"
+    },
+    "suffer": {
+      "en_US": "suf-fer",
+      "en_GB": "suf-fer"
+    },
+    "sugar": {
+      "en_US": "sug-ar",
+      "en_GB": "sug-ar"
+    },
+    "suggest": {
+      "en_US": "sug-gest",
+      "en_GB": "sug-gest"
+    },
+    "suggestion": {
+      "en_US": "sug-ges-tion",
+      "en_GB": "sug-ges-tion"
+    },
+    "suit": {
+      "en_US": "suit",
+      "en_GB": "suit"
+    },
+    "suitable": {
+      "en_US": "suit-able",
+      "en_GB": "suit-able"
+    },
+    "summarise": {
+      "en_US": "sum-marise",
+      "en_GB": "sum-mar-ise"
+    },
+    "summary": {
+      "en_US": "sum-ma-ry",
+      "en_GB": "sum-mary"
+    },
+    "summer": {
+      "en_US": "sum-mer",
+      "en_GB": "sum-mer"
+    },
+    "sun": {
+      "en_US": "sun",
+      "en_GB": "sun"
+    },
+    "sunbathe": {
+      "en_US": "sun-bathe",
+      "en_GB": "sun-bathe"
+    },
+    "sunday": {
+      "en_US": "sun-day",
+      "en_GB": "sunday"
+    },
+    "sunglasses": {
+      "en_US": "sun-glass-es",
+      "en_GB": "sunglasses"
+    },
+    "sunlight": {
+      "en_US": "sun-light",
+      "en_GB": "sun-light"
+    },
+    "sunny": {
+      "en_US": "sun-ny",
+      "en_GB": "sunny"
+    },
+    "sunrise": {
+      "en_US": "sun-rise",
+      "en_GB": "sun-rise"
+    },
+    "sunset": {
+      "en_US": "sun-set",
+      "en_GB": "sun-set"
+    },
+    "sunshine": {
+      "en_US": "sun-shine",
+      "en_GB": "sun-shine"
+    },
+    "super": {
+      "en_US": "su-per",
+      "en_GB": "su-per"
+    },
+    "supermarket": {
+      "en_US": "su-per-mar-ket",
+      "en_GB": "su-per-mar-ket"
+    },
+    "supply": {
+      "en_US": "sup-ply",
+      "en_GB": "sup-ply"
+    },
+    "support": {
+      "en_US": "sup-port",
+      "en_GB": "sup-port"
+    },
+    "suppose": {
+      "en_US": "sup-pose",
+      "en_GB": "sup-pose"
+    },
+    "sure": {
+      "en_US": "sure",
+      "en_GB": "sure"
+    },
+    "surely": {
+      "en_US": "sure-ly",
+      "en_GB": "surely"
+    },
+    "surface": {
+      "en_US": "sur-face",
+      "en_GB": "sur-face"
+    },
+    "surprise": {
+      "en_US": "sur-prise",
+      "en_GB": "sur-prise"
+    },
+    "surprised": {
+      "en_US": "sur-prised",
+      "en_GB": "sur-prised"
+    },
+    "surprisingly": {
+      "en_US": "sur-pris-ing-ly",
+      "en_GB": "sur-pris-ingly"
+    },
+    "surround": {
+      "en_US": "sur-round",
+      "en_GB": "sur-round"
+    },
+    "survey": {
+      "en_US": "sur-vey",
+      "en_GB": "sur-vey"
+    },
+    "survive": {
+      "en_US": "sur-vive",
+      "en_GB": "sur-vive"
+    },
+    "sushi": {
+      "en_US": "sushi",
+      "en_GB": "sushi"
+    },
+    "swan": {
+      "en_US": "swan",
+      "en_GB": "swan"
+    },
+    "sweater": {
+      "en_US": "sweater",
+      "en_GB": "sweat-er"
+    },
+    "sweep": {
+      "en_US": "sweep",
+      "en_GB": "sweep"
+    },
+    "sweet": {
+      "en_US": "sweet",
+      "en_GB": "sweet"
+    },
+    "sweetness": {
+      "en_US": "sweet-ness",
+      "en_GB": "sweet-ness"
+    },
+    "swim": {
+      "en_US": "swim",
+      "en_GB": "swim"
+    },
+    "swimmer": {
+      "en_US": "swim-mer",
+      "en_GB": "swim-mer"
+    },
+    "swimming": {
+      "en_US": "swim-ming",
+      "en_GB": "swim-ming"
+    },
+    "sydney": {
+      "en_US": "syd-ney",
+      "en_GB": "sydney"
+    },
+    "system": {
+      "en_US": "sys-tem",
+      "en_GB": "sys-tem"
+    },
+    "tablespoon": {
+      "en_US": "ta-ble-spoon",
+      "en_GB": "ta-ble-spoon"
+    },
+    "taikonaut": {
+      "en_US": "taiko-naut",
+      "en_GB": "taiko-naut"
+    },
+    "tail": {
+      "en_US": "tail",
+      "en_GB": "tail"
+    },
+    "take": {
+      "en_US": "take",
+      "en_GB": "take"
+    },
+    "talent": {
+      "en_US": "tal-ent",
+      "en_GB": "tal-ent"
+    },
+    "talented": {
+      "en_US": "tal-ent-ed",
+      "en_GB": "tal-en-ted"
+    },
+    "talk": {
+      "en_US": "talk",
+      "en_GB": "talk"
+    },
+    "tall": {
+      "en_US": "tall",
+      "en_GB": "tall"
+    },
+    "taller": {
+      "en_US": "taller",
+      "en_GB": "taller"
+    },
+    "tape": {
+      "en_US": "tape",
+      "en_GB": "tape"
+    },
+    "task": {
+      "en_US": "task",
+      "en_GB": "task"
+    },
+    "taste": {
+      "en_US": "taste",
+      "en_GB": "taste"
+    },
+    "tea": {
+      "en_US": "tea",
+      "en_GB": "tea"
+    },
+    "teach": {
+      "en_US": "teach",
+      "en_GB": "teach"
+    },
+    "teacher": {
+      "en_US": "teach-er",
+      "en_GB": "teach-er"
+    },
+    "team": {
+      "en_US": "team",
+      "en_GB": "team"
+    },
+    "teammate": {
+      "en_US": "team-mate",
+      "en_GB": "team-mate"
+    },
+    "teamwork": {
+      "en_US": "team-work",
+      "en_GB": "team-work"
+    },
+    "tear": {
+      "en_US": "tear",
+      "en_GB": "tear"
+    },
+    "technology": {
+      "en_US": "tech-nol-o-gy",
+      "en_GB": "tech-no-logy"
+    },
+    "teenage": {
+      "en_US": "teenage",
+      "en_GB": "teen-age"
+    },
+    "teenager": {
+      "en_US": "teenag-er",
+      "en_GB": "teen-ager"
+    },
+    "telescope": {
+      "en_US": "tele-scope",
+      "en_GB": "tele-scope"
+    },
+    "tell": {
+      "en_US": "tell",
+      "en_GB": "tell"
+    },
+    "temper": {
+      "en_US": "tem-per",
+      "en_GB": "tem-per"
+    },
+    "temperature": {
+      "en_US": "tem-per-a-ture",
+      "en_GB": "tem-per-at-ure"
+    },
+    "ten": {
+      "en_US": "ten",
+      "en_GB": "ten"
+    },
+    "tennis": {
+      "en_US": "ten-nis",
+      "en_GB": "ten-nis"
+    },
+    "tent": {
+      "en_US": "tent",
+      "en_GB": "tent"
+    },
+    "term": {
+      "en_US": "term",
+      "en_GB": "term"
+    },
+    "terracotta": {
+      "en_US": "ter-ra-cot-ta",
+      "en_GB": "ter-ra-cotta"
+    },
+    "terrible": {
+      "en_US": "ter-ri-ble",
+      "en_GB": "ter-rible"
+    },
+    "terribly": {
+      "en_US": "ter-ri-bly",
+      "en_GB": "ter-ribly"
+    },
+    "test": {
+      "en_US": "test",
+      "en_GB": "test"
+    },
+    "text": {
+      "en_US": "text",
+      "en_GB": "text"
+    },
+    "textbook": {
+      "en_US": "text-book",
+      "en_GB": "text-book"
+    },
+    "thai": {
+      "en_US": "thai",
+      "en_GB": "thai"
+    },
+    "than": {
+      "en_US": "than",
+      "en_GB": "than"
+    },
+    "thankful": {
+      "en_US": "thank-ful",
+      "en_GB": "thank-ful"
+    },
+    "thankfully": {
+      "en_US": "thank-ful-ly",
+      "en_GB": "thank-fully"
+    },
+    "thanksgiving": {
+      "en_US": "thanks-giv-ing",
+      "en_GB": "thanks-giv-ing"
+    },
+    "theatre": {
+      "en_US": "the-atre",
+      "en_GB": "theatre"
+    },
+    "their": {
+      "en_US": "their",
+      "en_GB": "their"
+    },
+    "theirs": {
+      "en_US": "theirs",
+      "en_GB": "theirs"
+    },
+    "them": {
+      "en_US": "them",
+      "en_GB": "them"
+    },
+    "theme": {
+      "en_US": "theme",
+      "en_GB": "theme"
+    },
+    "themselves": {
+      "en_US": "them-selves",
+      "en_GB": "them-selves"
+    },
+    "then": {
+      "en_US": "then",
+      "en_GB": "then"
+    },
+    "theolympics": {
+      "en_US": "the-olympics",
+      "en_GB": "theo-lympics"
+    },
+    "there": {
+      "en_US": "there",
+      "en_GB": "there"
+    },
+    "therefore": {
+      "en_US": "there-fore",
+      "en_GB": "there-fore"
+    },
+    "these": {
+      "en_US": "these",
+      "en_GB": "these"
+    },
+    "thick": {
+      "en_US": "thick",
+      "en_GB": "thick"
+    },
+    "thin": {
+      "en_US": "thin",
+      "en_GB": "thin"
+    },
+    "thing": {
+      "en_US": "thing",
+      "en_GB": "thing"
+    },
+    "think": {
+      "en_US": "think",
+      "en_GB": "think"
+    },
+    "thinker": {
+      "en_US": "thinker",
+      "en_GB": "thinker"
+    },
+    "thinking": {
+      "en_US": "think-ing",
+      "en_GB": "think-ing"
+    },
+    "thinner": {
+      "en_US": "thin-ner",
+      "en_GB": "thin-ner"
+    },
+    "third": {
+      "en_US": "third",
+      "en_GB": "third"
+    },
+    "thirdly": {
+      "en_US": "third-ly",
+      "en_GB": "thirdly"
+    },
+    "thirsty": {
+      "en_US": "thirsty",
+      "en_GB": "thirsty"
+    },
+    "thirteen": {
+      "en_US": "thir-teen",
+      "en_GB": "thir-teen"
+    },
+    "thirtieth": {
+      "en_US": "thir-ti-eth",
+      "en_GB": "thir-ti-eth"
+    },
+    "those": {
+      "en_US": "those",
+      "en_GB": "those"
+    },
+    "though": {
+      "en_US": "though",
+      "en_GB": "though"
+    },
+    "thought": {
+      "en_US": "thought",
+      "en_GB": "thought"
+    },
+    "thousand": {
+      "en_US": "thou-sand",
+      "en_GB": "thou-sand"
+    },
+    "three": {
+      "en_US": "three",
+      "en_GB": "three"
+    },
+    "throat": {
+      "en_US": "throat",
+      "en_GB": "throat"
+    },
+    "through": {
+      "en_US": "through",
+      "en_GB": "through"
+    },
+    "throw": {
+      "en_US": "throw",
+      "en_GB": "throw"
+    },
+    "thunder": {
+      "en_US": "thun-der",
+      "en_GB": "thun-der"
+    },
+    "thursday": {
+      "en_US": "thurs-day",
+      "en_GB": "thursday"
+    },
+    "tick": {
+      "en_US": "tick",
+      "en_GB": "tick"
+    },
+    "ticket": {
+      "en_US": "tick-et",
+      "en_GB": "tick-et"
+    },
+    "tidy": {
+      "en_US": "tidy",
+      "en_GB": "tidy"
+    },
+    "tie": {
+      "en_US": "tie",
+      "en_GB": "tie"
+    },
+    "tiger": {
+      "en_US": "tiger",
+      "en_GB": "ti-ger"
+    },
+    "tight": {
+      "en_US": "tight",
+      "en_GB": "tight"
+    },
+    "till": {
+      "en_US": "till",
+      "en_GB": "till"
+    },
+    "time": {
+      "en_US": "time",
+      "en_GB": "time"
+    },
+    "tiny": {
+      "en_US": "tiny",
+      "en_GB": "tiny"
+    },
+    "tip": {
+      "en_US": "tip",
+      "en_GB": "tip"
+    },
+    "tired": {
+      "en_US": "tired",
+      "en_GB": "tired"
+    },
+    "tiring": {
+      "en_US": "tir-ing",
+      "en_GB": "tir-ing"
+    },
+    "title": {
+      "en_US": "ti-tle",
+      "en_GB": "title"
+    },
+    "today": {
+      "en_US": "to-day",
+      "en_GB": "today"
+    },
+    "tofu": {
+      "en_US": "to-fu",
+      "en_GB": "tofu"
+    },
+    "together": {
+      "en_US": "to-geth-er",
+      "en_GB": "to-geth-er"
+    },
+    "togetherness": {
+      "en_US": "to-geth-er-ness",
+      "en_GB": "to-geth-er-ness"
+    },
+    "toilet": {
+      "en_US": "toi-let",
+      "en_GB": "toi-let"
+    },
+    "tomato": {
+      "en_US": "toma-to",
+      "en_GB": "to-mato"
+    },
+    "tomb": {
+      "en_US": "tomb",
+      "en_GB": "tomb"
+    },
+    "tomorrow": {
+      "en_US": "to-mor-row",
+      "en_GB": "to-mor-row"
+    },
+    "ton": {
+      "en_US": "ton",
+      "en_GB": "ton"
+    },
+    "tongue": {
+      "en_US": "tongue",
+      "en_GB": "tongue"
+    },
+    "tonight": {
+      "en_US": "tonight",
+      "en_GB": "to-night"
+    },
+    "too": {
+      "en_US": "too",
+      "en_GB": "too"
+    },
+    "took": {
+      "en_US": "took",
+      "en_GB": "took"
+    },
+    "tool": {
+      "en_US": "tool",
+      "en_GB": "tool"
+    },
+    "tooth": {
+      "en_US": "tooth",
+      "en_GB": "tooth"
+    },
+    "toothache": {
+      "en_US": "toothache",
+      "en_GB": "toothache"
+    },
+    "toothpaste": {
+      "en_US": "tooth-paste",
+      "en_GB": "tooth-paste"
+    },
+    "top": {
+      "en_US": "top",
+      "en_GB": "top"
+    },
+    "topic": {
+      "en_US": "top-ic",
+      "en_GB": "top-ic"
+    },
+    "tornado": {
+      "en_US": "tor-na-do",
+      "en_GB": "tor-nado"
+    },
+    "total": {
+      "en_US": "to-tal",
+      "en_GB": "total"
+    },
+    "touch": {
+      "en_US": "touch",
+      "en_GB": "touch"
+    },
+    "tour": {
+      "en_US": "tour",
+      "en_GB": "tour"
+    },
+    "tourism": {
+      "en_US": "tourism",
+      "en_GB": "tour-ism"
+    },
+    "tourist": {
+      "en_US": "tourist",
+      "en_GB": "tour-ist"
+    },
+    "towards": {
+      "en_US": "to-wards",
+      "en_GB": "to-wards"
+    },
+    "tower": {
+      "en_US": "tow-er",
+      "en_GB": "tower"
+    },
+    "town": {
+      "en_US": "town",
+      "en_GB": "town"
+    },
+    "toy": {
+      "en_US": "toy",
+      "en_GB": "toy"
+    },
+    "track": {
+      "en_US": "track",
+      "en_GB": "track"
+    },
+    "trade": {
+      "en_US": "trade",
+      "en_GB": "trade"
+    },
+    "tradition": {
+      "en_US": "tra-di-tion",
+      "en_GB": "tra-di-tion"
+    },
+    "traditional": {
+      "en_US": "tra-di-tion-al",
+      "en_GB": "tra-di-tion-al"
+    },
+    "traffic": {
+      "en_US": "traf-fic",
+      "en_GB": "traffic"
+    },
+    "training": {
+      "en_US": "train-ing",
+      "en_GB": "train-ing"
+    },
+    "transport": {
+      "en_US": "trans-port",
+      "en_GB": "trans-port"
+    },
+    "trash": {
+      "en_US": "trash",
+      "en_GB": "trash"
+    },
+    "traveller": {
+      "en_US": "trav-eller",
+      "en_GB": "trav-el-ler"
+    },
+    "treasure": {
+      "en_US": "trea-sure",
+      "en_GB": "treas-ure"
+    },
+    "treat": {
+      "en_US": "treat",
+      "en_GB": "treat"
+    },
+    "tree": {
+      "en_US": "tree",
+      "en_GB": "tree"
+    },
+    "trillion": {
+      "en_US": "tril-lion",
+      "en_GB": "tril-lion"
+    },
+    "trip": {
+      "en_US": "trip",
+      "en_GB": "trip"
+    },
+    "trouble": {
+      "en_US": "trou-ble",
+      "en_GB": "trouble"
+    },
+    "trousers": {
+      "en_US": "trousers",
+      "en_GB": "trousers"
+    },
+    "truck": {
+      "en_US": "truck",
+      "en_GB": "truck"
+    },
+    "true": {
+      "en_US": "true",
+      "en_GB": "true"
+    },
+    "truly": {
+      "en_US": "tru-ly",
+      "en_GB": "truly"
+    },
+    "trumpet": {
+      "en_US": "trum-pet",
+      "en_GB": "trum-pet"
+    },
+    "trunk": {
+      "en_US": "trunk",
+      "en_GB": "trunk"
+    },
+    "trust": {
+      "en_US": "trust",
+      "en_GB": "trust"
+    },
+    "truth": {
+      "en_US": "truth",
+      "en_GB": "truth"
+    },
+    "tryout": {
+      "en_US": "try-out",
+      "en_GB": "try-out"
+    },
+    "tsunami": {
+      "en_US": "tsuna-mi",
+      "en_GB": "tsunami"
+    },
+    "tuesday": {
+      "en_US": "tues-day",
+      "en_GB": "tues-day"
+    },
+    "tunnel": {
+      "en_US": "tun-nel",
+      "en_GB": "tun-nel"
+    },
+    "turn": {
+      "en_US": "turn",
+      "en_GB": "turn"
+    },
+    "turpan": {
+      "en_US": "tur-pan",
+      "en_GB": "turpan"
+    },
+    "turtle": {
+      "en_US": "tur-tle",
+      "en_GB": "turtle"
+    },
+    "tv": {
+      "en_US": "tv",
+      "en_GB": "tv"
+    },
+    "twelfth": {
+      "en_US": "twelfth",
+      "en_GB": "twelfth"
+    },
+    "twelve": {
+      "en_US": "twelve",
+      "en_GB": "twelve"
+    },
+    "twentieth": {
+      "en_US": "twen-ti-eth",
+      "en_GB": "twen-ti-eth"
+    },
+    "twenty": {
+      "en_US": "twen-ty",
+      "en_GB": "twenty"
+    },
+    "twice": {
+      "en_US": "twice",
+      "en_GB": "twice"
+    },
+    "twin": {
+      "en_US": "twin",
+      "en_GB": "twin"
+    },
+    "two": {
+      "en_US": "two",
+      "en_GB": "two"
+    },
+    "type": {
+      "en_US": "type",
+      "en_GB": "type"
+    },
+    "typhoon": {
+      "en_US": "ty-phoon",
+      "en_GB": "typhoon"
+    },
+    "tyre": {
+      "en_US": "tyre",
+      "en_GB": "tyre"
+    },
+    "ugly": {
+      "en_US": "ug-ly",
+      "en_GB": "ugly"
+    },
+    "uk": {
+      "en_US": "uk",
+      "en_GB": "uk"
+    },
+    "umbrella": {
+      "en_US": "um-brel-la",
+      "en_GB": "um-brella"
+    },
+    "unbelievable": {
+      "en_US": "un-be-liev-able",
+      "en_GB": "un-be-liev-able"
+    },
+    "uncle": {
+      "en_US": "un-cle",
+      "en_GB": "uncle"
+    },
+    "uncommon": {
+      "en_US": "un-com-mon",
+      "en_GB": "un-com-mon"
+    },
+    "under": {
+      "en_US": "un-der",
+      "en_GB": "un-der"
+    },
+    "understand": {
+      "en_US": "un-der-stand",
+      "en_GB": "un-der-stand"
+    },
+    "underwater": {
+      "en_US": "un-der-wa-ter",
+      "en_GB": "un-der-wa-ter"
+    },
+    "unforgettable": {
+      "en_US": "un-for-get-table",
+      "en_GB": "un-for-get-table"
+    },
+    "unfortunately": {
+      "en_US": "un-for-tu-nate-ly",
+      "en_GB": "un-for-tu-nately"
+    },
+    "unhappy": {
+      "en_US": "un-hap-py",
+      "en_GB": "un-happy"
+    },
+    "uniform": {
+      "en_US": "uni-form",
+      "en_GB": "uni-form"
+    },
+    "unique": {
+      "en_US": "unique",
+      "en_GB": "unique"
+    },
+    "unit": {
+      "en_US": "unit",
+      "en_GB": "unit"
+    },
+    "universe": {
+      "en_US": "uni-verse",
+      "en_GB": "uni-verse"
+    },
+    "university": {
+      "en_US": "uni-ver-si-ty",
+      "en_GB": "uni-ver-sity"
+    },
+    "unless": {
+      "en_US": "un-less",
+      "en_GB": "un-less"
+    },
+    "unlikely": {
+      "en_US": "un-like-ly",
+      "en_GB": "un-likely"
+    },
+    "unlock": {
+      "en_US": "un-lock",
+      "en_GB": "un-lock"
+    },
+    "unlucky": {
+      "en_US": "un-lucky",
+      "en_GB": "un-lucky"
+    },
+    "unmanned": {
+      "en_US": "un-manned",
+      "en_GB": "un-manned"
+    },
+    "unplug": {
+      "en_US": "un-plug",
+      "en_GB": "un-plug"
+    },
+    "unsafe": {
+      "en_US": "un-safe",
+      "en_GB": "un-safe"
+    },
+    "untidy": {
+      "en_US": "un-tidy",
+      "en_GB": "un-tidy"
+    },
+    "until": {
+      "en_US": "un-til",
+      "en_GB": "un-til"
+    },
+    "unusual": {
+      "en_US": "un-usu-al",
+      "en_GB": "un-usu-al"
+    },
+    "upon": {
+      "en_US": "up-on",
+      "en_GB": "upon"
+    },
+    "upset": {
+      "en_US": "up-set",
+      "en_GB": "up-set"
+    },
+    "us": {
+      "en_US": "us",
+      "en_GB": "us"
+    },
+    "usa": {
+      "en_US": "usa",
+      "en_GB": "usa"
+    },
+    "useful": {
+      "en_US": "use-ful",
+      "en_GB": "use-ful"
+    },
+    "usual": {
+      "en_US": "usu-al",
+      "en_GB": "usu-al"
+    },
+    "usually": {
+      "en_US": "usu-al-ly",
+      "en_GB": "usu-ally"
+    },
+    "vacation": {
+      "en_US": "va-ca-tion",
+      "en_GB": "va-ca-tion"
+    },
+    "valley": {
+      "en_US": "val-ley",
+      "en_GB": "val-ley"
+    },
+    "valuable": {
+      "en_US": "valu-able",
+      "en_GB": "valu-able"
+    },
+    "vegetable": {
+      "en_US": "veg-etable",
+      "en_GB": "ve-get-able"
+    },
+    "version": {
+      "en_US": "ver-sion",
+      "en_GB": "ver-sion"
+    },
+    "very": {
+      "en_US": "very",
+      "en_GB": "very"
+    },
+    "vessel": {
+      "en_US": "ves-sel",
+      "en_GB": "ves-sel"
+    },
+    "victory": {
+      "en_US": "vic-to-ry",
+      "en_GB": "vic-tory"
+    },
+    "video": {
+      "en_US": "video",
+      "en_GB": "video"
+    },
+    "view": {
+      "en_US": "view",
+      "en_GB": "view"
+    },
+    "village": {
+      "en_US": "vil-lage",
+      "en_GB": "vil-lage"
+    },
+    "villager": {
+      "en_US": "vil-lager",
+      "en_GB": "vil-la-ger"
+    },
+    "violin": {
+      "en_US": "vi-o-lin",
+      "en_GB": "vi-ol-in"
+    },
+    "virus": {
+      "en_US": "virus",
+      "en_GB": "vir-us"
+    },
+    "visible": {
+      "en_US": "vis-i-ble",
+      "en_GB": "vis-ible"
+    },
+    "visit": {
+      "en_US": "vis-it",
+      "en_GB": "vis-it"
+    },
+    "visitor": {
+      "en_US": "vis-i-tor",
+      "en_GB": "vis-it-or"
+    },
+    "vocational": {
+      "en_US": "vo-ca-tion-al",
+      "en_GB": "vo-ca-tion-al"
+    },
+    "voice": {
+      "en_US": "voice",
+      "en_GB": "voice"
+    },
+    "volleyball": {
+      "en_US": "vol-ley-ball",
+      "en_GB": "vol-ley-ball"
+    },
+    "voluntary": {
+      "en_US": "vol-un-tary",
+      "en_GB": "vol-un-tary"
+    },
+    "volunteer": {
+      "en_US": "vol-un-teer",
+      "en_GB": "vo-lun-teer"
+    },
+    "vote": {
+      "en_US": "vote",
+      "en_GB": "vote"
+    },
+    "waiter": {
+      "en_US": "wait-er",
+      "en_GB": "waiter"
+    },
+    "waitress": {
+      "en_US": "wait-ress",
+      "en_GB": "wait-ress"
+    },
+    "wake": {
+      "en_US": "wake",
+      "en_GB": "wake"
+    },
+    "walk": {
+      "en_US": "walk",
+      "en_GB": "walk"
+    },
+    "wall": {
+      "en_US": "wall",
+      "en_GB": "wall"
+    },
+    "wallet": {
+      "en_US": "wal-let",
+      "en_GB": "wal-let"
+    },
+    "want": {
+      "en_US": "want",
+      "en_GB": "want"
+    },
+    "war": {
+      "en_US": "war",
+      "en_GB": "war"
+    },
+    "ware": {
+      "en_US": "ware",
+      "en_GB": "ware"
+    },
+    "warm": {
+      "en_US": "warm",
+      "en_GB": "warm"
+    },
+    "warmly": {
+      "en_US": "warm-ly",
+      "en_GB": "warmly"
+    },
+    "warn": {
+      "en_US": "warn",
+      "en_GB": "warn"
+    },
+    "was": {
+      "en_US": "was",
+      "en_GB": "was"
+    },
+    "wash": {
+      "en_US": "wash",
+      "en_GB": "wash"
+    },
+    "washed": {
+      "en_US": "washed",
+      "en_GB": "washed"
+    },
+    "waste": {
+      "en_US": "waste",
+      "en_GB": "waste"
+    },
+    "wastewater": {
+      "en_US": "waste-water",
+      "en_GB": "wastewa-ter"
+    },
+    "watch": {
+      "en_US": "watch",
+      "en_GB": "watch"
+    },
+    "watched": {
+      "en_US": "watched",
+      "en_GB": "watched"
+    },
+    "water": {
+      "en_US": "wa-ter",
+      "en_GB": "wa-ter"
+    },
+    "waterfall": {
+      "en_US": "wa-ter-fall",
+      "en_GB": "wa-ter-fall"
+    },
+    "watermelon": {
+      "en_US": "wa-ter-mel-on",
+      "en_GB": "wa-ter-mel-on"
+    },
+    "wave": {
+      "en_US": "wave",
+      "en_GB": "wave"
+    },
+    "way": {
+      "en_US": "way",
+      "en_GB": "way"
+    },
+    "weak": {
+      "en_US": "weak",
+      "en_GB": "weak"
+    },
+    "wealth": {
+      "en_US": "wealth",
+      "en_GB": "wealth"
+    },
+    "wealthy": {
+      "en_US": "wealthy",
+      "en_GB": "wealthy"
+    },
+    "wear": {
+      "en_US": "wear",
+      "en_GB": "wear"
+    },
+    "weather": {
+      "en_US": "weath-er",
+      "en_GB": "weath-er"
+    },
+    "website": {
+      "en_US": "web-site",
+      "en_GB": "web-site"
+    },
+    "wednesday": {
+      "en_US": "wednes-day",
+      "en_GB": "wed-nes-day"
+    },
+    "week": {
+      "en_US": "week",
+      "en_GB": "week"
+    },
+    "weekday": {
+      "en_US": "week-day",
+      "en_GB": "week-day"
+    },
+    "weekend": {
+      "en_US": "week-end",
+      "en_GB": "week-end"
+    },
+    "weigh": {
+      "en_US": "weigh",
+      "en_GB": "weigh"
+    },
+    "weight": {
+      "en_US": "weight",
+      "en_GB": "weight"
+    },
+    "weightless": {
+      "en_US": "weight-less",
+      "en_GB": "weight-less"
+    },
+    "went": {
+      "en_US": "went",
+      "en_GB": "went"
+    },
+    "west": {
+      "en_US": "west",
+      "en_GB": "west"
+    },
+    "western": {
+      "en_US": "west-ern",
+      "en_GB": "west-ern"
+    },
+    "wet": {
+      "en_US": "wet",
+      "en_GB": "wet"
+    },
+    "whale": {
+      "en_US": "whale",
+      "en_GB": "whale"
+    },
+    "wheel": {
+      "en_US": "wheel",
+      "en_GB": "wheel"
+    },
+    "when": {
+      "en_US": "when",
+      "en_GB": "when"
+    },
+    "whenever": {
+      "en_US": "when-ev-er",
+      "en_GB": "whenev-er"
+    },
+    "where": {
+      "en_US": "where",
+      "en_GB": "where"
+    },
+    "wherever": {
+      "en_US": "wher-ev-er",
+      "en_GB": "wherever"
+    },
+    "whether": {
+      "en_US": "whether",
+      "en_GB": "wheth-er"
+    },
+    "which": {
+      "en_US": "which",
+      "en_GB": "which"
+    },
+    "while": {
+      "en_US": "while",
+      "en_GB": "while"
+    },
+    "white": {
+      "en_US": "white",
+      "en_GB": "white"
+    },
+    "whiteboard": {
+      "en_US": "white-board",
+      "en_GB": "white-board"
+    },
+    "who": {
+      "en_US": "who",
+      "en_GB": "who"
+    },
+    "whoever": {
+      "en_US": "who-ev-er",
+      "en_GB": "who-ever"
+    },
+    "whole": {
+      "en_US": "whole",
+      "en_GB": "whole"
+    },
+    "whom": {
+      "en_US": "whom",
+      "en_GB": "whom"
+    },
+    "whose": {
+      "en_US": "whose",
+      "en_GB": "whose"
+    },
+    "why": {
+      "en_US": "why",
+      "en_GB": "why"
+    },
+    "wide": {
+      "en_US": "wide",
+      "en_GB": "wide"
+    },
+    "widely": {
+      "en_US": "wide-ly",
+      "en_GB": "widely"
+    },
+    "widen": {
+      "en_US": "widen",
+      "en_GB": "widen"
+    },
+    "wife": {
+      "en_US": "wife",
+      "en_GB": "wife"
+    },
+    "wild": {
+      "en_US": "wild",
+      "en_GB": "wild"
+    },
+    "wildfire": {
+      "en_US": "wild-fire",
+      "en_GB": "wild-fire"
+    },
+    "wildlife": {
+      "en_US": "wildlife",
+      "en_GB": "wild-life"
+    },
+    "willing": {
+      "en_US": "will-ing",
+      "en_GB": "will-ing"
+    },
+    "win": {
+      "en_US": "win",
+      "en_GB": "win"
+    },
+    "wind": {
+      "en_US": "wind",
+      "en_GB": "wind"
+    },
+    "window": {
+      "en_US": "win-dow",
+      "en_GB": "win-dow"
+    },
+    "windy": {
+      "en_US": "windy",
+      "en_GB": "windy"
+    },
+    "wing": {
+      "en_US": "wing",
+      "en_GB": "wing"
+    },
+    "winner": {
+      "en_US": "win-ner",
+      "en_GB": "win-ner"
+    },
+    "winter": {
+      "en_US": "win-ter",
+      "en_GB": "winter"
+    },
+    "wisdom": {
+      "en_US": "wis-dom",
+      "en_GB": "wis-dom"
+    },
+    "wise": {
+      "en_US": "wise",
+      "en_GB": "wise"
+    },
+    "wisely": {
+      "en_US": "wise-ly",
+      "en_GB": "wisely"
+    },
+    "without": {
+      "en_US": "with-out",
+      "en_GB": "without"
+    },
+    "woke": {
+      "en_US": "woke",
+      "en_GB": "woke"
+    },
+    "wolf": {
+      "en_US": "wolf",
+      "en_GB": "wolf"
+    },
+    "woman": {
+      "en_US": "wom-an",
+      "en_GB": "wo-man"
+    },
+    "wonder": {
+      "en_US": "won-der",
+      "en_GB": "won-der"
+    },
+    "wonderful": {
+      "en_US": "won-der-ful",
+      "en_GB": "won-der-ful"
+    },
+    "woodwork": {
+      "en_US": "wood-work",
+      "en_GB": "wood-work"
+    },
+    "word": {
+      "en_US": "word",
+      "en_GB": "word"
+    },
+    "work": {
+      "en_US": "work",
+      "en_GB": "work"
+    },
+    "workbook": {
+      "en_US": "work-book",
+      "en_GB": "work-book"
+    },
+    "workshop": {
+      "en_US": "work-shop",
+      "en_GB": "work-shop"
+    },
+    "world": {
+      "en_US": "world",
+      "en_GB": "world"
+    },
+    "worldwide": {
+      "en_US": "world-wide",
+      "en_GB": "world-wide"
+    },
+    "worried": {
+      "en_US": "wor-ried",
+      "en_GB": "wor-ried"
+    },
+    "worry": {
+      "en_US": "wor-ry",
+      "en_GB": "worry"
+    },
+    "worse": {
+      "en_US": "worse",
+      "en_GB": "worse"
+    },
+    "worst": {
+      "en_US": "worst",
+      "en_GB": "worst"
+    },
+    "worth": {
+      "en_US": "worth",
+      "en_GB": "worth"
+    },
+    "would": {
+      "en_US": "would",
+      "en_GB": "would"
+    },
+    "wound": {
+      "en_US": "wound",
+      "en_GB": "wound"
+    },
+    "wounded": {
+      "en_US": "wound-ed",
+      "en_GB": "wounded"
+    },
+    "wow": {
+      "en_US": "wow",
+      "en_GB": "wow"
+    },
+    "writer": {
+      "en_US": "writ-er",
+      "en_GB": "writer"
+    },
+    "wrong": {
+      "en_US": "wrong",
+      "en_GB": "wrong"
+    },
+    "yard": {
+      "en_US": "yard",
+      "en_GB": "yard"
+    },
+    "yeah": {
+      "en_US": "yeah",
+      "en_GB": "yeah"
+    },
+    "year": {
+      "en_US": "year",
+      "en_GB": "year"
+    },
+    "yellow": {
+      "en_US": "yel-low",
+      "en_GB": "yel-low"
+    },
+    "yesterday": {
+      "en_US": "yes-ter-day",
+      "en_GB": "yes-ter-day"
+    },
+    "yet": {
+      "en_US": "yet",
+      "en_GB": "yet"
+    },
+    "yoga": {
+      "en_US": "yo-ga",
+      "en_GB": "yoga"
+    },
+    "yogurt": {
+      "en_US": "yo-gurt",
+      "en_GB": "yogurt"
+    },
+    "you": {
+      "en_US": "you",
+      "en_GB": "you"
+    },
+    "young": {
+      "en_US": "young",
+      "en_GB": "young"
+    },
+    "younger": {
+      "en_US": "younger",
+      "en_GB": "young-er"
+    },
+    "yours": {
+      "en_US": "yours",
+      "en_GB": "yours"
+    },
+    "yourself": {
+      "en_US": "your-self",
+      "en_GB": "your-self"
+    },
+    "youth": {
+      "en_US": "youth",
+      "en_GB": "youth"
+    },
+    "yummy": {
+      "en_US": "yum-my",
+      "en_GB": "yummy"
+    },
+    "zero": {
+      "en_US": "ze-ro",
+      "en_GB": "zero"
+    },
+    "zone": {
+      "en_US": "zone",
+      "en_GB": "zone"
+    },
+    "zoo": {
+      "en_US": "zoo",
+      "en_GB": "zoo"
+    }
+  }
+}

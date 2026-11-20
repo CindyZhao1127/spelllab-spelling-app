@@ -1689,8 +1689,31 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     assert(JSON.stringify(o.beautiful) === JSON.stringify(['beau','ti','ful']), 'beautiful 音节错误: '+JSON.stringify(o.beautiful));
     assert(JSON.stringify(o.because) === JSON.stringify(['be','cause']) && o.sauce.length===1 &&
       o.blue.length===1 && o.true.length===1, 'au/ue 元音组合未整体成节: '+JSON.stringify(o));
-    assert(o.ready.length===1 && o.real.length===1, 're 非前缀词被误剥: '+JSON.stringify(o));
-    return 'res·tau·rant / beau·ti·ful / be·cause / au·tumn 拼写记忆友好切分正确';
+    assert(JSON.stringify(o.ready)===JSON.stringify(['read','y']) && o.real.length===1,
+      'ready 应按词典拆 read·y，real 保持单音节: '+JSON.stringify(o));
+    return 'res·tau·rant / beau·ti·ful / be·cause / read·y 拼写记忆友好切分正确';
+  });
+
+  check('词典校订音节表修正 gingerbread 等易错词：gin·ger·bread', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      var w=['gingerbread','restaurant','beautiful','readable','reading','family','dictionary',
+             'breakfast','bread','tiger'];
+      var r={}; w.forEach(function(x){ r[x]=phonicsChunks(x); }); return r;})())`));
+    const letters = word => o[word].map(c=>c[0]);
+    assert(JSON.stringify(letters('gingerbread')) === JSON.stringify(['gin','ger','bread']),
+      'gingerbread 应为 gin·ger·bread（词典拆分）: '+JSON.stringify(o.gingerbread));
+    assert(o.gingerbread[2][1].indexOf('b r e d')>=0,
+      'bread 音节不应提示长音 ea: '+JSON.stringify(o.gingerbread));
+    assert(JSON.stringify(letters('readable')) === JSON.stringify(['read','able']) &&
+      JSON.stringify(letters('reading')) === JSON.stringify(['read','ing']),
+      'read 词根不应被当 re 前缀误剥: '+JSON.stringify(o));
+    assert(JSON.stringify(letters('family')) === JSON.stringify(['fam','i','ly']) &&
+      JSON.stringify(letters('dictionary')) === JSON.stringify(['dic','tion','ary']),
+      '词典校订词未生效: '+JSON.stringify(o));
+    assert(JSON.stringify(letters('breakfast')) === JSON.stringify(['break','fast']) &&
+      letters('bread').length===1 && JSON.stringify(letters('tiger'))===JSON.stringify(['ti','ger']),
+      '常见易错词校订缺失: '+JSON.stringify(o));
+    return 'gin·ger·bread / read·able / fam·i·ly / dic·tion·ary 均按词典校订表切分';
   });
 
   check('拼读教材来源复用顶部学习范围：无独立学段/教材/册下拉', () => {
