@@ -203,6 +203,52 @@
     background:rgba(255,255,255,.12);color:#e8ecff}
   .modal-actions button:hover{background:rgba(255,255,255,.22)}
   .modal-actions button.primary{background:linear-gradient(135deg,#6a5cff,#4361ee);color:#fff}
+  /* 速度突破：不拦截输入，答完题自动弹 2.6 秒 */
+  .speed-mask{position:fixed;inset:0;z-index:90;display:grid;place-items:center;padding:18px;pointer-events:none}
+  .speed-mask[hidden]{display:none}
+  .speed-card{position:relative;width:min(380px,92vw);padding:20px 18px 18px;text-align:center;overflow:hidden;
+    border-radius:22px;background:linear-gradient(160deg,#3b3173,#1b1f45 62%,#28205c);
+    border:1px solid rgba(255,220,120,.55);
+    box-shadow:0 24px 80px rgba(0,0,0,.65),0 0 60px rgba(255,190,70,.22);
+    animation:speedPop .5s cubic-bezier(.2,1.5,.4,1)}
+  .speed-card h2{margin:2px 0 4px;font-size:30px;font-weight:900;letter-spacing:2px;
+    background:linear-gradient(90deg,#fff0b3,#ffd166,#fff);-webkit-background-clip:text;background-clip:text;
+    color:transparent;text-shadow:0 0 24px rgba(255,209,102,.35)}
+  .speed-badge{display:inline-block;padding:4px 12px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:1px;
+    background:rgba(255,209,102,.18);border:1px solid rgba(255,209,102,.5);color:#ffe6a3}
+  .speed-icon{font-size:52px;line-height:1.1;margin:4px 0 -2px;
+    animation:speedBounce .9s ease-in-out infinite alternate;filter:drop-shadow(0 10px 14px rgba(0,0,0,.4))}
+  .speed-word{font-size:15px;color:#dfe4ff;max-width:100%;overflow-wrap:anywhere;margin:4px 0 12px;font-weight:700}
+  .speed-times{display:flex;align-items:center;justify-content:center;gap:16px;margin:6px 0}
+  .speed-times>div{display:flex;flex-direction:column;gap:3px;min-width:92px}
+  .speed-times span{font-size:11px;color:#a9b2e6}
+  .speed-times b{font-size:20px;color:#fff}
+  .speed-times>div:first-child b{color:#8ef2b8;font-size:24px}
+  .speed-arrow{font-size:20px;color:#ffd166;animation:speedNudge 1s ease-in-out infinite alternate}
+  .speed-gain{font-size:12px;color:#ffe6a3;margin-top:10px;min-height:17px}
+  .speed-rays{position:absolute;inset:-70px;pointer-events:none;opacity:.5;
+    background:repeating-conic-gradient(from 0deg,rgba(255,209,102,.28) 0deg 6deg,transparent 6deg 22deg);
+    animation:raysSpin 12s linear infinite}
+  .speed-confetti i{position:absolute;left:50%;top:46%;width:7px;height:12px;border-radius:2px;background:var(--c);
+    opacity:0;animation:speedFly 1.15s cubic-bezier(.15,.65,.3,1) var(--delay) forwards}
+  @keyframes speedPop{0%{transform:scale(.55) rotate(-4deg);opacity:0}
+    70%{transform:scale(1.06) rotate(1deg);opacity:1}100%{transform:none;opacity:1}}
+  @keyframes speedBounce{from{transform:translateY(0) rotate(-6deg)}to{transform:translateY(-9px) rotate(6deg)}}
+  @keyframes speedNudge{to{transform:translateX(5px)}}
+  @keyframes speedFly{0%{opacity:0;transform:rotate(var(--a)) translateY(0) scale(.5)}
+    15%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateY(calc(var(--d) * -1)) scale(1)}}
+  @media (prefers-reduced-motion:reduce){
+    .speed-card,.speed-icon,.speed-arrow,.speed-rays,.speed-confetti i{animation:none}}
+  .best-list{display:flex;flex-direction:column;gap:6px}
+  .best-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;
+    background:rgba(139,123,255,.08);border:1px solid rgba(139,123,255,.18)}
+  .best-rank{width:24px;height:24px;flex:none;display:grid;place-items:center;border-radius:50%;
+    font-size:11px;font-weight:800;background:rgba(139,123,255,.2);color:#cfc6ff}
+  .best-row:nth-child(1) .best-rank{background:rgba(255,209,102,.22);color:#ffe6a3}
+  .best-body{flex:1;min-width:0}
+  .best-en{font-size:13px;font-weight:700;overflow-wrap:anywhere}
+  .best-meta{font-size:11px;color:var(--muted);margin-top:2px}
+  .best-ms{font-size:15px;font-weight:800;color:#8ef2b8;flex:none}
   .plan-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:10px}
   .plan-head b{font-size:30px;font-weight:900;color:#ffe39a}
   .prize-row{display:flex;gap:6px;align-items:center;margin-bottom:7px}
@@ -2121,6 +2167,11 @@ body.td-typing #typingView { height: 100%; }
         </div>
       </div>
       <div class="panel">
+        <h3>个人最快纪录</h3>
+        <div class="panel-note">只统计一次答对、未借助提示的用时，每个词 / 句子单独记个人最佳。打破纪录时会弹出鼓励动画。</div>
+        <div class="best-list" id="bestList"></div>
+      </div>
+      <div class="panel">
         <h3>最近练习</h3>
         <div id="histList"></div>
       </div>
@@ -2396,6 +2447,24 @@ body.td-typing #typingView { height: 100%; }
     <p id="modalText"></p>
     <div id="modalResult"></div>
     <div class="modal-actions" id="modalActions"></div>
+  </div>
+</div>
+
+<!-- 速度突破鼓励动画：纯展示层不拦截输入，2.6 秒自动收起 -->
+<div class="speed-mask" id="speedMask" hidden aria-live="polite">
+  <div class="speed-card">
+    <div class="speed-rays"></div>
+    <div class="speed-confetti" id="speedConfetti"></div>
+    <span class="speed-badge">⚡ 速度突破</span>
+    <div class="speed-icon">🏆</div>
+    <h2>新纪录！</h2>
+    <div class="speed-word" id="speedWord"></div>
+    <div class="speed-times">
+      <div><span>这次用时</span><b id="speedNow"></b></div>
+      <span class="speed-arrow">→</span>
+      <div><span>原纪录</span><b id="speedPrev"></b></div>
+    </div>
+    <div class="speed-gain" id="speedGain"></div>
   </div>
 </div>
 
@@ -2984,7 +3053,7 @@ let parentPending = null;
 /* ---------------- 状态 ---------------- */
 const KEY = 'spelllab.state.v1';
 const DEFAULT_STATE = {
-  progress:{}, wrong:[], wordStats:{}, history:[],
+  progress:{}, wrong:[], wordStats:{}, history:[], bestTimes:{},
   stats:{attempted:0,correct:0,streak:0,best:0,today:'',todayDone:0,todayRight:0,wordRight:0},
   settings:{showHints:true,speakOnFinish:true,speakDelayMs:120,ignoreCase:true,smart:true,
     rate:0.9,sound:true,volume:0.35,letterBoxes:true,revealLetters:0,wordGap:22,
@@ -3178,6 +3247,14 @@ function normalizeState(s){
   st.revealLetters=Math.max(0,Math.min(3,Number(st.revealLetters)||0));
   if(!DIFFICULTY[st.difficulty]) st.difficulty='normal';
   if(st.timerMode!=='countdown') st.timerMode='count';
+  /* 个人最快用时：旧存档没有这个命名空间，补齐为空对象；
+     非法条目直接丢弃，避免记录页出现 NaN 或负数。 */
+  if(!out.bestTimes || typeof out.bestTimes!=='object' || Array.isArray(out.bestTimes)) out.bestTimes={};
+  Object.keys(out.bestTimes).forEach(function(k){
+    const b=out.bestTimes[k];
+    if(!b || !Number.isFinite(Number(b.ms)) || Number(b.ms)<=0) delete out.bestTimes[k];
+    else { b.ms=Number(b.ms); b.breaks=Math.max(0,Number(b.breaks)||0); }
+  });
   return out;
 }
 function loadState(){
@@ -5240,8 +5317,42 @@ function exportSQLite(){
   return L.join('\n')+'\n';
 }
 
+/* ---------------- 速度与个人最快纪录 ----------------
+   所有答题型练习都走 addHistory，这里统一统计「完成一道题用了多久」。
+   - 只认一次答对（借助提示、答错不计），避免靠提示刷快；
+   - 300ms 以下视作误触，30 分钟以上视作挂机，都不计纪录；
+   - key = 模式 + 英文题，同一个词/句跨单元共用一条个人最佳。 */
+const SPEED_MODES={sentence:'整句',chunk:'分步',word:'单词',phonics:'自然拼读',
+  review:'错词复习',dict:'听写',paperdict:'纸笔听写',typing:'打字练习'};
+function fmtSpeed(ms){
+  const s=Math.max(0,Number(ms)||0)/1000;
+  if(s<60) return s.toFixed(1)+' 秒';
+  return Math.floor(s/60)+' 分 '+(s%60).toFixed(1)+' 秒';
+}
+function speedKey(rec){
+  return String(rec.mode||'')+'|'+String(rec.en||'').trim().toLowerCase();
+}
+function trackSpeed(rec){
+  if(!rec || rec.ok!==true || rec.assisted || !SPEED_MODES[rec.mode]) return;
+  const ms=Number(rec.ms);
+  if(!Number.isFinite(ms) || ms<300 || ms>1800000) return;
+  if(!String(rec.en||'').trim()) return;
+  if(!state.bestTimes || typeof state.bestTimes!=='object') state.bestTimes={};
+  const key=speedKey(rec), old=state.bestTimes[key], prev=old?Number(old.ms)||0:0;
+  if(prev && prev<=ms) return;
+  const breaks=(Number(old&&old.breaks)||0)+1;
+  state.bestTimes[key]={ms:ms,t:rec.t||Date.now(),en:String(rec.en||''),cn:String(rec.cn||''),
+    unit:String(rec.unit||''),mode:rec.mode,breaks:breaks};
+  rec.record=true;
+  if(prev){
+    try{ showSpeedBurst({en:rec.en,cn:rec.cn,mode:rec.mode,ms:ms,prev:prev,breaks:breaks}); }catch(e){}
+  }else{
+    try{ if(typeof toast==='function') toast('已记下个人最快：'+fmtSpeed(ms),'ok'); }catch(e){}
+  }
+}
+
 /* ---------------- 练习记录 ---------------- */
-const MODE_CN={sentence:'整句',chunk:'分步',word:'单词',dict:'听写',paperdict:'纸笔听写',review:'错词复习',typing:'打字练习'};
+const MODE_CN={sentence:'整句',chunk:'分步',word:'单词',dict:'听写',paperdict:'纸笔听写',review:'错词复习',typing:'打字练习',phonics:'自然拼读'};
 function goPaperDict(){ openDrawer(false); setMode('growth'); switchGrowth('paper'); }
 function histDate(t){
   const d=new Date(t||Date.now());
@@ -5249,8 +5360,11 @@ function histDate(t){
 }
 function addHistory(rec){
   if(!Array.isArray(state.history)) state.history=[];
-  state.history.push(Object.assign({t:Date.now()},rec));
+  const entry=Object.assign({t:Date.now()},rec);
+  state.history.push(entry);
   if(state.history.length>HISTORY_LIMIT) state.history.splice(0,state.history.length-HISTORY_LIMIT);
+  /* 所有练习模式统一在这里统计用时、更新个人最快纪录 */
+  try{ trackSpeed(entry); }catch(e){}
   /* 有练习记录的那天就算打卡，日历与主程序进度保持同一份数据 */
   if(typeof window!=='undefined' && window.TypingDuck && typeof window.TypingDuck.syncPracticeCheckin==='function'){
     try{ window.TypingDuck.syncPracticeCheckin(); }catch(e){}
@@ -5261,9 +5375,22 @@ function renderHistory(){
   const tk=today();
   const okCount=h.filter(x=>x.ok).length;
   const mins=Math.round(h.reduce((n,x)=>n+(Number(x.ms)||0),0)/60000);
+  /* 个人最快榜：同一词/句只保留一条最佳，按用时升序取前 10 */
+  const allBest=Object.keys(state.bestTimes||{}).map(function(k){
+    return Object.assign({key:k},state.bestTimes[k]||{});
+  }).filter(x=>Number(x.ms)>0).sort((a,b)=>Number(a.ms)-Number(b.ms));
+  $('bestList').innerHTML=allBest.length?allBest.slice(0,10).map(function(x,i){
+    return '<div class="best-row"><span class="best-rank">'+(i+1)+'</span>'+
+      '<div class="best-body"><div class="best-en">'+esc(x.en||x.cn||'练习')+'</div>'+
+      '<div class="best-meta">'+esc(SPEED_MODES[x.mode]||'练习')+' · '+esc(x.unit||'')+
+      ' · '+esc(x.cn||'')+' · 刷新 '+Number(x.breaks||0)+' 次</div></div>'+
+      '<span class="best-ms">'+fmtSpeed(x.ms)+'</span></div>';
+  }).join(''):'<div class="empty">还没有最快纪录。一次答对一道题后，这里会自动记下用时；再快一点就会收到鼓励动画。</div>';
+  const todayMs=h.filter(x=>histDate(x.t)===tk && x.ok && Number(x.ms)>0).map(x=>Number(x.ms));
   $('histGrid').innerHTML=
     box(h.filter(x=>histDate(x.t)===tk).length,'今日练习')+box(h.length,'累计练习')+
-    box(h.length?Math.round(okCount/h.length*100)+'%':'--','一次答对率')+box(mins,'累计分钟');
+    box(h.length?Math.round(okCount/h.length*100)+'%':'--','一次答对率')+box(mins,'累计分钟')+
+    box(allBest.length,'速度纪录')+box(todayMs.length?fmtSpeed(Math.min.apply(null,todayMs)):'--','今日最快');
   if(!h.length){
     const legacy=Number((state.stats||{}).attempted||0);
     $('histList').innerHTML='<div class="empty">'+(legacy
@@ -5282,7 +5409,7 @@ function renderHistory(){
       '<div class="hist-cn">'+esc(x.cn||'')+'</div>'+
       '<div class="hist-meta">'+esc(MODE_CN[x.mode]||'练习')+' · '+esc(x.unit||'')+
       ' · '+Math.max(1,Math.round((Number(x.ms)||0)/1000))+' 秒'+
-      (x.bad?' · 错 '+Number(x.bad)+' 次':'')+'</div></div>'+
+      (x.record?' · ⚡新纪录':'')+(x.bad?' · 错 '+Number(x.bad)+' 次':'')+'</div></div>'+
       '<span class="hist-badge'+(x.ok?'':' assist')+'">'+esc(x.ok?'一次过':'借助提示')+'</span></div>'
     );
   });
@@ -5326,6 +5453,30 @@ function showModal(opts){
   }catch(e){}
 }
 function hideModal(){ try{ $('modalMask').hidden=true; }catch(e){} }
+
+/* 速度突破动画：只展示不拦截操作，连续破纪录会重置计时并更新内容 */
+let speedBurstTimer=0;
+function showSpeedBurst(info){
+  const el=$('speedMask'); if(!el) return;
+  $('speedWord').textContent=String(info.en||info.cn||'练习');
+  $('speedNow').textContent=fmtSpeed(info.ms);
+  $('speedPrev').textContent=fmtSpeed(info.prev);
+  const gain=Math.max(0,Number(info.prev)-Number(info.ms));
+  $('speedGain').textContent='比上次快了 '+fmtSpeed(gain)+' · 第 '+info.breaks+' 次刷新纪录';
+  const host=$('speedConfetti');
+  if(host){
+    const colors=['#ffd166','#ff6b9d','#6ee7b7','#8b7bff','#4cc9f0'];
+    let parts='';
+    for(let i=0;i<20;i++){
+      parts+='<i style="--a:'+(i*18)+'deg;--d:'+(80+(i*13)%120)+
+        'px;--c:'+colors[i%5]+';--delay:'+((i%5)*0.04).toFixed(2)+'s"></i>';
+    }
+    host.innerHTML=parts;
+  }
+  el.hidden=false;
+  if(speedBurstTimer){ clearTimeout(speedBurstTimer); speedBurstTimer=0; }
+  speedBurstTimer=setTimeout(function(){ el.hidden=true; speedBurstTimer=0; },2600);
+}
 
 /* ---------------- 难度 / 计时 ---------------- */
 function difficulty(){ return DIFFICULTY[state.settings.difficulty]||DIFFICULTY.normal; }
@@ -6045,7 +6196,7 @@ function offerResume(){
    内置课程进度存 state.phonics.done，教材单词进度存 state.phonics.textbookDone，
    都是 {best:星级,right:完成轮数}。两种来源共用「听音拼词 / 看词拼读」作答流程，
    教材单词额外提供音素分块提示，并按拼读规律自动归类。 */
-let phLesson=null, phQueue=[], phPos=0, phSolved=false, phLast=null;
+let phLesson=null, phQueue=[], phPos=0, phSolved=false, phLast=null, phStartedAt=0;
 let phSource='builtin', phTbMode=false, phChunkLevel=0, phRoundCorrect=0;
 /* 拼读练习的「音节输入格」：与句子练习同款，一个音节一个格，逐格输入自动判定。
    独立于句子练习的 slots/draft/curTokens，避免模式间互相污染。 */
@@ -6302,7 +6453,7 @@ function phShow(){
   if(!phLesson || !phQueue.length) return;
   const idx=phQueue[phPos%phQueue.length];
   const item=phLesson.l.w[idx]||phLesson.l.w[0];
-  phLast=item; phSolved=false; phChunkLevel=0;
+  phLast=item; phSolved=false; phChunkLevel=0; phStartedAt=Date.now();
   const mode=$('phMode').value==='read'?'read':'listen';
   const show=mode==='read';
   /* 真实界面：句子练习同款大字题干 + 音节输入格 */
@@ -6358,7 +6509,8 @@ function phCheck(){
   phRenderChunks();
   if(ok) phSpeak();
   /* 每答一次记一条练习记录，和拼写练习共用打卡日历 */
-  try{ addHistory({mode:'phonics',unit:phLesson.l.id,cn:phLast[1],en:phLast[0],ok:ok,ms:0,bad:ok?0:1}); }catch(e){}
+  try{ addHistory({mode:'phonics',unit:phLesson.l.id,cn:phLast[1],en:phLast[0],ok:ok,
+    ms:phStartedAt?Date.now()-phStartedAt:0,bad:ok?0:1}); }catch(e){}
   saveState();
 }
 function phAdvance(){
@@ -7291,7 +7443,7 @@ function dcAdvance(skip){
 /* ---------------- 纸笔听写（家长批阅） ----------------
    听中文/英文 → 写在纸上 → 家长解锁后逐题判对错。
    状态存 state.memo.paperDict：{done:[[unitId,时间,对数,总数]], ...} */
-let ppQueue=[], ppIdx=0, ppMarks=[], ppLang='cn', ppKind='mix', ppCurrent=null, ppPhase='idle';
+let ppQueue=[], ppIdx=0, ppMarks=[], ppLang='cn', ppKind='mix', ppCurrent=null, ppPhase='idle', ppStartedAt=0;
 function ppUnitKey(){ try{ return currentUnit().id||''; }catch(e){ return ''; } }
 function ppRenderPanel(){
   const total=ppQueue.length;
@@ -7309,7 +7461,7 @@ function ppStart(){
   ppLang=$('ppLang').value||'cn';
   const n=Number($('ppCount').value)||8;
   ppQueue=shuffle(pool).slice(0,n); ppIdx=0; ppMarks=ppQueue.map(()=>null);
-  ppCurrent=null; ppPhase='ask';
+  ppCurrent=null; ppPhase='ask'; ppStartedAt=Date.now();
   $('ppGradeCard').hidden=true; $('ppFeedback').textContent=''; $('ppFeedback').className='gfeedback';
   $('ppGradeFeedback').textContent=''; $('ppGradeFeedback').className='gfeedback';
   ppNextCard();
@@ -7373,8 +7525,10 @@ function ppSave(){
     ppQueue.forEach((it,i)=>{
       const ok=ppMarks[i]===true;
       srEnroll(it.en,it.cn,ok,true);
+      /* 纸笔听写按整轮平均每道题的用时记速，避免后面几题"白捡"快时间 */
+      const avgMs=ppStartedAt?Math.round((Date.now()-ppStartedAt)/Math.max(1,ppQueue.length)):0;
       addHistory({mode:'paperdict',unit:unitName,cn:it.cn,en:it.en,
-        ok:ok,assisted:false,ms:0,bad:ok?0:1});
+        ok:ok,assisted:false,ms:avgMs,bad:ok?0:1});
       if(ok && Number(state.plan.perCorrect||0)>0) addPoints(Number(state.plan.perCorrect),'纸笔听写答对');
     });
     const m=memo(), rec=m.paperDict||(m.paperDict={});
@@ -8085,7 +8239,7 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
   let G = null;
   function freshGame(mode) {
     return {
-      mode, active: true, score: 0, combo: 0, maxCombo: 0,
+      mode, active: true, startedAt: Date.now(), score: 0, combo: 0, maxCombo: 0,
       correct: 0, wrong: 0, totalAnswered: 0,
       seq: [], qIndex: 0, charIndex: 0,
       targetKey: null, timeLeft: 0, holes: [], spawnDelay: 0, aliveMs: 0,
@@ -8754,7 +8908,8 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
         (checkedIn ? `<br>📅 今日打卡成功，连续 ${save.checkin.streak} 天！` : '');
     }
     if (typeof window.TypingDuck !== 'undefined' && typeof window.TypingDuck.onFinish === 'function') {
-      try { window.TypingDuck.onFinish({ mode: G.mode, score: G.score, stars: stars, correct: G.correct, total: G.totalAnswered }); } catch (e) {}
+      try { window.TypingDuck.onFinish({ mode: G.mode, score: G.score, stars: stars,
+        correct: G.correct, total: G.totalAnswered, ms: Date.now() - (G.startedAt || Date.now()) }); } catch (e) {}
     }
     dom.resultModal.classList.add('show');
     SFX.finish();
@@ -8979,6 +9134,13 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
        与星星数脱钩；设为 0 表示打字练习不计积分。 */
     var pts = Math.max(0, Math.min(99, Number(state.lottery.typingPoints) || 0));
     if (pts > 0) addPoints(pts, '打字练习·' + (MODE_CN[r.mode] || '认识字母'));
+    /* 打字局是固定时长，改用「平均每次答对用时」纳入个人最快榜，才有突破意义 */
+    var label = MODE_CN[r.mode] || '打字练习';
+    var avgMs = Number(r.ms) > 0 ? Math.round(Number(r.ms) / Math.max(1, Number(r.correct) || 0)) : 0;
+    if (avgMs >= 300 && avgMs <= 1800000) {
+      try { addHistory({ mode: 'typing', unit: '打字练习', cn: label, en: label,
+        ok: true, assisted: false, ms: avgMs, bad: 0 }); } catch (e) {}
+    }
     var el = document.getElementById('td-resultDetail');
     if (el) { el.innerHTML += (pts > 0
       ? '<br>✨ 积分 <b>+' + pts + '</b> 已存入 SpellLab'

@@ -232,13 +232,58 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
         {t:Date.now()-86400000,mode:'word',unit:'Unit 1',cn:'雪',en:'snow',ok:true,ms:4000,bad:0},
         {t:Date.now(),mode:'sentence',unit:'Unit 2',cn:'今天很冷。',en:'It is cold today.',ok:false,assisted:true,ms:9000,bad:2}
       ];
+      state.bestTimes={'word|snow':{ms:4000,t:Date.now(),en:'snow',cn:'雪',unit:'Unit 1',mode:'word',breaks:1}};
       switchTab('history'); renderHistory();})()`);
     const grid = run("$('histGrid').innerHTML"), list = run("$('histList').innerHTML");
-    assert((grid.match(/class="stat-box"/g) || []).length === 4, '统计格数量不对');
+    const best = run("$('bestList').innerHTML");
+    assert((grid.match(/class="stat-box"/g) || []).length === 6, '统计格数量不对');
+    assert(best.indexOf('snow') >= 0 && best.indexOf('4.0 秒') >= 0, '个人最快榜未渲染: '+best);
     assert(list.indexOf('It is cold today.') >= 0 && list.indexOf('snow') >= 0, '缺记录条目');
     assert(list.indexOf('借助提示') >= 0 && list.indexOf('一次过') >= 0, '缺结果徽标');
     assert(list.indexOf('hist-day') >= 0, '缺按天分组');
-    return '4 个统计格 / 2 条记录 / 日期分组';
+    return '6 个统计格 / 个人最快榜 / 2 条记录 / 日期分组';
+  });
+
+  check('所有练习统一记用时：个人最快、破纪录动画与无效记录过滤', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      var oldHist=state.history.slice(), oldBest=JSON.parse(JSON.stringify(state.bestTimes||{}));
+      state.history=[]; state.bestTimes={};
+      var key=speedKey({mode:'word',en:' Apple '});
+      /* 答错 / 借助提示 / 过快误触 / 挂机超时都不算纪录 */
+      addHistory({mode:'word',unit:'U1',cn:'苹果',en:'apple',ok:false,assisted:false,ms:1200});
+      addHistory({mode:'word',unit:'U1',cn:'苹果',en:'apple',ok:true,assisted:true,ms:1500});
+      addHistory({mode:'word',unit:'U1',cn:'苹果',en:'apple',ok:true,assisted:false,ms:100});
+      addHistory({mode:'word',unit:'U1',cn:'苹果',en:'apple',ok:true,assisted:false,ms:3600000});
+      var ignored=Object.keys(state.bestTimes).length;
+      var first={mode:'word',unit:'U1',cn:'苹果',en:'apple',ok:true,assisted:false,ms:5000};
+      addHistory(first);
+      var firstMs=state.bestTimes[key]&&state.bestTimes[key].ms;
+      var faster={mode:'word',unit:'U1',cn:'苹果',en:'apple',ok:true,assisted:false,ms:3200};
+      addHistory(faster);
+      var recordFlag=state.history[state.history.length-1].record;
+      var b=state.bestTimes[key];
+      var modes=['sentence','chunk','phonics','review','dict','paperdict','typing'];
+      modes.forEach(function(m,i){ addHistory({mode:m,unit:'U',cn:'c'+i,en:'en'+i,
+        ok:true,assisted:false,ms:2000+i*100}); });
+      var covered=modes.filter(function(m){
+        return !!state.bestTimes[speedKey({mode:m,en:'en'+modes.indexOf(m)})];}).length;
+      var mask=document.getElementById('speedMask');
+      var now=document.getElementById('speedNow'), prev=document.getElementById('speedPrev');
+      var gain=document.getElementById('speedGain'), conf=document.getElementById('speedConfetti');
+      var out={ignored:ignored,first:firstMs,best:b&&b.ms,breaks:b&&b.breaks,covered:covered,
+        maskHidden:mask?mask.hidden:null,now:now&&now.textContent,prev:prev&&prev.textContent,
+        gain:gain&&gain.textContent,confetti:conf&&conf.innerHTML.length,record:!!recordFlag};
+      state.history=oldHist; state.bestTimes=oldBest;
+      return out;})())`));
+    assert(o.ignored===0,'答错/借助提示/过快/超时被误记为最快: '+JSON.stringify(o));
+    assert(o.first===5000 && o.best===3200 && o.breaks===2,'最快时间或破纪录次数错误: '+JSON.stringify(o));
+    assert(o.covered===7,'有练习模式未统计用时: '+JSON.stringify(o));
+    assert(/id="speedMask"/.test(html) && /id="speedConfetti"/.test(html) &&
+      /@keyframes speedPop/.test(html) && /@keyframes speedFly/.test(html), '速度动画结构或样式缺失');
+    assert(o.record && o.maskHidden===false && o.now==='3.2 秒' && o.prev==='5.0 秒',
+      '破纪录动画未弹出: '+JSON.stringify(o));
+    assert(o.gain && o.gain.indexOf('快了')>=0 && o.confetti>0,'动画文案或彩带缺失: '+JSON.stringify(o));
+    return '8 种模式统一记速 · 无效过滤 · 5.0→3.2 秒弹动画';
   });
 
   check('导出 CSV：BOM + 表头 + 全部记录', () => {
