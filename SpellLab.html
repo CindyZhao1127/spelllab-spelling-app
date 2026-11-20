@@ -2242,7 +2242,7 @@ body.td-typing #typingView { height: 100%; }
       <div class="panel">
         <h3>我的积分</h3>
         <div class="plan-head"><div><b id="planPoints">0</b> <span>分</span></div><button class="mini-btn sm" id="planGoLottery">去抽奖</button></div>
-        <div class="panel-note">不借助提示答对一题 +<b id="planPerCorrect">1</b> 分；每日计划达标额外加分，未达标扣分。积分可在「抽奖」页使用。</div>
+        <div class="panel-note">不借助提示答对一题（含自然拼读）+<b id="planPerCorrect">1</b> 分；每日计划达标额外加分，未达标扣分。积分可在「抽奖」页使用。</div>
         <div class="stat-grid" id="planTodayGrid"></div>
       </div>
       <div class="panel">
@@ -6541,7 +6541,11 @@ function phCheck(){
   if(!raw) return;
   const ok=raw.toLowerCase()===String(phLast[0]).toLowerCase();
   state.phonics.attempted++;
-  if(ok){ state.phonics.correct++; SFX.correct(); }
+  if(ok){
+    state.phonics.correct++; SFX.correct();
+    /* 拼读按「完成一部分」计分：每答对一题即发一次「一次答对」分，不用等整课做完 */
+    if(Number(state.plan.perCorrect||0)>0) addPoints(Number(state.plan.perCorrect),'自然拼读答对');
+  }
   else SFX.wrong();
   phSolved=true; if(ok) phRoundCorrect++;
   $('phInput').disabled=true; $('phNext').hidden=false;
@@ -8749,7 +8753,7 @@ if(typeof window!=='undefined' && typeof window.addEventListener==='function'){
       if (spans[G.charIndex]) {
         spans[G.charIndex].classList.remove('masked', 'current');
         spans[G.charIndex].classList.add('done');
-        spans[G.charIndex].textContent = expected.toUpperCase();
+        spans[G.charIndex].textContent = expected; // 正常大小写，不强制全大写
       }
       G.charIndex++;
       if (G.charIndex < item.text.length && spans[G.charIndex]) spans[G.charIndex].classList.add('current');

@@ -1554,6 +1554,8 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
   check('自然拼读：两种练法、答对计分、答错看答案，进度落盘', () => {
     run(`(function(){
       state.phonics=normalizeState({phonics:{done:{},correct:0,attempted:0}}).phonics;
+      window.__spOldPoints=state.plan.points; window.__spOldLedger=state.plan.ledger.slice();
+      state.plan.points=0; state.plan.ledger=[];
       phStart('fm-at');
       $('phMode').value='listen';
     })()`);
@@ -1563,18 +1565,30 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     run(`(function(){ $('phInput').value=phLast[0].toUpperCase(); phCheck(); })()`);
     const ok = JSON.parse(run(`JSON.stringify({fb:$('phFeedback').textContent,cls:$('phFeedback').className,
       right:state.phonics.correct,att:state.phonics.attempted,hist:state.history.length,
-      done:$('phInput').disabled})`));
+      done:$('phInput').disabled,points:state.plan.points,
+      reason:state.plan.ledger.length?state.plan.ledger[state.plan.ledger.length-1].reason:''})`));
     assert(ok.right === 1 && ok.att === 1 && ok.cls.indexOf('ok') >= 0, '答对未计分: '+JSON.stringify(ok));
     assert(ok.hist >= 1 && ok.done, '答题未记历史或未锁定输入');
+    assert(ok.points === Number(run('state.plan.perCorrect')||0) && ok.reason === '自然拼读答对',
+      '自然拼读答对未发积分: '+JSON.stringify(ok));
     /* 看词拼读：答错后显示答案 */
     run(`(function(){ phAdvance(); $('phMode').value='read'; phShow();
       $('phInput').value='zzzzwrong'; phCheck(); })()`);
     const bad = JSON.parse(run(`JSON.stringify({fb:$('phFeedback').textContent,
-      cls:$('phFeedback').className,hint:$('phHint').textContent})`));
+      cls:$('phFeedback').className,hint:$('phHint').textContent,points:state.plan.points})`));
     assert(bad.cls.indexOf('bad') >= 0 && bad.fb.indexOf('正确答案') >= 0, '答错未显示答案: '+JSON.stringify(bad));
     assert(bad.hint.indexOf('音素') >= 0, '看词拼读缺音素提示');
-    run('phBack()');
-    return '听音拼词对 1 题 / 看词拼读错 1 题 · 历史与进度已记录';
+    assert(bad.points === ok.points, '答错不应再发积分: '+JSON.stringify(bad));
+    run(`(function(){ phBack(); state.plan.points=window.__spOldPoints; state.plan.ledger=window.__spOldLedger; })()`);
+    return '听音拼词对 1 题发 '+ok.points+' 分 / 看词拼读错 1 题 · 历史与进度已记录';
+  });
+
+  check('听音打字：结果字母保持正常大小写，不强制全大写', () => {
+    assert(/spans\[G\.charIndex\]\.textContent = expected;/.test(html),
+      '听音打字结果字母未按原大小写显示');
+    assert(!/spans\[G\.charIndex\]\.textContent = expected\.toUpperCase\(\)/.test(html),
+      '听音打字仍强制全大写');
+    return '打出的字母按原样（小写）显示';
   });
 
   check('奖品自动兑换：抽到不扣分、即时已兑换；普通奖待家长兑换', () => {
