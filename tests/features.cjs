@@ -1661,6 +1661,72 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     return "Xi'an → Shee-ahn（仅朗读）";
   });
 
+  check('语法练习：题库完整、答题判定与积分只发一次、错题本自动进出', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      var b=GRAMMAR_BANK, bad={choices:0,fills:0,topics:b.topics.length};
+      b.choices.forEach(function(q){
+        if(!q.stem || q.opts.length!==3 || !q.ans || !q.detail) bad.choices++;
+      });
+      b.fills.forEach(function(q){ if(!q.stem || !q.ans) bad.fills++; });
+      /* 干净存档 */
+      state.grammar={done:{},wrong:[],stats:{answered:0,correct:0},pointsPaid:{}};
+      state.plan.perCorrect=2;
+      var p0=state.plan.points;
+      grTab='choice'; grBuildQueue(); grPos=0;
+      var it=grQueue[0], q=it.q, right='ABCDE'.indexOf(q.ans);
+      grAnswerChoice(right);                       /* 答对，首次 */
+      var afterRight=state.plan.points;
+      grAnswerChoice(right);                       /* 再答同一题（grAnswered 会拦，直接模拟重复领奖防护） */
+      var win1=!!state.grammar.done[it.key];
+      /* 用一道新题答错 */
+      grPos=1; grAnswered=false; var it2=grQueue[1], wrong=(('ABCDE'.indexOf(it2.q.ans)+1)%3);
+      grAnswerChoice(wrong);
+      var wrongN=state.grammar.wrong.length;
+      return {bad:bad, afterRight:afterRight, p0:p0, win1:win1,
+        done:Object.keys(state.grammar.done).length,
+        stats:state.grammar.stats, wrongN:wrongN,
+        pointsPaid:Object.keys(state.grammar.pointsPaid).length,
+        points:state.plan.points};
+    })())`));
+    assert(o.bad.choices===0 && o.bad.fills===0 && o.bad.topics===12, '题库数据不完整: '+JSON.stringify(o.bad));
+    assert(o.afterRight===o.p0+2, '首次答对未按 perCorrect 发积分: '+JSON.stringify(o));
+    assert(o.win1 && o.done===2 && o.stats.answered===2 && o.stats.correct===1, '答题进度统计错误: '+JSON.stringify(o));
+    assert(o.wrongN===1, '答错未进错题本: '+JSON.stringify(o));
+    assert(o.pointsPaid===1, '积分发放未去重（每题只发一次）: '+JSON.stringify(o));
+    return '99 选择 + 26 填空 + 12 专题 · 答对 2 分 · 错题本 · 积分去重';
+  });
+
+  check('语法练习四个标签页都能渲染出完整题目/知识点内容', () => {
+    /* 渲染函数只写 innerHTML，沙箱可直接检查生成的 HTML 字符串 */
+    run('state.grammar={done:{},wrong:[],stats:{answered:0,correct:0},pointsPaid:{}};');
+    run("grTab='points'; grTopicOpen=null; grRenderPoints();");
+    const pts=doc.getElementById('grammarPanel').innerHTML;
+    assert(/一般现在时/.test(pts) && /gk-topic/.test(pts) && (pts.match(/data-gtopic/g)||[]).length===12,
+      '知识点页未渲染 12 个专题: '+pts.length);
+    run("grTab='choice'; grBuildQueue(); grPos=0; grRenderChoice();");
+    const ch=doc.getElementById('grammarPanel').innerHTML;
+    assert(/gq-stem/.test(ch) && /gq-opt/.test(ch) && /data-gopt="0"/.test(ch), '选择题页渲染缺元素');
+    run("grTab='fill'; grBuildQueue(); grPos=0; grRenderFill();");
+    const fi=doc.getElementById('grammarPanel').innerHTML;
+    assert(/gq-input/.test(fi) && /gqFillSubmit/.test(fi), '填空题页渲染缺输入框/提交按钮');
+    run('state.grammar.wrong=[{key:"c1",type:"choice",type2:"动词短语",t:1}]; grRenderWrong();');
+    const wr=doc.getElementById('grammarPanel').innerHTML;
+    assert(/gqClearWrong/.test(wr) && /data-gwrong/.test(wr), '错题本页渲染缺元素');
+    return '知识点 12 专题 · 选择/填空/错题本 4 页齐全';
+  });
+
+  check('语法练习进度随存档归一化保留，旧存档自动补齐 grammar 命名空间', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      var old={plan:{points:7},grammar:{done:{'c1':{ok:true,t:1}},wrong:['x']}};
+      var s=normalizeState(old);
+      return {done:s.grammar.done.c1.ok, wrongOK:Array.isArray(s.grammar.wrong),
+        stats:s.grammar.stats, paid:!!s.grammar.pointsPaid,
+        fresh:!!normalizeState({}).grammar.done};})())`));
+    assert(o.done===true && o.wrongOK && o.paid && o.fresh, 'grammar 归一化失败: '+JSON.stringify(o));
+    assert(o.stats.answered===0, 'stats 默认值错误: '+JSON.stringify(o));
+    return '旧存档自动补齐，已做记录保留';
+  });
+
   check('奖品自动兑换：抽到不扣分、即时已兑换；普通奖线下发放后直接标记', () => {
     /* 自动兑换奖：必中且返还消耗 */
     run(`(function(){ state.plan.points=100;

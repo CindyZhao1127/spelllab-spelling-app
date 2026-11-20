@@ -1,0 +1,1190 @@
+[
+ {
+  "id": 1,
+  "stem": "The children often ________________________________morning exercises at 7:00 a.m.",
+  "opts": [
+   "get",
+   "go",
+   "do"
+  ],
+  "ans": "C",
+  "point": "动词短语",
+  "detail": "句意：孩子们经常在早上七点做早操。本题考查动词短语。domorningexercises 做早操，故选 C。"
+ },
+ {
+  "id": 2,
+  "stem": "They often play sports ________________________________2: 00 p.m. ________________________________the weekend.",
+  "opts": [
+   "on; at",
+   "at; on",
+   "at; in"
+  ],
+  "ans": "B",
+  "point": "时间介词和介词固定搭配",
+  "detail": "句意：他们经常在周末的下午两点运动。本题考查时间介词和介词固定搭配。in 后接年、月、季节等，at 后接时间点，on 后接具体时间。在周末ontheweekend。故选 B。"
+ },
+ {
+  "id": 3,
+  "stem": "My name is Robinson. I live on ________________________________island.",
+  "opts": [
+   "a",
+   "an",
+   "不填"
+  ],
+  "ans": "B",
+  "point": "不定冠词",
+  "detail": "句意：我叫鲁滨逊。我住在一个岛上。本题考查不定冠词。根据句意该空需填不定冠词，island 是以元音音素开头的单词，需要用an 修饰，故选B。"
+ },
+ {
+  "id": 4,
+  "stem": "I usually go to school ________________________8 o’clock ________________________the morning.",
+  "opts": [
+   "in; at",
+   "at; in",
+   "on; in"
+  ],
+  "ans": "B",
+  "point": "时间介词和介词固定搭配",
+  "detail": "句意：我通常在早上 8 点上学。本题考查时间介词和介词固定搭配。根据时间 8 o’clock 可知为固定时间点，前面用介词 at；根据in the morning在早晨，故选B。"
+ },
+ {
+  "id": 5,
+  "stem": "—Does Amy often ________________________TV on Saturdays? —No, she doesn’t.",
+  "opts": [
+   "watch",
+   "watches",
+   "watching"
+  ],
+  "ans": "A",
+  "point": "动词的形式",
+  "detail": "句意：—艾米经常在周六看电视吗？—不，她不是。本题考查动词的形式，A 动词原形，B 动词的第三人称单数，C 动名词或动词的现在分词，根据题干可知题干是 does 引导的一般疑问句，助动词 does 后加动词原形，故选A。"
+ },
+ {
+  "id": 6,
+  "stem": "I usually eat breakfast ________________________8:00 a. m.",
+  "opts": [
+   "in",
+   "on",
+   "at"
+  ],
+  "ans": "C",
+  "point": "时间介词",
+  "detail": "句意：我通常上午八点吃早餐。本题考查时间介词，A在……里面，B在……上面，C 在，具体时间点前用介词 at，故选 C。"
+ },
+ {
+  "id": 7,
+  "stem": "—If it doesn’t rain this Sunday, we’ll have a school trip to Fanta Wildland(狂野大 陆). —________________________!",
+  "opts": [
+   "Thank you",
+   "Good job",
+   "That sounds like a lot of fun"
+  ],
+  "ans": "C",
+  "point": "陈述句",
+  "detail": "句意：如果这个星期天不下雨，我们将去狂野大陆进行一次学校旅行。本题考查陈述句。A 谢谢，B 干得好 ，C 听起来很有趣，选项C符合题意，故选C。"
+ },
+ {
+  "id": 8,
+  "stem": "—With the double reduction(双减政策), what do you often do on theweekend? —I often ________________________. Sports can make my life colourful.",
+  "opts": [
+   "do homework",
+   "play ping-pong",
+   "take a math class"
+  ],
+  "ans": "B",
+  "point": "动词短语",
+  "detail": "句意：—随着双减政策的开展，你周末经常做什么？—我经常\\_\\_\\_\\_\\_\\_。运动使我的生活丰富多彩。本题考查动词短语。A 做作业，B 打乒乓球，C上数学课，选项 B 符合题意，故选 B。"
+ },
+ {
+  "id": 9,
+  "stem": "We usually ________________________swimming in the water.",
+  "opts": [
+   "go",
+   "to",
+   "have"
+  ],
+  "ans": "A",
+  "point": "动词短语",
+  "detail": "句意：我们通常在水里游泳。本题考查动词短语，go swimming去游泳，故选 A。"
+ },
+ {
+  "id": 10,
+  "stem": "—________________________do you eat lunch? —At 12 o’clock.",
+  "opts": [
+   "How",
+   "What",
+   "When"
+  ],
+  "ans": "C",
+  "point": "疑问词",
+  "detail": "句意：—你什么时候吃午饭？—12 点。本题考查疑问词。A怎样，B什么，C 什么时候，根据答语可知问句问什么时候，故选C。"
+ },
+ {
+  "id": 11,
+  "stem": "What do you have ________________________Tuesdays?",
+  "opts": [
+   "for",
+   "in",
+   "on"
+  ],
+  "ans": "C",
+  "point": "时间介词",
+  "detail": "句意：你们星期二有什么课？本题考查时间介词。for+一段时间，in后跟年、月、季节等，on 后跟具体某一天，故选 C。"
+ },
+ {
+  "id": 12,
+  "stem": "I often play basketball ________________________my friends after school.",
+  "opts": [
+   "at",
+   "with",
+   "in"
+  ],
+  "ans": "B",
+  "point": "介词辨析",
+  "detail": "句意：我放学后和朋友打篮球。本题考查介词辨析。A在，B和，C在……里面，with 符合句意，故选 B。"
+ },
+ {
+  "id": 13,
+  "stem": "Why are you ________________________today?",
+  "opts": [
+   "sing",
+   "singing",
+   "sings"
+  ],
+  "ans": "B",
+  "point": "动词的形式",
+  "detail": "句意：你(们)为什么今天唱歌？本题考查动词的形式。A是动词原形，B是动词的现在分词或动名词，C 是动词的第三人称单数。are+doing 构成现在进行时，故选 B。"
+ },
+ {
+  "id": 14,
+  "stem": "I often go running ________________________Amy.",
+  "opts": [
+   "with",
+   "of",
+   "for"
+  ],
+  "ans": "A",
+  "point": "介词辨析",
+  "detail": "句意：我经常\\_\\_\\_\\_\\_\\_艾米一起跑步。本题考查介词辨析。A和，B……的，C 为。A 符合题意，故选 A。"
+ },
+ {
+  "id": 15,
+  "stem": "Zhang Peng often plays ping-pong ________________________________his father.",
+  "opts": [
+   "of",
+   "and",
+   "with"
+  ],
+  "ans": "C",
+  "point": "其他介词",
+  "detail": "句意：张鹏经常和爸爸打乒乓球。本题考查其他介词。A……的，不符合句意；B 和，连词，表并列；C 和，介词，表伴随。Zhang Peng 和his father 是伴随关系，故选 C。"
+ },
+ {
+  "id": 16,
+  "stem": "Friday is good at ________________________.",
+  "opts": [
+   "play sports",
+   "sports",
+   "eat dinner"
+  ],
+  "ans": "B",
+  "point": "名词的用法",
+  "detail": "句意：星期五擅长运动。本题考查名词的用法。A 做运动，play是动词原形；B 运动，名词；C 吃晚饭，eat 是动词原形。be good at 后的动词用动名词形式，排除AC，横线处填名词做宾语，故选 B。"
+ },
+ {
+  "id": 17,
+  "stem": "—________________________do you often do on the weekend? —I often watch TV at home.",
+  "opts": [
+   "When",
+   "What",
+   "Which"
+  ],
+  "ans": "B",
+  "point": "疑问词",
+  "detail": "句意：—你周末经常做什么？—我经常在家看电视。本题考查疑问词。A什么时候，B 什么，C 哪一个，根据答语可知问句问经常做什么，故选B。"
+ },
+ {
+  "id": 18,
+  "stem": "I like spring best. There ________________________________beautiful flowers everywhere.",
+  "opts": [
+   "are",
+   "is",
+   "has"
+  ],
+  "ans": "A",
+  "point": "there be 句型",
+  "detail": "句意：我喜欢春天。到处有美丽的花。本题考查there be 句型，空后flowers是复数名词，时态是一般现在时，所以 be 用 are，故选A。"
+ },
+ {
+  "id": 19,
+  "stem": "I like winter ________________________there is lots of snow. It’s white everywhere.",
+  "opts": [
+   "because",
+   "but",
+   "so"
+  ],
+  "ans": "A",
+  "point": "连词辨析",
+  "detail": "句意：我喜欢冬天\\_\\_\\_\\_有一些雪。到处白茫茫一片。本题考查连词辨析。根据句意可知“I like winter”和“there is lots of snow”之间是因果关系，空处需要一个表原因的连词。but 但是，连词，表转折；so 所以，连词，表结果；而because因为，连词，表原因连接原因状语从句。故选 A。"
+ },
+ {
+  "id": 20,
+  "stem": "—Which season do you like best? —________________________. I like snow.",
+  "opts": [
+   "Spring",
+   "Summer",
+   "Winter"
+  ],
+  "ans": "C",
+  "point": "特殊疑问句的答语和名词辨析",
+  "detail": "句意：—你最喜欢哪个季节？—冬季，我喜欢雪。本题考查特殊疑问句的答语和名词辨析，A 春季，B 夏季。C 冬季。根据snow 可知为冬季，故选C。"
+ },
+ {
+  "id": 21,
+  "stem": "________________________is the second month of a year.",
+  "opts": [
+   "February",
+   "March",
+   "January"
+  ],
+  "ans": "A",
+  "point": "名词辨析",
+  "detail": "句意：\\_\\_\\_\\_\\_\\_\\_\\_\\_是一年中的第二个月。本题考查名词辨析。A二月，B三月，C 一月。A 符合题意，故选 A。"
+ },
+ {
+  "id": 22,
+  "stem": "—Why do you like summer? —________________________I can go swimming.",
+  "opts": [
+   "What",
+   "Because",
+   "Which"
+  ],
+  "ans": "B",
+  "point": "表因果关系的连词",
+  "detail": "句意：—你为什么喜欢夏天？—因为我可以去游泳。本题考查表因果关系的连词。A 什么，B 因为，C 哪一个，根据问句可知答语回答原因，故选B。"
+ },
+ {
+  "id": 23,
+  "stem": "—Is it spring in Sydney in April? —____________________.",
+  "opts": [
+   "Yes, it is.",
+   "No, it isn’t.",
+   "Yes, it isn’t."
+  ],
+  "ans": "B",
+  "point": "一般疑问句的答语",
+  "detail": "句意：悉尼的四月是春季吗？本题考查一般疑问句的答语。根据常识，悉尼是南半球，季节和北半球相反，四月应是秋季，所以做否定回答，No, it isn’t. 故选 B。"
+ },
+ {
+  "id": 24,
+  "stem": "—________________________do you like spring? —Because there are beautiful flowers everywhere.",
+  "opts": [
+   "Why",
+   "Which",
+   "What"
+  ],
+  "ans": "A",
+  "point": "疑问词",
+  "detail": "句意：—你\\_\\_\\_\\_\\_\\_\\_喜欢春天？—因为到处都有漂亮的花。本题考查疑问词。A 为什么，B 哪一个，C 什么。A 符合题意，故选A。"
+ },
+ {
+  "id": 25,
+  "stem": "—________________________do you like spring best? —Because I can fly kites and plant flowers in the park.",
+  "opts": [
+   "Why",
+   "When",
+   "What"
+  ],
+  "ans": "A",
+  "point": "疑问词",
+  "detail": "句意：—你为什么最喜欢春天？—因为我可以在公园里放风筝和种花。本题考查疑问词。A 为什么，B 什么时候，C 什么，根据Because 可知答语回答的原因，可知问句在问为什么，选项 A 符合题意，故选 A。"
+ },
+ {
+  "id": 26,
+  "stem": "No leaves are the same(相同的) in the world. No one in the worldis thesameas you. As the saying goes: ________________________",
+  "opts": [
+   "Every season brings its joy",
+   "Practice makes perfect",
+   "Let sleeping dogs lie"
+  ],
+  "ans": "A",
+  "point": "陈述句",
+  "detail": "句意：世界上没有一片树叶是一样的。世界上没有人和你一样。俗话说：\\_\\_\\_\\_\\_\\_\\_ 本题考查陈述句。A 春有百花秋有月，夏有凉风冬有雪。B熟能生巧。C莫 惹是非。根据描述可知 A 符合题意，故选 A。"
+ },
+ {
+  "id": 27,
+  "stem": "I can go ____________________every day in summer.",
+  "opts": [
+   "swim",
+   "swimming",
+   "swiming"
+  ],
+  "ans": "B",
+  "point": "动词短语",
+  "detail": "句意：夏天我可以每天去游泳。本题考查动词短语，go+doingsth意为去做某事，swim 游泳要变为动名词 swimming，故选B。"
+ },
+ {
+  "id": 28,
+  "stem": "There are ____________________seasons in a year.",
+  "opts": [
+   "fourth",
+   "four",
+   "two"
+  ],
+  "ans": "B",
+  "point": "基数词",
+  "detail": "句意：一年有\\_\\_\\_\\_\\_季。本题考查基数词。A 第四，B四，C二。由常识可知一年有四季，此处要用基数词 four，故选 B。"
+ },
+ {
+  "id": 29,
+  "stem": "How many ________________________are there in a year?",
+  "opts": [
+   "seasons",
+   "year",
+   "day"
+  ],
+  "ans": "A",
+  "point": "可数名词及其单复数",
+  "detail": "句意：一年有几个季节？本题考查可数名词及其单复数。A季节，可数名词复数；B 年，可数名词单数；C 天，可数名词单数。how many 后跟可数名词复数，故选 A。"
+ },
+ {
+  "id": 30,
+  "stem": "Look ________________________my picture.",
+  "opts": [
+   "on",
+   "at",
+   "in"
+  ],
+  "ans": "B",
+  "point": "动词短语",
+  "detail": "句意：看我的照片。本题考查动词短语。look on 旁观，lookat 看，lookin拜访，look at 符合句意，故选 B。"
+ },
+ {
+  "id": 31,
+  "stem": "It’s warm ________________________the day and cool ________________________night.",
+  "opts": [
+   "at; at",
+   "in; in",
+   "in; at"
+  ],
+  "ans": "C",
+  "point": "介词固定搭配",
+  "detail": "句意：白天暖和，晚上凉爽。本题考查介词固定搭配。in the day在白天，at night 在晚上，故选 C。"
+ },
+ {
+  "id": 32,
+  "stem": "—I like snow. What about you? —I ________________________like it, and winter is my favorite season.",
+  "opts": [
+   "too",
+   "also",
+   "either"
+  ],
+  "ans": "B",
+  "point": "副词的用法",
+  "detail": "句意：—我喜欢雪。你呢？—我也喜欢，冬天是我最喜欢的季节。本题考查副词的用法。A 也，用在肯定句句末；B 也，用在肯定句句中；C也，用在否定句句末。故选 B。"
+ },
+ {
+  "id": 33,
+  "stem": "—Look at my picture, Mum! —________________________________________! The colors are pretty!",
+  "opts": [
+   "Of course",
+   "Oh, no",
+   "Good job"
+  ],
+  "ans": "C",
+  "point": "交际用语",
+  "detail": "句意：—看我的图画，妈妈！—\\_\\_\\_\\_\\_\\_\\_\\_！颜色很漂亮。本题考查交际用语。A 当然，B 哦，不，C 做得很好。C 符合题意，故选C。"
+ },
+ {
+  "id": 34,
+  "stem": "There are ________________________rabbits on the farm.",
+  "opts": [
+   "a",
+   "lots of",
+   "a lot"
+  ],
+  "ans": "B",
+  "point": "不定代词",
+  "detail": "句意：农场上有很多兔子。本题考查不定代词。a 修饰可数名词单数，lotsof修饰可数名词复数和不可数名词；a lot 不修饰名词。rabbits 是可数名词复数，故选B。"
+ },
+ {
+  "id": 35,
+  "stem": "I want ____________________________the seasons.",
+  "opts": [
+   "to draw",
+   "drawing",
+   "draw"
+  ],
+  "ans": "A",
+  "point": "动词的形式",
+  "detail": "句意：我想画季节。本题考查动词的形式，want to do sth 想做某事，故选A。"
+ },
+ {
+  "id": 36,
+  "stem": "Look! What beautiful ____________________________!",
+  "opts": [
+   "leaf",
+   "a leaf",
+   "leaves"
+  ],
+  "ans": "C",
+  "point": "可数名词及其单复数",
+  "detail": "句意：看！多漂亮的树叶啊！本题考查可数名词及其单复数。根据感叹号和句子结构，可知句子是what引导的感叹句，what引导的感叹句结构为：What+(a/an)+形容词+名词+(主语+谓语)！横线前没有冠词修饰，横线处填可数名词复数leaves，故选 C。"
+ },
+ {
+  "id": 37,
+  "stem": "—When is your birthday? —It’s ________________________January.",
+  "opts": [
+   "at",
+   "in",
+   "on"
+  ],
+  "ans": "B",
+  "point": "时间介词",
+  "detail": "句意：—你的生日是什么时候？—它在1 月。本题考查时间介词。at 在（表示时间、地点的词前）；in 在……里（表示时间、地点、方位等）；on在……上（表示时间、地点、方位等）。根据句意可知表示在某个月份用介词in，故选B。"
+ },
+ {
+  "id": 38,
+  "stem": "—________________________—No, she is reading a book.",
+  "opts": [
+   "Is she reading a book?",
+   "What is she doing?",
+   "Is she listening to music?"
+  ],
+  "ans": "C",
+  "point": "一般疑问句",
+  "detail": "句意：—\\_\\_\\_\\_？—不，她正在读书。本题考查一般疑问句。A她正在读书吗？B 她正在做什么？C 她正在听音乐吗？根据回答可知问句是一般疑问句，C符合题意。故选 C。"
+ },
+ {
+  "id": 39,
+  "stem": "—When is Teachers’ Day? —It’s on ____________________.",
+  "opts": [
+   "September lst",
+   "September 3rd",
+   "September 10th"
+  ],
+  "ans": "C",
+  "point": "序数词",
+  "detail": "句意：—教师节在什么时候？—它在\\_\\_\\_\\_\\_。本题考查序数词。A九月一日。B 九月三日。C 九月十日。根据常识可知是九月十日，故选C。"
+ },
+ {
+  "id": 40,
+  "stem": "Can I have ____________________________peaches?",
+  "opts": [
+   "some",
+   "any",
+   "a"
+  ],
+  "ans": "A",
+  "point": "不定代词",
+  "detail": "句意：我能吃一些桃吗？本题考查不定代词。some/any 修饰可数名词复数和不可数名词，a 修饰可数名词单数，peaches 是可数名词复数，排除C；some一般用在肯定句中，但在期望得到对方肯定回答的疑问句中也用some，排除B。故选A。"
+ },
+ {
+  "id": 41,
+  "stem": "Kathy’s birthday is on ________________________.",
+  "opts": [
+   "Mar. 18th",
+   "May 18th",
+   "Dec. 18th"
+  ],
+  "ans": "A",
+  "point": "名词辨析",
+  "detail": "句意：凯西的生日是\\_\\_\\_\\_\\_。本题考查名词辨析。A3 月18 日，B5月18日，C12 月 18 日。根据所给日历，可知是 3 月 18 日。故选A。"
+ },
+ {
+  "id": 42,
+  "stem": "We will have ________________________English party. Will you come to ________________________party?",
+  "opts": [
+   "a; the",
+   "an; the",
+   "an; an"
+  ],
+  "ans": "B",
+  "point": "冠词",
+  "detail": "句意：我们会举办一个英语聚会。你会来聚会吗？本题考查冠词。第一个空表泛指，English 以元音音素开头，前面用 an 修饰；第二个空表特指，填定冠词the。故选 B。"
+ },
+ {
+  "id": 43,
+  "stem": "There are ________________________months in a year. December is the ________________________month.",
+  "opts": [
+   "twelve; two",
+   "four; twelfth",
+   "twelve; twelfth"
+  ],
+  "ans": "C",
+  "point": "基数词和序数词",
+  "detail": "句意：一年有\\_\\_\\_\\_\\_\\_个月。十二月是\\_\\_\\_\\_\\_\\_月。本题考查基数词和序数词。A 十二，二；B 四，第十二；C 十二，第十二。第一空表示数量，用基数词，根据常识可知一年有 12 个月，故第一空填 twelve；第二空指第十二个月，表示顺序，故用序数词 twelfth。故选 C。"
+ },
+ {
+  "id": 44,
+  "stem": "I’ll ________________________my family. What about you?",
+  "opts": [
+   "cook for",
+   "cook to",
+   "cooking"
+  ],
+  "ans": "A",
+  "point": "动词的形式和介词辨析",
+  "detail": "句意：我会给我的家人做饭。你呢？本题考查动词的形式和介词辨析。I’ll是 I will 的缩写，will 后跟动词原形，for 给；为，to 到，for 符合句意，故选A。"
+ },
+ {
+  "id": 45,
+  "stem": "The party will start at 7 o’clock in the evening. We ________________________a birthdaycakeatthe party.",
+  "opts": [
+   "eat",
+   "will eat",
+   "are eat"
+  ],
+  "ans": "B",
+  "point": "一般将来时",
+  "detail": "句意：聚会晚上 7 点开始。我们会在聚会上吃一个生日蛋糕。根据句意可知本题考查一般将来时，一般将来时的结构为：will+动词原形，故选B。"
+ },
+ {
+  "id": 46,
+  "stem": "The weather is cool. China’s National Day is in it. It’s ________________________.",
+  "opts": [
+   "July",
+   "October",
+   "December"
+  ],
+  "ans": "B",
+  "point": "名词辨析",
+  "detail": "句意：天气凉爽。中国的国庆节就在其中。它是十月。本题考查名词辨析。A 七月，B 十月，C 十二月，根据描述可知是十月，故选B。"
+ },
+ {
+  "id": 47,
+  "stem": "—Can you speak Chinese? —________________________",
+  "opts": [
+   "Yes, I am.",
+   "Yes, I can.",
+   "Yes, I do."
+  ],
+  "ans": "B",
+  "point": "情态动词引导的一般疑问句的答语",
+  "detail": "句意：—你会说中文吗？—是的，我会。本题考查情态动词引导的一般疑问句的答语。A 是的，我是。B 是的，我会。C 是的，我是。根据问句是情态动词can 开头的一般疑问句，询问对方是否会做某事，答语应为Yes, I can.或No, Ican’t.。故选 B。"
+ },
+ {
+  "id": 48,
+  "stem": "—____________________do you do morning exercises ? —Usually at 9:30.",
+  "opts": [
+   "What",
+   "When",
+   "Which"
+  ],
+  "ans": "B",
+  "point": "疑问词",
+  "detail": "句意：—你\\_\\_\\_\\_\\_做早操？—通常在九点半。本题考查疑问词。A什么，B什么时候，C 哪一个。根据答语可知应问什么时候，故选B。"
+ },
+ {
+  "id": 49,
+  "stem": "—What are the special days in June? —____________________",
+  "opts": [
+   "Easter and the singing contest.",
+   "Children’s Day and Father’s Day.",
+   "Mother’s Day and Father’s Day."
+  ],
+  "ans": "B",
+  "point": "特殊疑问句的答语",
+  "detail": "句意：六月有哪些特别的日子？本题考查特殊疑问句的答语。A复活节和歌唱比赛。B 儿童节和父亲节。C 母亲节和父亲节。根据常识，故选B。"
+ },
+ {
+  "id": 50,
+  "stem": "My birthday is ________________________________July 7th.",
+  "opts": [
+   "in",
+   "on",
+   "at"
+  ],
+  "ans": "B",
+  "point": "时间介词",
+  "detail": "句意：我的生日在 7 月 7 日。本题考查时间介词。in 后跟年、月、季节等，on 后跟具体某一天，at 后跟具体点钟，故选 B。"
+ },
+ {
+  "id": 51,
+  "stem": "—________________________________is the school party? —It’s on November 25th this year.",
+  "opts": [
+   "When",
+   "What",
+   "How"
+  ],
+  "ans": "A",
+  "point": "疑问词",
+  "detail": "句意：—学校聚会是什么时候？—今年它在11 月25 日。本题考查疑问词。A 什么时候，B 什么，C 怎样，根据答语可知问句问什么时候，故选A。"
+ },
+ {
+  "id": 52,
+  "stem": "April is the ________________________________month of a year.",
+  "opts": [
+   "four",
+   "forth",
+   "fourth"
+  ],
+  "ans": "C",
+  "point": "序数词",
+  "detail": "句意：四月是一年的第四个月。本题考查序数词。A四，B单词错误，C第四，表示第几用序数词，故选 C。"
+ },
+ {
+  "id": 53,
+  "stem": "The fifth day of a week is ________________________________.",
+  "opts": [
+   "Thursday",
+   "Friday",
+   "Saturday"
+  ],
+  "ans": "A",
+  "point": "名词辨析",
+  "detail": "句意：一周的第五天是周四。本题考查名词辨析。A星期四，B星期五，C星期六。根据常识一周第一天是周日 Sunday，第五天是周四Thursday，故选A。"
+ },
+ {
+  "id": 54,
+  "stem": "Who can play ________________pipa?",
+  "opts": [
+   "the",
+   "a",
+   "/"
+  ],
+  "ans": "A",
+  "point": "动词短语和定冠词",
+  "detail": "句意：谁会弹琵琶？本题考查动词短语和定冠词。play 后跟乐器名词，中间要加定冠词 the，play the pipa 弹琵琶，故选 A。"
+ },
+ {
+  "id": 55,
+  "stem": "There ________________________some special days in April.",
+  "opts": [
+   "am",
+   "are",
+   "is"
+  ],
+  "ans": "B",
+  "point": "be 动词",
+  "detail": "句意：四月有一些特殊的日子。本题考查 be 动词。句子是一般现在时态，主语是复数名词，所以 be 用 are，故选 B。"
+ },
+ {
+  "id": 56,
+  "stem": "We can have a birthday party for ________________________you.",
+  "opts": [
+   "both",
+   "both of",
+   "all"
+  ],
+  "ans": "B",
+  "point": "固定搭配",
+  "detail": "句意：我们可以为你们俩举办一个生日聚会。本题考查固定搭配。both(两者)都，all(三者及以上)都，both of +人称代词。故选B。"
+ },
+ {
+  "id": 57,
+  "stem": "My mother’s birthday is on June ________________________.",
+  "opts": [
+   "twenty-one",
+   "twenty-first",
+   "/"
+  ],
+  "ans": "B",
+  "point": "序数词",
+  "detail": "句意：我妈妈的生日在 6 月\\_\\_\\_\\_\\_\\_。本题考查序数词。A21，基数词；B第21，序数词。表示几日用序数词，故选 B。"
+ },
+ {
+  "id": 58,
+  "stem": "—What will you do for him? —I ________________________cook for him.",
+  "opts": [
+   "am",
+   "will",
+   "is"
+  ],
+  "ans": "B",
+  "point": "助动词",
+  "detail": "句意：—你将为他做什么？—我将为他做饭。本题考查助动词，可知句子为一般将来时，结构为主语+will+动词原形，故选B。"
+ },
+ {
+  "id": 59,
+  "stem": "Mike is ________________________years old and today is his ________________________birthday.",
+  "opts": [
+   "eleven; eleventh",
+   "eleven; eleven",
+   "eleventh; eleven"
+  ],
+  "ans": "A",
+  "point": "数词的用法",
+  "detail": "句意：迈克十一岁，今天是他的十一岁生日。本题考查数词的用法。第一句表示年龄，横线处填基数词 eleven 十一；第二句表示几岁生日，横线处填序数词eleventh 第十一。故选 A。"
+ },
+ {
+  "id": 60,
+  "stem": "—________________________is the reading festival? —It’s ________________________April 26th.",
+  "opts": [
+   "Where; on",
+   "When; in",
+   "When; on"
+  ],
+  "ans": "C",
+  "point": "疑问副词和时间介词",
+  "detail": "句意：—阅读节是什么时候？—它在 4 月26 日。本题考查疑问副词和时间介词。where 是哪里，when 是什么时候，根据答语“4 月26 日”可知问句是问阅读节是什么时候，when 符合题意。on 用在具体的某一天，in 用在年份月份季节前，4月26 日是具体的某一天用介词 on，故选 C。"
+ },
+ {
+  "id": 61,
+  "stem": "Jack will ____________________________________some delicious food for his dad on Father’s Day.",
+  "opts": [
+   "making",
+   "makes",
+   "make"
+  ],
+  "ans": "C",
+  "point": "动词的形式",
+  "detail": "句意：杰克在父亲节会为他爸爸做一些美味的食物。本题考查动词的形式。A 是动名词/动词的现在分词，B 是动词的第三人称单数，C 是动词原形，will 后跟动词原形，故选 C。"
+ },
+ {
+  "id": 62,
+  "stem": "They will ________________________a birthday party for both ________________________you.",
+  "opts": [
+   "has; at",
+   "have; of",
+   "be; of"
+  ],
+  "ans": "B",
+  "point": "动词短语",
+  "detail": "句意：他们要为你们两个举办生日聚会。本题考查动词短语，动词原形。have a birthday praty 举办生日聚会，will 后跟动词原形，故选B。"
+ },
+ {
+  "id": 63,
+  "stem": "—When do you eat dinner in Spain? —I always eat dinner ____________________8 o’clock.",
+  "opts": [
+   "in",
+   "at",
+   "on"
+  ],
+  "ans": "B",
+  "point": "时间介词",
+  "detail": "句意：—你在西班牙什么时候吃晚饭？—我总是在8 点钟吃晚饭。本题考查时间介词，in 后跟年、月、季节等，at 后跟具体点钟，on 后跟具体某天，根据句意可知是 8 点钟，故选 B。"
+ },
+ {
+  "id": 64,
+  "stem": "Today is Amy’s ________________________birthday.",
+  "opts": [
+   "twelfth",
+   "twelve",
+   "eleven"
+  ],
+  "ans": "A",
+  "point": "序数词",
+  "detail": "句意：今天是艾米的第十二个生日。本题考查序数词，A第十二，序数词；B 十二，基数词；C 十一，基数词，该空做 birthday 的定语，用序数词，故选A。"
+ },
+ {
+  "id": 65,
+  "stem": "—What will you do ________________________your mum? —I’ll cook noodles ________________________her.",
+  "opts": [
+   "for; for",
+   "of; for",
+   "for; on"
+  ],
+  "ans": "A",
+  "point": "介词辨析",
+  "detail": "句意：—你将为你的妈妈做什么？—我将给她做面条。本题考查介词辨析，for 为，给；of 属于……的；on 在……上面。根据句意可知两个空都填介词for，故选 A。"
+ },
+ {
+  "id": 66,
+  "stem": "—Hi, Miss Wang. Look at my picture. —________________________I like the flowers.",
+  "opts": [
+   "Good job.",
+   "Excuse me.",
+   "Of course."
+  ],
+  "ans": "A",
+  "point": "交际用语",
+  "detail": "句意：—你好，王老师。看看我的图画。—画得好。我喜欢花。本题考查交际用语，A 画得好；B 打扰了；C 当然了。根据“I like the flowers.”可知，画得很好，Good job 为赞扬语，符合语境。故选 A。"
+ },
+ {
+  "id": 67,
+  "stem": "—I’m drawing ________________________picture, Amy. What about you? —I’m playing ________________________pipa.",
+  "opts": [
+   "a; an",
+   "a; the",
+   "an; the"
+  ],
+  "ans": "B",
+  "point": "动词短语",
+  "detail": "句意：—艾米，我正在画画。你呢？—我在弹琵琶。本题考查动词短语，draw a picture 画画；弹琵琶 play the pipa ，故选B。"
+ },
+ {
+  "id": 68,
+  "stem": "The yellow picture is ________________________________. And the picture of Beijing is ________________________________.",
+  "opts": [
+   "Chen Jie’s; my",
+   "Chen Jie; mine",
+   "Chen Jie’s; mine"
+  ],
+  "ans": "C",
+  "point": "名词所有格及名词性物主代词",
+  "detail": "句意：这张黄色的图片是陈洁的。然后这张北京的图片是我的。本题考查名词所有格及名词性物主代词。两句句子的主语都是物品，表达物品的归属，要用名词所有格或者名词性物主代词。Chen Jie’s 意为陈洁的；mine 意为我的，是名词性物主代词。故选 C。"
+ },
+ {
+  "id": 69,
+  "stem": "There ________________________a toy car and two notebooks in the schoolbag.",
+  "opts": [
+   "have",
+   "are",
+   "is"
+  ],
+  "ans": "C",
+  "point": "there be 句型",
+  "detail": "句意：书包里有一个玩具车和两本笔记本。本题考查there be 句型，根据的近原则，根据 a toy car 是第三人称单数，可知 be 动词用is，故选C。"
+ },
+ {
+  "id": 70,
+  "stem": "These pictures are ________________________. Those are ________________________pictures.",
+  "opts": [
+   "my; your",
+   "mine; your",
+   "mine; yours"
+  ],
+  "ans": "B",
+  "point": "名词性物主代词和形容词性物主代词",
+  "detail": "句意：这些图片是我的。那些是你的图片。本题考查名词性物主代词和形容词性物主代词。A 我的，你的（你们的）；B 我的，你的（你们的）；C我的，你们的。第一空后面没有名词，用名词性物主代词 mine；第二空后有名词pictures，用形容词性物主代词 your。故选 B。"
+ },
+ {
+  "id": 71,
+  "stem": "—________________________desk is that? —It’s Mike’s.",
+  "opts": [
+   "Who",
+   "Whose",
+   "What"
+  ],
+  "ans": "B",
+  "point": "疑问词",
+  "detail": "句意：—桌子是\\_\\_\\_\\_？—它是麦克的。本题考查疑问词，A谁，B谁的，C什么，根据回答是问桌子是谁的，故选 B。"
+ },
+ {
+  "id": 72,
+  "stem": "This is ________________________picture. Where is ________________________?",
+  "opts": [
+   "my; her",
+   "her; you",
+   "his; mine"
+  ],
+  "ans": "C",
+  "point": "物主代词",
+  "detail": "句意：这是\\_\\_\\_\\_图片，\\_\\_\\_\\_在哪里？本题考查物主代词，my我的，her她的，you 你的 ，都是形容词性物主代词；his 他的，形容词性物主代词和名词性物主代词；mine 我的，名词性物主代词。第一空后面有名词用形容词性物主代词，第二空后面没有名词用名词性物主代词。故选 C。"
+ },
+ {
+  "id": 73,
+  "stem": "—Hi, Zhang Peng. Are these monkeys eating? —________________________They’re drinking.",
+  "opts": [
+   "Yes, they are.",
+   "No, it isn’t.",
+   "No, they aren’t."
+  ],
+  "ans": "C",
+  "point": "一般疑问句的答语",
+  "detail": "句意：—你好，张鹏。这些猴子在吃吗？—\\_\\_\\_\\_\\_\\_ 它们在喝。本题考查一般疑问句的答语。根据答语后一句可知前面是否定回答，are 引导的一般疑问句用are回答，故选 C。"
+ },
+ {
+  "id": 74,
+  "stem": "I am ____________________like a bird.",
+  "opts": [
+   "fly",
+   "flying",
+   "fall"
+  ],
+  "ans": "B",
+  "point": "动词的形式",
+  "detail": "句意：我像小鸟一样正在飞。本题考查动词的形式，A飞，动词原形，B飞，动名词或动词的现在分词，C 落，动词原形，根据句中be 动词“am”，可知句中时态为现在进行时，结构为：be 动词+动词的现在分词，故选B。"
+ },
+ {
+  "id": 75,
+  "stem": "Look! They’re ________________________________in the classroom.",
+  "opts": [
+   "dance",
+   "dancing",
+   "dances"
+  ],
+  "ans": "B",
+  "point": "动词的形式",
+  "detail": "句意：看！他们正在教室里跳舞。本题考查动词的形式。横线处填动词的现在分词 dancing，与 are 构成现在进行时，故选B。"
+ },
+ {
+  "id": 76,
+  "stem": "Mike and I are in the park. We are ________________________________.",
+  "opts": [
+   "excited",
+   "walk",
+   "win"
+  ],
+  "ans": "A",
+  "point": "形容词的用法",
+  "detail": "句意：迈克和我在公园里。我们很兴奋。本题考查形容词的用法。A兴奋的，形容词；B 散步，动词原形；C 获胜，动词原形。横线处填形容词做are的表语，故选 A。"
+ },
+ {
+  "id": 77,
+  "stem": "We can help with ________________________________.",
+  "opts": [
+   "each other",
+   "each us",
+   "every other"
+  ],
+  "ans": "A",
+  "point": "相互代词",
+  "detail": "句意：我们可以互相帮助。本题考查相互代词，each other 互相，BC搭配错误，故选 A。"
+ },
+ {
+  "id": 78,
+  "stem": "—Whose dog is this? —________________________",
+  "opts": [
+   "It’s his.",
+   "It’s yellow.",
+   "They’re his."
+  ],
+  "ans": "A",
+  "point": "特殊疑问句答语",
+  "detail": "句意：这是谁的狗？本题考查特殊疑问句答语，A 它是他的。B它是黄色的。C 它们是他的。问句问所属，可排除 B 选项，问句中dog 是名词单数，所以答句主语用 It，排除 C 选项。故选 A。"
+ },
+ {
+  "id": 79,
+  "stem": "I want to swim ________________________a fish.",
+  "opts": [
+   "like",
+   "at",
+   "of"
+  ],
+  "ans": "A",
+  "point": "介词辨析",
+  "detail": "句意：我想像鱼一样游泳。本题考查介词辨析，A 像，B在，C……的，like符合句意，故选 A。"
+ },
+ {
+  "id": 80,
+  "stem": "My sister ________________________to music now.",
+  "opts": [
+   "listens",
+   "is listening",
+   "listen"
+  ],
+  "ans": "B",
+  "point": "动词的形式",
+  "detail": "句意：我的姐姐（妹妹）正在听音乐。本题考查动词的形式。now是现在进行时的标志词，结构为：be 动词+动词现在分词+其他，my sister 是第三人称单数，be 动词用 is，listen 的现在分词 listening，故选 B。"
+ },
+ {
+  "id": 81,
+  "stem": "—Are these all ________________________? —No, the red one is ________________________ball.",
+  "opts": [
+   "ours, theirs",
+   "ours, their",
+   "we, theirs"
+  ],
+  "ans": "B",
+  "point": "物主代词",
+  "detail": "句意：—这些都是我们的吗？—不，红色的那个是他们的球。本题考查物主代词，ours 我们的，名词性物主代词；theirs 他们的，名词性物主代词；their他们的，形容词性物主代词；we 我们，人称代词。前一个句子后没有名词，用名词性物主代词；后一个句子中横线后有名词，用形容词性物主代词。故选B。"
+ },
+ {
+  "id": 82,
+  "stem": "There is a picture ________________________Beijing.",
+  "opts": [
+   "of",
+   "too",
+   "show"
+  ],
+  "ans": "A",
+  "point": "其他介词",
+  "detail": "句意：有一张北京的照片。本题考查其他介词，A……的，B太，C展示，of 符合句意，故选 A。"
+ },
+ {
+  "id": 83,
+  "stem": "—Be quiet. Don’t talk in the classroom. —________________________________.",
+  "opts": [
+   "Sure",
+   "Sorry",
+   "Of course"
+  ],
+  "ans": "B",
+  "point": "交际用语",
+  "detail": "句意：—保持安静。不要在课堂上说话。—\\_\\_\\_\\_\\_\\_。本题考查交际用语，A当然，B 抱歉，C 当然，当别人不让在课堂上说话时，要表达歉意，故选B。"
+ },
+ {
+  "id": 84,
+  "stem": "—Can I use your crayons? —________________________",
+  "opts": [
+   "Here it is .",
+   "OK, take turns.",
+   "They are here."
+  ],
+  "ans": "B",
+  "point": "一般疑问句的答语",
+  "detail": "句意：—我可以用你的蜡笔吗？—\\_\\_\\_\\_。本题考查一般疑问句的答语。A在这里。B 可以，轮流。C 他们在这。根据句意可知回答为可以，轮流使用。故选B。"
+ },
+ {
+  "id": 85,
+  "stem": "I can see ____________________monkeys.",
+  "opts": [
+   "some",
+   "any",
+   "a"
+  ],
+  "ans": "A",
+  "point": "不定代词",
+  "detail": "句意：我能看见一些猴子。本题考查不定代词。monkeys 是复数，可知该空应表示“一些”，排除 C；some 用于肯定句，any 用于否定句和疑问句，该句是肯定句，排除 B，故选 A。"
+ },
+ {
+  "id": 86,
+  "stem": "Can the ducks ____________________________?",
+  "opts": [
+   "fly",
+   "flies",
+   "flying"
+  ],
+  "ans": "A",
+  "point": "动词的形式",
+  "detail": "句意：鸭子会飞吗？本题考查动词的形式。can 后跟动词原形fly，故选A。"
+ },
+ {
+  "id": 87,
+  "stem": "Talk ____________________________in the library.",
+  "opts": [
+   "quietly",
+   "quiet",
+   "noisy"
+  ],
+  "ans": "A",
+  "point": "副词的用法",
+  "detail": "句意：在图书馆轻声说话。本题考查副词的用法。A轻声地，副词；B安静的，形容词；C 吵闹的，形容词。横线处填副词修饰动词，故选A。"
+ },
+ {
+  "id": 88,
+  "stem": "—Can we do homework in the library? —Sure. ________________________.",
+  "opts": [
+   "Keep to the right",
+   "Take turns",
+   "Work quietly"
+  ],
+  "ans": "C",
+  "point": "动词短语",
+  "detail": "句意：—我们能在图书馆做作业吗？—当然，\\_\\_\\_\\_\\_\\_\\_。本题考查动词短语，A 靠右走，B 轮流，C 安静地学习，根据回答“sure 当然”，可知是能在图书馆做作业，根据常识可知在图书馆做作业也要安静，故选 C。"
+ },
+ {
+  "id": 89,
+  "stem": "—What can you see at the zoo? —I can see ________________________elephant. It is playing with a ball.",
+  "opts": [
+   "the",
+   "an",
+   "a"
+  ],
+  "ans": "B",
+  "point": "不定冠词",
+  "detail": "—你能在动物园看见什么？—我能看见一头大象。它正在玩球。本题考查不定冠词。a/an 一个，是泛指；the 这个，是特指，本题是泛指。elephant 是以元音音素开头的单词，前面用 an 修饰，故选 B。"
+ },
+ {
+  "id": 91,
+  "stem": "—Asako, can you make sushi? —________________________________Let me teach you.",
+  "opts": [
+   "It’s OK.",
+   "Sure.",
+   "I’m sorry."
+  ],
+  "ans": "B",
+  "point": "交际用语",
+  "detail": "句意：—Asako，你会做寿司吗？—\\_\\_\\_\\_\\_\\_让我教你。本题考查交际用语。A 没关系。B 当然。C 对不起。根据句意可知是会做，故选B。"
+ },
+ {
+  "id": 92,
+  "stem": "Whose books ________________________________?",
+  "opts": [
+   "is this",
+   "are these",
+   "these are"
+  ],
+  "ans": "B",
+  "point": "特殊疑问句和指示代词",
+  "detail": "句意：这是谁的书？本题考查特殊疑问句和指示代词。books 是可数名词复数，指示代词用复数 these 这些，whose books 后跟一般疑问句语序，are提前，故选B。"
+ },
+ {
+  "id": 93,
+  "stem": "Keep your desk ____________________________________.",
+  "opts": [
+   "clean",
+   "like",
+   "black"
+  ],
+  "ans": "A",
+  "point": "形容词的用法和形容词辨析",
+  "detail": "句意：保持你的课桌干净。本题考查形容词的用法和形容词辨析。A干净的，形容词；B 喜欢，动词；C 黑色的，形容词。keep sth adj.保持某物……，clean符合句意，故选 A。"
+ },
+ {
+  "id": 94,
+  "stem": "I clean my bike ____________________________________the weekend.",
+  "opts": [
+   "in",
+   "on",
+   "under"
+  ],
+  "ans": "B",
+  "point": "时间介词",
+  "detail": "句意：我在周末擦我的自行车。本题考查时间介词。A在年份月份季节前用 in，B 在具体的某天或者某天的上下午晚上用on，C 在……下面。在周末用介词on，故选 B。"
+ },
+ {
+  "id": 95,
+  "stem": "Shh. Talk ________________________. They are sleeping.",
+  "opts": [
+   "quiet",
+   "quietly",
+   "/"
+  ],
+  "ans": "B",
+  "point": "副词的用法",
+  "detail": "句意：嘘。小声说话，他们正在睡觉。本题考查副词的用法，A形容词，安静的；B 副词，轻声地；C 不填。根据题干，修饰动词talk，用副词，故选B。"
+ },
+ {
+  "id": 96,
+  "stem": "There are many animals in the zoo. Do you see ________________________elephants?",
+  "opts": [
+   "much",
+   "some",
+   "any"
+  ],
+  "ans": "C",
+  "point": "不定代词",
+  "detail": "句意：动物园里有很多动物。你看到大象了吗？本题考查不定代词。A很多，修饰不可数名词；B 一些，修饰可数名词复数和不可数名词，一般用于肯定句中；C 一些，修饰可数名词复数和不可数名词，一般用于否定句和疑问句中。故选C。"
+ },
+ {
+  "id": 97,
+  "stem": "Can you take ________________________to the park?",
+  "opts": [
+   "I",
+   "my",
+   "me"
+  ],
+  "ans": "C",
+  "point": "人称代词",
+  "detail": "句意：你能带我去公园吗？本题考查人称代词。A 我，人称代词主格；B我的，形容词性物主代词；C 我，人称代词宾格。take 后跟人称代词宾格做宾语，故选C。"
+ },
+ {
+  "id": 98,
+  "stem": "What ________________________the animals doing at the zoo?",
+  "opts": [
+   "do",
+   "are",
+   "is"
+  ],
+  "ans": "B",
+  "point": "be 动词",
+  "detail": "句意：动物园的动物正在做什么？本题考查be 动词。根据doing可知横线处填 be 动词，主语 the animals 是第三人称复数，be 用are，故选B。"
+ },
+ {
+  "id": 99,
+  "stem": "Please talk ________________________________in the library.",
+  "opts": [
+   "quiet",
+   "quietly",
+   "loudly"
+  ],
+  "ans": "B",
+  "point": "副词辨析和用法",
+  "detail": "句意：请在图书馆轻声说话。本题考查副词辨析和用法。A安静的，形容词；B 轻声地，副词；C 大声地，副词。横线处填副词修饰动词，选项B符合句意，故选 B。"
+ },
+ {
+  "id": 100,
+  "stem": "Please keep ________________________the right.",
+  "opts": [
+   "/",
+   "in",
+   "to"
+  ],
+  "ans": "C",
+  "point": "动词短语",
+  "detail": "句意：请靠右走。本题考查动词短语，keep to the right 靠右走，故选C。"
+ }
+]

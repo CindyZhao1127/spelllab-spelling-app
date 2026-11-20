@@ -1,0 +1,184 @@
+[
+ {
+  "id": "f1",
+  "section": "一般现在时/过去时",
+  "stem": "I often ______ football with my good friends after school. (play)",
+  "ans": "play",
+  "detail": "often 是一般现在时标志，主语 I 非三单，动词用原形 play。"
+ },
+ {
+  "id": "f2",
+  "section": "一般现在时/过去时",
+  "stem": "My mother usually ______ TV plays after dinner every evening. (watch)",
+  "ans": "watches",
+  "detail": "usually 表现在时，主语 My mother 是第三人称单数，watch 以 ch 结尾加 -es。"
+ },
+ {
+  "id": "f3",
+  "section": "一般现在时/过去时",
+  "stem": "My father often ______ to work every morning. (walk)",
+  "ans": "walks",
+  "detail": "every morning 表现在时，主语第三人称单数，动词加 -s。"
+ },
+ {
+  "id": "f4",
+  "section": "一般现在时/过去时",
+  "stem": "We ______ our grandparents last Sunday. (visit)",
+  "ans": "visited",
+  "detail": "last Sunday 表过去，动词用过去式 visited。"
+ },
+ {
+  "id": "f5",
+  "section": "过去式变化",
+  "stem": "Zhang Peng ______ English yesterday. (study)",
+  "ans": "studied",
+  "detail": "辅音字母+y 结尾，变 y 为 i 加 -ed。"
+ },
+ {
+  "id": "f6",
+  "section": "过去式变化",
+  "stem": "I ______ to school with my best friend yesterday morning. (walk)",
+  "ans": "walked",
+  "detail": "一般情况直接加 -ed。"
+ },
+ {
+  "id": "f7",
+  "section": "过去式变化",
+  "stem": "He ______ (study) Maths hard and ______ (get) a good grade yesterday.",
+  "ans": "studied; got",
+  "detail": "study→studied（辅音+y），get 不规则→got。"
+ },
+ {
+  "id": "f8",
+  "section": "过去式变化",
+  "stem": "We ______ (go) to the zoo and ______ (see) many lovely animals last Sunday.",
+  "ans": "went; saw",
+  "detail": "不规则动词 go→went, see→saw。"
+ },
+ {
+  "id": "f9",
+  "section": "过去式变化",
+  "stem": "They ______ (stop) and ______ (chat) with each other under the tree just now.",
+  "ans": "stopped; chatted",
+  "detail": "重读闭音节双写末辅音：stop→stopped, chat→chatted。"
+ },
+ {
+  "id": "f10",
+  "section": "过去时疑问句",
+  "stem": "—______ you watch TV last night? —Yes, I ______.",
+  "ans": "Did; did",
+  "detail": "实义动词 watch，一般疑问句用 Did，回答用 did。"
+ },
+ {
+  "id": "f11",
+  "section": "过去时疑问句",
+  "stem": "—______ they in the library yesterday? —No, they ______.",
+  "ans": "Were; weren't",
+  "detail": "含 be 动词、主语 they 复数，用 Were，否定回答 weren't。"
+ },
+ {
+  "id": "f12",
+  "section": "健康句型",
+  "stem": "—______ ______ with your sister? —My sister has a bad cold.",
+  "ans": "What's the matter",
+  "detail": "询问某人怎么了：What's wrong/the matter with sb.?"
+ },
+ {
+  "id": "f13",
+  "section": "健康句型",
+  "stem": "—______ ______ Tom ______? —Tom feels ill.",
+  "ans": "How does; feel",
+  "detail": "询问感觉：How does/do sb. feel? 主语第三人称单数用 does。"
+ },
+ {
+  "id": "f14",
+  "section": "一般将来时",
+  "stem": "I ______ ______ ______ ______ eat junk food any more. (not eat)",
+  "ans": "am not going to",
+  "detail": "I 搭配 am，否定在 be 后加 not：am not going to。"
+ },
+ {
+  "id": "f15",
+  "section": "一般将来时",
+  "stem": "______ your sister ______ ______ ______ a doctor tomorrow morning? (see)",
+  "ans": "Is; going to see",
+  "detail": "主语第三人称单数用 Is，一般疑问句把 be 提前。"
+ },
+ {
+  "id": "f16",
+  "section": "want/need",
+  "stem": "Lily ______ need to take an umbrella today. It's sunny. (do)",
+  "ans": "doesn't",
+  "detail": "主语第三人称单数，否定用 doesn't。"
+ },
+ {
+  "id": "f17",
+  "section": "want/need",
+  "stem": "I ______ to eat some candy now. (want)",
+  "ans": "want",
+  "detail": "主语 I 非三单，用原形 want。"
+ },
+ {
+  "id": "f18",
+  "section": "want/need",
+  "stem": "He ______ to finish his homework before dinner. (need)",
+  "ans": "needs",
+  "detail": "need 作实义动词，主语第三人称单数加 -s。"
+ },
+ {
+  "id": "f19",
+  "section": "介词搭配",
+  "stem": "We can get extra pocket money ______ selling old storybooks.",
+  "ans": "by",
+  "detail": "by 表「通过某种方式」，后接动名词 selling。"
+ },
+ {
+  "id": "f20",
+  "section": "介词搭配",
+  "stem": "—How do you pay ______ the robot show ticket? —With my pocket money.",
+  "ans": "for",
+  "detail": "pay for 后接购买的对象。"
+ },
+ {
+  "id": "f21",
+  "section": "there be",
+  "stem": "There ______ any milk in the fridge. Let's go and buy some. (be)",
+  "ans": "isn't",
+  "detail": "milk 不可数用 is，否定 isn't；any 用于否定句。"
+ },
+ {
+  "id": "f22",
+  "section": "there be",
+  "stem": "There ______ no water in the glass. (be)",
+  "ans": "is",
+  "detail": "water 不可数，no 后不用 any，be 用 is。"
+ },
+ {
+  "id": "f23",
+  "section": "不定式表目的",
+  "stem": "______ (learn) English well, you must read more.",
+  "ans": "To learn",
+  "detail": "句首表目的用不定式，逗号与主句隔开。"
+ },
+ {
+  "id": "f24",
+  "section": "不定式表目的",
+  "stem": "We plant trees ______ (make) our city beautiful.",
+  "ans": "to make",
+  "detail": "不定式表目的，动词原形前加 to。"
+ },
+ {
+  "id": "f25",
+  "section": "run out 辨析",
+  "stem": "Time ______ quickly when you are busy.",
+  "ans": "runs out",
+  "detail": "主语 time 是物、自身耗尽，用不及物 run out，第三人称单数加 -s。"
+ },
+ {
+  "id": "f26",
+  "section": "run out 辨析",
+  "stem": "She ______ all her energy after finishing the marathon.",
+  "ans": "ran out of",
+  "detail": "主语 She 是人、用完某物且后接宾语 energy，用 run out of，过去式 ran out of。"
+ }
+]
