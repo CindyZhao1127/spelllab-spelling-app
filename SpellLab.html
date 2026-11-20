@@ -1577,11 +1577,7 @@ body.td-typing #typingView { height: 100%; }
             <div id="phGroupList"></div>
           </div>
           <div id="phTextbookPanel" hidden>
-            <div class="field-row">
-              <span class="sel"><select id="phStage" aria-label="学段"></select></span>
-              <span class="sel"><select id="phBook" aria-label="教材"></select></span>
-              <span class="sel"><select id="phPack" aria-label="教材包"></select></span>
-            </div>
+            <div class="ph-scope-note" id="phScopeNote"></div>
             <div class="field-row">
               <span class="sel"><select id="phGroupBy" aria-label="分组方式"><option value="unit">按单元</option><option value="pattern">按拼读规律</option></select></span>
               <span class="sel"><select id="phUnit" aria-label="单元或拼读组"></select></span>
@@ -2845,18 +2841,56 @@ function phUnits(word){
   for(;i<src.length;i++) if(!/[a-z]/.test(src[i])) out.push({t:src[i],s:'',v:false});
   return out;
 }
-/* 音节切分：逐段处理两个元音核心之间的辅音。
-   - 0 个辅音：两个元音分属两音节（road 之类由元音组合合成一个核心）
-   - 1 个辅音：VCV，辅音归后一个音节（ba-na / ti-ger）
-   - 2 个辅音：VCCV，中间切开（ap-ple / win-ter）；辅音丛（bl/st/sh…）不拆，整体归后
-   - 3 个及以上：首辅音归前，其余归后（in-struct / chil-dren）
-   词首辅音归首音节，词尾辅音（含静音 e）归末音节。 */
+/* 音节切分规则（主流 Structured Literacy / 音节六分法）：
+   1) VC/CV：两元音间 2 个辅音从中间切，但二合辅音（bl/st/sh/ch/th/ck…）不拆、整体归后
+   2) V/CV 先试前切（元音读长音）：1 个辅音归后一节（ba-na / ti-ger / ro-bot）
+      —— 主流策略是「先试前切，读起来不像学过的词再改后切」，本程序按先试前切处理
+   3) VC/V 后切（元音读短音）：词首若为常见短元音闭音节词（cab-in / sev-en / nev-er），
+      改把辅音归前一节；这些是教学里约定俗成读短音的高频词
+   4) C+le：词尾「辅音+le」自成末音节（ta-ble / pur-ple / lit-tle），le 的 e 不发音
+   5) V/V：两个元音各自成音节、不组成元音组合时中间切（li-on / di-et / ra-di-o）
+   6) 前后缀：常见前缀（re/un/dis/pre…）、后缀（ing/ed/er/ful/ly…）在词缀边界切
+   （re-play / jump-ing / hope-ful / quick-ly），剩余词根再按上面规则切。
+   所有切分都以「一个元音核心 = 一个音节」为底线，保留神奇 e 与元音同节。 */
+const PH_VCV_LATE={cabin:1,seven:1,never:1,lemon:1,melon:1,wagon:1,robin:1,camel:1,
+  habit:1,rabbit:1,basket:1,pocket:1,rocket:1,banana:0,robot:0,tiger:0}; /* 0=强制前切（长音） */
+const PH_PREFIXES=['under','super','inter','over','dis','mis','pre','sub','un','re','in','im','non','out','up','en'];
+/* 后缀不含 er/or：它们是 r 控元音（ar/er/ir/or/ur），主流按元音组合整体归节，
+   如 tea-cher / com-pu-ter / ti-ger，切在辅音前而不是当独立词缀剥走。 */
+const PH_SUFFIXES=['ness','ment','less','ful','ous','ive','able','ible','tion','sion','ing','est','ed','ly','ist','age'];
+function phAffixSound(t){
+  return phUnits(t).filter(u=>!u.silent).map(u=>u.s).filter(Boolean).join(' ');
+}
 function phonicsChunks(word){
-  const units=phUnits(word);
-  if(!units.length) return [];
+  const src=String(word||'').toLowerCase();
+  if(!src) return [];
+  /* 先剥词缀：前缀、后缀整体成节，词根再按音节规则切 */
+  let pre='', suf='', root=src;
+  for(const p of PH_PREFIXES){
+    if(src.length-p.length>=3 && src.indexOf(p)===0){
+      pre=p; root=src.slice(p.length); break;
+    }
+  }
+  for(const s of PH_SUFFIXES){
+    if(root.length-s.length>=3 && root.slice(-s.length)===s &&
+       /[aeiou]/.test(root.slice(0,-s.length))){
+      suf=s; root=root.slice(0,-s.length); break;
+    }
+  }
+  const units=phUnits(root);
+  const out=[];
+  if(pre) out.push([pre,phAffixSound(pre)]);
+  if(!units.length){ if(suf) out.push([suf,phAffixSound(suf)]); return out; }
   const vowelIdx=[];
   units.forEach((u,i)=>{ if(u.v) vowelIdx.push(i); });
-  if(!vowelIdx.length) return [[units.map(u=>u.t).join(''),'']];
+  if(!vowelIdx.length){
+    out.push([units.map(u=>u.t).join(''),'']);
+    if(suf) out.push([suf,phAffixSound(suf)]);
+    return out;
+  }
+  /* 判断首音节是否按短音后切：VCV 且首音节元音是短元音字母（非元音组合） */
+  const lateVcv = vowelIdx.length>=2 && vowelIdx[1]-vowelIdx[0]===2 &&
+    PH_VCV_LATE[src]===1 && /^[aeiou]$/.test(units[vowelIdx[0]].t);
   const groups=[];
   let start=0;
   for(let k=0;k<vowelIdx.length;k++){
@@ -2864,23 +2898,34 @@ function phonicsChunks(word){
     let end=units.length;
     if(next!==undefined){
       const gap=next-v-1;
-      if(gap<=0) end=next;
-      else if(gap===1) end=next-1;
+      if(gap<=0) end=next;                 /* V/V：两元音各自成节 */
+      else if(gap===1) end=(k===0&&lateVcv)?next:next-1; /* V/CV 前切；短音词后切 */
       else if(gap===2){
         const pair=units[next-2].t+units[next-1].t;
         const cluster=PH_PATTERNS.some(p=>!phVowelTeam(p[0])&&p[0].length===2&&p[0]===pair);
-        end=cluster?next-2:next-1;
-      } else end=next-2;
+        end=cluster?next-2:next-1;          /* 二合辅音不拆 */
+      } else end=next-2;                    /* 三辅音以上：首辅音归前 */
     }
     if(end<=start) end=start+1;
     groups.push(units.slice(start,end));
     start=end;
   }
-  return groups.filter(g=>g.length).map(g=>{
+  /* C+le：末两个音节若形如「辅音 + le（静音 e）」，把辅音从上一节挪到 le 节 */
+  if(groups.length>=2){
+    const last=groups[groups.length-1], prev=groups[groups.length-2];
+    const lastLetters=last.map(u=>u.t).join('');
+    if(/^[^aeiou]?le$/.test(lastLetters) && last.some(u=>u.silent) && prev.length>1){
+      const moved=prev.pop();
+      last.unshift(moved);
+    }
+  }
+  groups.filter(g=>g.length).forEach(g=>{
     const letters=g.map(u=>u.t).join('');
     const sound=g.filter(u=>!u.silent).map(u=>u.s).filter(Boolean).join(' ');
-    return [letters,sound];
+    out.push([letters,sound]);
   });
+  if(suf) out.push([suf,phAffixSound(suf)]);
+  return out;
 }
 function phonicsGroup(word){
   const w=String(word||'').toLowerCase().replace(/[^a-z]/g,'');
@@ -6005,7 +6050,9 @@ let phSource='builtin', phTbMode=false, phChunkLevel=0, phRoundCorrect=0;
 /* 拼读练习的「音节输入格」：与句子练习同款，一个音节一个格，逐格输入自动判定。
    独立于句子练习的 slots/draft/curTokens，避免模式间互相污染。 */
 let phSlotEls=[], phDraft=[], phTokens=[];
-const PH_TB={stage:'all',book:'all',pack:'all',groupBy:'unit',unit:'all'};
+/* 教材来源直接复用顶部「学习范围」（state.filter），不再单独配置学段/教材/册。
+   PH_TB 只保留拼读自己的组织方式：按单元还是按拼读规律、选中哪个单元/组。 */
+const PH_TB={groupBy:'unit',unit:'all'};
 function renderPhonics(){ phRender(); }
 function phStars(n){
   n=Math.max(0,Math.min(3,Math.round(Number(n)||0)));
@@ -6034,13 +6081,28 @@ function phTbPacks(){
 }
 /* 教材包 JSON 本身不带 id（导入时才生成），这里给一个稳定的显示/分组键 */
 function phPackKey(p){ return String((p&&p.id)||('name:'+((p&&p.name)||'教材包'))); }
+/* 与顶部「学习范围」同源：学段/年级/教材/册别全部读 state.filter，
+   顶部一改，这里的教材单词范围立刻跟着变，不用在拼读里再配一遍。 */
 function phTbFilteredPacks(){
+  const f=state.filter||{};
   return phTbPacks().filter(p=>{
-    if(PH_TB.stage!=='all'&&stageOfGrade(p.gradeId)!==PH_TB.stage) return false;
-    if(PH_TB.book!=='all'&&p.bookId!==PH_TB.book) return false;
-    if(PH_TB.pack!=='all'&&phPackKey(p)!==PH_TB.pack) return false;
+    if(f.stageId&&f.stageId!=='all'&&stageOfGrade(p.gradeId)!==f.stageId) return false;
+    if(f.gradeId&&f.gradeId!=='all'&&!sameGrade(p.gradeId,f.gradeId)) return false;
+    if(f.bookId&&f.bookId!=='all'&&p.bookId!==f.bookId) return false;
+    if(f.volumeId&&f.volumeId!=='all'&&packVolume(p)!==f.volumeId) return false;
     return true;
   });
+}
+/* 顶部学习范围的可读描述，显示在教材来源面板里，提示去顶部调整。 */
+function phScopeText(){
+  const f=state.filter||{};
+  const bits=[];
+  bits.push((f.stageId&&f.stageId!=='all')?(STAGES.find(s=>s.id===f.stageId)||{name:f.stageId}).name:'全部学段');
+  bits.push((f.gradeId&&f.gradeId!=='all')?gradeName(f.gradeId):'全部年级');
+  bits.push((f.bookId&&f.bookId!=='all')?bookName(f.bookId):'全部教材');
+  bits.push((f.volumeId&&f.volumeId!=='all')?
+    ((VOLUMES.find(v=>v.id===f.volumeId)||{name:f.volumeId}).name):'全部册别');
+  return bits.join(' · ');
 }
 /* 词组、缩写、带连字符/撇号的词不做音素拆分，统一在源头过滤 */
 function phWordOk(w){ return /^[a-z]+$/i.test(String(w&&w[0]||'').trim()); }
@@ -6057,7 +6119,7 @@ function phTbUnitRows(){
   return rows;
 }
 function phTbPatternRows(){
-  const scope=[PH_TB.stage,PH_TB.book,PH_TB.pack].join('/'),map=new Map();
+  const f=state.filter||{},scope=[f.stageId,f.gradeId,f.bookId,f.volumeId].join('/'),map=new Map();
   phTbUnitRows().forEach(u=>u.words.forEach(w=>{
     const g=phonicsGroup(w[0]); if(!g) return;
     const key='pt:'+scope+':'+g.id;
@@ -6071,17 +6133,9 @@ function phTbPatternRows(){
 function phTbRows(){ return PH_TB.groupBy==='pattern'?phTbPatternRows():phTbUnitRows(); }
 function phRenderTextbook(){
   const packs=phTbPacks();
-  $('phStage').innerHTML='<option value="all">全部学段</option>'+STAGES.map(s=>
-    '<option value="'+esc(s.id)+'"'+(PH_TB.stage===s.id?' selected':'')+'>'+esc(s.name)+'</option>').join('');
-  $('phStage').value=PH_TB.stage;
-  $('phBook').innerHTML=optionGroups(state.books,stageOfBook,PH_TB.book,'全部教材','all',null,PH_TB.stage);
-  $('phBook').value=PH_TB.book;
-  const visible=packs.filter(p=>(PH_TB.stage==='all'||stageOfGrade(p.gradeId)===PH_TB.stage)&&
-    (PH_TB.book==='all'||p.bookId===PH_TB.book));
-  $('phPack').innerHTML='<option value="all">全部教材包</option>'+visible.map(p=>
-    '<option value="'+esc(phPackKey(p))+'"'+(PH_TB.pack===phPackKey(p)?' selected':'')+'>'+
-    esc((bookName(p.bookId)||'教材')+' · '+packLabel(p))+'</option>').join('');
-  $('phPack').value=PH_TB.pack;
+  const visible=phTbFilteredPacks();
+  $('phScopeNote').innerHTML='教材范围跟随顶部「学习范围」：<b>'+esc(phScopeText())+'</b>'+
+    ' · 当前 '+visible.length+' 个教材包。要换教材，请在页面顶部的「学制 / 学段 / 年级 / 教材 / 册别」里调整，这里会自动同步。';
   $('phGroupBy').value=PH_TB.groupBy;
   const rows=phTbRows(),keys=rows.map(r=>r.key);
   if(PH_TB.unit!=='all'&&keys.indexOf(PH_TB.unit)<0) PH_TB.unit='all';
@@ -6138,7 +6192,8 @@ function phStartTextbook(key){
   }));
   if(!words.length){ toast('这里的词含短语或缩写，暂时无法按拼读练习','bad'); return; }
   const all=!key||key==='all';
-  const gid=all?('all:'+[PH_TB.stage,PH_TB.book,PH_TB.pack,PH_TB.groupBy].join(':')):pick[0].key;
+  const f=state.filter||{};
+  const gid=all?('all:'+[f.stageId,f.gradeId,f.bookId,f.volumeId,PH_TB.groupBy].join(':')):pick[0].key;
   const title='教材单词 · '+(all?('全部'+(PH_TB.groupBy==='pattern'?'拼读组':'单元')):pick[0].name);
   phTbMode=true;
   phBegin({g:{name:'教材单词'},l:{id:gid,t:title,s:'',w:words}},null,title);
@@ -6795,16 +6850,6 @@ function bind(){
   $('phUnitList').addEventListener('click',e=>{
     const row=e.target.closest&&e.target.closest('[data-phunit]');
     if(row) phStartTextbook(row.dataset.phunit);
-  });
-  $('phStage').addEventListener('change',e=>{
-    PH_TB.stage=e.target.value; PH_TB.book='all'; PH_TB.pack='all'; PH_TB.unit='all';
-    phRenderTextbook();
-  });
-  $('phBook').addEventListener('change',e=>{
-    PH_TB.book=e.target.value; PH_TB.pack='all'; PH_TB.unit='all'; phRenderTextbook();
-  });
-  $('phPack').addEventListener('change',e=>{
-    PH_TB.pack=e.target.value; PH_TB.unit='all'; phRenderTextbook();
   });
   $('phGroupBy').addEventListener('change',e=>{
     PH_TB.groupBy=e.target.value==='pattern'?'pattern':'unit'; PH_TB.unit='all'; phRenderTextbook();

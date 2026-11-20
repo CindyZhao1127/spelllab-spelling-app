@@ -1611,6 +1611,58 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     return 'apple→ap·ple / banana→ba·na·na / computer→com·pu·ter 等按音节切分正确';
   });
 
+  check('音节切分补齐主流六规则：短元音后切 / C+le / V/V / 前后缀 / 二合辅音不拆', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      var w=['cabin','seven','never','robin','table','purple','little','lion','diet','replay',
+             'jumping','hopeful','quickly','basket','instruct','children','window'];
+      var r={}; w.forEach(function(x){ r[x]=phonicsChunks(x).map(function(c){return c[0];}); }); return r;})())`));
+    assert(JSON.stringify(o.cabin) === JSON.stringify(['cab','in']) &&
+      JSON.stringify(o.seven) === JSON.stringify(['sev','en']) &&
+      JSON.stringify(o.never) === JSON.stringify(['nev','er']), 'VC/V 短元音后切错误: '+JSON.stringify(o));
+    assert(JSON.stringify(o.table) === JSON.stringify(['ta','ble']) &&
+      JSON.stringify(o.purple) === JSON.stringify(['pur','ple']) &&
+      JSON.stringify(o.little) === JSON.stringify(['lit','tle']), 'C+le 词尾规则错误: '+JSON.stringify(o));
+    assert(JSON.stringify(o.lion) === JSON.stringify(['li','on']) &&
+      JSON.stringify(o.diet) === JSON.stringify(['di','et']), 'V/V 双元音各自成节错误: '+JSON.stringify(o));
+    assert(JSON.stringify(o.replay) === JSON.stringify(['re','play']) &&
+      JSON.stringify(o.jumping) === JSON.stringify(['jump','ing']) &&
+      JSON.stringify(o.hopeful) === JSON.stringify(['hope','ful']) &&
+      JSON.stringify(o.quickly) === JSON.stringify(['quick','ly']), '前后缀边界切分错误: '+JSON.stringify(o));
+    assert(JSON.stringify(o.basket) === JSON.stringify(['bas','ket']) &&
+      JSON.stringify(o.window) === JSON.stringify(['win','dow']), 'VC/CV 二合/中间切错误: '+JSON.stringify(o));
+    assert(JSON.stringify(o.instruct) === JSON.stringify(['in','struct']) &&
+      JSON.stringify(o.children) === JSON.stringify(['chil','dren']), '多辅音归位错误: '+JSON.stringify(o));
+    return 'cab·in / ta·ble / li·on / re·play / jump·ing 等 6 类规则全部命中';
+  });
+
+  check('拼读教材来源复用顶部学习范围：无独立学段/教材/册下拉', () => {
+    /* 结构断言放 Node 侧：教材面板里不再有 phStage/phBook/phPack，改为只读范围说明 */
+    const noDrops = !/id="phStage"/.test(html) && !/id="phBook"/.test(html) && !/id="phPack"/.test(html);
+    const hasNote = /id="phScopeNote"/.test(html);
+    assert(noDrops && hasNote, '拼读仍有独立教材下拉或缺全局范围说明');
+    const o = JSON.parse(run(`(function(){
+      var oldTbs=state.textbooks.slice(), oldFilter=JSON.parse(JSON.stringify(state.filter||{}));
+      state.textbooks=[
+        {id:'pa',name:'小学包',gradeId:'g3',bookId:'ba',volume:'upper',units:[
+          {id:'u',name:'U',words:[['cat','猫']],sentences:[['x']]}]},
+        {id:'pb',name:'初中包',gradeId:'g7',bookId:'bb',volume:'upper',units:[
+          {id:'u',name:'U',words:[['ship','羊']],sentences:[['x']]}]}];
+      state.filter={stageId:'all',gradeId:'all',bookId:'all',volumeId:'all'};
+      var all=phTbUnitRows().length;
+      state.filter.stageId='primary'; var primary=phTbUnitRows().length;
+      var primaryText=phScopeText();
+      state.filter.stageId='junior'; var junior=phTbUnitRows().length;
+      state.filter={stageId:'all',gradeId:'all',bookId:'all',volumeId:'all'};
+      state.filter.bookId='bb'; var byBook=phTbUnitRows().map(function(r){return r.packName;});
+      state.textbooks=oldTbs; state.filter=oldFilter;
+      return JSON.stringify({all:all,primary:primary,junior:junior,byBook:byBook,
+        primaryText:primaryText});})()`));
+    assert(o.all === 2 && o.primary === 1 && o.junior === 1, '拼读范围未跟随顶部学段: '+JSON.stringify(o));
+    assert(o.byBook.length === 1 && o.byBook[0] === '初中包', '拼读范围未跟随顶部教材: '+JSON.stringify(o));
+    assert(/小学/.test(o.primaryText), '范围说明未反映顶部学段: '+JSON.stringify(o));
+    return '顶部学段/教材一改，拼读词库即时同步 · 无独立配置';
+  });
+
   check('教材单词按单元与拼读规律归类并随学段级联', () => {
     const o = JSON.parse(run(`(function(){
       var oldBooks=state.books.slice(), oldTbs=state.textbooks.slice(), oldPh=JSON.parse(JSON.stringify(PH_TB));
@@ -1620,22 +1672,27 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
           {id:'u1',name:'Unit 1 Hello',words:[['cat','猫'],['ship','轮船'],['cake','蛋糕'],["can't",'不能']],sentences:[['x']]}]},
         {id:'pk7',name:'初中七上',gradeId:'g7',bookId:'bjun',volume:'upper',units:[
           {id:'u2',name:'Starter Unit 1',words:[['sheep','羊'],['teacher','老师']],sentences:[['x']]}]}];
-      PH_TB.stage='all'; PH_TB.book='all'; PH_TB.pack='all'; PH_TB.groupBy='unit'; PH_TB.unit='all';
+      var oldFilter=JSON.parse(JSON.stringify(state.filter||{}));
+      state.filter={stageId:'all',gradeId:'all',bookId:'all',volumeId:'all'};
+      PH_TB.groupBy='unit'; PH_TB.unit='all';
       phRenderTextbook();
       var units=phTbUnitRows().map(function(r){return r.name;});
       var allHtml=$('phUnitList').innerHTML;
-      PH_TB.stage='primary'; phRenderTextbook(); var primary=phTbUnitRows().length;
-      PH_TB.stage='junior'; phRenderTextbook(); var junior=phTbUnitRows().length;
-      PH_TB.stage='all'; PH_TB.groupBy='pattern'; phRenderTextbook();
+      var scopeHtml=$('phScopeNote').innerHTML;
+      state.filter.stageId='primary'; phRenderTextbook(); var primary=phTbUnitRows().length;
+      state.filter.stageId='junior'; phRenderTextbook(); var junior=phTbUnitRows().length;
+      state.filter=oldFilter; state.filter={stageId:'all',gradeId:'all',bookId:'all',volumeId:'all'};
+      PH_TB.groupBy='pattern'; phRenderTextbook();
       var groups=phTbRows().map(function(r){return r.name+':'+r.words.length;});
       var patHtml=$('phUnitList').innerHTML;
       state.books=oldBooks; state.textbooks=oldTbs;
       Object.keys(oldPh).forEach(function(k){PH_TB[k]=oldPh[k];});
       phRenderTextbook();
       return JSON.stringify({units:units,primary:primary,junior:junior,groups:groups,
-        unitRow:/data-phunit=/.test(allHtml),patRow:/data-phunit=/.test(patHtml)});})()`));
+        unitRow:/data-phunit=/.test(allHtml),patRow:/data-phunit=/.test(patHtml),
+        scope:/学习范围/.test(scopeHtml)});})()`));
     assert(o.units.length === 2 && o.primary === 1 && o.junior === 1, '教材单元级联错误: '+JSON.stringify(o));
-    assert(o.unitRow && o.patRow, '单元/拼读组列表未渲染: '+JSON.stringify(o));
+    assert(o.unitRow && o.patRow && o.scope, '单元/拼读组列表或全局范围提示未渲染: '+JSON.stringify(o));
     assert(o.groups.some(g => g.indexOf('sh /ʃ/:2') === 0) && o.groups.some(g => g.indexOf('a_e /eɪ/:1') === 0),
       '拼读规律未跨单元合并: '+JSON.stringify(o));
     return '小学/初中各 1 单元 · sh 组合 2 词 · a_e 1 词';
@@ -1650,12 +1707,14 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     });
     const o = JSON.parse(run(`(function(){
       var old=state.textbooks.slice(), oldPh=JSON.parse(JSON.stringify(PH_TB));
+      var oldFilter=JSON.parse(JSON.stringify(state.filter||{}));
       state.textbooks=[${payload}];
-      PH_TB.stage='all'; PH_TB.book='all'; PH_TB.pack='all'; PH_TB.groupBy='unit'; PH_TB.unit='all';
+      state.filter={stageId:'all',gradeId:'all',bookId:'all',volumeId:'all'};
+      PH_TB.groupBy='unit'; PH_TB.unit='all';
       var units=phTbUnitRows(), unitWords=units.reduce(function(n,r){return n+r.words.length;},0);
       PH_TB.groupBy='pattern'; var groups=phTbRows(), groupWords=groups.reduce(function(n,r){return n+r.words.length;},0);
       var names=groups.map(function(r){return r.name;});
-      state.textbooks=old; Object.keys(oldPh).forEach(function(k){PH_TB[k]=oldPh[k];}); phRenderTextbook();
+      state.textbooks=old; state.filter=oldFilter; Object.keys(oldPh).forEach(function(k){PH_TB[k]=oldPh[k];}); phRenderTextbook();
       return JSON.stringify({units:units.length,unitWords:unitWords,groups:groups.length,
         groupWords:groupWords,names:names});})()`));
     assert(o.units === 6 && o.unitWords > 90 && o.groups >= 8 && o.groupWords === o.unitWords,
@@ -1669,9 +1728,11 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     const o = JSON.parse(run(`(function(){
       var oldTbs=state.textbooks.slice(), oldTd=JSON.parse(JSON.stringify(state.phonics.textbookDone));
       var oldHist=state.history.slice(), oldAtt=state.phonics.attempted, oldCor=state.phonics.correct, oldPh=JSON.parse(JSON.stringify(PH_TB));
+      var oldFilter=JSON.parse(JSON.stringify(state.filter||{}));
+      state.filter={stageId:'all',gradeId:'all',bookId:'all',volumeId:'all'};
       state.textbooks=[{id:'pkx',name:'test',gradeId:'g3',bookId:'b_pep',volume:'upper',units:[
         {id:'u',name:'U1',words:[['ship','轮船'],['cake','蛋糕'],['teacher','老师']],sentences:[['x']]}]}];
-      PH_TB.stage='all'; PH_TB.book='all'; PH_TB.pack='pkx'; PH_TB.groupBy='unit'; PH_TB.unit='tb:pkx:u';
+      PH_TB.groupBy='unit'; PH_TB.unit='tb:pkx:u';
       $('phMode').value='listen';
       phRenderTextbook(); phStartTextbook('tb:pkx:u');
       var title=$('phLessonTitle').textContent, listen=$('phChunks').innerHTML;
@@ -1683,7 +1744,7 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
       var hist=state.history.filter(function(x){return x.mode==='phonics'&&x.unit==='tb:pkx:u';}).length;
       var attended=state.phonics.attempted-oldAtt;
       phBack();
-      state.textbooks=oldTbs; state.phonics.textbookDone=oldTd; state.history=oldHist;
+      state.textbooks=oldTbs; state.filter=oldFilter; state.phonics.textbookDone=oldTd; state.history=oldHist;
       state.phonics.attempted=oldAtt; state.phonics.correct=oldCor;
       Object.keys(oldPh).forEach(function(k){PH_TB[k]=oldPh[k];});
       return JSON.stringify({title:title,listen:/ph-blank/.test(listen),hint:/ph-chunk/.test(hint),
