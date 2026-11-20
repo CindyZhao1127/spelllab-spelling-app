@@ -1406,6 +1406,25 @@ body.td-typing #typingView { height: 100%; }
 /* ---------- 自然拼读 ---------- */
 .ph-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
 .ph-head h3{margin:0;font-size:15px;font-weight:800}
+.ph-source{display:flex;gap:6px;margin:10px 0 8px;flex-wrap:wrap}
+.ph-source button{border:1px solid rgba(226,232,255,.14);background:rgba(255,255,255,.04);color:var(--muted);
+  border-radius:9px;padding:6px 12px;font-size:12px;font-weight:800;cursor:pointer}
+.ph-source button.on{border-color:var(--accent);background:rgba(139,123,255,.16);color:var(--text)}
+.ph-source .count-pill{margin-left:4px}
+.ph-tb-group{margin:12px 0 4px;font-size:12px;font-weight:800;color:var(--muted);letter-spacing:.4px}
+.ph-tb-row{display:flex;align-items:center;gap:8px;padding:9px 10px;border:1px solid rgba(226,232,255,.12);
+  border-radius:10px;margin-bottom:6px;cursor:pointer;background:rgba(255,255,255,.03)}
+.ph-tb-row:hover{border-color:var(--accent);background:rgba(139,123,255,.1)}
+.ph-tb-row.done{border-color:rgba(61,220,151,.42)}
+.ph-tb-row .ph-name{flex:1;font-weight:700;font-size:13px;min-width:0}
+.ph-tb-row .ph-desc{display:block;font-size:11px;color:var(--muted);font-weight:400;margin-top:2px;overflow-wrap:anywhere}
+.ph-chunks{display:flex;flex-wrap:wrap;gap:6px;min-height:22px;margin:4px 0 8px}
+.ph-chunk{display:inline-flex;align-items:center;gap:4px;border:1px solid rgba(139,123,255,.32);
+  background:rgba(139,123,255,.1);border-radius:8px;padding:3px 7px;font-size:12px}
+.ph-chunk b{font-weight:800;letter-spacing:.5px}
+.ph-chunk i{font-style:normal;color:#b8adff;font-size:11px}
+.ph-blank{border:1px dashed rgba(226,232,255,.28);border-radius:6px;min-width:18px;
+  text-align:center;color:transparent;padding:2px 5px;font-weight:800}
 .ph-group{margin:12px 0 4px;font-size:12px;font-weight:800;color:var(--muted);letter-spacing:.4px}
 .ph-row{display:flex;align-items:center;gap:8px;padding:9px 10px;border:1px solid rgba(226,232,255,.12);
   border-radius:12px;background:rgba(255,255,255,.04);margin-bottom:6px;cursor:pointer;transition:.16s}
@@ -2062,22 +2081,43 @@ body.td-typing #typingView { height: 100%; }
     <div class="tab-page" id="pagePhonics" hidden>
       <div class="panel">
         <h3>自然拼读 <span class="count-pill" id="phStat">0 / 0</span></h3>
-        <div class="panel-note">内置课程按「字母音 → 短元音 → 长元音 → 辅音组合 → 常见词族」循序渐进。每课用两种练法：<b>听音拼词</b>（听单词发音拼出来）和<b>看词拼读</b>（看中文和音素提示拼出来）。答对得星，进度自动保存。</div>
+        <div class="panel-note">两种来源：<b>内置课程</b>循序渐进打基础；<b>教材单词</b>直接练已导入课本的词，可按单元练，也可按拼读规律自动归类（sh / ee / a_e / 短元音…）。「听音拼词」先按音素分块给出空格，点「拼读提示」再看字母组合和读音；「看词拼读」直接显示。词组与带撇号、连字符的词不参与音素拆分。</div>
+        <div class="ph-source" id="phSourceTabs">
+          <button class="on" data-phsource="builtin">内置课程</button>
+          <button data-phsource="textbook">教材单词 <span class="count-pill" id="phTbStat">0 / 0</span></button>
+        </div>
         <div class="field-row">
           <span class="sel"><select id="phMode"><option value="listen">听音拼词</option><option value="read">看词拼读</option></select></span>
           <button class="mini-btn primary sm" id="phContinue">继续上次</button>
         </div>
-        <div id="phGroupList"></div>
+        <div id="phBuiltinPanel">
+          <div id="phGroupList"></div>
+        </div>
+        <div id="phTextbookPanel" hidden>
+          <div class="field-row">
+            <span class="sel"><select id="phStage" aria-label="学段"></select></span>
+            <span class="sel"><select id="phBook" aria-label="教材"></select></span>
+            <span class="sel"><select id="phPack" aria-label="教材包"></select></span>
+          </div>
+          <div class="field-row">
+            <span class="sel"><select id="phGroupBy" aria-label="分组方式"><option value="unit">按单元</option><option value="pattern">按拼读规律</option></select></span>
+            <span class="sel"><select id="phUnit" aria-label="单元或拼读组"></select></span>
+            <button class="mini-btn primary sm" id="phTbStart">开始练习</button>
+          </div>
+          <div id="phUnitList"></div>
+        </div>
       </div>
       <div class="panel" id="phPracticePanel" hidden>
-        <div class="ph-head"><h3 id="phLessonTitle">—</h3><button class="mini-btn sm" id="phBack">← 课程列表</button></div>
+        <div class="ph-head"><h3 id="phLessonTitle">—</h3><button class="mini-btn sm" id="phBack">← 返回列表</button></div>
         <div class="ph-progress"><i id="phBar"></i></div>
         <div class="ph-prompt" id="phPrompt"></div>
+        <div class="ph-chunks" id="phChunks"></div>
         <div class="ph-hint" id="phHint"></div>
         <input class="gfield" id="phInput" placeholder="拼出英文单词，回车提交" autocomplete="off" spellcheck="false">
         <div class="ph-feedback" id="phFeedback"></div>
         <div class="btn-row tight">
           <button class="mini-btn sm" id="phSpeak">🔊 再听一遍</button>
+          <button class="mini-btn sm" id="phChunkBtn">拼读提示</button>
           <button class="mini-btn sm" id="phShow">看答案</button>
           <button class="mini-btn sm" id="phShuffle">换一题</button>
           <button class="mini-btn primary sm" id="phNext" hidden>下一题 →</button>
@@ -2696,7 +2736,63 @@ function phonicsCount(){
   PHONICS_GROUPS.forEach(g=>g.lessons.forEach(l=>{lessons++;words+=l.w.length;}));
   return {lessons:lessons,words:words};
 }
-const DEFAULT_PHONICS = {done:{},correct:0,attempted:0};
+/* ---------- 教材单词的音素分块与自动归类 ----------
+   把任意英文单词切成「字母组合 / 常见读音」小块，用于拼写提示；
+   同一个词典也用于按 sh / ee / a_e / 短元音 等规律给课本单词分组。
+   音素取最常见读音，仅作学习提示，不追求词典级精确。 */
+const PH_LETTER_SOUND={a:'æ',b:'b',c:'k',d:'d',e:'e',f:'f',g:'g',h:'h',i:'ɪ',j:'dʒ',k:'k',
+  l:'l',m:'m',n:'n',o:'ɒ',p:'p',q:'kw',r:'r',s:'s',t:'t',u:'ʌ',v:'v',w:'w',x:'ks',y:'j',z:'z'};
+const PH_PATTERNS=[
+  ['tion','ʃn'],['ture','tʃə'],['dge','dʒ'],
+  ['sh','ʃ'],['ch','tʃ'],['th','θ'],['ph','f'],['wh','w'],['ck','k'],['ng','ŋ'],['qu','kw'],
+  ['ee','iː'],['ea','iː'],['ai','eɪ'],['ay','eɪ'],['oa','əʊ'],['oo','uː'],['ou','aʊ'],['ow','əʊ'],
+  ['oi','ɔɪ'],['oy','ɔɪ'],['ar','ɑː'],['er','ɜː'],['ir','ɜː'],['or','ɔː'],['ur','ɜː'],
+  ['bl','bl'],['br','br'],['cl','kl'],['cr','kr'],['dr','dr'],['fl','fl'],['fr','fr'],['gl','gl'],
+  ['gr','gr'],['pl','pl'],['pr','pr'],['sl','sl'],['sm','sm'],['sn','sn'],['sp','sp'],['st','st'],
+  ['tr','tr'],['tw','tw']
+];
+const PH_MAGIC={a:'eɪ',e:'iː',i:'aɪ',o:'əʊ',u:'juː'};
+function phMagicE(w){
+  /* a_e / i_e …：末尾 e + 前面一个辅音 + 元音，即「神奇的 e」 */
+  if(w.length<4||w[w.length-1]!=='e') return null;
+  const v=w[w.length-3],c=w[w.length-2];
+  if(!PH_MAGIC[v]||!/[b-df-hj-np-tv-z]/.test(c)) return null;
+  return {v:v,c:c,s:PH_MAGIC[v]};
+}
+function phonicsChunks(word){
+  const src=String(word||'').toLowerCase(),out=[];
+  const me=phMagicE(src),end=me?src.length-1:src.length;
+  let i=0;
+  while(i<end){
+    if(me&&i===src.length-3){ out.push([src[i],me.s]); i++; continue; }
+    let hit=null;
+    for(let k=0;k<PH_PATTERNS.length;k++){
+      const p=PH_PATTERNS[k];
+      if(src.substr(i,p[0].length)===p[0]){ hit=p; break; }
+    }
+    if(hit&&i+hit[0].length<=end){ out.push([hit[0],hit[1]]); i+=hit[0].length; continue; }
+    const ch=src[i];
+    out.push([ch,PH_LETTER_SOUND[ch]||'']); i++;
+  }
+  if(me) out.push(['e','不发音']);
+  /* 连字符、撇号原样保留，不参与拼读提示 */
+  for(;i<src.length;i++) if(!/[a-z]/.test(src[i])) out.push([src[i],'']);
+  return out;
+}
+function phonicsGroup(word){
+  const w=String(word||'').toLowerCase().replace(/[^a-z]/g,'');
+  if(!w) return null;
+  const me=phMagicE(w);
+  if(me) return {id:me.v+'_e',name:me.v+'_e /'+me.s+'/',sound:me.s};
+  for(let k=0;k<PH_PATTERNS.length;k++){
+    const p=PH_PATTERNS[k];
+    if(w.indexOf(p[0])>=0) return {id:p[0],name:p[0]+' /'+p[1]+'/',sound:p[1]};
+  }
+  const v=w.match(/[aeiou]/);
+  if(v) return {id:'short-'+v[0],name:'短元音 '+v[0]+' /'+PH_LETTER_SOUND[v[0]]+'/',sound:PH_LETTER_SOUND[v[0]]};
+  return {id:'other',name:'其他字母组合',sound:''};
+}
+const DEFAULT_PHONICS = {done:{},textbookDone:{},correct:0,attempted:0};
 const DEFAULT_PLAN = {enabled:false,type:'units',target:3,reward:20,penalty:10,perCorrect:1,
   points:0,ledger:[],results:{},since:'',lastEval:''};
 /* lottery.typingPoints：打字练习每局兑换的积分；lottery.dailyLimit：每天最多抽奖次数；
@@ -2900,6 +2996,15 @@ function normalizeState(s){
     const v=out.phonics.done[k]||{};
     out.phonics.done[k]={best:Math.max(0,Math.min(3,Math.round(Number(v.best)||0))),
       right:Math.max(0,Math.round(Number(v.right)||0))};
+  });
+  /* 教材单词拼读进度：键为单元 id 或拼读组 id，与内置课程分开存放 */
+  out.phonics.textbookDone=(out.phonics.textbookDone && typeof out.phonics.textbookDone==='object' &&
+    !Array.isArray(out.phonics.textbookDone))?out.phonics.textbookDone:{};
+  Object.keys(out.phonics.textbookDone).forEach(k=>{
+    const v=out.phonics.textbookDone[k]||{};
+    out.phonics.textbookDone[k]={best:Math.max(0,Math.min(3,Math.round(Number(v.best)||0))),
+      right:Math.max(0,Math.round(Number(v.right)||0)),
+      name:String(v.name||'').slice(0,60)};
   });
   if(out.lottery.log.length>LOTTERY_LOG_LIMIT) out.lottery.log=out.lottery.log.slice(-LOTTERY_LOG_LIMIT);
   /* 打字得分转换：允许 0（纯娱乐不积分）～ 99；默认 1。 */
@@ -5788,9 +5893,12 @@ function offerResume(){
 }
 
 /* ---------------- 自然拼读练习 ----------------
-   课程是内置常量（见 PHONICS_GROUPS），进度存 state.phonics.done[lessonId]={best,right}。
-   两种练法共用同一作答流程：listen 只报发音看中文，read 额外显示音素提示。 */
+   内置课程进度存 state.phonics.done，教材单词进度存 state.phonics.textbookDone，
+   都是 {best:星级,right:完成轮数}。两种来源共用「听音拼词 / 看词拼读」作答流程，
+   教材单词额外提供音素分块提示，并按拼读规律自动归类。 */
 let phLesson=null, phQueue=[], phPos=0, phSolved=false, phLast=null;
+let phSource='builtin', phTbMode=false, phChunkLevel=0, phRoundCorrect=0;
+const PH_TB={stage:'all',book:'all',pack:'all',groupBy:'unit',unit:'all'};
 function renderPhonics(){ phRender(); }
 function phStars(n){
   n=Math.max(0,Math.min(3,Math.round(Number(n)||0)));
@@ -5810,38 +5918,157 @@ function phRender(){
         '<span class="ph-stars">'+phStars(d?d.best:0)+'</span></div>';
     }).join('')
   ).join('');
+  phRenderTextbook();
 }
-function phStart(id,queue){
-  const found=phonicsLesson(id); if(!found) return;
-  phLesson=found;
-  phQueue=(queue&&queue.length)?queue.slice():found.l.w.map((x,i)=>i);
-  phPos=0; phSolved=false; phLast=null;
+/* --- 教材单词来源：学段 → 教材 → 册 → 单元 / 拼读组 --- */
+function phTbPacks(){
+  return (state.textbooks||[]).filter(p=>p&&p.enabled!==false&&
+    (p.units||[]).some(u=>u&&(u.words||[]).some(w=>w&&w[0])));
+}
+/* 教材包 JSON 本身不带 id（导入时才生成），这里给一个稳定的显示/分组键 */
+function phPackKey(p){ return String((p&&p.id)||('name:'+((p&&p.name)||'教材包'))); }
+function phTbFilteredPacks(){
+  return phTbPacks().filter(p=>{
+    if(PH_TB.stage!=='all'&&stageOfGrade(p.gradeId)!==PH_TB.stage) return false;
+    if(PH_TB.book!=='all'&&p.bookId!==PH_TB.book) return false;
+    if(PH_TB.pack!=='all'&&phPackKey(p)!==PH_TB.pack) return false;
+    return true;
+  });
+}
+/* 词组、缩写、带连字符/撇号的词不做音素拆分，统一在源头过滤 */
+function phWordOk(w){ return /^[a-z]+$/i.test(String(w&&w[0]||'').trim()); }
+function phTbUnitRows(){
+  const rows=[],seen=new Set();
+  phTbFilteredPacks().forEach(p=>(p.units||[]).forEach((u,ui)=>{
+    const words=(u.words||[]).filter(phWordOk);
+    if(!words.length) return;
+    const key='tb:'+phPackKey(p)+':'+(u.id||('i'+ui+':'+(u.name||'')));
+    if(seen.has(key)) return; seen.add(key);
+    rows.push({key:key,name:u.name||'未命名单元',packName:p.name||'教材包',
+      words:words,kind:'unit'});
+  }));
+  return rows;
+}
+function phTbPatternRows(){
+  const scope=[PH_TB.stage,PH_TB.book,PH_TB.pack].join('/'),map=new Map();
+  phTbUnitRows().forEach(u=>u.words.forEach(w=>{
+    const g=phonicsGroup(w[0]); if(!g) return;
+    const key='pt:'+scope+':'+g.id;
+    let row=map.get(key);
+    if(!row){ row={key:key,name:g.name,words:[],kind:'pattern',packName:'按拼读规律归类'}; map.set(key,row); }
+    const en=String(w[0]).toLowerCase();
+    if(!row.words.some(x=>String(x[0]).toLowerCase()===en)) row.words.push(w);
+  }));
+  return Array.from(map.values()).sort((a,b)=>b.words.length-a.words.length||a.name.localeCompare(b.name,'zh'));
+}
+function phTbRows(){ return PH_TB.groupBy==='pattern'?phTbPatternRows():phTbUnitRows(); }
+function phRenderTextbook(){
+  const packs=phTbPacks();
+  $('phStage').innerHTML='<option value="all">全部学段</option>'+STAGES.map(s=>
+    '<option value="'+esc(s.id)+'"'+(PH_TB.stage===s.id?' selected':'')+'>'+esc(s.name)+'</option>').join('');
+  $('phStage').value=PH_TB.stage;
+  $('phBook').innerHTML=optionGroups(state.books,stageOfBook,PH_TB.book,'全部教材','all',null,PH_TB.stage);
+  $('phBook').value=PH_TB.book;
+  const visible=packs.filter(p=>(PH_TB.stage==='all'||stageOfGrade(p.gradeId)===PH_TB.stage)&&
+    (PH_TB.book==='all'||p.bookId===PH_TB.book));
+  $('phPack').innerHTML='<option value="all">全部教材包</option>'+visible.map(p=>
+    '<option value="'+esc(phPackKey(p))+'"'+(PH_TB.pack===phPackKey(p)?' selected':'')+'>'+
+    esc((bookName(p.bookId)||'教材')+' · '+packLabel(p))+'</option>').join('');
+  $('phPack').value=PH_TB.pack;
+  $('phGroupBy').value=PH_TB.groupBy;
+  const rows=phTbRows(),keys=rows.map(r=>r.key);
+  if(PH_TB.unit!=='all'&&keys.indexOf(PH_TB.unit)<0) PH_TB.unit='all';
+  $('phUnit').innerHTML='<option value="all">全部'+(PH_TB.groupBy==='pattern'?'拼读组':'单元')+'（'+rows.length+'）</option>'+
+    rows.map(r=>'<option value="'+esc(r.key)+'"'+(PH_TB.unit===r.key?' selected':'')+'>'+
+      esc(r.name)+' · '+r.words.length+' 词</option>').join('');
+  $('phUnit').value=PH_TB.unit;
+  const td=state.phonics.textbookDone||{};
+  const count=Object.keys(td).filter(k=>td[k]&&td[k].best>0).length;
+  $('phTbStat').textContent=count+' / '+rows.length;
+  const wordCount=rows.reduce((n,r)=>n+r.words.length,0);
+  $('phUnitList').innerHTML=rows.length?
+    '<div class="ph-tb-group">'+(PH_TB.groupBy==='pattern'?'按拼读规律自动归类':'当前范围')+' · 共 '+wordCount+' 词</div>'+
+    rows.map(r=>{
+      const d=td[r.key],stars=d&&d.best?d.best:0;
+      return '<div class="ph-tb-row'+(stars?' done':'')+'" data-phunit="'+esc(r.key)+'">'+
+        '<span class="ph-name">'+esc(r.name)+'<span class="ph-desc">'+esc(r.packName)+' · '+r.words.length+' 词</span></span>'+
+        '<span class="ph-stars">'+phStars(stars)+'</span></div>';
+    }).join(''):'<div class="empty">'+(packs.length?
+      '当前范围没有带单词的教材单元，换个筛选试试。':'还没有导入教材包。到「教材库」导入课本词表后，就能在这里按拼读练习。')+'</div>';
+}
+function phSourceSwitch(v){
+  phSource=v==='textbook'?'textbook':'builtin';
+  $('phBuiltinPanel').hidden=phSource!=='builtin';
+  $('phTextbookPanel').hidden=phSource!=='textbook';
+  const tabs=$('phSourceTabs').querySelectorAll?$('phSourceTabs').querySelectorAll('button'):[];
+  for(let i=0;i<tabs.length;i++) tabs[i].classList.toggle('on',tabs[i].dataset.phsource===phSource);
+  renderPhonics();
+}
+function phBegin(lesson,queue,title){
+  phLesson=lesson;
+  phQueue=(queue&&queue.length)?queue.slice():lesson.l.w.map((x,i)=>i);
+  phPos=0; phSolved=false; phLast=null; phChunkLevel=0; phRoundCorrect=0;
   $('phPracticePanel').hidden=false;
-  $('phLessonTitle').textContent=found.g.name+' · '+found.l.t;
+  $('phLessonTitle').textContent=title||(lesson.g.name+' · '+lesson.l.t);
   phShow();
   try{ $('phInput').focus(); }catch(e){}
 }
+function phStart(id,queue){
+  const found=phonicsLesson(id); if(!found) return;
+  phTbMode=false; phBegin(found,queue,found.g.name+' · '+found.l.t);
+}
+function phStartTextbook(key){
+  const rows=phTbRows();
+  const pick=(key&&key!=='all')?rows.filter(r=>r.key===key):rows;
+  if(!pick.length){ toast('当前范围没有可练习的单词','bad'); return; }
+  const seen=new Set(),words=[];
+  pick.forEach(r=>r.words.forEach(w=>{
+    const en=String(w[0]||'').trim();
+    if(!phWordOk(w)) return;
+    const k=en.toLowerCase();
+    if(seen.has(k)) return; seen.add(k);
+    words.push([en,String(w[1]||'')]);
+  }));
+  if(!words.length){ toast('这里的词含短语或缩写，暂时无法按拼读练习','bad'); return; }
+  const all=!key||key==='all';
+  const gid=all?('all:'+[PH_TB.stage,PH_TB.book,PH_TB.pack,PH_TB.groupBy].join(':')):pick[0].key;
+  const title='教材单词 · '+(all?('全部'+(PH_TB.groupBy==='pattern'?'拼读组':'单元')):pick[0].name);
+  phTbMode=true;
+  phBegin({g:{name:'教材单词'},l:{id:gid,t:title,s:'',w:words}},null,title);
+}
 function phShuffle(){
   if(!phLesson) return;
-  phQueue=phQueue.slice().sort(()=>Math.random()-0.5); phPos=0; phShow();
+  phQueue=phQueue.slice().sort(()=>Math.random()-0.5); phPos=0; phRoundCorrect=0; phShow();
+}
+/* 音素分块：听音模式先只给块数，点「拼读提示」后显示字母组合与音素；
+   看词拼读模式直接显示，帮助把中文提示和字形对应起来。 */
+function phRenderChunks(){
+  if(!phLast){ $('phChunks').innerHTML=''; return; }
+  const show=phChunkLevel>0||$('phMode').value==='read'||phSolved;
+  $('phChunks').innerHTML=phonicsChunks(phLast[0]).map(c=>show?
+    '<span class="ph-chunk"><b>'+esc(c[0])+'</b>'+(c[1]?'<i>/'+esc(c[1])+'/</i>':'')+'</span>':
+    '<span class="ph-blank">'+'_'.repeat(Math.max(1,c[0].length))+'</span>').join('');
 }
 function phShow(){
   if(!phLesson || !phQueue.length) return;
   const idx=phQueue[phPos%phQueue.length];
   const item=phLesson.l.w[idx]||phLesson.l.w[0];
-  phLast=item; phSolved=false;
+  phLast=item; phSolved=false; phChunkLevel=0;
   const mode=$('phMode').value==='read'?'read':'listen';
-  $('phPrompt').innerHTML=(mode==='listen'?'听发音，拼出这个英文单词':'看中文，结合音素提示拼出单词')+
+  $('phPrompt').innerHTML=(mode==='listen'?'听发音，按音素分块拼出这个英文单词':'看中文，结合音素分块拼出单词')+
     '<b>'+esc(item[1])+'</b>';
-  $('phHint').textContent=mode==='read'?('音素 /'+(phLesson.l.s||'')+'/ · 首字母 '+item[0][0].toUpperCase()):'';
+  const ph=phLesson.l.s||phonicsChunks(item[0]).map(c=>c[1]).filter(Boolean).join(' ');
+  $('phHint').textContent=mode==='read'?('音素 /'+ph+'/ · 首字母 '+item[0][0].toUpperCase()):'';
   $('phInput').value=''; $('phInput').disabled=false;
   $('phFeedback').textContent=''; $('phFeedback').className='ph-feedback';
   $('phNext').hidden=true;
   $('phBar').style.width=Math.round((phPos+1)/phQueue.length*100)+'%';
+  phRenderChunks();
   if(mode==='listen') phSpeak();
   try{ $('phInput').focus(); }catch(e){}
 }
 function phSpeak(){ if(phLast && typeof speak==='function') speak(phLast[0]); }
+function phStore(){ return phTbMode?state.phonics.textbookDone:state.phonics.done; }
 function phCheck(){
   if(!phLesson || !phLast || phSolved) return;
   const raw=String($('phInput').value||'').trim();
@@ -5850,11 +6077,13 @@ function phCheck(){
   state.phonics.attempted++;
   if(ok){ state.phonics.correct++; SFX.correct(); }
   else SFX.wrong();
-  phSolved=true; $('phInput').disabled=true; $('phNext').hidden=false;
+  phSolved=true; if(ok) phRoundCorrect++;
+  $('phInput').disabled=true; $('phNext').hidden=false;
   $('phFeedback').textContent=ok?'✔ 拼对了！'+phLast[0]:'✘ 正确答案：'+phLast[0];
   $('phFeedback').className='ph-feedback '+(ok?'ok':'bad');
+  phRenderChunks();
   if(ok) phSpeak();
-  /* 每答对一次记一条练习记录，和拼写练习共用打卡日历 */
+  /* 每答一次记一条练习记录，和拼写练习共用打卡日历 */
   try{ addHistory({mode:'phonics',unit:phLesson.l.id,cn:phLast[1],en:phLast[0],ok:ok,ms:0,bad:ok?0:1}); }catch(e){}
   saveState();
 }
@@ -5863,24 +6092,36 @@ function phAdvance(){
   if(!phSolved){ phCheck(); return; }
   phPos=(phPos+1)%phQueue.length;
   if(phPos===0){
-    const d=state.phonics.done[phLesson.l.id]||{best:0,right:0};
+    const id=phLesson.l.id,store=phStore();
+    const d=store[id]||{best:0,right:0,name:''};
+    const rate=phQueue.length?phRoundCorrect/phQueue.length:0;
+    const stars=rate>=0.9?3:rate>=0.6?2:1;
+    d.best=Math.max(Number(d.best)||0,stars);
     d.right=Math.max(0,Math.round(Number(d.right)||0)+1);
-    state.phonics.done[phLesson.l.id]=d;
-    saveState();
-    toast('这一轮完成，继续加油！','ok');
+    if(phTbMode) d.name=String(phLesson.l.t||'').slice(0,60);
+    store[id]=d; phRoundCorrect=0; saveState();
+    toast('这一轮完成，获得 '+stars+' 星 · 正确 '+Math.round(rate*100)+'%','ok');
   }
   phShow();
 }
 function phFinishLesson(){
   if(!phLesson) return;
-  const right=phQueue.length, id=phLesson.l.id;
-  const d=state.phonics.done[id]||{best:0,right:0};
-  d.best=Math.max(d.best,3); d.right=Math.max(0,Math.round(Number(d.right)||0));
-  state.phonics.done[id]=d; saveState();
-  phRender(); phBack(); toast('本课已完成，获得 3 星','ok');
+  const id=phLesson.l.id,store=phStore();
+  const d=store[id]||{best:0,right:0,name:''};
+  d.best=Math.max(Number(d.best)||0,3);
+  d.right=Math.max(0,Math.round(Number(d.right)||0));
+  if(phTbMode) d.name=String(phLesson.l.t||'').slice(0,60);
+  store[id]=d; saveState();
+  phBack(); toast('本课已完成，获得 3 星','ok');
 }
-function phBack(){ $('phPracticePanel').hidden=true; phLesson=null; phLast=null; phRender(); }
+function phBack(){ $('phPracticePanel').hidden=true; phLesson=null; phLast=null; phTbMode=false; phRender(); }
 function phContinue(){
+  if(phSource==='textbook'){
+    const rows=phTbRows(),done=state.phonics.textbookDone||{};
+    const next=rows.find(r=>!(done[r.key]&&done[r.key].best>0));
+    if(!next){ toast('当前范围的教材单词都练过了，可以换一组或选「全部」复习','ok'); return; }
+    PH_TB.unit=next.key; phRenderTextbook(); phStartTextbook(next.key); return;
+  }
   const ids=Object.keys(state.phonics.done);
   let next=null;
   PHONICS_GROUPS.forEach(g=>g.lessons.forEach(l=>{ if(!next && ids.indexOf(l.id)<0) next=l.id; }));
@@ -6315,15 +6556,42 @@ function bind(){
   });
 
   /* 自然拼读 */
+  $('phSourceTabs').addEventListener('click',e=>{
+    const b=e.target.closest&&e.target.closest('[data-phsource]');
+    if(b) phSourceSwitch(b.dataset.phsource);
+  });
   $('phGroupList').addEventListener('click',e=>{
     const row=e.target.closest&&e.target.closest('[data-ph]');
     if(row) phStart(row.dataset.ph);
   });
+  $('phUnitList').addEventListener('click',e=>{
+    const row=e.target.closest&&e.target.closest('[data-phunit]');
+    if(row) phStartTextbook(row.dataset.phunit);
+  });
+  $('phStage').addEventListener('change',e=>{
+    PH_TB.stage=e.target.value; PH_TB.book='all'; PH_TB.pack='all'; PH_TB.unit='all';
+    phRenderTextbook();
+  });
+  $('phBook').addEventListener('change',e=>{
+    PH_TB.book=e.target.value; PH_TB.pack='all'; PH_TB.unit='all'; phRenderTextbook();
+  });
+  $('phPack').addEventListener('change',e=>{
+    PH_TB.pack=e.target.value; PH_TB.unit='all'; phRenderTextbook();
+  });
+  $('phGroupBy').addEventListener('change',e=>{
+    PH_TB.groupBy=e.target.value==='pattern'?'pattern':'unit'; PH_TB.unit='all'; phRenderTextbook();
+  });
+  $('phUnit').addEventListener('change',e=>{ PH_TB.unit=e.target.value; phRenderTextbook(); });
+  $('phTbStart').addEventListener('click',()=>phStartTextbook(PH_TB.unit));
   $('phContinue').addEventListener('click',phContinue);
   $('phBack').addEventListener('click',phBack);
   $('phSpeak').addEventListener('click',phSpeak);
+  $('phChunkBtn').addEventListener('click',()=>{ phChunkLevel=phChunkLevel?0:1; phRenderChunks(); });
   $('phShow').addEventListener('click',()=>{
-    if(phLast){ $('phFeedback').textContent='答案：'+phLast[0]; $('phFeedback').className='ph-feedback ok'; }
+    if(phLast){
+      phChunkLevel=1; phRenderChunks();
+      $('phFeedback').textContent='答案：'+phLast[0]; $('phFeedback').className='ph-feedback ok';
+    }
   });
   $('phShuffle').addEventListener('click',phShuffle);
   $('phNext').addEventListener('click',phAdvance);

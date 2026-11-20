@@ -1464,7 +1464,7 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
 
   check('自然拼读：两种练法、答对计分、答错看答案，进度落盘', () => {
     run(`(function(){
-      state.phonics={done:{},correct:0,attempted:0};
+      state.phonics=normalizeState({phonics:{done:{},correct:0,attempted:0}}).phonics;
       phStart('fm-at');
       $('phMode').value='listen';
     })()`);
@@ -1543,6 +1543,111 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     assert(o.fresh === true && o.on === true && o.checkbox && o.label, '自动兑换开关缺失: '+JSON.stringify(o));
     assert(run("DEFAULT_PRIZES.find(p=>p.id==='p5').autoRedeem") === true, '默认「再抽一次」未设自动兑换');
     return '新奖默认关闭 · 可勾选 · 默认再抽一次自动兑换';
+  });
+
+  check('教材单词音素分块与拼读归类', () => {
+    const o = JSON.parse(run(`JSON.stringify({
+      ship:phonicsChunks('ship'), cake:phonicsChunks('cake'), teacher:phonicsChunks('teacher'),
+      sheep:phonicsGroup('sheep').name, cakeGroup:phonicsGroup('cake').name,
+      catGroup:phonicsGroup('cat').name})`));
+    assert(JSON.stringify(o.ship) === JSON.stringify([['sh','ʃ'],['i','ɪ'],['p','p']]), 'sh 分块错误: '+JSON.stringify(o));
+    assert(JSON.stringify(o.cake) === JSON.stringify([['c','k'],['a','eɪ'],['k','k'],['e','不发音']]), '神奇 e 分块错误: '+JSON.stringify(o));
+    assert(JSON.stringify(o.teacher) === JSON.stringify([['t','t'],['ea','iː'],['ch','tʃ'],['er','ɜː']]), 'ea/ch/er 分块错误: '+JSON.stringify(o));
+    assert(o.sheep === 'sh /ʃ/' && o.cakeGroup === 'a_e /eɪ/' && o.catGroup === '短元音 a /æ/', '归类错误: '+JSON.stringify(o));
+    return 'sh/ea/ch/a_e/短元音 均正确识别';
+  });
+
+  check('教材单词按单元与拼读规律归类并随学段级联', () => {
+    const o = JSON.parse(run(`(function(){
+      var oldBooks=state.books.slice(), oldTbs=state.textbooks.slice(), oldPh=JSON.parse(JSON.stringify(PH_TB));
+      state.books=[{id:'bpep',name:'人教版 PEP（三年级起点）'},{id:'bjun',name:'人教版初中英语'}];
+      state.textbooks=[
+        {id:'pk3',name:'PEP三上',gradeId:'g3',bookId:'bpep',volume:'upper',units:[
+          {id:'u1',name:'Unit 1 Hello',words:[['cat','猫'],['ship','轮船'],['cake','蛋糕'],["can't",'不能']],sentences:[['x']]}]},
+        {id:'pk7',name:'初中七上',gradeId:'g7',bookId:'bjun',volume:'upper',units:[
+          {id:'u2',name:'Starter Unit 1',words:[['sheep','羊'],['teacher','老师']],sentences:[['x']]}]}];
+      PH_TB.stage='all'; PH_TB.book='all'; PH_TB.pack='all'; PH_TB.groupBy='unit'; PH_TB.unit='all';
+      phRenderTextbook();
+      var units=phTbUnitRows().map(function(r){return r.name;});
+      var allHtml=$('phUnitList').innerHTML;
+      PH_TB.stage='primary'; phRenderTextbook(); var primary=phTbUnitRows().length;
+      PH_TB.stage='junior'; phRenderTextbook(); var junior=phTbUnitRows().length;
+      PH_TB.stage='all'; PH_TB.groupBy='pattern'; phRenderTextbook();
+      var groups=phTbRows().map(function(r){return r.name+':'+r.words.length;});
+      var patHtml=$('phUnitList').innerHTML;
+      state.books=oldBooks; state.textbooks=oldTbs;
+      Object.keys(oldPh).forEach(function(k){PH_TB[k]=oldPh[k];});
+      phRenderTextbook();
+      return JSON.stringify({units:units,primary:primary,junior:junior,groups:groups,
+        unitRow:/data-phunit=/.test(allHtml),patRow:/data-phunit=/.test(patHtml)});})()`));
+    assert(o.units.length === 2 && o.primary === 1 && o.junior === 1, '教材单元级联错误: '+JSON.stringify(o));
+    assert(o.unitRow && o.patRow, '单元/拼读组列表未渲染: '+JSON.stringify(o));
+    assert(o.groups.some(g => g.indexOf('sh /ʃ/:2') === 0) && o.groups.some(g => g.indexOf('a_e /eɪ/:1') === 0),
+      '拼读规律未跨单元合并: '+JSON.stringify(o));
+    return '小学/初中各 1 单元 · sh 组合 2 词 · a_e 1 词';
+  });
+
+  check('真实课本包可直接按拼读规律分组', () => {
+    const real = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'textbooks', 'packs', 'pep-3a.json'), 'utf8')).packs[0];
+    const payload = JSON.stringify({
+      id:real.id, name:real.name, gradeId:real.gradeId, bookId:real.bookId,
+      volume:real.volume, enabled:true,
+      units:real.units.map(u => ({id:u.id, name:u.name, words:u.words, sentences:[]}))
+    });
+    const o = JSON.parse(run(`(function(){
+      var old=state.textbooks.slice(), oldPh=JSON.parse(JSON.stringify(PH_TB));
+      state.textbooks=[${payload}];
+      PH_TB.stage='all'; PH_TB.book='all'; PH_TB.pack='all'; PH_TB.groupBy='unit'; PH_TB.unit='all';
+      var units=phTbUnitRows(), unitWords=units.reduce(function(n,r){return n+r.words.length;},0);
+      PH_TB.groupBy='pattern'; var groups=phTbRows(), groupWords=groups.reduce(function(n,r){return n+r.words.length;},0);
+      var names=groups.map(function(r){return r.name;});
+      state.textbooks=old; Object.keys(oldPh).forEach(function(k){PH_TB[k]=oldPh[k];}); phRenderTextbook();
+      return JSON.stringify({units:units.length,unitWords:unitWords,groups:groups.length,
+        groupWords:groupWords,names:names});})()`));
+    assert(o.units === 6 && o.unitWords > 90 && o.groups >= 8 && o.groupWords === o.unitWords,
+      '真实教材包分组异常: '+JSON.stringify(o));
+    assert(o.names.some(n => n.indexOf('sh /') === 0) || o.names.some(n => n.indexOf('短元音') === 0),
+      '未识别常见拼读组: '+JSON.stringify(o));
+    return o.units+' 单元 / '+o.unitWords+' 词 → '+o.groups+' 个拼读组';
+  });
+
+  check('教材单词拼读练习：分块提示、答题、星级进度与打卡', () => {
+    const o = JSON.parse(run(`(function(){
+      var oldTbs=state.textbooks.slice(), oldTd=JSON.parse(JSON.stringify(state.phonics.textbookDone));
+      var oldHist=state.history.slice(), oldAtt=state.phonics.attempted, oldCor=state.phonics.correct, oldPh=JSON.parse(JSON.stringify(PH_TB));
+      state.textbooks=[{id:'pkx',name:'test',gradeId:'g3',bookId:'b_pep',volume:'upper',units:[
+        {id:'u',name:'U1',words:[['ship','轮船'],['cake','蛋糕'],['teacher','老师']],sentences:[['x']]}]}];
+      PH_TB.stage='all'; PH_TB.book='all'; PH_TB.pack='pkx'; PH_TB.groupBy='unit'; PH_TB.unit='tb:pkx:u';
+      $('phMode').value='listen';
+      phRenderTextbook(); phStartTextbook('tb:pkx:u');
+      var title=$('phLessonTitle').textContent, listen=$('phChunks').innerHTML;
+      $('phChunkBtn').listeners.click[0](); var hint=$('phChunks').innerHTML;
+      $('phInput').value=phLast[0]; phCheck(); var ok=$('phFeedback').textContent;
+      phAdvance(); $('phInput').value='wrong'; phCheck(); var bad=$('phFeedback').textContent;
+      phAdvance(); $('phInput').value=phLast[0]; phCheck(); phAdvance();
+      var done=state.phonics.textbookDone['tb:pkx:u'];
+      var hist=state.history.filter(function(x){return x.mode==='phonics'&&x.unit==='tb:pkx:u';}).length;
+      var attended=state.phonics.attempted-oldAtt;
+      phBack();
+      state.textbooks=oldTbs; state.phonics.textbookDone=oldTd; state.history=oldHist;
+      state.phonics.attempted=oldAtt; state.phonics.correct=oldCor;
+      Object.keys(oldPh).forEach(function(k){PH_TB[k]=oldPh[k];});
+      return JSON.stringify({title:title,listen:/ph-blank/.test(listen),hint:/ph-chunk/.test(hint),
+        ok:ok,bad:bad,done:done,hist:hist,attended:attended});})()`));
+    assert(o.title === '教材单词 · U1' && o.listen && o.hint, '分块提示未切换: '+JSON.stringify(o));
+    assert(o.ok.indexOf('拼对了') >= 0 && o.bad.indexOf('正确答案') >= 0, '答题判定错误: '+JSON.stringify(o));
+    assert(o.done && o.done.best === 2 && o.done.right === 1, '星级/轮数进度错误: '+JSON.stringify(o));
+    assert(o.hist === 3 && o.attended === 3, '练习记录或统计未写入: '+JSON.stringify(o));
+    return '2/3 正确得 2 星 · 3 条记录 · 提示可切换';
+  });
+
+  check('旧存档自动补齐教材拼读进度命名空间', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      var s=normalizeState({phonics:{done:{},correct:1,attempted:2}});
+      return {td:s.phonics.textbookDone,correct:s.phonics.correct,attempted:s.phonics.attempted};})())`));
+    assert(o.td && typeof o.td === 'object' && !Array.isArray(o.td) && o.correct === 1 && o.attempted === 2,
+      '旧存档归一化失败: '+JSON.stringify(o));
+    return 'textbookDone 补齐且原统计保留';
   });
 
   const failed = results.filter(r => r[1] === 'FAIL');
