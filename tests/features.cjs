@@ -1697,7 +1697,8 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
   check('词典校订音节表修正 gingerbread 等易错词：gin·ger·bread', () => {
     const o = JSON.parse(run(`JSON.stringify((function(){
       var w=['gingerbread','restaurant','beautiful','readable','reading','family','dictionary',
-             'breakfast','bread','tiger'];
+             'breakfast','bread','tiger','kilometre','kilometer','metre','meter',
+             'millimetre','millimeter'];
       var r={}; w.forEach(function(x){ r[x]=phonicsChunks(x); }); return r;})())`));
     const letters = word => o[word].map(c=>c[0]);
     assert(JSON.stringify(letters('gingerbread')) === JSON.stringify(['gin','ger','bread']),
@@ -1713,7 +1714,13 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     assert(JSON.stringify(letters('breakfast')) === JSON.stringify(['break','fast']) &&
       letters('bread').length===1 && JSON.stringify(letters('tiger'))===JSON.stringify(['ti','ger']),
       '常见易错词校订缺失: '+JSON.stringify(o));
-    return 'gin·ger·bread / read·able / fam·i·ly / dic·tion·ary 均按词典校订表切分';
+    assert(JSON.stringify(letters('kilometre')) === JSON.stringify(['kil','o','me','tre']) &&
+      JSON.stringify(letters('kilometer')) === JSON.stringify(['ki','lo','me','ter']) &&
+      JSON.stringify(letters('metre')) === JSON.stringify(['me','tre']) &&
+      JSON.stringify(letters('millimetre')) === JSON.stringify(['mil','li','me','tre']),
+      '公制单位词未按英美拼写分别校订: '+JSON.stringify(o));
+    assert(o.kilometre[2][1].indexOf('m iː')>=0, 'kilometre 的 me 不应提示短音 e: '+JSON.stringify(o.kilometre));
+    return 'gin·ger·bread / read·able / kil·o·me·tre 等均按词典校订表切分';
   });
 
   check('拼读教材来源复用顶部学习范围：无独立学段/教材/册下拉', () => {

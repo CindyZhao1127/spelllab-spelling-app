@@ -76,6 +76,18 @@
       "cab",
       "in"
     ],
+    "centimeter": [
+      "cen",
+      "ti",
+      "me",
+      "ter"
+    ],
+    "centimetre": [
+      "cen",
+      "ti",
+      "me",
+      "tre"
+    ],
     "children": [
       "chil",
       "dren"
@@ -126,6 +138,18 @@
       "jump",
       "ing"
     ],
+    "kilometer": [
+      "ki",
+      "lo",
+      "me",
+      "ter"
+    ],
+    "kilometre": [
+      "kil",
+      "o",
+      "me",
+      "tre"
+    ],
     "lion": [
       "li",
       "on"
@@ -133,6 +157,26 @@
     "little": [
       "lit",
       "tle"
+    ],
+    "meter": [
+      "me",
+      "ter"
+    ],
+    "metre": [
+      "me",
+      "tre"
+    ],
+    "millimeter": [
+      "mil",
+      "li",
+      "me",
+      "ter"
+    ],
+    "millimetre": [
+      "mil",
+      "li",
+      "me",
+      "tre"
     ],
     "never": [
       "nev",

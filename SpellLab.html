@@ -2941,10 +2941,13 @@ function phAffixSound(t){
 const PH_SYLLABLE_DICT={
   ability:'a|bil|i|ty', activity:'ac|tiv|i|ty', apple:'ap|ple', autumn:'au|tumn',
   banana:'ba|na|na', basket:'bas|ket', beautiful:'beau|ti|ful', because:'be|cause',
-  blue:'blue', bread:'bread', breakfast:'break|fast', cabin:'cab|in', children:'chil|dren',
+  blue:'blue', bread:'bread', breakfast:'break|fast', cabin:'cab|in',
+  centimeter:'cen|ti|me|ter', centimetre:'cen|ti|me|tre', children:'chil|dren',
   computer:'com|pu|ter', dictionary:'dic|tion|ary', diet:'di|et', family:'fam|i|ly',
   gingerbread:'gin|ger|bread', happy:'hap|py', hopeful:'hope|ful', information:'in|for|ma|tion',
-  instruct:'in|struct', jumping:'jump|ing', lion:'li|on', little:'lit|tle', never:'nev|er',
+  instruct:'in|struct', jumping:'jump|ing', kilometer:'ki|lo|me|ter',
+  kilometre:'kil|o|me|tre', lion:'li|on', little:'lit|tle', meter:'me|ter', metre:'me|tre',
+  millimeter:'mil|li|me|ter', millimetre:'mil|li|me|tre', never:'nev|er',
   purple:'pur|ple', quickly:'quick|ly', rabbit:'rab|bit', readable:'read|able',
   reading:'read|ing', ready:'read|y', real:'real', really:'re|al|ly', recent:'re|cent',
   replay:'re|play', respect:'re|spect', rest:'rest', result:'re|sult',
@@ -2954,6 +2957,9 @@ const PH_SYLLABLE_DICT={
 /* 少量发音例外：字母组合与常见音不一致时，避免拆分正确但提示音误导。 */
 const PH_SOUND_FIX={
   bread:'b r e d', 'breakfast|0':'b r e k', 'gingerbread|2':'b r e d',
+  'centimeter|2':'m iː', 'centimetre|2':'m iː', 'kilometer|2':'m iː',
+  'kilometre|2':'m iː', 'meter|0':'m iː', 'metre|0':'m iː',
+  'millimeter|2':'m iː', 'millimetre|2':'m iː',
   'ready|0':'r e d', 'ready|1':'ɪ', 'readable|0':'r iː d',
   'reading|0':'r iː d', 'tiger|0':'t aɪ'
 };
