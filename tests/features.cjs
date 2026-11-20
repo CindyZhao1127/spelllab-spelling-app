@@ -1481,6 +1481,31 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     return '顶栏模式按钮 + 主视图切换 + 侧边栏入口 + 音节槽大字号均正常';
   });
 
+  check('拼读练习界面与句子练习同款：大字题干 + 音节输入格 + 成功卡片', () => {
+    /* 结构性断言（Node 侧，沙箱无 html 变量）：练习区是 stage，含句子练习同款元素 */
+    const stage = /<section[^>]*class="stage"[^>]*id="phPracticePanel"/.test(html) ||
+                  /<section[^>]*id="phPracticePanel"[^>]*class="stage"/.test(html);
+    const qBig = /class="question-cn" id="phQuestionCn"/.test(html);
+    const slots = /class="slots" id="phSlots"/.test(html);
+    const card = /class="success-card" id="phSuccessCard"/.test(html);
+    assert(stage && qBig && slots && card, '拼读练习区不是句子练习同款 stage/题干/格子/成功卡片');
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      state.phonics=normalizeState({phonics:{done:{},correct:0,attempted:0}}).phonics;
+      /* 用多音节词 apple(ap·ple) 验证按音节分成多个输入格 */
+      phBegin({g:{name:'测试'},l:{id:'test-multi',t:'多音节',s:'',w:[['apple','苹果']]}},null,'多音节');
+      var chunks=phonicsChunks(phLast[0]);
+      phBuildSlots(phLast[0],false);
+      var n=phTokens.length, kinds=phTokens.map(function(t){return t.word;});
+      /* 逐格判定内核：把每个音节拼对后 phCommitSlot 返回 true */
+      var committed=phTokens.map(function(t,i){ phDraft[i]=t.word.slice(Number(phSlotEls[i].dataset.given)||0); return phCommitSlot(i); });
+      var question=$('phQuestionCn').textContent;
+      return {n:n,kinds:kinds,chunks:chunks.map(function(c){return c[0];}),
+        committed:committed,question:question,cardExists:!!$('phSuccessCard')};})())`));
+    assert(o.n >= 2 && JSON.stringify(o.kinds) === JSON.stringify(o.chunks), '多音节词未按音节分成多个格: '+JSON.stringify(o));
+    assert(o.committed.every(Boolean), '逐格判定内核失败: '+JSON.stringify(o));
+    return 'stage 同款界面 + apple 分成 '+o.n+' 个音节输入格 + 逐格判定内核正常';
+  });
+
   check('自然拼读：两种练法、答对计分、答错看答案，进度落盘', () => {
     run(`(function(){
       state.phonics=normalizeState({phonics:{done:{},correct:0,attempted:0}}).phonics;
