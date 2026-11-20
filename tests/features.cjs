@@ -1713,6 +1713,38 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     return '老普通奖→待兑换 / 自动奖保持 / 谢谢参与不冒出 / 迁移幂等';
   });
 
+  check('已被错标为已兑换的老中奖记录可二次恢复且不重复重置', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      const now=Date.now();
+      /* 模拟真实数据库：记录已带布尔字段，但奖品名与当前奖项表对不上 */
+      const s={lottery:{prizes:[
+        {id:'p1',name:'奶茶',prob:8,autoRedeem:false},
+        {id:'p5',name:'再抽一次',prob:20,autoRedeem:false}
+      ],log:[
+        {t:now-4000,cost:1,prize:'谢谢参与',autoRedeem:true,redeemed:true},
+        {t:now-3000,cost:1,prize:'再抽一次',autoRedeem:true,redeemed:true},
+        {t:now-2000,cost:1,prize:'免写一次抄写',autoRedeem:true,redeemed:true},
+        {t:now-1000,cost:1,prize:'5元',autoRedeem:true,redeemed:true}
+      ]}};
+      const a=normalizeState(s);
+      const snap=a.lottery.log.map(function(x){return {prize:x.prize,pid:x.prizeId,
+        auto:x.autoRedeem,red:x.redeemed};});
+      a.lottery.log[2].redeemed=true;
+      const b=normalizeState(a);
+      return {snap:snap,after:b.lottery.log[2].redeemed,
+        pending:b.lottery.log.filter(function(x){return !x.autoRedeem && !x.redeemed;}).length};
+    })())`));
+    assert(o.snap[0].auto === true && o.snap[0].red === true, '谢谢参与不应变成待兑换');
+    assert(o.snap[1].auto === true && o.snap[1].red === true, '再抽一次应保持自动生效');
+    assert(o.snap[2].auto === false && o.snap[2].red === false,
+      '奖品名对不上的真实中奖未恢复待兑换: '+JSON.stringify(o.snap));
+    assert(o.snap[3].auto === false && o.snap[3].red === false,
+      '改名奖品未恢复待兑换: '+JSON.stringify(o.snap));
+    assert(o.after === true && o.pending === 1,
+      '二次归一化重置了用户标记: '+JSON.stringify(o));
+    return '已错标记录按奖品名二次恢复 / 幂等不重置';
+  });
+
   check('新增奖项默认关闭自动兑换，家长解锁后才可勾选', () => {
     const o = JSON.parse(run(`JSON.stringify((function(){
       parentUnlocked=true; state.lottery.prizes=clone(DEFAULT_PRIZES);
@@ -1947,6 +1979,30 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     assert(o.td && typeof o.td === 'object' && !Array.isArray(o.td) && o.correct === 1 && o.attempted === 2,
       '旧存档归一化失败: '+JSON.stringify(o));
     return 'textbookDone 补齐且原统计保留';
+  });
+
+  check('六上已导入教材包自动补齐新句型且不重复、不覆盖进度', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      var src={textbooks:[{id:'tb_x',name:'人教版 PEP 六年级上册（2026版·三年级起点）',units:[
+        {id:'tu_x',name:'Unit 3 Healthy life',words:[],
+         sentences:[{cn:'你感觉怎么样？',en:'How do you feel?',hints:['你','感到','怎样']}]}
+      ]}]};
+      var a=normalizeState(src);
+      var u=a.textbooks[0].units[0];
+      var first=u.sentences.length;
+      var added=u.sentences[first-1].en;
+      a.progress['tb:tu_x:0']={m:2,ok:3,bad:1};
+      var b=normalizeState(a);
+      var v=b.textbooks[0].units[0];
+      return {first:first,second:v.sentences.length,id:b.textbooks[0].id,uid:v.id,
+        orig:v.sentences[0].en,added:added,progress:(b.progress['tb:tu_x:0']||{}).m};
+    })())`));
+    assert(o.first === 5 && o.second === 5, '六上补句数量或幂等性不对: '+JSON.stringify(o));
+    assert(o.id === 'tb_x' && o.uid === 'tu_x', '包/单元 id 被改写: '+JSON.stringify(o));
+    assert(o.orig === 'How do you feel?' && o.progress === 2,
+      '原题或进度被覆盖: '+JSON.stringify(o));
+    assert(o.added === "Let's discuss a healthy diet.", '新增句未落到位: '+JSON.stringify(o));
+    return '每单元 +4 句 · 重复加载不叠加 · 包 id 与进度保留';
   });
 
   const failed = results.filter(r => r[1] === 'FAIL');

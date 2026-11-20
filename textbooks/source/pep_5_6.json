@@ -455,7 +455,11 @@
           {"cn": "非常棒！", "en": "It was great!"},
           {"cn": "你去哪儿了？", "en": "Where did you go?"},
           {"cn": "我去了西安。", "en": "I went to Xi'an."},
-          {"cn": "我爬了长城。", "en": "I climbed the Great Wall."}
+          {"cn": "我爬了长城。", "en": "I climbed the Great Wall."},
+          {"cn": "村里的景色令人鼓舞。", "en": "The view from the village was inspiring."},
+          {"cn": "我们在村子里吃了姜饼。", "en": "We ate gingerbread in a village."},
+          {"cn": "我在那里看到了竹子和泥土。", "en": "I saw bamboo and clay there."},
+          {"cn": "黏土又干又暖。", "en": "The clay was dry and warm."}
         ]
       },
       {
@@ -490,7 +494,11 @@
           {"cn": "是的，我们去了。", "en": "Yes, we did."},
           {"cn": "你们吃月饼了吗？", "en": "Did you eat mooncakes?"},
           {"cn": "不，我们没有。", "en": "No, we didn't."},
-          {"cn": "比赛很激动人心。", "en": "The race was exciting."}
+          {"cn": "比赛很激动人心。", "en": "The race was exciting."},
+          {"cn": "我们昨天吃了一顿丰盛的晚餐。", "en": "We ate a big dinner yesterday."},
+          {"cn": "我在晚会上读了一本书。", "en": "I read a book at the gala."},
+          {"cn": "你参加马拉松了吗？", "en": "Did you run in the marathon?"},
+          {"cn": "我们为获胜者欢呼。", "en": "We cheered for the winner."}
         ]
       },
       {
@@ -520,7 +528,11 @@
           {"cn": "我觉得不舒服。", "en": "I feel ill."},
           {"cn": "我头疼。", "en": "My head hurts."},
           {"cn": "也许你应该去看医生。", "en": "Maybe you should see a doctor."},
-          {"cn": "祝你早日康复。", "en": "Get well soon."}
+          {"cn": "祝你早日康复。", "en": "Get well soon."},
+          {"cn": "我的烧现在好些了。", "en": "My fever is better now."},
+          {"cn": "多喝水对你有好处。", "en": "More water is good for you."},
+          {"cn": "我咳嗽，而且觉得不开心。", "en": "I cough and I feel unhappy."},
+          {"cn": "让我们讨论一下健康饮食。", "en": "Let's discuss a healthy diet."}
         ]
       },
       {
@@ -547,7 +559,11 @@
           {"cn": "我打算买一个书包。", "en": "I'm going to buy a schoolbag."},
           {"cn": "我还想买一台显微镜。", "en": "I also want to buy a microscope."},
           {"cn": "我还需要多存点钱。", "en": "I still need to save more."},
-          {"cn": "我们应该谨慎用钱。", "en": "We should be careful with money."}
+          {"cn": "我们应该谨慎用钱。", "en": "We should be careful with money."},
+          {"cn": "我们可以把钱存罐子里。", "en": "We can save money in a jar."},
+          {"cn": "理财很难。", "en": "It is difficult to manage money."},
+          {"cn": "我想理发和喝点东西。", "en": "I want a haircut and a drink."},
+          {"cn": "这些商品在打折。", "en": "These goods are on sale."}
         ]
       },
       {
@@ -586,7 +602,11 @@
           {"cn": "我们能看见太阳和云。", "en": "We can see the Sun and clouds."},
           {"cn": "它看起来像一颗蓝色弹珠。", "en": "It looks like a big blue marble."},
           {"cn": "火星上有水吗？", "en": "Is there any water on Mars?"},
-          {"cn": "我们如何探索太空？", "en": "How can we explore space?"}
+          {"cn": "我们如何探索太空？", "en": "How can we explore space?"},
+          {"cn": "月球车在月球上。", "en": "The rover is on the moon."},
+          {"cn": "航天员能从太空看到地球。", "en": "A taikonaut can see Earth from space."},
+          {"cn": "我们从宇宙飞船上看日出。", "en": "We watched the sunrise from the spaceship."},
+          {"cn": "我有一个关于火星的问题。", "en": "I have a question about Mars."}
         ]
       },
       {
@@ -625,7 +645,11 @@
           {"cn": "水来自哪里？", "en": "Where does water come from?"},
           {"cn": "我们怎样节约能源？", "en": "How can we save energy?"},
           {"cn": "我们可以缩短淋浴时间。", "en": "We can take quick showers."},
-          {"cn": "微小的改变能带来巨大影响。", "en": "Small changes can make a big difference."}
+          {"cn": "微小的改变能带来巨大影响。", "en": "Small changes can make a big difference."},
+          {"cn": "太阳能是有用的能源。", "en": "Solar power is useful energy."},
+          {"cn": "我们应该在家里重复利用瓶子。", "en": "We should reuse bottles at home."},
+          {"cn": "我们可以拔掉灯插头。", "en": "We can unplug the light."},
+          {"cn": "我们应该节约用水。", "en": "We should save water."}
         ]
       }
     ]
