@@ -2859,8 +2859,9 @@ function phonicsCount(){
   return {lessons:lessons,words:words};
 }
 /* ---------- 教材单词的音节分块与自动归类 ----------
-   phonicsChunks() 先查 PH_SYLLABLE_DICT：由 Merriam-Webster / Cambridge 的
-   点分音节人工校订，批量候选来自 LibreOffice/Pyphen 连字符词典，数据文件在
+   phonicsChunks() 先查 PH_SYLLABLE_DICT：以 Merriam-Webster 词头点分音节
+   （拼写记忆用）为准，Cambridge IPA 点分只作发音交叉校订；批量候选来自
+   LibreOffice/Pyphen 连字符词典，数据文件在
    textbooks/phonics-syllables.json。未收录的词再按「一个元音核心 = 一个音节」
    和 VCV / VCCV / C+le / V/V / 词缀边界规则兜底。
    phonicsGroup() 仍按 sh / ee / a_e / 短元音 等规律给课本单词分组。
@@ -2946,7 +2947,7 @@ const PH_SYLLABLE_DICT={
   computer:'com|pu|ter', dictionary:'dic|tion|ary', diet:'di|et', family:'fam|i|ly',
   gingerbread:'gin|ger|bread', happy:'hap|py', hopeful:'hope|ful', information:'in|for|ma|tion',
   instruct:'in|struct', jumping:'jump|ing', kilometer:'ki|lo|me|ter',
-  kilometre:'kil|o|me|tre', lion:'li|on', little:'lit|tle', meter:'me|ter', metre:'me|tre',
+  kilometre:'ki|lo|me|tre', lion:'li|on', little:'lit|tle', meter:'me|ter', metre:'me|tre',
   millimeter:'mil|li|me|ter', millimetre:'mil|li|me|tre', never:'nev|er',
   purple:'pur|ple', quickly:'quick|ly', rabbit:'rab|bit', readable:'read|able',
   reading:'read|ing', ready:'read|y', real:'real', really:'re|al|ly', recent:'re|cent',
@@ -2958,7 +2959,8 @@ const PH_SYLLABLE_DICT={
 const PH_SOUND_FIX={
   bread:'b r e d', 'breakfast|0':'b r e k', 'gingerbread|2':'b r e d',
   'centimeter|2':'m iː', 'centimetre|2':'m iː', 'kilometer|2':'m iː',
-  'kilometre|2':'m iː', 'meter|0':'m iː', 'metre|0':'m iː',
+  'kilometre|2':'m iː', 'kilometer|0':'k i', 'kilometre|0':'k i',
+  'meter|0':'m iː', 'metre|0':'m iː',
   'millimeter|2':'m iː', 'millimetre|2':'m iː',
   'ready|0':'r e d', 'ready|1':'ɪ', 'readable|0':'r iː d',
   'reading|0':'r iː d', 'tiger|0':'t aɪ'

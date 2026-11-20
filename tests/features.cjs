@@ -1714,13 +1714,14 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     assert(JSON.stringify(letters('breakfast')) === JSON.stringify(['break','fast']) &&
       letters('bread').length===1 && JSON.stringify(letters('tiger'))===JSON.stringify(['ti','ger']),
       '常见易错词校订缺失: '+JSON.stringify(o));
-    assert(JSON.stringify(letters('kilometre')) === JSON.stringify(['kil','o','me','tre']) &&
+    assert(JSON.stringify(letters('kilometre')) === JSON.stringify(['ki','lo','me','tre']) &&
       JSON.stringify(letters('kilometer')) === JSON.stringify(['ki','lo','me','ter']) &&
       JSON.stringify(letters('metre')) === JSON.stringify(['me','tre']) &&
       JSON.stringify(letters('millimetre')) === JSON.stringify(['mil','li','me','tre']),
-      '公制单位词未按英美拼写分别校订: '+JSON.stringify(o));
-    assert(o.kilometre[2][1].indexOf('m iː')>=0, 'kilometre 的 me 不应提示短音 e: '+JSON.stringify(o.kilometre));
-    return 'gin·ger·bread / read·able / kil·o·me·tre 等均按词典校订表切分';
+      '公制单位词未按词典点分音节省略英美尾缀差异: '+JSON.stringify(o));
+    assert(o.kilometre[2][1].indexOf('m iː')>=0 && o.kilometre[0][1].indexOf('k i')>=0,
+      'kilometre 首音节 ki 与 me 的提示音应分别为短音 i 与长音 iː: '+JSON.stringify(o.kilometre));
+    return 'gin·ger·bread / read·able / ki·lo·me·tre 等均按词典校订表切分';
   });
 
   check('拼读教材来源复用顶部学习范围：无独立学段/教材/册下拉', () => {

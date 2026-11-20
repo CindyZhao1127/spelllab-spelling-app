@@ -54,7 +54,7 @@ CURATED = {
     "instruct": "in|struct",
     "jumping": "jump|ing",
     "kilometer": "ki|lo|me|ter",
-    "kilometre": "kil|o|me|tre",
+    "kilometre": "ki|lo|me|tre",
     "lion": "li|on",
     "little": "lit|tle",
     "meter": "me|ter",
