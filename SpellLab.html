@@ -86,8 +86,11 @@
   .accent-switch{display:flex;gap:2px;padding:3px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.08)}
   .accent-switch button{padding:5px 11px;border-radius:999px;font-size:11px;font-weight:800;color:var(--muted);transition:.2s}
   .accent-switch button.active{background:rgba(139,123,255,.28);color:#fff}
-  .stat{text-align:center;line-height:1.1;min-width:44px}
-  .stat b{display:block;font-size:17px;font-weight:800}
+  .top-stats{display:flex;align-items:center;gap:10px;padding:4px 12px;border-radius:999px;
+    background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07)}
+  .top-sep{width:1px;height:22px;flex:none;background:rgba(255,255,255,.14)}
+  .stat{text-align:center;line-height:1.1;min-width:40px}
+  .stat b{display:block;font-size:15px;font-weight:800;font-variant-numeric:tabular-nums}
   .stat span{font-size:10px;color:var(--muted)}
   .icon-btn{
     width:36px;height:36px;border-radius:12px;display:grid;place-items:center;
@@ -744,16 +747,24 @@
     .lbox{width:clamp(17px,5vw,23px);height:clamp(27px,8vw,34px);font-size:clamp(15px,4.4vw,20px)}
     .tips{font-size:11px}
     .chunk-card{width:min(200px,84vw);min-height:126px}
-    .filter-bar{padding:8px 14px 0;gap:6px;font-size:11px}
+    .filter-bar{padding:8px 14px 0;gap:8px;font-size:11px}
+    .filter-group{gap:6px}
+    .filter-links{gap:10px;width:100%;padding:6px 0 0;border-left:0;
+      border-top:1px solid rgba(255,255,255,.1)}
+    .top-stats{padding:3px 9px;gap:7px}
+    .top-sep{display:none}
     .drawer{width:min(420px,94vw)}
   }
 
   /* ---------- 学习范围筛选 ---------- */
   .filter-bar{
-    display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+    display:flex;align-items:center;justify-content:space-between;gap:12px 18px;flex-wrap:wrap;
     padding:9px clamp(16px,4vw,44px) 0;font-size:12px;color:var(--muted);
   }
-  .fb-title{letter-spacing:1px;font-weight:800;color:#b3a3ff}
+  .filter-group{display:flex;align-items:center;gap:9px;flex-wrap:wrap;min-width:0}
+  .filter-links{display:flex;align-items:center;gap:12px;flex:none;padding-left:16px;
+    border-left:1px solid rgba(255,255,255,.14)}
+  .fb-title{letter-spacing:1px;font-weight:800;color:#b3a3ff;white-space:nowrap}
   .filter-bar label{display:flex;align-items:center;gap:6px;white-space:nowrap}
   .sel{position:relative;display:inline-flex;align-items:center}
   .sel::after{content:"▾";position:absolute;right:9px;font-size:10px;color:#c6cbf2;pointer-events:none}
@@ -1614,16 +1625,19 @@ body.td-typing #typingView { height: 100%; }
       <button data-mode="sentence" class="active">句子拼写</button>
       <button data-mode="chunk">分步记忆</button>
       <button data-mode="word">单词速记</button>
-      <button data-mode="phonics">自然拼读 🔤</button>
-      <button data-mode="grammar">语法练习 📖</button>
-      <button data-mode="growth">成长中心 🚀</button>
-      <button data-mode="typing">打字练习 🦆</button>
+      <button data-mode="phonics">自然拼读</button>
+      <button data-mode="grammar">语法练习</button>
+      <button data-mode="growth">成长中心</button>
+      <button data-mode="typing">打字练习</button>
     </div>
     <div class="top-right">
       <div class="accent-switch" id="accentSwitch" title="朗读口音与拼读音节标准（英式 / 美式）"><button data-accent="uk" class="active">UK</button><button data-accent="us">US</button></div>
-      <div class="stat"><b id="statStreak">0</b><span>连对</span></div>
-      <div class="stat"><b id="statAcc">--</b><span>正确率</span></div>
+      <div class="top-stats" title="本轮战绩">
+        <div class="stat"><b id="statStreak">0</b><span>连对</span></div>
+        <div class="stat"><b id="statAcc">--</b><span>正确率</span></div>
+      </div>
       <button class="points-chip" id="btnPoints" title="学习计划与积分"><b id="statPoints">0</b><span>积分</span></button>
+      <span class="top-sep"></span>
       <button class="wheel-chip" id="btnWheel" title="打开惊喜盲盒">🎁 抽盲盒</button>
       <button class="parent-chip" id="btnParent" title="家长中心：输入管理密码后可修改抽奖设置">家长</button>
       <button class="icon-btn" id="btnMenu" title="学习面板" aria-label="打开学习面板"></button>
@@ -1631,16 +1645,20 @@ body.td-typing #typingView { height: 100%; }
   </header>
 
   <div class="filter-bar">
-    <span class="fb-title">学习范围</span>
-    <label>学制 <span class="sel"><select id="systemFilter" aria-label="选择学制"></select></span></label>
-    <label>学段 <span class="sel"><select id="stageFilter" aria-label="选择学段"></select></span></label>
-    <label>年级 <span class="sel"><select id="gradeFilter" aria-label="选择年级"></select></span></label>
-    <label>教材 <span class="sel"><select id="bookFilter" aria-label="选择教材版本"></select></span></label>
-    <label>册别 <span class="sel"><select id="volumeFilter" aria-label="选择上册下册"></select></span></label>
-    <span class="fb-info" id="filterInfo"></span>
-    <button class="link-btn" id="btnManage">管理年级 / 教材</button>
-    <button class="link-btn" id="btnLibrary">教材库</button>
-    <button class="link-btn" id="btnStorage">本地数据库</button>
+    <div class="filter-group">
+      <span class="fb-title">学习范围</span>
+      <label>学制 <span class="sel"><select id="systemFilter" aria-label="选择学制"></select></span></label>
+      <label>学段 <span class="sel"><select id="stageFilter" aria-label="选择学段"></select></span></label>
+      <label>年级 <span class="sel"><select id="gradeFilter" aria-label="选择年级"></select></span></label>
+      <label>教材 <span class="sel"><select id="bookFilter" aria-label="选择教材版本"></select></span></label>
+      <label>册别 <span class="sel"><select id="volumeFilter" aria-label="选择上册下册"></select></span></label>
+      <span class="fb-info" id="filterInfo"></span>
+    </div>
+    <div class="filter-links">
+      <button class="link-btn" id="btnManage">管理年级 / 教材</button>
+      <button class="link-btn" id="btnLibrary">教材库</button>
+      <button class="link-btn" id="btnStorage">本地数据库</button>
+    </div>
   </div>
   <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
 
@@ -2358,7 +2376,7 @@ body.td-typing #typingView { height: 100%; }
       <div class="panel">
         <h3>积分抽奖 · 惊喜盲盒</h3>
         <div class="plan-head"><div><b id="lotteryPoints">0</b> <span>分</span></div><span class="badge" id="lotteryCostTag">每次 10 分</span></div>
-        <div class="panel-note">点右上角「🎁 抽盲盒」即可开盒，基础消耗 <b id="lotteryCostText">10</b> 分。<b>每天最多抽 <b id="lotteryLimitText">3</b> 次，且每天只能中奖一次</b>；中奖后再抽不会再中奖，消耗还会逐次翻倍（第 2 次 2 倍、第 3 次 4 倍……）。今日已抽 <b id="lotteryDailyText">0/3</b> 次。奖项概率之和需 ≤ 100%，剩余为「谢谢参与」。</div>
+        <div class="panel-note">点右上角「🎁 抽盲盒」即可开盒，每次消耗 <b id="lotteryCostText">10</b> 分。<b>抽奖次数不限，没中奖可以一直抽</b>，每次都是正常积分。抽中真实奖品后当天不会再中奖，之后每抽一次消耗才翻倍（第 2 次 2 倍、第 3 次 4 倍……）；「再抽一次」是免费重抽，不算中奖、也不触发翻倍。今日已抽 <b id="lotteryDailyText">0</b> 次。奖项概率之和需 ≤ 100%，剩余为「谢谢参与」。</div>
       </div>
       <div class="panel">
         <h3>奖项设置 <span class="lock-badge" id="prizeLockBadge">家长锁定</span></h3>
@@ -2371,8 +2389,6 @@ body.td-typing #typingView { height: 100%; }
         <div id="prizeEditor" hidden>
           <div class="parent-label">每次抽奖基础消耗积分</div>
           <div class="field-row"><input class="field" id="lotteryCost" type="number" min="1" max="999" value="10" placeholder="每次消耗积分"></div>
-          <div class="parent-label">每天最多抽奖次数（1–10）</div>
-          <div class="field-row"><input class="field" id="lotteryDailyLimit" type="number" min="1" max="10" value="3" placeholder="每天最多抽几次"></div>
           <div class="parent-label">打字练习每局兑换积分（0–99）</div>
           <div class="field-row"><input class="field" id="typingPointsInput" type="number" min="0" max="99" value="1" placeholder="每局打字得几分"></div>
           <div class="panel-note" style="margin:2px 0 8px">打字得分转换：设为 0 则打字练习不计积分；默认每局 1 分，与该局星级无关。</div>
@@ -6173,8 +6189,9 @@ let wheelSegs=[], wheelRotation=0, wheelSpinning=false, wheelInvalid=false, whee
 /* 最近一次中奖的扇区下标，用来在图例里高亮命中行（-99 表示无） */
 let wheelHit=-99;
 
-/* ---- 抽奖的「按天限制」状态 ----
-   每天最多抽 dailyLimit 次；当天最多中奖一次；中奖后再抽，消耗按 2 的幂
+/* ---- 抽奖的「按天」状态 ----
+   抽奖不限次数：没中奖永远按基础积分抽；只有抽中真实奖品（不含「再抽一次」
+   这种自动兑换的免费重抽）才算中奖，当天最多中奖一次，中奖后再抽消耗按 2 的幂
    逐次翻倍（第 1 次再抽 2 倍、第 2 次 4 倍……）直到硬上限。换天自动清零。 */
 function ensureLotteryDaily(){
   const L=state.lottery;
@@ -6190,8 +6207,10 @@ function ensureLotteryDaily(){
 function lotteryDailyLimit(){
   return Math.max(1,Math.min(10,Math.round(Number(state.lottery.dailyLimit)||3)));
 }
-function lotteryLeft(){ return Math.max(0,lotteryDailyLimit()-ensureLotteryDaily().draws); }
-/* 本次抽奖实际消耗：未中奖时为基础分；已中奖后按 2^(afterWin+1) 翻倍 */
+/* 抽奖不限次数：剩余次数恒为「无限」，counts 仅用于展示今日已抽次数。 */
+function lotteryLeft(){ return Infinity; }
+/* 本次抽奖实际消耗：没中奖时恒为基础分；真实中奖后按 2^(afterWin+1) 翻倍
+   （「再抽一次」是自动兑换的免费重抽，不算中奖，不进入翻倍状态）。 */
 function lotteryCostNow(){
   const d=ensureLotteryDaily();
   const base=Math.max(1,Number(state.lottery.cost)||10);
@@ -6287,21 +6306,18 @@ function syncWheelButtons(){
   const points=Number(state.plan.points)||0;
   const d=ensureLotteryDaily();
   const cost=lotteryCostNow();
-  const noLeft=d.draws>=lotteryDailyLimit();
-  const disabled=wheelSpinning||wheelInvalid||points<cost||noLeft;
+  const disabled=wheelSpinning||wheelInvalid||points<cost;
   $('btnSpin').disabled=disabled;
   $('wheelHub').classList.toggle('off',disabled);
-  $('wheelWarn').classList.toggle('show',wheelInvalid||noLeft||d.won);
+  $('wheelWarn').classList.toggle('show',wheelInvalid||d.won);
   $('wheelWarn').textContent=wheelInvalid?
     '奖项概率合计 '+wheelTotal+'%，超过 100%。请家长解锁后在「抽奖」页调整，暂时不能抽奖。':
-    noLeft? '今天已抽 '+d.draws+' 次，达到每日上限（'+lotteryDailyLimit()+' 次），明天再来吧。':
     d.won? '今天已经中过奖啦！再抽不会再中奖，且消耗翻倍为 '+cost+' 分。':
     cost>Math.max(1,Number(state.lottery.cost)||10)? '本次消耗已翻倍为 '+cost+' 分。':'';
   $('wheelPoints').textContent=points;
   $('wheelCost').textContent=cost;
-  if($('wheelDaily')) $('wheelDaily').textContent=d.draws+'/'+lotteryDailyLimit();
-  if($('btnSpin')) $('btnSpin').textContent=noLeft?'今日已抽满':
-    (d.won?'再抽一次（翻倍）':'开始抽奖');
+  if($('wheelDaily')) $('wheelDaily').textContent=d.draws;
+  if($('btnSpin')) $('btnSpin').textContent=d.won?'再抽一次（翻倍）':'开始抽奖';
 }
 function openWheel(){
   if(wheelSpinning) return;
@@ -6394,10 +6410,8 @@ function renderLottery(){
   $('lotteryCost').value=cost;
   $('lotteryCostTag').textContent='每次 '+cost+' 分';
   $('lotteryCostText').textContent=cost;
-  if($('lotteryDailyLimit')) $('lotteryDailyLimit').value=lotteryDailyLimit();
   if($('typingPointsInput')) $('typingPointsInput').value=Number(L.typingPoints)||0;
-  if($('lotteryLimitText')) $('lotteryLimitText').textContent=lotteryDailyLimit();
-  if($('lotteryDailyText')) $('lotteryDailyText').textContent=d.draws+'/'+lotteryDailyLimit();
+  if($('lotteryDailyText')) $('lotteryDailyText').textContent=d.draws;
   /* 未解锁时只展示只读奖项，编辑器整体隐藏；所有写操作再经 guardParent 兜底 */
   const locked=!parentUnlocked;
   $('prizeLocked').hidden=!locked;
@@ -6499,11 +6513,7 @@ function drawLottery(){
   const L=state.lottery, d=ensureLotteryDaily();
   const cost=lotteryCostNow();
   L.cost=Math.max(1,Number(L.cost)||10);   // 基础消耗保持家长设置值，翻倍只作用于本次
-  /* 次数限制：当天抽满 dailyLimit 次后不再扣积分、不再出结果。 */
-  if(d.draws>=lotteryDailyLimit()){
-    toast('今天已抽 '+d.draws+' 次，每日最多 '+lotteryDailyLimit()+' 次，明天再来吧','bad');
-    return null;
-  }
+  /* 抽奖不限次数：没中奖可以一直抽，积分够就能继续；不再做每日次数拦截。 */
   const points=Number(state.plan.points)||0;
   if(points<cost){ toast('积分不足，本次需要 '+cost+' 分（还差 '+(cost-points)+' 分）','bad'); return null; }
   /* 抽奖与盘面共用 wheelSegments()：结果的名称、下标、颜色都来自指针
@@ -6539,7 +6549,9 @@ function drawLottery(){
   if(L.log.length>LOTTERY_LOG_LIMIT) L.log.splice(0,L.log.length-LOTTERY_LOG_LIMIT);
   /* 更新当天计数：中奖后 afterWin 归零，之后再抽逐次 +1 供翻倍使用。 */
   const wasWon=!!d.won;
-  const realWin=hit.index>=0;
+  /* 「再抽一次」是自动兑换的免费重抽，不算中奖：既不锁定当天「必不中奖」，
+     也不让下次抽奖进入翻倍状态。只有其它真实奖才算中奖。 */
+  const realWin=hit.index>=0 && !autoRedeem;
   d.draws++;
   if(realWin && !wasWon){ d.won=true; d.afterWin=0; }
   else if(wasWon){ d.afterWin++; }
@@ -7260,13 +7272,6 @@ function bind(){
     guardParent('lottery',()=>{
       state.lottery.cost=Math.max(1,Math.min(999,Number(v)||10));
       saveState(); lotteryChanged();
-    });
-  });
-  $('lotteryDailyLimit').addEventListener('change',e=>{
-    const v=e.target.value;
-    guardParent('lottery',()=>{
-      state.lottery.dailyLimit=Math.max(1,Math.min(10,Math.round(Number(v)||3)));
-      saveState(); lotteryChanged(); toast('每天抽奖次数已更新','ok');
     });
   });
   $('typingPointsInput').addEventListener('change',e=>{

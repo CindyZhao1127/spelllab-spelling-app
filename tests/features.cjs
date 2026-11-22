@@ -1211,23 +1211,22 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     return o.total + ' 题 · 家长锁生效 · 判对 1 题记入历史/复习';
   });
 
-  check('抽奖每日次数上限：当天抽满后不再扣分也不出结果', () => {
+  check('抽奖不限次数：没中奖可一直按正常积分抽，不因次数递增', () => {
     const o = JSON.parse(run(`JSON.stringify((function(){
-      state.lottery.prizes=[{id:'a',name:'奖',prob:100}];
+      /* 奖项概率为 0：必为「谢谢参与」，模拟一直不中奖 */
+      state.lottery.prizes=[];
       state.lottery.cost=1; state.plan.points=100; state.lottery.log=[];
-      state.lottery.dailyLimit=3;
       state.lottery.daily={date:today(),draws:0,won:false,afterWin:0};
-      const p0=state.plan.points, rs=[];
-      for(let i=0;i<4;i++){ const r=drawLottery(); rs.push(r?r.prize:null); }
-      return {spent:p0-state.plan.points,draws:state.lottery.daily.draws,
-        rs:rs,log:state.lottery.log.length,left:lotteryLeft(),
-        over:drawLottery()};})())`));
-    /* 基础 1 分，中奖后再抽翻倍为 2、4，共扣 7；第 4 次超限被拦截 */
-    assert(o.spent === 7 && o.draws === 3 && o.log === 3,
-      '每日上限未生效: ' + JSON.stringify(o));
-    assert(o.rs[3] === null && o.over === null, '超限仍能抽奖: ' + JSON.stringify(o));
+      const costs=[];
+      for(let i=0;i<6;i++){ const r=drawLottery(); costs.push(r?r.cost:null); }
+      return {spent:100-state.plan.points,draws:state.lottery.daily.draws,
+        costs:costs,left:lotteryLeft()};})())`));
+    /* 6 次都未中奖：每次扣基础 1 分，共 6 分；次数不受限 */
+    assert(o.spent === 6 && o.draws === 6, '未中奖却被限次或加分: ' + JSON.stringify(o));
+    assert(o.costs.every(c => c === 1), '未中奖消耗不是正常积分: ' + JSON.stringify(o));
+    assert(o.left === null || o.left > 1000, '剩余次数应视为无限: ' + JSON.stringify(o));
     newLotteryDay(); run('state.plan.points=100');
-    return '每天 3 次 · 第 4 次返回 null 且不扣分';
+    return '连抽 6 次不中奖 · 每次扣 1 分 · 剩余无限';
   });
 
   check('抽奖每天只中奖一次，中奖后必为「谢谢参与」', () => {
@@ -1765,6 +1764,34 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     assert(run("$('prizePending').textContent").indexOf('0 待兑换') >= 0, '待兑换计数不对');
     run('state.lottery=clone(DEFAULT_LOTTERY); state.plan.points=0;');
     return '自动兑换净扣 0 / 普通奖扣 10 且待兑换 / 未解锁可直接标记已兑换';
+  });
+
+  check('「再抽一次」不算中奖：不锁定谢谢参与、不触发下次翻倍', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      state.lottery.cost=10; state.plan.points=1000;
+      /* 只有「再抽一次」一个奖：每次必中它 */
+      state.lottery.prizes=[{id:'auto',name:'再抽一次',prob:100,autoRedeem:true}];
+      state.lottery.log=[];
+      state.lottery.daily={date:today(),draws:0,won:false,afterWin:0};
+      const r1=drawLottery();
+      const afterFirst={won:state.lottery.daily.won,after:state.lottery.daily.afterWin,
+        cost:lotteryCostNow()};
+      /* 再抽一次后，下一个真实奖仍应能中奖（未被锁定为谢谢参与） */
+      state.lottery.prizes=[{id:'gift',name:'贴纸',prob:100,autoRedeem:false}];
+      const r2=drawLottery();
+      return {r1:r1,afterFirst:afterFirst,r2:r2,
+        won2:state.lottery.daily.won,costAfterWin:lotteryCostNow()};
+    })())`));
+    assert(o.r1.autoRedeem === true && o.r1.realWin === false,
+      '再抽一次被误判为中奖: ' + JSON.stringify(o));
+    assert(o.afterFirst.won === false && o.afterFirst.after === 0 && o.afterFirst.cost === 10,
+      '再抽一次错误触发翻倍/锁定: ' + JSON.stringify(o.afterFirst));
+    assert(o.r2.prize === '贴纸' && o.won2 === true,
+      '再抽一次后无法再中真实奖: ' + JSON.stringify(o));
+    assert(o.costAfterWin === 20,
+      '真实中奖后未翻倍为 20: ' + JSON.stringify(o));
+    newLotteryDay(); run('state.plan.points=1000; state.lottery=clone(DEFAULT_LOTTERY);');
+    return '再抽一次不中奖不翻倍 · 之后真实奖可中奖且触发翻倍';
   });
 
   check('老存档抽奖记录幂等迁移：普通奖恢复待兑换，谢谢参与不冒出', () => {
