@@ -364,6 +364,7 @@ function bind(){
     }
   });
   $('phShuffle').addEventListener('click',phShuffle);
+  $('phAddVocab').addEventListener('click',()=>{ if(typeof phAddVocab==='function') phAddVocab(); });
   $('phNext').addEventListener('click',phAdvance);
   $('phScNext').addEventListener('click',phAdvance);
   $('phScSpeak').addEventListener('click',phSpeak);

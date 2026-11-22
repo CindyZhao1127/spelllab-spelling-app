@@ -84,19 +84,21 @@ const PH_SYLLABLE_DICT={
   banana:'ba|na|na', basket:'bas|ket', beautiful:'beau|ti|ful', because:'be|cause',
   blue:'blue', bread:'bread', breakfast:'break|fast', cabin:'cab|in',
   centimeter:'cen|ti|me|ter', centimetre:'cen|ti|me|tre', children:'chil|dren',
-  computer:'com|pu|ter', dictionary:'dic|tion|ary', diet:'di|et', family:'fam|i|ly',
+  computer:'com|pu|ter', country:'coun|try', dictionary:'dic|tion|ary', diet:'di|et',
+  elephant:'el|e|phant', eve:'eve', family:'fam|i|ly',
   gingerbread:'gin|ger|bread', happy:'hap|py', hopeful:'hope|ful', information:'in|for|ma|tion',
-  instruct:'in|struct', jumping:'jump|ing',   kilometer:'ki|lo|me|ter', microscope:'mi|cro|scope',
+  instruct:'in|struct', juice:'juice', jumping:'jump|ing', kilometer:'ki|lo|me|ter',
+  microscope:'mi|cro|scope', mother:'moth|er',
   /* 英美音节不同的词：值写成 {uk,us}，数据来自 soundwhy.com 对齐结果。
      marathon 英式 ma/ra/thon（r 归后一节），美式 mar/a/thon（ar 读 /er/ 成节）。 */
   marathon:{uk:'ma|ra|thon',us:'mar|a|thon'},
   kilometre:'ki|lo|me|tre', lion:'li|on', little:'lit|tle', meter:'me|ter', metre:'me|tre',
-  millimeter:'mil|li|me|ter', millimetre:'mil|li|me|tre', never:'nev|er',
+  millimeter:'mil|li|me|ter', millimetre:'mil|li|me|tre', never:'nev|er', orange:'or|ange',
   purple:'pur|ple', quickly:'quick|ly', rabbit:'rab|bit', readable:'read|able',
   reading:'read|ing', ready:'read|y', real:'real', really:'re|al|ly', recent:'re|cent',
   replay:'re|play', respect:'re|spect', rest:'rest', result:'re|sult',
-  restaurant:'res|tau|rant', sauce:'sauce', seven:'sev|en', table:'ta|ble',
-  teacher:'tea|cher', tiger:'ti|ger', true:'true', window:'win|dow'
+  restaurant:'res|tau|rant', sauce:'sauce', seven:'sev|en', story:'sto|ry', table:'ta|ble',
+  teacher:'tea|cher', tiger:'ti|ger', true:'true', use:'use', window:'win|dow'
 };
 /* 少量发音例外：字母组合与常见音不一致时，避免拆分正确但提示音误导。 */
 const PH_SOUND_FIX={
@@ -110,6 +112,12 @@ const PH_SOUND_FIX={
   'millimeter|2':'m iː', 'millimetre|2':'m iː',
   'ready|0':'r e d', 'ready|1':'ɪ', 'readable|0':'r iː d',
   'reading|0':'r iː d', 'tiger|0':'t aɪ',
+  /* 词典校订词的音素：eve/use/juice 单音节按长音读，elephant 首节 e 短音、弱读节轻读 */
+  'eve|0':'iː v', 'use|0':'j uː z', 'juice|0':'dʒ uː s',
+  'elephant|0':'e l', 'elephant|1':'ɪ', 'elephant|2':'f ə n t',
+  'mother|0':'m ʌ ð', 'mother|1':'ə r',
+  'orange|0':'ɒ r', 'orange|1':'ɪ n dʒ',
+  'story|0':'s t ɔː', 'story|1':'r i', 'country|0':'k ʌ n', 'country|1':'t r i',
   /* soundwhy.com 英美对齐：marathon 三节的音素随口音不同 */
   'marathon|0':{uk:'m æ',us:'m er'}, 'marathon|1':{uk:'r ə',us:'ə'},
   'marathon|2':{uk:'θ ə n',us:'θ ɑː n'}

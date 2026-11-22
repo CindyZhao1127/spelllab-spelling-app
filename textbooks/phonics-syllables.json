@@ -97,6 +97,10 @@
       "pu",
       "ter"
     ],
+    "country": [
+      "coun",
+      "try"
+    ],
     "dictionary": [
       "dic",
       "tion",
@@ -105,6 +109,14 @@
     "diet": [
       "di",
       "et"
+    ],
+    "elephant": [
+      "el",
+      "e",
+      "phant"
+    ],
+    "eve": [
+      "eve"
     ],
     "family": [
       "fam",
@@ -133,6 +145,9 @@
     "instruct": [
       "in",
       "struct"
+    ],
+    "juice": [
+      "juice"
     ],
     "jumping": [
       "jump",
@@ -183,9 +198,17 @@
       "me",
       "tre"
     ],
+    "mother": [
+      "moth",
+      "er"
+    ],
     "never": [
       "nev",
       "er"
+    ],
+    "orange": [
+      "or",
+      "ange"
     ],
     "purple": [
       "pur",
@@ -250,6 +273,10 @@
       "sev",
       "en"
     ],
+    "story": [
+      "sto",
+      "ry"
+    ],
     "table": [
       "ta",
       "ble"
@@ -264,6 +291,9 @@
     ],
     "true": [
       "true"
+    ],
+    "use": [
+      "use"
     ],
     "window": [
       "win",

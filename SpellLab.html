@@ -719,6 +719,7 @@
   .mini-btn:hover{background:rgba(255,255,255,.2)}
   .mini-btn.primary{background:var(--grad-primary)}
   .mini-btn.danger{background:rgba(255,122,134,.16);color:#ffb3ba}
+  .mini-btn.on{background:rgba(139,123,255,.2);color:#cfc7ff}
   .danger-zone{margin-top:26px;border-top:1px solid rgba(255,255,255,.1);padding-top:16px}
 
   @media(max-width:560px){
@@ -1767,6 +1768,7 @@ body.td-typing #typingView { height: 100%; }
             <button class="mini-btn sm" id="phSpeak">🔊 再听一遍</button>
             <button class="mini-btn sm" id="phChunkBtn">拼读提示</button>
             <button class="mini-btn sm" id="phShow">看答案</button>
+            <button class="mini-btn sm" id="phAddVocab">☆ 加生词</button>
             <button class="mini-btn sm" id="phShuffle">换一题</button>
             <button class="mini-btn sm" id="phBack">← 返回课程</button>
           </div>
@@ -3055,19 +3057,21 @@ const PH_SYLLABLE_DICT={
   banana:'ba|na|na', basket:'bas|ket', beautiful:'beau|ti|ful', because:'be|cause',
   blue:'blue', bread:'bread', breakfast:'break|fast', cabin:'cab|in',
   centimeter:'cen|ti|me|ter', centimetre:'cen|ti|me|tre', children:'chil|dren',
-  computer:'com|pu|ter', dictionary:'dic|tion|ary', diet:'di|et', family:'fam|i|ly',
+  computer:'com|pu|ter', country:'coun|try', dictionary:'dic|tion|ary', diet:'di|et',
+  elephant:'el|e|phant', eve:'eve', family:'fam|i|ly',
   gingerbread:'gin|ger|bread', happy:'hap|py', hopeful:'hope|ful', information:'in|for|ma|tion',
-  instruct:'in|struct', jumping:'jump|ing',   kilometer:'ki|lo|me|ter', microscope:'mi|cro|scope',
+  instruct:'in|struct', juice:'juice', jumping:'jump|ing', kilometer:'ki|lo|me|ter',
+  microscope:'mi|cro|scope', mother:'moth|er',
   /* 英美音节不同的词：值写成 {uk,us}，数据来自 soundwhy.com 对齐结果。
      marathon 英式 ma/ra/thon（r 归后一节），美式 mar/a/thon（ar 读 /er/ 成节）。 */
   marathon:{uk:'ma|ra|thon',us:'mar|a|thon'},
   kilometre:'ki|lo|me|tre', lion:'li|on', little:'lit|tle', meter:'me|ter', metre:'me|tre',
-  millimeter:'mil|li|me|ter', millimetre:'mil|li|me|tre', never:'nev|er',
+  millimeter:'mil|li|me|ter', millimetre:'mil|li|me|tre', never:'nev|er', orange:'or|ange',
   purple:'pur|ple', quickly:'quick|ly', rabbit:'rab|bit', readable:'read|able',
   reading:'read|ing', ready:'read|y', real:'real', really:'re|al|ly', recent:'re|cent',
   replay:'re|play', respect:'re|spect', rest:'rest', result:'re|sult',
-  restaurant:'res|tau|rant', sauce:'sauce', seven:'sev|en', table:'ta|ble',
-  teacher:'tea|cher', tiger:'ti|ger', true:'true', window:'win|dow'
+  restaurant:'res|tau|rant', sauce:'sauce', seven:'sev|en', story:'sto|ry', table:'ta|ble',
+  teacher:'tea|cher', tiger:'ti|ger', true:'true', use:'use', window:'win|dow'
 };
 /* 少量发音例外：字母组合与常见音不一致时，避免拆分正确但提示音误导。 */
 const PH_SOUND_FIX={
@@ -3081,6 +3085,12 @@ const PH_SOUND_FIX={
   'millimeter|2':'m iː', 'millimetre|2':'m iː',
   'ready|0':'r e d', 'ready|1':'ɪ', 'readable|0':'r iː d',
   'reading|0':'r iː d', 'tiger|0':'t aɪ',
+  /* 词典校订词的音素：eve/use/juice 单音节按长音读，elephant 首节 e 短音、弱读节轻读 */
+  'eve|0':'iː v', 'use|0':'j uː z', 'juice|0':'dʒ uː s',
+  'elephant|0':'e l', 'elephant|1':'ɪ', 'elephant|2':'f ə n t',
+  'mother|0':'m ʌ ð', 'mother|1':'ə r',
+  'orange|0':'ɒ r', 'orange|1':'ɪ n dʒ',
+  'story|0':'s t ɔː', 'story|1':'r i', 'country|0':'k ʌ n', 'country|1':'t r i',
   /* soundwhy.com 英美对齐：marathon 三节的音素随口音不同 */
   'marathon|0':{uk:'m æ',us:'m er'}, 'marathon|1':{uk:'r ə',us:'ə'},
   'marathon|2':{uk:'θ ə n',us:'θ ɑː n'}
@@ -6961,10 +6971,34 @@ function phShow(){
   $('phBar').style.width=Math.round((phPos+1)/phQueue.length*100)+'%';
   phRenderChunks();
   if(mode==='listen') phSpeak();
+  phSyncVocabBtn();
   const first=$('phSlots').querySelector('input');
   if(first) first.focus(); else { try{ $('phInput').focus(); }catch(e){} }
 }
 function phSpeak(){ if(phLast && typeof speak==='function') speak(phLast[0]); }
+/* 当前拼读词是否已在生词本 */
+function phInVocab(){
+  if(!phLast) return false;
+  const w=typeof normWord==='function'?normWord(phLast[0]):String(phLast[0]).trim().toLowerCase();
+  return (state.vocab||[]).some(v=>(typeof normWord==='function'?normWord(v.en):String(v.en).trim().toLowerCase())===w);
+}
+/* 按钮态随当前词刷新：已在生词本显示 ★ 已收录 */
+function phSyncVocabBtn(){
+  const btn=$('phAddVocab'); if(!btn) return;
+  const has=phInVocab();
+  btn.textContent=has?'★ 已收录':'☆ 加生词';
+  btn.classList.toggle('on',has);
+}
+/* 把当前练习词加入生词本，来源标注为自然拼读，复用教材筛选范围 */
+function phAddVocab(){
+  if(!phLast || !phLesson) { toast('请先选一课开始拼读','bad'); return; }
+  const en=String(phLast[0]||'').trim(), cn=String(phLast[1]||'').trim();
+  const src='自然拼读 · '+String(phLesson.l.t||'').slice(0,40);
+  const before=(state.vocab||[]).length;
+  const v=addVocab(en,cn,src);
+  if(v && (state.vocab||[]).length>before) SFX.flip();
+  phSyncVocabBtn();
+}
 function phStore(){ return phTbMode?state.phonics.textbookDone:state.phonics.done; }
 function phCheck(){
   if(!phLesson || !phLast || phSolved) return;
@@ -7532,6 +7566,7 @@ function bind(){
     }
   });
   $('phShuffle').addEventListener('click',phShuffle);
+  $('phAddVocab').addEventListener('click',()=>{ if(typeof phAddVocab==='function') phAddVocab(); });
   $('phNext').addEventListener('click',phAdvance);
   $('phScNext').addEventListener('click',phAdvance);
   $('phScSpeak').addEventListener('click',phSpeak);

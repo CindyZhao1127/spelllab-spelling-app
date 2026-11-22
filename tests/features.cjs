@@ -1577,6 +1577,27 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     return 'stage 同款界面 + apple 分成 '+o.n+' 个音节输入格 + 逐格判定内核正常';
   });
 
+  check('自然拼读：加生词按钮把当前词收录进生词本，重复点击不重复', () => {
+    /* 结构性断言：练习区有加生词按钮 */
+    assert(/id="phAddVocab"/.test(html), '拼读练习区缺加生词按钮');
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      state.vocab=[];
+      state.phonics=normalizeState({phonics:{done:{},correct:0,attempted:0}}).phonics;
+      phBegin({g:{name:'测试'},l:{id:'test-vocab',t:'加生词课',s:'',w:[['banana','香蕉']]}},null,'加生词课');
+      var before=state.vocab.length, label0=$('phAddVocab').textContent;
+      phAddVocab();
+      var after=state.vocab.length, v=state.vocab[0]||{}, label1=$('phAddVocab').textContent;
+      phAddVocab();
+      return {before:before,after:after,final:state.vocab.length,en:v.en,cn:v.cn,src:v.source,
+        label0:label0,label1:label1,label2:$('phAddVocab').textContent,
+        inVocab:typeof phInVocab==='function'?phInVocab():null};})())`));
+    assert(o.before===0 && o.after===1 && o.final===1, '加生词未收录或重复收录: '+JSON.stringify(o));
+    assert(o.en==='banana' && o.cn==='香蕉' && /自然拼读/.test(o.src), '生词来源/词义错误: '+JSON.stringify(o));
+    assert(/加生词/.test(o.label0) && /已收录/.test(o.label1) && /已收录/.test(o.label2),
+      '按钮态未随收录刷新: '+JSON.stringify(o));
+    return 'banana 收录一次，来源标注自然拼读，按钮切到「已收录」';
+  });
+
   check('自然拼读：两种练法、答对计分、答错看答案，进度落盘', () => {
     run(`(function(){
       state.phonics=normalizeState({phonics:{done:{},correct:0,attempted:0}}).phonics;
@@ -1987,7 +2008,8 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     const o = JSON.parse(run(`JSON.stringify((function(){
       var w=['gingerbread','restaurant','beautiful','readable','reading','family','dictionary',
              'breakfast','bread','tiger','kilometre','kilometer','metre','meter',
-             'millimetre','millimeter','microscope'];
+             'millimetre','millimeter','microscope','eve','use','juice','orange',
+             'mother','elephant','story','country'];
       var r={}; w.forEach(function(x){ r[x]=phonicsChunks(x); }); return r;})())`));
     const letters = word => o[word].map(c=>c[0]);
     assert(JSON.stringify(letters('gingerbread')) === JSON.stringify(['gin','ger','bread']),
@@ -2015,7 +2037,19 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     assert(o.microscope[0][1].indexOf('m aɪ')>=0 && o.microscope[1][1].indexOf('k r ə')>=0 &&
       o.microscope[2][1].indexOf('əʊ')>=0,
       'microscope 音节提示音应体现长音 aɪ / 弱读 ə / 神奇 e 的 əʊ: '+JSON.stringify(o.microscope));
-    return 'gin·ger·bread / mi·cro·scope / ki·lo·me·tre 等均按词典校订表切分';
+    /* 全表校验发现的 8 处错误：eve/use/juice 神奇 e 或元音组合应单节，
+       其余按词典点分 re 归位，避免开音节把短元音读成长音 */
+    const expect={
+      eve:['eve'], use:['use'], juice:['juice'], orange:['or','ange'],
+      mother:['moth','er'], elephant:['el','e','phant'], story:['sto','ry'], country:['coun','try']
+    };
+    Object.keys(expect).forEach(function(w){
+      assert(JSON.stringify(letters(w))===JSON.stringify(expect[w]),
+        w+' 应为 '+expect[w].join('·')+'（词典点分）: '+JSON.stringify(o[w]));
+    });
+    assert(o.mother[0][1].indexOf('ʌ')>=0 && o.elephant[1][1].indexOf('ɪ')>=0,
+      'mother/elephant 短元音提示音错误: '+JSON.stringify({m:o.mother,e:o.elephant}));
+    return 'gin·ger·bread / mi·cro·scope / moth·er / coun·try 等 25 词按词典校订表切分';
   });
 
   check('音节词典数据与代码同步：curated 每条都在 PH_SYLLABLE_DICT 中且拆分一致', () => {

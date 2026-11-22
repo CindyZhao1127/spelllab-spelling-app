@@ -111,10 +111,34 @@ function phShow(){
   $('phBar').style.width=Math.round((phPos+1)/phQueue.length*100)+'%';
   phRenderChunks();
   if(mode==='listen') phSpeak();
+  phSyncVocabBtn();
   const first=$('phSlots').querySelector('input');
   if(first) first.focus(); else { try{ $('phInput').focus(); }catch(e){} }
 }
 function phSpeak(){ if(phLast && typeof speak==='function') speak(phLast[0]); }
+/* 当前拼读词是否已在生词本 */
+function phInVocab(){
+  if(!phLast) return false;
+  const w=typeof normWord==='function'?normWord(phLast[0]):String(phLast[0]).trim().toLowerCase();
+  return (state.vocab||[]).some(v=>(typeof normWord==='function'?normWord(v.en):String(v.en).trim().toLowerCase())===w);
+}
+/* 按钮态随当前词刷新：已在生词本显示 ★ 已收录 */
+function phSyncVocabBtn(){
+  const btn=$('phAddVocab'); if(!btn) return;
+  const has=phInVocab();
+  btn.textContent=has?'★ 已收录':'☆ 加生词';
+  btn.classList.toggle('on',has);
+}
+/* 把当前练习词加入生词本，来源标注为自然拼读，复用教材筛选范围 */
+function phAddVocab(){
+  if(!phLast || !phLesson) { toast('请先选一课开始拼读','bad'); return; }
+  const en=String(phLast[0]||'').trim(), cn=String(phLast[1]||'').trim();
+  const src='自然拼读 · '+String(phLesson.l.t||'').slice(0,40);
+  const before=(state.vocab||[]).length;
+  const v=addVocab(en,cn,src);
+  if(v && (state.vocab||[]).length>before) SFX.flip();
+  phSyncVocabBtn();
+}
 function phStore(){ return phTbMode?state.phonics.textbookDone:state.phonics.done; }
 function phCheck(){
   if(!phLesson || !phLast || phSolved) return;
