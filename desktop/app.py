@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import shutil
 import socket
 import subprocess
@@ -28,6 +29,15 @@ from storage import Store, default_db_path
 
 APP_VERSION = "1.0.0"
 MAX_BODY = 32 * 1024 * 1024
+# 允许写入的 Origin：只有本机页面。外部网页跨站 POST 会带自己的 Origin，必须拒绝。
+LOCAL_ORIGINS = ("http://127.0.0.1", "http://localhost", "http://[::1]")
+
+
+def _origin_allowed(origin: str) -> bool:
+    if not origin:
+        return True  # curl / 测试 / 少数内嵌客户端不带 Origin，保持兼容
+    origin = origin.strip().rstrip("/")
+    return any(origin == base or origin.startswith(base + ":") for base in LOCAL_ORIGINS)
 
 try:
     sys.stdout.reconfigure(encoding="utf-8")
@@ -93,8 +103,24 @@ class Handler(BaseHTTPRequestHandler):
             return False
         return True
 
+    def _guard_origin(self, method: str):
+        """阻止外部网页跨站改写本地学习数据（CSRF）。
+
+        Host 头由浏览器填成目标地址，恶意页面照样能让请求落到本机服务；
+        真正能区分跨站的是 Origin。GET 只读（open-folder 除外，危害有限），
+        写接口一律校验。缺少 Origin 的非浏览器客户端放行。
+        """
+        if method != "POST":
+            return True
+        if not _origin_allowed(self.headers.get("Origin") or ""):
+            self._json({"error": "拒绝跨站请求"}, 403)
+            return False
+        return True
+
     def _route(self, method: str):
         if not self._guard_host():
+            return
+        if not self._guard_origin(method):
             return
         path = self.path.split("?", 1)[0].rstrip("/") or "/"
         store = self.server.store  # type: Store
@@ -134,6 +160,14 @@ class Handler(BaseHTTPRequestHandler):
                     subprocess.Popen(["xdg-open", folder])
                 return self._json({"ok": True, "path": folder})
             if method == "POST" and path == "/api/reset":
+                # 清空是不可撤销操作：除 Origin 白名单外，还要求显式确认字段，
+                # 避免跨站表单/脚本误触（前端清空数据走 save 默认态，不调此接口）。
+                try:
+                    confirm = json.loads(self._body().decode("utf-8") or "{}").get("confirm")
+                except (ValueError, UnicodeDecodeError, json.JSONDecodeError):
+                    confirm = None
+                if confirm is not True:
+                    return self._json({"error": "重置需要显式确认 confirm=true"}, 400)
                 store.reset()
                 return self._json({"ok": True})
             return self._json({"error": "未知接口 " + path}, 404)
@@ -259,7 +293,7 @@ def open_app_window(url: str, profile_dir: Path):
 def main(argv=None):
     parser = argparse.ArgumentParser(description="SpellLab 桌面版")
     parser.add_argument("--port", type=int, default=8790, help="本地服务端口，默认 8790；被占用则自动顺延")
-    parser.add_argument("--db", help="SQLite 数据库路径，默认 desktop/data/spelllab.db")
+    parser.add_argument("--db", help="SQLite 数据库路径，默认 desktop/dist/data/spelllab.db")
     parser.add_argument("--html", help="SpellLab.html 路径")
     parser.add_argument("--no-browser", action="store_true", help="只启动服务，不打开窗口")
     parser.add_argument("--pywebview", action="store_true", help="用 pywebview 原生窗口")

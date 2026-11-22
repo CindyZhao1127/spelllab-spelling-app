@@ -1001,17 +1001,20 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     const o = JSON.parse(run(`JSON.stringify((function(){
       state.lottery.typingPoints=1;
       const p0=Number(state.plan.points)||0, n0=state.plan.ledger.length;
-      window.TypingDuck.onFinish({mode:'word',stars:3,score:999});
+      const pay=function(mode,stars,score,id,ms){
+        window.TypingDuck.onFinish({mode:mode,stars:stars,score:score,id:id,ms:ms});
+      };
+      pay('word',3,999,'tp-test-1',20000);
       const p1=Number(state.plan.points)||0;
-      window.TypingDuck.onFinish({mode:'abc',stars:1,score:10});
+      pay('abc',1,10,'tp-test-2',20000);
       const d1=p1-p0, d2=(Number(state.plan.points)||0)-p1;
       state.lottery.typingPoints=5;
       const p2=Number(state.plan.points)||0;
-      window.TypingDuck.onFinish({mode:'word',stars:1,score:1});
+      pay('word',1,1,'tp-test-3',20000);
       const d3=(Number(state.plan.points)||0)-p2;
       state.lottery.typingPoints=0;
       const p3=Number(state.plan.points)||0;
-      window.TypingDuck.onFinish({mode:'word',stars:5,score:500});
+      pay('word',5,500,'tp-test-4',20000);
       const d4=(Number(state.plan.points)||0)-p3;
       state.lottery.typingPoints=1;
       return {d1:d1,d2:d2,d3:d3,d4:d4,n:state.plan.ledger.length-n0};})())`));
@@ -1019,6 +1022,28 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     assert(o.d3 === 5, '改为 5 分后未生效: ' + JSON.stringify(o));
     assert(o.d4 === 0, '设为 0 仍加了分: ' + JSON.stringify(o));
     return '默认 +1 / 改 5 分 +5 / 设 0 不计分 · 与星级无关';
+  });
+
+  check('打字积分防刷：无局 id / 过短局时 / 同局重复结算都不发分', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      state.lottery.typingPoints=2;
+      window.__typingPayoutIds={};
+      var p0=Number(state.plan.points)||0, h0=state.history.length;
+      window.TypingDuck.onFinish({mode:'word',ms:20000});                  /* 无局 id */
+      var noId=(Number(state.plan.points)||0)-p0;
+      window.TypingDuck.onFinish({mode:'word',id:'too-short',ms:500});     /* 局时过短 */
+      var tooShort=(Number(state.plan.points)||0)-p0;
+      window.TypingDuck.onFinish({mode:'word',id:'once-only',ms:20000,correct:20});
+      var once=(Number(state.plan.points)||0)-p0;
+      window.TypingDuck.onFinish({mode:'word',id:'once-only',ms:20000,correct:20});
+      var replay=(Number(state.plan.points)||0)-p0;
+      return {noId:noId,tooShort:tooShort,once:once,replay:replay,
+        newHistory:state.history.length-h0};
+    })())`));
+    assert(o.noId===0 && o.tooShort===0, '无效结算不应发分: '+JSON.stringify(o));
+    assert(o.once===2 && o.replay===2, '同局重放重复发分: '+JSON.stringify(o));
+    assert(o.newHistory===1, '同局重放重复写入练习历史: '+JSON.stringify(o));
+    return '无 id / <3 秒 / 重放均不发分，历史只记一次';
   });
 
   check('复习回车：提交后再回车直接下一题，听写同理', () => {
@@ -1714,16 +1739,45 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     return '知识点 12 专题 · 选择/填空/错题本 4 页齐全';
   });
 
+  check('语法题先错后对仍发积分，重复答对不重复发放', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      state.grammar={done:{},wrong:[],stats:{answered:0,correct:0},pointsPaid:{}};
+      state.plan.perCorrect=3;
+      var p0=state.plan.points;
+      grTab='choice'; grBuildQueue(); grPos=0;
+      var it=grQueue[0], right='ABCDE'.indexOf(it.q.ans), wrong=(right+1)%3;
+      grAnswered=false; grAnswerChoice(wrong);
+      var afterWrong=state.plan.points;
+      var inWrong=state.grammar.wrong.some(function(x){return x.key===it.key;});
+      grAnswered=false; grAnswerChoice(right);      /* 错题本重做答对 */
+      var afterRight=state.plan.points;
+      var paidAfter=!!state.grammar.pointsPaid[it.key];
+      var wrongAfter=state.grammar.wrong.length;
+      grAnswered=false; grAnswerChoice(right);      /* 再做对一次，不应重复发 */
+      return {p0:p0, afterWrong:afterWrong, afterRight:afterRight, paidAfter:paidAfter,
+        inWrong:inWrong, wrongAfter:wrongAfter, final:state.plan.points,
+        paidN:Object.keys(state.grammar.pointsPaid).length};
+    })())`));
+    assert(o.afterWrong===o.p0, '答错不应发积分: '+JSON.stringify(o));
+    assert(o.inWrong && o.wrongAfter===0, '错题本进出异常: '+JSON.stringify(o));
+    assert(o.afterRight===o.p0+3 && o.paidAfter, '先错后对未发积分: '+JSON.stringify(o));
+    assert(o.final===o.p0+3 && o.paidN===1, '重复答对重复发分: '+JSON.stringify(o));
+    return '先错后对发 3 分 · 错题本自动移出 · 不重复发放';
+  });
+
   check('语法练习进度随存档归一化保留，旧存档自动补齐 grammar 命名空间', () => {
     const o = JSON.parse(run(`JSON.stringify((function(){
       var old={plan:{points:7},grammar:{done:{'c1':{ok:true,t:1}},wrong:['x']}};
       var s=normalizeState(old);
+      var arr=normalizeState({grammar:{done:['x'],pointsPaid:['y']}});
       return {done:s.grammar.done.c1.ok, wrongOK:Array.isArray(s.grammar.wrong),
         stats:s.grammar.stats, paid:!!s.grammar.pointsPaid,
-        fresh:!!normalizeState({}).grammar.done};})())`));
+        fresh:!!normalizeState({}).grammar.done,
+        arrDone:!Array.isArray(arr.grammar.done), arrPaid:!Array.isArray(arr.grammar.pointsPaid)};})())`));
     assert(o.done===true && o.wrongOK && o.paid && o.fresh, 'grammar 归一化失败: '+JSON.stringify(o));
     assert(o.stats.answered===0, 'stats 默认值错误: '+JSON.stringify(o));
-    return '旧存档自动补齐，已做记录保留';
+    assert(o.arrDone && o.arrPaid, '数组型 done/pointsPaid 未纠正: '+JSON.stringify(o));
+    return '旧存档自动补齐，异常类型自动纠正';
   });
 
   check('奖品自动兑换：抽到不扣分、即时已兑换；普通奖线下发放后直接标记', () => {

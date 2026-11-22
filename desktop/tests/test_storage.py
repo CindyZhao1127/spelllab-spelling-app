@@ -169,6 +169,30 @@ class StoreTest(unittest.TestCase):
         self.assertIsNone(self.store.load())
         self.assertTrue(all(v == 0 for v in self.store.info()["counts"].values()))
 
+    def test_reset_does_not_revive_backup(self):
+        """用户明确清空后重启，旧备份不能再次自动导入。"""
+        backup = {"format": "spelllab.backup.v1", "state": {"stats": {"attempted": 77}}}
+        (Path(self.tmp.name) / "spelllab-backup.json").write_text(
+            json.dumps(backup), encoding="utf-8")
+        self.assertTrue(self.store.auto_migrate()["migrated"])
+        self.assertEqual(self.store.load()["state"]["stats"]["attempted"], 77)
+
+        self.store.reset()
+        reopened = Store(self.path)
+        self.assertFalse(reopened.auto_migrate()["migrated"])
+        self.assertIsNone(reopened.load())
+
+    def test_stale_save_does_not_overwrite_newer_state(self):
+        """迟到的旧快照不能覆盖新状态；旧客户端不带时间戳仍可写入。"""
+        self.store.save({"stats": {"attempted": 1}, "__clientSavedAt": 20000})
+        result = self.store.save({"stats": {"attempted": 99}, "__clientSavedAt": 10000})
+        self.assertTrue(result["stale"])
+        self.assertEqual(self.store.load()["state"]["stats"]["attempted"], 1)
+        self.assertNotIn("__clientSavedAt", self.store.load()["state"])
+
+        self.store.save({"stats": {"attempted": 7}})
+        self.assertEqual(self.store.load()["state"]["stats"]["attempted"], 7)
+
     def test_rejects_non_object(self):
         with self.assertRaises(ValueError):
             self.store.save(["not", "a", "dict"])

@@ -154,9 +154,20 @@ class Store:
                 conn.close()
 
     def save(self, state: dict) -> dict:
-        """事务写入全量快照；内容变化时才重建规范化表。"""
+        """事务写入全量快照；内容变化时才重建规范化表。
+
+        防抖保存与关窗 beacon 可能并发，较旧的快照若后到，不能覆盖新状态。
+        前端在发送时附加 __clientSavedAt（单调客户端时间戳），服务端记住
+        已接收的最大值，迟到的小时间戳直接丢弃。旧客户端不带该字段，行为不变。
+        """
         if not isinstance(state, dict):
             raise ValueError("state 必须是对象")
+        state = dict(state)  # 不要修改调用方持有的对象
+        client_ts = state.pop("__clientSavedAt", None)
+        if not isinstance(client_ts, (int, float)):
+            client_ts = None
+        else:
+            client_ts = int(client_ts)
         raw = json.dumps(state, ensure_ascii=False, separators=(",", ":"))
         digest = hashlib.sha256(raw.encode("utf-8")).hexdigest()
         saved_at = int(time.time() * 1000)
@@ -165,10 +176,28 @@ class Store:
             conn = self._connect()
             try:
                 conn.execute("BEGIN IMMEDIATE")
+                if client_ts is not None:
+                    row = conn.execute(
+                        "SELECT value FROM meta WHERE key='last_client_ts'").fetchone()
+                    last_ts = int(row[0]) if row else 0
+                    if client_ts < last_ts:
+                        prior = conn.execute(
+                            "SELECT saved_at, hash FROM state WHERE id=1").fetchone()
+                        conn.rollback()
+                        return {
+                            "savedAt": prior[0] if prior else saved_at,
+                            "hash": prior[1] if prior else self._last_hash,
+                            "normalized": False, "bytes": 0, "stale": True,
+                        }
                 conn.execute(
                     "INSERT OR REPLACE INTO state(id,payload,saved_at,hash) VALUES(1,?,?,?)",
                     (raw, saved_at, digest),
                 )
+                if client_ts is not None:
+                    conn.execute(
+                        "INSERT OR REPLACE INTO meta(key,value) VALUES('last_client_ts',?)",
+                        (str(client_ts),),
+                    )
                 if changed:
                     self._rebuild(conn, state)
                 conn.commit()
@@ -327,6 +356,16 @@ class Store:
         """数据库为空时，自动导入同目录的浏览器备份 / 绑定数据文件。"""
         if self.load() is not None:
             return {"migrated": False}
+        # reset() 会写这个标记：用户明确清空后重启，旧备份不得「复活」。
+        with self._lock:
+            conn = self._connect()
+            try:
+                row = conn.execute(
+                    "SELECT value FROM meta WHERE key='auto_migrate_disabled'").fetchone()
+            finally:
+                conn.close()
+        if row and row[0] == "1":
+            return {"migrated": False, "reason": "已重置，跳过自动迁移"}
         folder = self.db_path.parent
         candidates = sorted(
             [p for p in folder.glob("*.json")
@@ -351,6 +390,10 @@ class Store:
                 conn.execute("DELETE FROM state")
                 for table in NORMALIZED_TABLES:
                     conn.execute("DELETE FROM " + table)
+                conn.execute(
+                    "INSERT OR REPLACE INTO meta(key,value) "
+                    "VALUES('auto_migrate_disabled','1')")
+                conn.execute("DELETE FROM meta WHERE key='last_client_ts'")
                 conn.commit()
                 self._last_hash = None
             except Exception:

@@ -179,6 +179,45 @@ class ServerTest(unittest.TestCase):
         status, data = self.jcall("/api/ping", host="evil.example.com")
         self.assertEqual(status, 403)
 
+    def post_with_origin(self, path, payload, origin, content_type="application/json"):
+        data = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+        headers = {"Content-Type": content_type}
+        if origin is not None:
+            headers["Origin"] = origin
+        req = urllib.request.Request(
+            "http://127.0.0.1:%d%s" % (self.port, path), data=data,
+            headers=headers, method="POST")
+        try:
+            with urllib.request.urlopen(req, timeout=5) as resp:
+                return resp.status, resp.read()
+        except urllib.error.HTTPError as exc:
+            return exc.code, exc.read()
+
+    def test_cross_origin_write_is_blocked(self):
+        """外部网页的跨站 POST 不能覆写本地数据，即使是 text/plain。"""
+        status, _ = self.post_with_origin(
+            "/api/save", {"stats": {"attempted": 999}},
+            "https://evil.example.com", "text/plain;charset=UTF-8")
+        self.assertEqual(status, 403)
+        self.assertIsNone(self.store.load())
+
+        status, _ = self.post_with_origin(
+            "/api/save", {"stats": {"attempted": 5}},
+            "http://127.0.0.1:%d" % self.port)
+        self.assertEqual(status, 200)
+        self.assertEqual(self.store.load()["state"]["stats"]["attempted"], 5)
+
+    def test_reset_requires_explicit_confirm(self):
+        self.jcall("/api/save", {"stats": {"attempted": 7}})
+        status, data = self.jcall("/api/reset", {})
+        self.assertEqual(status, 400)
+        self.assertIn("confirm", data["error"])
+        self.assertIsNotNone(self.store.load())
+        status, data = self.jcall("/api/reset", {"confirm": True})
+        self.assertEqual(status, 200)
+        self.assertTrue(data["ok"])
+        self.assertIsNone(self.store.load())
+
     def test_beacon_save_with_plain_content_type(self):
         """关窗时 sendBeacon 可能带 text/plain；服务端不能依赖 Content-Type 解析。"""
         payload = json.dumps({
