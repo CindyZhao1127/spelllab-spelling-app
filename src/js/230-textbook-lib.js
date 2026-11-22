@@ -248,9 +248,17 @@ function importPackText(text){
   return r.packs.length;
 }
 function backupPayload(){
+  /* 整个 state 含 profiles：一份备份覆盖所有孩子档案。
+     v1 读取方忽略新字段，仍只认当前顶层字段，向下兼容。 */
   return {format:'spelllab.backup.v1',exportedAt:new Date().toISOString(),state:clone(state)};
 }
-function restoreBackup(text){
+function profileCountInBackup(data){
+  try{
+    const p=data&&data.state&&data.state.profiles;
+    return (p&&Array.isArray(p.list))?p.list.length:1;
+  }catch(e){ return 1; }
+}
+function restoreBackup(text,fromFile){
   let data;
   try{ data=JSON.parse(String(text||'').trim()); }
   catch(e){ toast('备份 JSON 解析失败','bad'); return false; }
@@ -258,7 +266,7 @@ function restoreBackup(text){
   if(!data||data.format!=='spelllab.backup.v1'||!s||typeof s!=='object'){
     toast('不是有效的全库备份文件','bad'); return false;
   }
-  if(!confirm('从备份恢复会覆盖当前全部学习数据、教材包和设置，确定继续？')) return false;
+  if(!fromFile && !confirm('从备份恢复会覆盖当前全部学习数据、教材包、设置与孩子档案，确定继续？')) return false;
   try{
     localStorage.setItem(KEY,JSON.stringify(s));
     localStorage.setItem(MIRROR_TS,String(Date.now()));

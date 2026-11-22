@@ -7,6 +7,7 @@ const STORE = {
   mirror:'ok', mirrorBytes:0, lastMirror:0, savedAt:0,
   timer:0, queued:false, writing:false,
   fileHandle:null, fileName:'', fileState:'', fileLast:0, fileTimer:0,
+  fileDevice:'', fileConflict:false, fileRemoteAt:0,
   usage:0, quota:0, persisted:false,
   dbPath:'', dbSize:0, dbCounts:null, desktopTimer:0,
   dirty:false, lastFlush:0

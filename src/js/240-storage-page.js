@@ -34,10 +34,14 @@ function renderDbFile(){
     return;
   }
   if(!STORE.fileHandle){ el.innerHTML=dbRow('状态','未绑定本地文件'); return; }
+  const cr=$('dbConflictRow'); if(cr) cr.hidden=!STORE.fileConflict;
   el.innerHTML=
     dbRow('绑定文件',STORE.fileName||'spelllab-data.json')+
     dbRow('授权状态',STORE.fileState==='granted'?'已授权 · 自动写回':'需点「立即同步」重新授权')+
-    dbRow('上次同步',STORE.fileLast?new Date(STORE.fileLast).toLocaleString('zh-CN'):'尚未同步');
+    dbRow('上次同步',STORE.fileLast?new Date(STORE.fileLast).toLocaleString('zh-CN'):'尚未同步')+
+    (STORE.fileConflict
+      ? dbRow('同步冲突','文件已被其他设备更新 · 请先选择用哪份')
+      : dbRow('冲突检测','正常 · 未被其他设备改动'));
 }
 function renderDesktopInfo(){
   const counts=STORE.dbCounts||{};
@@ -106,15 +110,56 @@ async function ensureFilePermission(silent){
     return r==='granted';
   }catch(e){ STORE.fileState='prompt'; return false; }
 }
-async function writeDataFile(){
-  if(!(await ensureFilePermission(false))) return false;
+function fileDeviceId(){
+  if(STORE.fileDevice) return STORE.fileDevice;
+  let id='';
+  try{ id=localStorage.getItem('spelllab.device.v1')||''; }catch(e){}
+  if(!id){
+    id='dev-'+Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+    try{ localStorage.setItem('spelllab.device.v1',id); }catch(e){}
+  }
+  STORE.fileDevice=id;
+  return id;
+}
+/* 读取绑定文件最后修改时间。网盘（坚果云 / OneDrive / 百度网盘）同步下来的
+   文件 lastModified 会保留来源时间；若比本机上次写入还新，说明另一台设备改过。 */
+async function fileRemoteModified(){
+  if(!STORE.fileHandle || typeof STORE.fileHandle.getFile!=='function') return 0;
   try{
+    const f=await STORE.fileHandle.getFile();
+    return Number(f&&f.lastModified)||0;
+  }catch(e){ return 0; }
+}
+async function writeDataFile(force){
+  if(!(await ensureFilePermission(false))) return false;
+  if(!force){
+    const remote=await fileRemoteModified();
+    /* fileLast 是本机上次写入时的文件 mtime；只在确知远端更新时拦截。
+       首次绑定（fileLast=0）不拦截，直接写入初始快照。 */
+    if(remote && STORE.fileLast && remote>STORE.fileLast+2000){
+      STORE.fileConflict=true; STORE.fileRemoteAt=remote;
+      STORE.error='文件已被其他设备更新，已暂停自动写入以免覆盖';
+      toast('检测到网盘里的文件被另一台设备更新，已暂停同步','bad');
+      if(drawerTab==='storage') renderStorage();
+      return false;
+    }
+  }
+  try{
+    const payload=backupPayload();
+    payload.deviceId=fileDeviceId();
+    payload.savedAt=STORE.savedAt||Date.now();
     const w=await STORE.fileHandle.createWritable();
-    await w.write(JSON.stringify(backupPayload(),null,2));
+    await w.write(JSON.stringify(payload,null,2));
     await w.close();
-    STORE.fileLast=Date.now(); STORE.fileState='granted'; STORE.error='';
+    const after=await fileRemoteModified();
+    STORE.fileLast=after||Date.now(); STORE.fileConflict=false; STORE.fileRemoteAt=0;
+    STORE.fileState='granted'; STORE.error='';
     return true;
-  }catch(e){ STORE.error='文件写入失败：'+String((e&&e.message)||e); return false; }
+  }catch(e){
+    STORE.error='文件写入失败：'+String((e&&e.message)||e);
+    if(drawerTab==='storage') renderStorage();
+    return false;
+  }
 }
 function scheduleFileSync(){
   if(!STORE.fileHandle || STORE.fileState!=='granted' || STORE.fileTimer) return;
@@ -149,8 +194,33 @@ async function syncDataFile(){
 }
 async function unbindDataFile(){
   STORE.fileHandle=null; STORE.fileName=''; STORE.fileState=''; STORE.fileLast=0;
+  STORE.fileConflict=false; STORE.fileRemoteAt=0;
   try{ await idbCall(DB_KEY_FILE,{handle:null,name:''},true); }catch(e){}
   renderStorage(); toast('已解除文件绑定');
+}
+/* 冲突二选一：本机覆盖文件（强制写）或从文件恢复本机（重新读备份）。 */
+async function resolveUseLocal(){
+  const ok=await writeDataFile(true);
+  renderStorage();
+  toast(ok?'已用本机数据覆盖文件':'写入失败','ok');
+  return ok;
+}
+async function resolveUseRemote(){
+  if(!STORE.fileHandle) return false;
+  let text='';
+  try{
+    const f=await STORE.fileHandle.getFile();
+    text=await f.text();
+  }catch(e){ toast('读取文件失败：'+String((e&&e.message)||e),'bad'); return false; }
+  const ok=restoreBackup(text,true);
+  if(ok){
+    STORE.fileConflict=false; STORE.fileRemoteAt=0;
+    STORE.fileLast=await fileRemoteModified()||Date.now();
+    await writeDataFile(true);
+    renderStorage();
+    toast('已从文件恢复本机数据','ok');
+  }
+  return ok;
 }
 function readRestoreFile(e){
   const f=e.target.files&&e.target.files[0]; if(!f) return;

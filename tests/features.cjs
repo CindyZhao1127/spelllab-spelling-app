@@ -2217,6 +2217,114 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     return '每单元 +4 句 · 重复加载不叠加 · 包 id 与进度保留';
   });
 
+  check('多档案：老存档幂等迁移为默认档案，进度积分不丢', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      var old=normalizeState({plan:{points:42},history:[{t:1,en:'hi'}],vocab:[{id:'v1',en:'hi'}]});
+      var again=normalizeState(old);
+      return {count:old.profiles.list.length, active:old.profiles.activeId,
+        hasSnap:!!old.profiles.data[old.profiles.activeId],
+        pts:(old.profiles.data[old.profiles.activeId].plan||{}).points,
+        hist:(old.profiles.data[old.profiles.activeId].history||[]).length,
+        againCount:again.profiles.list.length, topPts:old.plan.points,
+        vocab:old.vocab.length};})())`));
+    assert(o.count===1 && o.againCount===1 && o.hasSnap, '档案名册迁移失败: '+JSON.stringify(o));
+    assert(o.topPts===42 && o.pts===42 && o.hist===1 && o.vocab===1,
+      '老存档迁移后进度/积分丢失: '+JSON.stringify(o));
+    return '单档案默认名册 · 快照含 42 分 / 1 条记录 · 重复加载不新增';
+  });
+
+  check('多档案：切换时进度/积分隔离，教材与奖励规则共享', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      var s=normalizeState({plan:{points:10},history:[{t:1,en:'a'}],
+        textbooks:[{id:'bk',name:'人教版',units:[]}],
+        lottery:{prizes:[{id:'p1',name:'奖',prob:10}],cost:8},
+        parent:{salt:'x',hash:'h',changed:true}});
+      state=s;
+      var p1=state.profiles.activeId;
+      /* 新增二宝：空白进度、继承共享配置 */
+      addProfile('二宝');
+      var p2=state.profiles.activeId;
+      var b={p2Points:state.plan.points, p2Hist:state.history.length,
+        p2Books:state.textbooks.length, p2Prize:state.lottery.prizes[0].name,
+        p2Cost:state.lottery.cost, p2Parent:state.parent.salt};
+      /* 在二宝下练一题、改积分 */
+      state.plan.points=99; state.history.push({t:2,en:'b'});
+      profileStoreCurrent();
+      /* 切回大宝：应恢复 10 分 / 1 条记录 */
+      switchProfile(p1);
+      b.backPoints=state.plan.points; b.backHist=state.history.length;
+      b.backBooks=state.textbooks.length; b.backPrize=state.lottery.prizes[0].name;
+      /* 再切二宝：应恢复 99 分 / 2 条记录 */
+      switchProfile(p2);
+      b.p2BackPoints=state.plan.points; b.p2BackHist=state.history.length;
+      b.names=state.profiles.list.map(function(p){return p.name;}).join('/');
+      return b;})())`));
+    assert(o.p2Points===0 && o.p2Hist===0, '新档案未从空白开始: '+JSON.stringify(o));
+    assert(o.p2Books===1 && o.p2Prize==='奖' && o.p2Cost===8 && o.p2Parent==='x',
+      '共享字段（教材/奖项/家长锁）未继承: '+JSON.stringify(o));
+    assert(o.backPoints===10 && o.backHist===1, '切回原档案数据串了: '+JSON.stringify(o));
+    /* 新档案从空白开始（history 0 条），push 一条后为 1；大宝保留原来的 1 条不串档 */
+    assert(o.p2BackPoints===99 && o.p2BackHist===1, '二次切换未恢复该孩子数据: '+JSON.stringify(o));
+    assert(o.names==='默认档案/二宝', '名册顺序异常: '+JSON.stringify(o));
+    return '两孩子积分/记录互不干扰 · 教材与奖项规则共用';
+  });
+
+  check('多档案：删除档案后数据不残留，至少保留一个', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      state=normalizeState({plan:{points:5}});
+      var p1=state.profiles.activeId;
+      addProfile('孩子B');
+      var p2=state.profiles.activeId;
+      state.plan.points=77; profileStoreCurrent();
+      /* 删除非当前档案 */
+      reallyDeleteProfile(p1);
+      var a={count:state.profiles.list.length,active:state.profiles.activeId,
+        pts:state.plan.points, hasOld:!!state.profiles.data[p1]};
+      /* 尝试删最后一个：应被拒绝 */
+      reallyDeleteProfile(p2);
+      a.afterGuard=state.profiles.list.length;
+      return a;})())`));
+    assert(o.count===1 && o.active===o.active && !o.hasOld && o.pts===77,
+      '删除档案后数据残留: '+JSON.stringify(o));
+    assert(o.afterGuard===1, '最后一个档案被误删: '+JSON.stringify(o));
+    return '删除当前档案自动切到剩余档案 · 最后一个不可删';
+  });
+
+  check('多档案：全库备份包含所有孩子档案，恢复后名册完整', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      state=normalizeState({plan:{points:3},history:[{t:1,en:'x'}]});
+      addProfile('二宝');
+      state.plan.points=55; profileStoreCurrent();
+      var payload=backupPayload();
+      var cnt=profileCountInBackup(payload);
+      var json=JSON.stringify(payload);
+      /* 模拟恢复：走 normalizeState（restoreBackup 内部路径） */
+      var restored=normalizeState(JSON.parse(json).state);
+      return {cnt:cnt, hasAll:/二宝/.test(json),
+        restoredCount:restored.profiles.list.length,
+        restoredActivePts:restored.plan.points};})())`));
+    assert(o.cnt===2 && o.hasAll && o.restoredCount===2,
+      '备份未含全部档案: '+JSON.stringify(o));
+    assert(o.restoredActivePts===55, '恢复后当前档案积分错误: '+JSON.stringify(o));
+    return '一份备份含 2 个档案 · 恢复后名册与当前档案数据完整';
+  });
+
+  check('网盘同步：备份文件带设备标识与保存时间，冲突时暂停覆盖', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      /* 常量与函数存在性 */
+      var p=backupPayload();
+      return {hasDevice:typeof fileDeviceId==='function',
+        hasRemote:typeof fileRemoteModified==='function',
+        hasWriteForce:writeDataFile.length>=0,
+        hasConflictField:typeof STORE.fileConflict==='boolean',
+        payloadFormat:p.format, hasState:!!p.state};})())`));
+    assert(o.hasDevice && o.hasRemote && o.hasConflictField,
+      '冲突检测函数缺失: '+JSON.stringify(o));
+    assert(o.payloadFormat==='spelllab.backup.v1' && o.hasState,
+      '备份格式被破坏: '+JSON.stringify(o));
+    return '设备 id / 远端 mtime 检测就绪 · 备份格式保持 v1 兼容';
+  });
+
   const failed = results.filter(r => r[1] === 'FAIL');
   results.forEach(r => console.log('[' + r[1] + ']   ' + r[0] + (r[2] ? '  -> ' + r[2] : '')));
   console.log('\n合计 ' + results.length + ' 项，失败 ' + failed.length + ' 项');

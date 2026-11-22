@@ -89,6 +89,29 @@
   .top-stats{display:flex;align-items:center;gap:10px;padding:4px 12px;border-radius:999px;
     background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07)}
   .top-sep{width:1px;height:22px;flex:none;background:rgba(255,255,255,.14)}
+  .profile-chip{display:flex;align-items:center;gap:7px;padding:4px 11px 4px 4px;border-radius:999px;
+    background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);font-size:12px;font-weight:700;
+    color:var(--text);max-width:150px;transition:.18s}
+  .profile-chip:hover{background:rgba(255,255,255,.14)}
+  .profile-chip .avatar{width:26px;height:26px;flex:none;display:grid;place-items:center;border-radius:50%;
+    background:var(--grad-primary);color:#fff;font-size:11px;font-weight:800}
+  .profile-chip>span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .profile-menu{display:flex;flex-direction:column;gap:6px;min-width:230px}
+  .profile-row{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:12px;
+    background:rgba(255,255,255,.05);border:1px solid transparent;cursor:pointer;text-align:left;width:100%;color:var(--text)}
+  .profile-row:hover{background:rgba(139,123,255,.16)}
+  .profile-row.active{border-color:rgba(139,123,255,.55);background:rgba(139,123,255,.18)}
+  .profile-row .avatar{width:30px;height:30px;flex:none;display:grid;place-items:center;border-radius:50%;
+    color:#fff;font-size:12px;font-weight:800}
+  .profile-row .pname{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}
+  .profile-row .pstat{font-size:11px;color:var(--muted);flex:none}
+  .profile-row .pdel{flex:none;width:26px;height:26px;border-radius:8px;color:var(--muted);font-size:16px;line-height:1}
+  .profile-row .pdel:hover{background:rgba(255,122,134,.18);color:#ffb3ba}
+  .profile-actions{display:flex;gap:8px;margin-top:4px}
+  .profile-actions .mini-btn{flex:1}
+  .profile-colors{display:flex;gap:8px;margin-top:12px;justify-content:center}
+  .profile-colors button{width:28px;height:28px;border-radius:50%;border:2px solid transparent;transition:.15s}
+  .profile-colors button.active{border-color:var(--text);transform:scale(1.15)}
   .stat{text-align:center;line-height:1.1;min-width:40px}
   .stat b{display:block;font-size:15px;font-weight:800;font-variant-numeric:tabular-nums}
   .stat span{font-size:10px;color:var(--muted)}
@@ -1632,6 +1655,7 @@ body.td-typing #typingView { height: 100%; }
       <button data-mode="typing">打字练习</button>
     </div>
     <div class="top-right">
+      <button class="profile-chip" id="btnProfile" title="切换孩子档案（新增 / 重命名 / 删除）"><span class="avatar" id="profileAvatar">默认</span><span id="profileName">默认档案</span></button>
       <div class="accent-switch" id="accentSwitch" title="朗读口音与拼读音节标准（英式 / 美式）"><button data-accent="uk" class="active">UK</button><button data-accent="us">US</button></div>
       <div class="top-stats" title="本轮战绩">
         <div class="stat"><b id="statStreak">0</b><span>连对</span></div>
@@ -2514,6 +2538,10 @@ body.td-typing #typingView { height: 100%; }
           <button class="mini-btn primary sm" id="dbBindFile">绑定本地文件</button>
           <button class="mini-btn sm" id="dbSyncFile">立即同步</button>
           <button class="mini-btn danger sm" id="dbUnbindFile">解除绑定</button>
+        </div>
+        <div class="btn-row tight" id="dbConflictRow" style="margin-top:8px" hidden>
+          <button class="mini-btn sm" id="dbUseLocal">用本机数据覆盖文件</button>
+          <button class="mini-btn sm" id="dbUseRemote">从文件恢复本机</button>
         </div>
       </div>
 

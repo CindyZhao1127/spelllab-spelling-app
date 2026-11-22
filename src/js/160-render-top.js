@@ -54,6 +54,7 @@ function setSystem(v){
   toast('已切换为'+(v==='54'?'五四制（小学 1–5 / 初中 6–9）':'六三制（小学 1–6 / 初中 7–9）'));
 }
 function renderHeader(){
+  if(typeof renderProfileChip==='function') renderProfileChip();
   const u=currentUnit();
   $('courseName').textContent=(filterFallback?'该范围暂无课程 · ':'')+u.scope+' · '+u.name+' ('+u.sentences.length+'题)';
   const total = order().length||1;

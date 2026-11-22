@@ -168,5 +168,95 @@ function normalizeState(s){
     if(!b || !Number.isFinite(Number(b.ms)) || Number(b.ms)<=0) delete out.bestTimes[k];
     else { b.ms=Number(b.ms); b.breaks=Math.max(0,Number(b.breaks)||0); }
   });
+  normalizeProfiles(out);
   return out;
 }
+
+/* ---------------- 多孩子档案 ----------------
+   设计：运行时的顶层字段永远是「当前档案」的数据，7000 行业务代码零改动。
+   state.profiles 只保存档案名册 + 其余档案的完整快照；切换时把当前顶层字段
+   存回快照、再把目标档案铺回顶层。这样备份 / SQLite / IndexedDB 只要序列化
+   整个 state，就天然带上所有孩子的进度，不需要改任何存储格式。
+   共享字段（家长锁、教材包、计划/奖项规则）不进快照，切换时保持当前值。 */
+function profileId(){
+  return 'p'+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+}
+function profileBlank(id,name){
+  return {id:id,name:name,createdAt:Date.now(),updatedAt:Date.now(),color:0};
+}
+/* 老存档 / 全新安装：把当前整份数据收进第一个档案，之后一切以档案为准。
+   只在当前档案缺快照时补一份，绝不覆盖用户已有的切换现场。 */
+function normalizeProfiles(out){
+  let ps=out.profiles;
+  if(!ps || typeof ps!=='object' || Array.isArray(ps)){
+    ps=out.profiles={activeId:'',list:[],data:{}};
+  }
+  if(typeof ps.activeId!=='string') ps.activeId='';
+  if(!Array.isArray(ps.list)) ps.list=[];
+  if(!ps.data || typeof ps.data!=='object' || Array.isArray(ps.data)) ps.data={};
+  ps.list=ps.list.filter(function(p){ return p && typeof p==='object' && typeof p.id==='string' && p.id; })
+    .map(function(p){
+      return {id:p.id,name:String(p.name||'孩子').slice(0,16),
+        createdAt:Number(p.createdAt)||Date.now(),updatedAt:Number(p.updatedAt)||Date.now(),
+        color:Math.max(0,Math.min(5,Math.round(Number(p.color)||0)))};
+    });
+  const ids={}; ps.list.forEach(function(p){ ids[p.id]=1; });
+  Object.keys(ps.data).forEach(function(k){ if(!ids[k]) delete ps.data[k]; });
+  if(!ps.list.length){
+    const first=profileBlank(profileId(),PROFILE_DEFAULT_NAME);
+    ps.list.push(first); ps.activeId=first.id;
+  }
+  if(!ids[ps.activeId]) ps.activeId=ps.list[0].id;
+  if(!ps.data[ps.activeId] || typeof ps.data[ps.activeId]!=='object'){
+    ps.data[ps.activeId]=profilePickChild(out);
+  }
+}
+function profilePickChild(src){
+  const snap={};
+  PROFILE_FIELDS.forEach(function(k){ if(src[k]!==undefined) snap[k]=clone(src[k]); });
+  snap.plan={}; PROFILE_PLAN_CHILD.forEach(function(k){ snap.plan[k]=clone(src.plan?src.plan[k]:undefined); });
+  snap.lottery={}; PROFILE_LOTTERY_CHILD.forEach(function(k){ snap.lottery[k]=clone(src.lottery?src.lottery[k]:undefined); });
+  return snap;
+}
+function profileMergeChild(snap,target){
+  PROFILE_FIELDS.forEach(function(k){ if(snap[k]!==undefined) target[k]=clone(snap[k]); });
+  if(snap.plan) PROFILE_PLAN_CHILD.forEach(function(k){
+    if(snap.plan[k]!==undefined) target.plan[k]=clone(snap.plan[k]);
+  });
+  if(snap.lottery) PROFILE_LOTTERY_CHILD.forEach(function(k){
+    if(snap.lottery[k]!==undefined) target.lottery[k]=clone(snap.lottery[k]);
+  });
+}
+/* 把当前顶层字段存入当前档案快照（切换 / 建删档案前调用）。 */
+function profileStoreCurrent(){
+  if(typeof state==='undefined' || !state.profiles) return;
+  const id=state.profiles.activeId;
+  state.profiles.data[id]=profilePickChild(state);
+  const cur=state.profiles.list.find(function(p){ return p.id===id; });
+  if(cur) cur.updatedAt=Date.now();
+}
+/* 把目标档案的快照铺回顶层；共享字段（教材包 / 家长密码 / 规则）保持当前值。 */
+function profileApply(id){
+  if(typeof state==='undefined' || !state.profiles) return false;
+  const ps=state.profiles;
+  if(!ps.list.some(function(p){ return p.id===id; })) return false;
+  profileStoreCurrent();
+  const snap=ps.data[id]||{};
+  /* 以干净档案为底，注入当前共享配置，再合并目标孩子的数据；
+     normalizeState 保证新档案缺字段时也有完整默认结构。 */
+  const next=normalizeState(clone(DEFAULT_STATE));
+  PROFILE_SHARED_FIELDS.forEach(function(k){ next[k]=clone(state[k]); });
+  PROFILE_PLAN_SHARED.forEach(function(k){ next.plan[k]=clone(state.plan[k]); });
+  PROFILE_LOTTERY_SHARED.forEach(function(k){ next.lottery[k]=clone(state.lottery[k]); });
+  profileMergeChild(snap,next);
+  next.profiles=ps;
+  ps.activeId=id;
+  Object.keys(state).forEach(function(k){ delete state[k]; });
+  Object.keys(next).forEach(function(k){ state[k]=next[k]; });
+  return true;
+}
+function profileActive(){
+  if(typeof state==='undefined' || !state.profiles) return null;
+  return state.profiles.list.find(function(p){ return p.id===state.profiles.activeId; })||null;
+}
+function profileList(){ return (typeof state!=='undefined' && state.profiles)?state.profiles.list:[]; }

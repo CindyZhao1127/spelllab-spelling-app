@@ -23,7 +23,8 @@ function hashPassword(pwd,salt){
    再把对应控件的事件处理包一层 guardParent('域名', fn) 即可。 */
 const PARENT_SCOPES = {
   lottery:{label:'抽奖与奖项设置',hint:'奖项内容、中奖概率、每次消耗积分'},
-  paperdict:{label:'纸笔听写批改',hint:'显示正确答案、给孩子听写打分'}
+  paperdict:{label:'纸笔听写批改',hint:'显示正确答案、给孩子听写打分'},
+  profiles:{label:'孩子档案管理',hint:'新增、改名与删除孩子档案'}
 };
 let parentUnlocked = false;   // 只在内存里，刷新 / 重启即重新锁定
 let parentPending = null;

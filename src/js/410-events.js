@@ -42,6 +42,7 @@ function bind(){
   });
   $('btnPoints').addEventListener('click',()=>openDrawer(true,'plan'));
   $('btnWheel').addEventListener('click',openWheel);
+  $('btnProfile').addEventListener('click',openProfileMenu);
   $('btnParent').addEventListener('click',()=>openParentCenter());
   $('scStar').addEventListener('click',starQuestionWords);
   $('modalMask').addEventListener('click',e=>{
@@ -492,6 +493,8 @@ function bind(){
   $('dbBindFile').addEventListener('click',()=>bindDataFile());
   $('dbSyncFile').addEventListener('click',()=>syncDataFile());
   $('dbUnbindFile').addEventListener('click',()=>unbindDataFile());
+  $('dbUseLocal').addEventListener('click',()=>resolveUseLocal());
+  $('dbUseRemote').addEventListener('click',()=>resolveUseRemote());
   $('dbBackup').addEventListener('click',()=>emitJSON('spelllab-backup-'+today()+'.json',backupPayload()));
   $('dbExportSQL').addEventListener('click',()=>{
     const name='spelllab-'+today()+'.sql', text=exportSQLite();

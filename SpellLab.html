@@ -89,6 +89,29 @@
   .top-stats{display:flex;align-items:center;gap:10px;padding:4px 12px;border-radius:999px;
     background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07)}
   .top-sep{width:1px;height:22px;flex:none;background:rgba(255,255,255,.14)}
+  .profile-chip{display:flex;align-items:center;gap:7px;padding:4px 11px 4px 4px;border-radius:999px;
+    background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);font-size:12px;font-weight:700;
+    color:var(--text);max-width:150px;transition:.18s}
+  .profile-chip:hover{background:rgba(255,255,255,.14)}
+  .profile-chip .avatar{width:26px;height:26px;flex:none;display:grid;place-items:center;border-radius:50%;
+    background:var(--grad-primary);color:#fff;font-size:11px;font-weight:800}
+  .profile-chip>span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .profile-menu{display:flex;flex-direction:column;gap:6px;min-width:230px}
+  .profile-row{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:12px;
+    background:rgba(255,255,255,.05);border:1px solid transparent;cursor:pointer;text-align:left;width:100%;color:var(--text)}
+  .profile-row:hover{background:rgba(139,123,255,.16)}
+  .profile-row.active{border-color:rgba(139,123,255,.55);background:rgba(139,123,255,.18)}
+  .profile-row .avatar{width:30px;height:30px;flex:none;display:grid;place-items:center;border-radius:50%;
+    color:#fff;font-size:12px;font-weight:800}
+  .profile-row .pname{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}
+  .profile-row .pstat{font-size:11px;color:var(--muted);flex:none}
+  .profile-row .pdel{flex:none;width:26px;height:26px;border-radius:8px;color:var(--muted);font-size:16px;line-height:1}
+  .profile-row .pdel:hover{background:rgba(255,122,134,.18);color:#ffb3ba}
+  .profile-actions{display:flex;gap:8px;margin-top:4px}
+  .profile-actions .mini-btn{flex:1}
+  .profile-colors{display:flex;gap:8px;margin-top:12px;justify-content:center}
+  .profile-colors button{width:28px;height:28px;border-radius:50%;border:2px solid transparent;transition:.15s}
+  .profile-colors button.active{border-color:var(--text);transform:scale(1.15)}
   .stat{text-align:center;line-height:1.1;min-width:40px}
   .stat b{display:block;font-size:15px;font-weight:800;font-variant-numeric:tabular-nums}
   .stat span{font-size:10px;color:var(--muted)}
@@ -1632,6 +1655,7 @@ body.td-typing #typingView { height: 100%; }
       <button data-mode="typing">打字练习</button>
     </div>
     <div class="top-right">
+      <button class="profile-chip" id="btnProfile" title="切换孩子档案（新增 / 重命名 / 删除）"><span class="avatar" id="profileAvatar">默认</span><span id="profileName">默认档案</span></button>
       <div class="accent-switch" id="accentSwitch" title="朗读口音与拼读音节标准（英式 / 美式）"><button data-accent="uk" class="active">UK</button><button data-accent="us">US</button></div>
       <div class="top-stats" title="本轮战绩">
         <div class="stat"><b id="statStreak">0</b><span>连对</span></div>
@@ -2515,6 +2539,10 @@ body.td-typing #typingView { height: 100%; }
           <button class="mini-btn sm" id="dbSyncFile">立即同步</button>
           <button class="mini-btn danger sm" id="dbUnbindFile">解除绑定</button>
         </div>
+        <div class="btn-row tight" id="dbConflictRow" style="margin-top:8px" hidden>
+          <button class="mini-btn sm" id="dbUseLocal">用本机数据覆盖文件</button>
+          <button class="mini-btn sm" id="dbUseRemote">从文件恢复本机</button>
+        </div>
       </div>
 
       <div class="panel">
@@ -3235,11 +3263,24 @@ function hashPassword(pwd,salt){
    再把对应控件的事件处理包一层 guardParent('域名', fn) 即可。 */
 const PARENT_SCOPES = {
   lottery:{label:'抽奖与奖项设置',hint:'奖项内容、中奖概率、每次消耗积分'},
-  paperdict:{label:'纸笔听写批改',hint:'显示正确答案、给孩子听写打分'}
+  paperdict:{label:'纸笔听写批改',hint:'显示正确答案、给孩子听写打分'},
+  profiles:{label:'孩子档案管理',hint:'新增、改名与删除孩子档案'}
 };
 let parentUnlocked = false;   // 只在内存里，刷新 / 重启即重新锁定
 let parentPending = null;
 
+/* ---------------- 多孩子档案常量（须早于 80-state 的 loadState 初始化） ---------------- */
+const PROFILE_FIELDS = [
+  'progress','wrong','wordStats','history','bestTimes','stats','settings','filter',
+  'vocab','practiceSets','session','phonics','grammar','memo','typingDuck','seq'
+];
+/* 积分与抽奖：余额 / 记录按孩子，规则（每答对几分、奖项、消耗）全孩子共享。 */
+const PROFILE_PLAN_CHILD = ['points','ledger','results','since','lastEval'];
+const PROFILE_LOTTERY_CHILD = ['log','daily'];
+const PROFILE_PLAN_SHARED = ['enabled','type','target','reward','penalty','perCorrect'];
+const PROFILE_LOTTERY_SHARED = ['cost','typingPoints','dailyLimit','prizes','legacyPrizeFix'];
+const PROFILE_SHARED_FIELDS = ['parent','textbooks','grades','books','custom','customMeta','system','unitMeta'];
+const PROFILE_DEFAULT_NAME = '默认档案';
 /* ---------------- 状态 ---------------- */
 const KEY = 'spelllab.state.v1';
 const DEFAULT_STATE = {
@@ -3285,6 +3326,7 @@ const STORE = {
   mirror:'ok', mirrorBytes:0, lastMirror:0, savedAt:0,
   timer:0, queued:false, writing:false,
   fileHandle:null, fileName:'', fileState:'', fileLast:0, fileTimer:0,
+  fileDevice:'', fileConflict:false, fileRemoteAt:0,
   usage:0, quota:0, persisted:false,
   dbPath:'', dbSize:0, dbCounts:null, desktopTimer:0,
   dirty:false, lastFlush:0
@@ -3552,8 +3594,98 @@ function normalizeState(s){
     if(!b || !Number.isFinite(Number(b.ms)) || Number(b.ms)<=0) delete out.bestTimes[k];
     else { b.ms=Number(b.ms); b.breaks=Math.max(0,Number(b.breaks)||0); }
   });
+  normalizeProfiles(out);
   return out;
 }
+
+/* ---------------- 多孩子档案 ----------------
+   设计：运行时的顶层字段永远是「当前档案」的数据，7000 行业务代码零改动。
+   state.profiles 只保存档案名册 + 其余档案的完整快照；切换时把当前顶层字段
+   存回快照、再把目标档案铺回顶层。这样备份 / SQLite / IndexedDB 只要序列化
+   整个 state，就天然带上所有孩子的进度，不需要改任何存储格式。
+   共享字段（家长锁、教材包、计划/奖项规则）不进快照，切换时保持当前值。 */
+function profileId(){
+  return 'p'+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+}
+function profileBlank(id,name){
+  return {id:id,name:name,createdAt:Date.now(),updatedAt:Date.now(),color:0};
+}
+/* 老存档 / 全新安装：把当前整份数据收进第一个档案，之后一切以档案为准。
+   只在当前档案缺快照时补一份，绝不覆盖用户已有的切换现场。 */
+function normalizeProfiles(out){
+  let ps=out.profiles;
+  if(!ps || typeof ps!=='object' || Array.isArray(ps)){
+    ps=out.profiles={activeId:'',list:[],data:{}};
+  }
+  if(typeof ps.activeId!=='string') ps.activeId='';
+  if(!Array.isArray(ps.list)) ps.list=[];
+  if(!ps.data || typeof ps.data!=='object' || Array.isArray(ps.data)) ps.data={};
+  ps.list=ps.list.filter(function(p){ return p && typeof p==='object' && typeof p.id==='string' && p.id; })
+    .map(function(p){
+      return {id:p.id,name:String(p.name||'孩子').slice(0,16),
+        createdAt:Number(p.createdAt)||Date.now(),updatedAt:Number(p.updatedAt)||Date.now(),
+        color:Math.max(0,Math.min(5,Math.round(Number(p.color)||0)))};
+    });
+  const ids={}; ps.list.forEach(function(p){ ids[p.id]=1; });
+  Object.keys(ps.data).forEach(function(k){ if(!ids[k]) delete ps.data[k]; });
+  if(!ps.list.length){
+    const first=profileBlank(profileId(),PROFILE_DEFAULT_NAME);
+    ps.list.push(first); ps.activeId=first.id;
+  }
+  if(!ids[ps.activeId]) ps.activeId=ps.list[0].id;
+  if(!ps.data[ps.activeId] || typeof ps.data[ps.activeId]!=='object'){
+    ps.data[ps.activeId]=profilePickChild(out);
+  }
+}
+function profilePickChild(src){
+  const snap={};
+  PROFILE_FIELDS.forEach(function(k){ if(src[k]!==undefined) snap[k]=clone(src[k]); });
+  snap.plan={}; PROFILE_PLAN_CHILD.forEach(function(k){ snap.plan[k]=clone(src.plan?src.plan[k]:undefined); });
+  snap.lottery={}; PROFILE_LOTTERY_CHILD.forEach(function(k){ snap.lottery[k]=clone(src.lottery?src.lottery[k]:undefined); });
+  return snap;
+}
+function profileMergeChild(snap,target){
+  PROFILE_FIELDS.forEach(function(k){ if(snap[k]!==undefined) target[k]=clone(snap[k]); });
+  if(snap.plan) PROFILE_PLAN_CHILD.forEach(function(k){
+    if(snap.plan[k]!==undefined) target.plan[k]=clone(snap.plan[k]);
+  });
+  if(snap.lottery) PROFILE_LOTTERY_CHILD.forEach(function(k){
+    if(snap.lottery[k]!==undefined) target.lottery[k]=clone(snap.lottery[k]);
+  });
+}
+/* 把当前顶层字段存入当前档案快照（切换 / 建删档案前调用）。 */
+function profileStoreCurrent(){
+  if(typeof state==='undefined' || !state.profiles) return;
+  const id=state.profiles.activeId;
+  state.profiles.data[id]=profilePickChild(state);
+  const cur=state.profiles.list.find(function(p){ return p.id===id; });
+  if(cur) cur.updatedAt=Date.now();
+}
+/* 把目标档案的快照铺回顶层；共享字段（教材包 / 家长密码 / 规则）保持当前值。 */
+function profileApply(id){
+  if(typeof state==='undefined' || !state.profiles) return false;
+  const ps=state.profiles;
+  if(!ps.list.some(function(p){ return p.id===id; })) return false;
+  profileStoreCurrent();
+  const snap=ps.data[id]||{};
+  /* 以干净档案为底，注入当前共享配置，再合并目标孩子的数据；
+     normalizeState 保证新档案缺字段时也有完整默认结构。 */
+  const next=normalizeState(clone(DEFAULT_STATE));
+  PROFILE_SHARED_FIELDS.forEach(function(k){ next[k]=clone(state[k]); });
+  PROFILE_PLAN_SHARED.forEach(function(k){ next.plan[k]=clone(state.plan[k]); });
+  PROFILE_LOTTERY_SHARED.forEach(function(k){ next.lottery[k]=clone(state.lottery[k]); });
+  profileMergeChild(snap,next);
+  next.profiles=ps;
+  ps.activeId=id;
+  Object.keys(state).forEach(function(k){ delete state[k]; });
+  Object.keys(next).forEach(function(k){ state[k]=next[k]; });
+  return true;
+}
+function profileActive(){
+  if(typeof state==='undefined' || !state.profiles) return null;
+  return state.profiles.list.find(function(p){ return p.id===state.profiles.activeId; })||null;
+}
+function profileList(){ return (typeof state!=='undefined' && state.profiles)?state.profiles.list:[]; }
 function loadState(){
   /* 空存档也要走 normalizeState：默认管理密码的哈希在这里生成，
      否则全新安装时 state.parent.hash 为空，初始密码永远校验不过。 */
@@ -4080,6 +4212,7 @@ function setSystem(v){
   toast('已切换为'+(v==='54'?'五四制（小学 1–5 / 初中 6–9）':'六三制（小学 1–6 / 初中 7–9）'));
 }
 function renderHeader(){
+  if(typeof renderProfileChip==='function') renderProfileChip();
   const u=currentUnit();
   $('courseName').textContent=(filterFallback?'该范围暂无课程 · ':'')+u.scope+' · '+u.name+' ('+u.sentences.length+'题)';
   const total = order().length||1;
@@ -5242,9 +5375,17 @@ function importPackText(text){
   return r.packs.length;
 }
 function backupPayload(){
+  /* 整个 state 含 profiles：一份备份覆盖所有孩子档案。
+     v1 读取方忽略新字段，仍只认当前顶层字段，向下兼容。 */
   return {format:'spelllab.backup.v1',exportedAt:new Date().toISOString(),state:clone(state)};
 }
-function restoreBackup(text){
+function profileCountInBackup(data){
+  try{
+    const p=data&&data.state&&data.state.profiles;
+    return (p&&Array.isArray(p.list))?p.list.length:1;
+  }catch(e){ return 1; }
+}
+function restoreBackup(text,fromFile){
   let data;
   try{ data=JSON.parse(String(text||'').trim()); }
   catch(e){ toast('备份 JSON 解析失败','bad'); return false; }
@@ -5252,7 +5393,7 @@ function restoreBackup(text){
   if(!data||data.format!=='spelllab.backup.v1'||!s||typeof s!=='object'){
     toast('不是有效的全库备份文件','bad'); return false;
   }
-  if(!confirm('从备份恢复会覆盖当前全部学习数据、教材包和设置，确定继续？')) return false;
+  if(!fromFile && !confirm('从备份恢复会覆盖当前全部学习数据、教材包、设置与孩子档案，确定继续？')) return false;
   try{
     localStorage.setItem(KEY,JSON.stringify(s));
     localStorage.setItem(MIRROR_TS,String(Date.now()));
@@ -5420,10 +5561,14 @@ function renderDbFile(){
     return;
   }
   if(!STORE.fileHandle){ el.innerHTML=dbRow('状态','未绑定本地文件'); return; }
+  const cr=$('dbConflictRow'); if(cr) cr.hidden=!STORE.fileConflict;
   el.innerHTML=
     dbRow('绑定文件',STORE.fileName||'spelllab-data.json')+
     dbRow('授权状态',STORE.fileState==='granted'?'已授权 · 自动写回':'需点「立即同步」重新授权')+
-    dbRow('上次同步',STORE.fileLast?new Date(STORE.fileLast).toLocaleString('zh-CN'):'尚未同步');
+    dbRow('上次同步',STORE.fileLast?new Date(STORE.fileLast).toLocaleString('zh-CN'):'尚未同步')+
+    (STORE.fileConflict
+      ? dbRow('同步冲突','文件已被其他设备更新 · 请先选择用哪份')
+      : dbRow('冲突检测','正常 · 未被其他设备改动'));
 }
 function renderDesktopInfo(){
   const counts=STORE.dbCounts||{};
@@ -5492,15 +5637,56 @@ async function ensureFilePermission(silent){
     return r==='granted';
   }catch(e){ STORE.fileState='prompt'; return false; }
 }
-async function writeDataFile(){
-  if(!(await ensureFilePermission(false))) return false;
+function fileDeviceId(){
+  if(STORE.fileDevice) return STORE.fileDevice;
+  let id='';
+  try{ id=localStorage.getItem('spelllab.device.v1')||''; }catch(e){}
+  if(!id){
+    id='dev-'+Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+    try{ localStorage.setItem('spelllab.device.v1',id); }catch(e){}
+  }
+  STORE.fileDevice=id;
+  return id;
+}
+/* 读取绑定文件最后修改时间。网盘（坚果云 / OneDrive / 百度网盘）同步下来的
+   文件 lastModified 会保留来源时间；若比本机上次写入还新，说明另一台设备改过。 */
+async function fileRemoteModified(){
+  if(!STORE.fileHandle || typeof STORE.fileHandle.getFile!=='function') return 0;
   try{
+    const f=await STORE.fileHandle.getFile();
+    return Number(f&&f.lastModified)||0;
+  }catch(e){ return 0; }
+}
+async function writeDataFile(force){
+  if(!(await ensureFilePermission(false))) return false;
+  if(!force){
+    const remote=await fileRemoteModified();
+    /* fileLast 是本机上次写入时的文件 mtime；只在确知远端更新时拦截。
+       首次绑定（fileLast=0）不拦截，直接写入初始快照。 */
+    if(remote && STORE.fileLast && remote>STORE.fileLast+2000){
+      STORE.fileConflict=true; STORE.fileRemoteAt=remote;
+      STORE.error='文件已被其他设备更新，已暂停自动写入以免覆盖';
+      toast('检测到网盘里的文件被另一台设备更新，已暂停同步','bad');
+      if(drawerTab==='storage') renderStorage();
+      return false;
+    }
+  }
+  try{
+    const payload=backupPayload();
+    payload.deviceId=fileDeviceId();
+    payload.savedAt=STORE.savedAt||Date.now();
     const w=await STORE.fileHandle.createWritable();
-    await w.write(JSON.stringify(backupPayload(),null,2));
+    await w.write(JSON.stringify(payload,null,2));
     await w.close();
-    STORE.fileLast=Date.now(); STORE.fileState='granted'; STORE.error='';
+    const after=await fileRemoteModified();
+    STORE.fileLast=after||Date.now(); STORE.fileConflict=false; STORE.fileRemoteAt=0;
+    STORE.fileState='granted'; STORE.error='';
     return true;
-  }catch(e){ STORE.error='文件写入失败：'+String((e&&e.message)||e); return false; }
+  }catch(e){
+    STORE.error='文件写入失败：'+String((e&&e.message)||e);
+    if(drawerTab==='storage') renderStorage();
+    return false;
+  }
 }
 function scheduleFileSync(){
   if(!STORE.fileHandle || STORE.fileState!=='granted' || STORE.fileTimer) return;
@@ -5535,8 +5721,33 @@ async function syncDataFile(){
 }
 async function unbindDataFile(){
   STORE.fileHandle=null; STORE.fileName=''; STORE.fileState=''; STORE.fileLast=0;
+  STORE.fileConflict=false; STORE.fileRemoteAt=0;
   try{ await idbCall(DB_KEY_FILE,{handle:null,name:''},true); }catch(e){}
   renderStorage(); toast('已解除文件绑定');
+}
+/* 冲突二选一：本机覆盖文件（强制写）或从文件恢复本机（重新读备份）。 */
+async function resolveUseLocal(){
+  const ok=await writeDataFile(true);
+  renderStorage();
+  toast(ok?'已用本机数据覆盖文件':'写入失败','ok');
+  return ok;
+}
+async function resolveUseRemote(){
+  if(!STORE.fileHandle) return false;
+  let text='';
+  try{
+    const f=await STORE.fileHandle.getFile();
+    text=await f.text();
+  }catch(e){ toast('读取文件失败：'+String((e&&e.message)||e),'bad'); return false; }
+  const ok=restoreBackup(text,true);
+  if(ok){
+    STORE.fileConflict=false; STORE.fileRemoteAt=0;
+    STORE.fileLast=await fileRemoteModified()||Date.now();
+    await writeDataFile(true);
+    renderStorage();
+    toast('已从文件恢复本机数据','ok');
+  }
+  return ok;
 }
 function readRestoreFile(e){
   const f=e.target.files&&e.target.files[0]; if(!f) return;
@@ -7200,6 +7411,177 @@ function doImport(){
   renderFilters(); renderDrawer(); setMode(mode);
 }
 
+/* ---------------- 多孩子档案：切换 / 新增 / 重命名 / 删除 ----------------
+   顶层 state 永远是「当前档案」，档案名册与其余档案快照存在 state.profiles。
+   所有写盘路径都序列化整个 state，所以新档案无需改存储层。 */
+const PROFILE_COLORS = ['#8b7bff','#4cc9f0','#ff8fa3','#ffd166','#5dcaa5','#f0997b'];
+function profileColor(p){
+  return PROFILE_COLORS[(Number(p&&p.color)||0)%PROFILE_COLORS.length];
+}
+function profileInitial(name){
+  const s=String(name||'').trim();
+  return s?s.slice(0,2):'娃';
+}
+function renderProfileChip(){
+  const b=$('btnProfile'); if(!b) return;
+  const p=profileActive();
+  $('profileName').textContent=p?p.name:PROFILE_DEFAULT_NAME;
+  const av=$('profileAvatar');
+  av.textContent=profileInitial(p?p.name:'默认');
+  av.style.background=profileColor(p);
+}
+/* 档案摘要：已练题数 + 积分，展示在切换菜单里，方便家长一眼分清 */
+function profileSummary(id){
+  const snap=(state.profiles.data[id]||{});
+  const hist=Array.isArray(snap.history)?snap.history:[];
+  const st=snap.stats||{};
+  const pts=Number(snap.plan&&snap.plan.points)||0;
+  return (Number(st.correct)||0)+' 题对 · '+pts+' 分'+(hist.length?' · '+hist.length+' 次':'');
+}
+function openProfileMenu(){
+  const active=profileActive();
+  const rows=profileList().map(function(p){
+    const isMe=p.id===state.profiles.activeId;
+    return '<div class="profile-row'+(isMe?' active':'')+'" data-profile-id="'+esc(p.id)+'">'+
+      '<span class="avatar" style="background:'+profileColor(p)+'">'+esc(profileInitial(p.name))+'</span>'+
+      '<span class="pname">'+esc(p.name)+(isMe?' · 当前':'')+'</span>'+
+      '<span class="pstat">'+esc(profileSummary(p.id))+'</span>'+
+      (profileList().length>1?'<button class="pdel" data-profile-del="'+esc(p.id)+'" title="删除档案">×</button>':'')+
+      '</div>';
+  }).join('');
+  const html='<div class="profile-menu">'+rows+
+    '<div class="profile-actions">'+
+      '<button class="mini-btn sm primary" data-profile-act="add">+ 新增孩子</button>'+
+      '<button class="mini-btn sm" data-profile-act="rename">改名 / 换色</button>'+
+    '</div></div>';
+  showModal({title:'孩子档案',text:'点姓名即可切换，进度与积分各自独立；教材包和奖励规则全孩子共用。',
+    result:html,dismissible:true,actions:[{label:'关闭'}]});
+  bindProfileMenu();
+}
+function bindProfileMenu(){
+  const host=$('modalResult'); if(!host) return;
+  host.querySelectorAll('[data-profile-id]').forEach(function(row){
+    row.addEventListener('click',function(e){
+      if(e.target && e.target.closest('[data-profile-del]')) return;
+      switchProfile(row.getAttribute('data-profile-id'));
+    });
+  });
+  host.querySelectorAll('[data-profile-del]').forEach(function(btn){
+    btn.addEventListener('click',function(e){
+      e.stopPropagation();
+      const id=btn.getAttribute('data-profile-del');
+      guardParent('profiles',function(){ deleteProfile(id); });
+    });
+  });
+  const acts=host.querySelectorAll('[data-profile-act]');
+  acts.forEach(function(b){
+    b.addEventListener('click',function(){
+      const act=b.getAttribute('data-profile-act');
+      if(act==='add') guardParent('profiles',addProfileDialog);
+      else guardParent('profiles',renameProfileDialog);
+    });
+  });
+}
+function closeProfileMenuAnd(fn){
+  hideModal();
+  if(typeof fn==='function') fn();
+}
+function switchProfile(id){
+  if(id===state.profiles.activeId){ hideModal(); return; }
+  if(!profileApply(id)){ toast('没找到这个档案','bad'); return; }
+  saveState(true);
+  applyLoadedState();
+  renderProfileChip();
+  renderHeader();
+  hideModal();
+  toast('已切换到「'+(profileActive()?profileActive().name:'孩子')+'」','ok');
+}
+function addProfileDialog(){
+  const menuOpen=!$('modalMask').hidden;
+  if(menuOpen) hideModal();
+  showModal({title:'新增孩子档案',text:'新档案从空白进度开始；教材包与奖励规则会沿用当前设置。',
+    result:'<div class="field"><label>孩子称呼</label><input id="profileNewName" maxlength="16" placeholder="例如：大宝 / 二宝"></div>',
+    actions:[{label:'取消',onClick:function(){ if(menuOpen) openProfileMenu(); }},
+      {label:'创建',primary:true,onClick:function(){
+        const name=String(($('profileNewName')||{}).value||'').trim();
+        if(!name){ toast('请填写孩子称呼','bad'); if(menuOpen) openProfileMenu(); return; }
+        addProfile(name);
+      }}]});
+  const inp=$('profileNewName');
+  if(inp){
+    inp.focus();
+    inp.addEventListener('keydown',function(e){ if(e.key==='Enter'){ const b=$('modalActions').querySelector('.primary'); if(b) b.click(); } });
+  }
+}
+function addProfile(name){
+  profileStoreCurrent();
+  const p=profileBlank(profileId(),name);
+  p.color=profileList().length%PROFILE_COLORS.length;
+  state.profiles.list.push(p);
+  state.profiles.data[p.id]=profilePickChild(clone(DEFAULT_STATE));
+  state.profiles.activeId=p.id;
+  const next=normalizeState(clone(DEFAULT_STATE));
+  PROFILE_SHARED_FIELDS.forEach(function(k){ next[k]=clone(state[k]); });
+  PROFILE_PLAN_SHARED.forEach(function(k){ next.plan[k]=clone(state.plan[k]); });
+  PROFILE_LOTTERY_SHARED.forEach(function(k){ next.lottery[k]=clone(state.lottery[k]); });
+  next.profiles=state.profiles;
+  Object.keys(state).forEach(function(k){ delete state[k]; });
+  Object.keys(next).forEach(function(k){ state[k]=next[k]; });
+  saveState(true); applyLoadedState(); renderProfileChip(); renderHeader();
+  toast('已为「'+name+'」建立独立档案','ok');
+}
+function renameProfileDialog(){
+  const p=profileActive(); if(!p) return;
+  const menuOpen=!$('modalMask').hidden;
+  if(menuOpen) hideModal();
+  showModal({title:'修改档案',text:'只改称呼和头像颜色，不会影响学习进度。',
+    result:'<div class="field"><label>孩子称呼</label><input id="profileRename" maxlength="16" value="'+esc(p.name)+'"></div>'+
+      '<div class="profile-colors">'+PROFILE_COLORS.map(function(c,i){
+        return '<button data-profile-color="'+i+'" style="background:'+c+'" class="'+(i===Number(p.color)?'active':'')+'"></button>';
+      }).join('')+'</div>',
+    actions:[{label:'取消',onClick:function(){ if(menuOpen) openProfileMenu(); }},
+      {label:'保存',primary:true,onClick:function(){
+        const name=String(($('profileRename')||{}).value||'').trim();
+        if(!name){ toast('请填写孩子称呼','bad'); if(menuOpen) openProfileMenu(); return; }
+        p.name=name;
+        const sel=document.querySelector('.profile-colors button.active');
+        if(sel) p.color=Number(sel.getAttribute('data-profile-color'))||0;
+        p.updatedAt=Date.now();
+        saveState(true); renderProfileChip();
+        toast('档案已更新','ok');
+        if(menuOpen) openProfileMenu();
+      }}]});
+  const inp=$('profileRename'); if(inp){ inp.focus(); inp.select(); }
+  document.querySelectorAll('[data-profile-color]').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('[data-profile-color]').forEach(function(x){ x.classList.remove('active'); });
+      b.classList.add('active');
+    });
+  });
+}
+function deleteProfile(id){
+  const ps=(typeof state!=='undefined' && state.profiles)?state.profiles:null;
+  if(!ps || ps.list.length<2){ toast('至少保留一个档案','bad'); return; }
+  const p=ps.list.find(function(x){ return x.id===id; });
+  if(!p) return;
+  showModal({title:'删除档案「'+p.name+'」？',text:'这个孩子的全部进度、积分、生词和打卡记录会被永久删除，无法恢复。建议先导出全库备份。',
+    actions:[{label:'取消'},{label:'确认删除',primary:true,onClick:function(){ reallyDeleteProfile(id); }}]});
+}
+function reallyDeleteProfile(id){
+  const ps=state.profiles;
+  if(ps.list.length<2) return;
+  ps.list=ps.list.filter(function(p){ return p.id!==id; });
+  delete ps.data[id];
+  if(ps.activeId===id){
+    const nextId=ps.list[0].id;
+    profileApply(nextId);
+  }else{
+    /* 删的是别的档案，当前档案快照保持不动 */
+    profileStoreCurrent();
+  }
+  saveState(true); applyLoadedState(); renderProfileChip(); renderHeader();
+  toast('档案已删除','ok');
+}
 /* ---------------- 事件绑定 ---------------- */
 function setMode(m){
   var prev = mode;
@@ -7244,6 +7626,7 @@ function bind(){
   });
   $('btnPoints').addEventListener('click',()=>openDrawer(true,'plan'));
   $('btnWheel').addEventListener('click',openWheel);
+  $('btnProfile').addEventListener('click',openProfileMenu);
   $('btnParent').addEventListener('click',()=>openParentCenter());
   $('scStar').addEventListener('click',starQuestionWords);
   $('modalMask').addEventListener('click',e=>{
@@ -7694,6 +8077,8 @@ function bind(){
   $('dbBindFile').addEventListener('click',()=>bindDataFile());
   $('dbSyncFile').addEventListener('click',()=>syncDataFile());
   $('dbUnbindFile').addEventListener('click',()=>unbindDataFile());
+  $('dbUseLocal').addEventListener('click',()=>resolveUseLocal());
+  $('dbUseRemote').addEventListener('click',()=>resolveUseRemote());
   $('dbBackup').addEventListener('click',()=>emitJSON('spelllab-backup-'+today()+'.json',backupPayload()));
   $('dbExportSQL').addEventListener('click',()=>{
     const name='spelllab-'+today()+'.sql', text=exportSQLite();
