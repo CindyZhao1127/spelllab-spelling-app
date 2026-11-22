@@ -1,0 +1,2656 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SpellLab · 单词句子拼写记忆</title>
+<style>
+  :root{
+    --bg1:#141830;
+    --bg2:#222a55;
+    --bg3:#0e1228;
+    --text:#f5f7ff;
+    --muted:#9aa5cf;
+    --line:rgba(226,232,255,.5);
+    --accent:#8b7bff;
+    --blue:#3d5be0;
+    --ok:#5ce2a0;
+    --err:#ff7a86;
+    --card:rgba(255,255,255,.06);
+    --shadow:0 18px 50px rgba(3,6,24,.42);
+    /* 统一设计 token：保留深紫蓝调性，把散落的硬编码收敛为同一套语言 */
+    --grad-primary:var(--grad-primary);
+    --grad-brand:linear-gradient(140deg,#8b7bff,#4a6bff);
+    --grad-progress:linear-gradient(90deg,#8b7bff,#5b8cff);
+    --grad-toolbar:linear-gradient(115deg,#3449d6,#3f5ff0 60%,#4a58e8);
+    --r-xs:8px; --r-sm:12px; --r-md:14px; --r-lg:16px; --r-xl:20px; --r-full:999px;
+    --sh-1:0 4px 14px rgba(74,84,240,.38);
+    --sh-2:0 12px 32px rgba(3,6,24,.34);
+    --sh-3:0 24px 70px rgba(0,0,0,.6);
+    --ease-spring:cubic-bezier(.34,1.56,.64,1);
+    --ease-standard:cubic-bezier(.2,0,0,1);
+    --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-6:24px; --sp-8:32px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family:"PingFang SC","Microsoft YaHei","Segoe UI",system-ui,sans-serif;
+    color:var(--text);
+    background:
+      radial-gradient(900px 520px at 18% -8%,rgba(126,99,255,.30),transparent 62%),
+      radial-gradient(760px 460px at 92% 12%,rgba(61,91,224,.22),transparent 60%),
+      linear-gradient(165deg,var(--bg2) 0%,#1b2047 42%,var(--bg3) 100%);
+    background-attachment:fixed;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  [hidden]{display:none !important}
+  button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
+  button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+  ::selection{background:rgba(139,123,255,.45)}
+
+  .app{min-height:100vh;display:flex;flex-direction:column;padding-bottom:110px}
+
+  /* ---------- 顶部 ---------- */
+  .topbar{
+    display:flex;align-items:center;gap:18px;
+    padding:16px clamp(16px,4vw,44px) 10px;
+  }
+  .brand{display:flex;align-items:center;gap:12px;min-width:0}
+  .logo{
+    width:38px;height:38px;flex:none;border-radius:12px;
+    background:var(--grad-brand);
+    display:grid;place-items:center;font-weight:900;font-size:15px;letter-spacing:-1px;
+    box-shadow:0 6px 18px rgba(90,90,255,.4);
+  }
+  .brand-name{font-size:15px;font-weight:800;letter-spacing:.5px;white-space:nowrap}
+  .brand-name span{font-size:11px;font-weight:500;color:var(--muted);margin-left:6px}
+  .course{
+    font-size:11px;color:#b9a8ff;margin-top:3px;
+    max-width:min(46vw,420px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  }
+  .mode-switch{
+    margin-left:auto;display:flex;gap:2px;padding:4px;border-radius:999px;
+    background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.08);
+    max-width:46vw;overflow-x:auto;scrollbar-width:none;
+  }
+  .mode-switch::-webkit-scrollbar{display:none}
+  .mode-switch button{
+    padding:7px 11px;border-radius:999px;font-size:12px;font-weight:700;color:var(--muted);
+    transition:.2s;white-space:nowrap;flex:none;
+  }
+  .mode-switch button:hover:not(.active){background:rgba(255,255,255,.12);color:#fff}
+  .mode-switch button.active{background:var(--grad-primary);color:#fff;box-shadow:var(--sh-1)}
+  .top-right{display:flex;align-items:center;gap:14px}
+  .accent-switch{display:flex;gap:2px;padding:3px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.08)}
+  .accent-switch button{padding:5px 11px;border-radius:999px;font-size:11px;font-weight:800;color:var(--muted);transition:.2s}
+  .accent-switch button.active{background:rgba(139,123,255,.28);color:#fff}
+  .top-stats{display:flex;align-items:center;gap:10px;padding:4px 12px;border-radius:999px;
+    background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07)}
+  .top-sep{width:1px;height:22px;flex:none;background:rgba(255,255,255,.14)}
+  .stat{text-align:center;line-height:1.1;min-width:40px}
+  .stat b{display:block;font-size:15px;font-weight:800;font-variant-numeric:tabular-nums}
+  .stat span{font-size:10px;color:var(--muted)}
+  .icon-btn{
+    width:36px;height:36px;border-radius:12px;display:grid;place-items:center;
+    background:rgba(255,255,255,.08);transition:.18s;flex:none;
+  }
+  .icon-btn:hover{background:rgba(255,255,255,.18);transform:translateY(-1px)}
+  .icon-btn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .progress-wrap{height:3px;margin:6px clamp(16px,4vw,44px) 0;background:rgba(255,255,255,.09);border-radius:4px;overflow:hidden}
+  .progress-bar{height:100%;width:0;border-radius:4px;background:var(--grad-progress);transition:width .35s ease}
+
+  /* ---------- 主舞台 ---------- */
+  main{flex:1;display:flex;align-items:center;justify-content:center;padding:12px 20px}
+  .view{width:100%;max-width:1000px;display:flex;justify-content:center}
+  .stage{
+    width:100%;text-align:center;padding:clamp(18px,3.5vh,44px) 18px 4px;
+    animation:fade .35s ease;
+  }
+  @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .stage-label{display:inline-block;font-size:11px;letter-spacing:2.5px;color:#c7bcff;font-weight:800;
+    padding:6px 16px;border-radius:var(--r-full);background:rgba(139,123,255,.12);
+    border:1px solid rgba(139,123,255,.28);margin-bottom:20px}
+  .question-cn{
+    margin:0 auto;max-width:880px;
+    font-size:clamp(27px,4.1vw,45px);font-weight:900;line-height:1.42;letter-spacing:1px;
+    text-shadow:0 2px 12px rgba(0,0,0,.24);
+    overflow-wrap:anywhere;word-break:break-word;
+  }
+  .question-sub{margin-top:14px;font-size:13px;color:#b7c0e6}
+
+  /* 整句按「每个单词的真实宽度」自动换行。词槽不能再写死 max-width，
+     否则长单词的字母格会溢出槽位、盖到相邻单词上（表现为单词重叠）。
+     现在词槽最多占满一行，超长单词只在自己的槽里折行，普通短词仍是单行。 */
+  .slots{
+    margin:clamp(28px,5vh,54px) auto 0;
+    display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;
+    column-gap:var(--word-gap,22px);row-gap:var(--slot-row-gap,16px);
+    max-width:min(940px,100%);width:100%;
+  }
+  .slot{position:relative;display:flex;flex-direction:column;align-items:center;
+    margin:8px 0 6px;min-width:62px;max-width:100%;flex:0 0 auto}
+  .slot-core{display:flex;flex-direction:column;align-items:center;
+    width:max-content;max-width:100%;min-width:0}
+  .slot .answer{
+    height:1.35em;display:flex;align-items:center;justify-content:center;max-width:100%;
+    font-size:clamp(25px,3.5vw,38px);font-weight:900;letter-spacing:.5px;line-height:1.2;
+    color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.2);
+  }
+  .slot input{
+    width:100%;max-width:100%;min-width:1ch;padding:0;border:0;background:transparent;
+    font:inherit;letter-spacing:inherit;color:inherit;text-align:center;
+    caret-color:#c9bcff;
+  }
+  .slot input::placeholder{color:rgba(255,255,255,.18)}
+  .slot .line{
+    width:100%;height:2px;border-radius:3px;background:var(--line);
+    transition:.2s;margin-top:4px;
+  }
+  .slot.focus .line{background:#c3b6ff;box-shadow:0 0 14px rgba(160,140,255,.8);height:3px}
+  /* 提示改为参与布局：中文意思再长也只在本词下方换行，不会压到相邻单词 */
+  .slot .hint{
+    margin-top:9px;max-width:min(var(--hint-max,180px),100%);width:max-content;
+    font-size:13px;color:#a5b0d8;line-height:1.4;text-align:center;
+    white-space:normal;overflow-wrap:anywhere;pointer-events:none;
+  }
+  .hide-hints .slot .hint{visibility:hidden}
+  .slot.correct .answer{color:var(--ok)}
+  .slot.correct .line{background:rgba(92,226,160,.75)}
+  .slot.correct::after{
+    content:"";position:absolute;top:-14px;right:-2px;width:14px;height:8px;
+    border-left:2px solid var(--ok);border-bottom:2px solid var(--ok);transform:rotate(-45deg);
+  }
+  .slot.assisted .answer{color:#ffd782}
+  .slot.wrong .answer{color:var(--err)}
+  .slot.wrong .line{background:var(--err)}
+  .slot.wrong{animation:shake .34s ease}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-3px)}}
+  .slot.punct{min-width:34px}
+  .slot.punct .answer{font-size:clamp(24px,3.1vw,34px)}
+  .slot.punct .line{background:rgba(226,232,255,.28)}
+  .slot.punct .hint{display:none}
+
+  /* ---------- 字母格：按单词字母数显示小空格，整句横向排列自动换行 ----------
+     短词仍是一个词一行；当某个单词比一整行还宽时，允许它只在自己这个
+     词槽内部折行，避免 10+ 字母的长单词溢出并把下一个单词盖住。 */
+  .slot.boxed{flex:0 0 auto;max-width:100%}
+  .slot.boxed .answer{min-height:clamp(30px,3.6vw,40px);height:auto;padding:2px 0;
+    font-size:inherit;position:relative;max-width:100%}
+  .slot.boxed .boxes{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
+    gap:4px;max-width:100%;width:100%}
+  .lbox{
+    width:clamp(19px,2.2vw,27px);height:clamp(30px,3.6vw,40px);flex:0 0 auto;
+    border-radius:6px 6px 3px 3px;border-bottom:2px solid var(--line);
+    background:rgba(255,255,255,.05);display:grid;place-items:center;
+    font-size:clamp(17px,2.2vw,24px);font-weight:800;line-height:1;
+    color:#fff;transition:.15s;user-select:none;
+  }
+  .lbox.given{color:#c3b6ff;border-bottom-color:rgba(183,168,255,.7);background:rgba(139,123,255,.14)}
+  .lbox.current{border-bottom-color:#c3b6ff;box-shadow:0 0 12px rgba(160,140,255,.55);background:rgba(139,123,255,.2)}
+  .slot.correct .lbox{color:var(--ok);border-bottom-color:rgba(92,226,160,.75)}
+  .slot.assisted .lbox{color:#ffd782}
+  .slot.wrong .lbox{color:var(--err);border-bottom-color:var(--err)}
+  .slot.boxed input{
+    position:absolute;left:0;top:0;width:100%;height:100%;
+    opacity:0;z-index:2;cursor:text;font-size:16px;letter-spacing:0;
+  }
+  .slot.boxed .line{background:rgba(226,232,255,.18)}
+  .slot.boxed.focus .line{background:#c3b6ff;box-shadow:0 0 14px rgba(160,140,255,.8);height:3px}
+
+  /* ---------- 计时 / 难度 / 积分 / 弹窗 ---------- */
+  .stage-meta{display:flex;justify-content:center;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap}
+  .meta-chip{
+    padding:5px 12px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.4px;
+    background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:#cbd3ff;
+  }
+  .meta-chip.timer{font-variant-numeric:tabular-nums;min-width:88px;text-align:center}
+  .meta-chip.timer.urgent{background:rgba(255,122,134,.18);border-color:rgba(255,122,134,.5);color:#ffb3ba;animation:pulse 1s infinite}
+  @keyframes pulse{50%{opacity:.55}}
+  .points-chip{display:flex;align-items:center;gap:7px;padding:5px 12px;border-radius:999px;
+    background:rgba(255,214,102,.14);border:1px solid rgba(255,214,102,.32);color:#ffe39a;font-weight:800}
+  .points-chip b{font-size:16px}.points-chip span{font-size:10px;opacity:.8}
+  .points-chip:hover{background:rgba(255,214,102,.26)}
+  .modal-mask{position:fixed;inset:0;background:rgba(5,8,26,.74);z-index:70;display:grid;place-items:center;padding:18px}
+  .modal-mask[hidden],.modal[hidden]{display:none}
+  .modal{
+    width:min(430px,94vw);max-height:86vh;overflow:auto;padding:24px;border-radius:20px;
+    background:linear-gradient(160deg,#28305e,#171c3b);border:1px solid rgba(255,255,255,.16);
+    box-shadow:0 24px 70px rgba(0,0,0,.6);animation:fade .25s ease;
+  }
+  .modal h3{margin:0 0 10px;font-size:19px;font-weight:800;color:#fff}
+  .modal p{margin:0;font-size:13px;line-height:1.8;color:#c3cbeb;white-space:pre-line}
+  .modal-actions{display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end;margin-top:20px}
+  .modal-actions button{padding:9px 18px;border-radius:999px;font-size:13px;font-weight:700;
+    background:rgba(255,255,255,.12);color:#e8ecff}
+  .modal-actions button:hover{background:rgba(255,255,255,.22)}
+  .modal-actions button.primary{background:var(--grad-primary);color:#fff}
+  /* 速度突破：不拦截输入，答完题自动弹 2.6 秒；缩为右上角小卡片，不遮挡中央单词 */
+  .speed-mask{position:fixed;inset:0;z-index:90;display:flex;align-items:flex-start;justify-content:flex-end;
+    padding:64px 14px 0;pointer-events:none}
+  .speed-mask[hidden]{display:none}
+  .speed-card{position:relative;width:min(224px,70vw);padding:10px 12px 11px;text-align:center;overflow:hidden;
+    border-radius:16px;background:linear-gradient(160deg,#3b3173,#1b1f45 62%,#28205c);
+    border:1px solid rgba(255,220,120,.55);
+    box-shadow:0 12px 34px rgba(0,0,0,.6),0 0 26px rgba(255,190,70,.2);
+    animation:speedPop .5s cubic-bezier(.2,1.5,.4,1)}
+  .speed-card h2{margin:1px 0 3px;font-size:19px;font-weight:900;letter-spacing:1px;
+    background:linear-gradient(90deg,#fff0b3,#ffd166,#fff);-webkit-background-clip:text;background-clip:text;
+    color:transparent;text-shadow:0 0 16px rgba(255,209,102,.35)}
+  .speed-badge{display:inline-block;padding:2px 9px;border-radius:999px;font-size:9px;font-weight:800;letter-spacing:.5px;
+    background:rgba(255,209,102,.18);border:1px solid rgba(255,209,102,.5);color:#ffe6a3}
+  .speed-icon{font-size:30px;line-height:1.1;margin:2px 0 -1px;
+    animation:speedBounce .9s ease-in-out infinite alternate;filter:drop-shadow(0 5px 9px rgba(0,0,0,.4))}
+  .speed-word{font-size:12px;color:#dfe4ff;max-width:100%;overflow-wrap:anywhere;margin:3px 0 7px;font-weight:700}
+  .speed-times{display:flex;align-items:center;justify-content:center;gap:10px;margin:4px 0}
+  .speed-times>div{display:flex;flex-direction:column;gap:2px;min-width:58px}
+  .speed-times span{font-size:10px;color:#a9b2e6}
+  .speed-times b{font-size:14px;color:#fff}
+  .speed-times>div:first-child b{color:#8ef2b8;font-size:16px}
+  .speed-arrow{font-size:14px;color:#ffd166;animation:speedNudge 1s ease-in-out infinite alternate}
+  .speed-gain{font-size:10px;color:#ffe6a3;margin-top:6px;min-height:13px;line-height:1.3}
+  .speed-rays{position:absolute;inset:-40px;pointer-events:none;opacity:.35;
+    background:repeating-conic-gradient(from 0deg,rgba(255,209,102,.28) 0deg 6deg,transparent 6deg 22deg);
+    animation:raysSpin 12s linear infinite}
+  .speed-confetti i{position:absolute;left:50%;top:46%;width:5px;height:9px;border-radius:2px;background:var(--c);
+    opacity:0;animation:speedFly 1.15s cubic-bezier(.15,.65,.3,1) var(--delay) forwards}
+  @keyframes speedPop{0%{transform:scale(.55) rotate(-4deg);opacity:0}
+    70%{transform:scale(1.06) rotate(1deg);opacity:1}100%{transform:none;opacity:1}}
+  @keyframes speedBounce{from{transform:translateY(0) rotate(-6deg)}to{transform:translateY(-9px) rotate(6deg)}}
+  @keyframes speedNudge{to{transform:translateX(5px)}}
+  @keyframes speedFly{0%{opacity:0;transform:rotate(var(--a)) translateY(0) scale(.5)}
+    15%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateY(calc(var(--d) * -1)) scale(1)}}
+  @media (prefers-reduced-motion:reduce){
+    .speed-card,.speed-icon,.speed-arrow,.speed-rays,.speed-confetti i{animation:none}}
+  .best-list{display:flex;flex-direction:column;gap:6px}
+  .best-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;
+    background:rgba(139,123,255,.08);border:1px solid rgba(139,123,255,.18)}
+  .best-rank{width:24px;height:24px;flex:none;display:grid;place-items:center;border-radius:50%;
+    font-size:11px;font-weight:800;background:rgba(139,123,255,.2);color:#cfc6ff}
+  .best-row:nth-child(1) .best-rank{background:rgba(255,209,102,.22);color:#ffe6a3}
+  .best-body{flex:1;min-width:0}
+  .best-en{font-size:13px;font-weight:700;overflow-wrap:anywhere}
+  .best-meta{font-size:11px;color:var(--muted);margin-top:2px}
+  .best-ms{font-size:15px;font-weight:800;color:#8ef2b8;flex:none}
+  .plan-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:10px}
+  .plan-head b{font-size:30px;font-weight:900;color:#ffe39a}
+  .prize-row{display:flex;gap:6px;align-items:center;margin-bottom:7px}
+  .prize-row .field{flex:1;min-width:0}
+  .prize-row .prob{width:64px;flex:none;text-align:center}
+  .prize-row .unit{font-size:11px;color:var(--muted);flex:none}
+  .prize-row .prize-auto{display:flex;align-items:center;gap:3px;font-size:11px;
+    color:var(--muted);white-space:nowrap;flex:none;cursor:pointer}
+  .prize-row .prize-auto input{accent-color:#6a5cff;cursor:pointer}
+  .panel-note.warn{color:#ffb3ba;font-weight:800;background:rgba(255,122,134,.12);
+    border:1px solid rgba(255,122,134,.4)}
+  .ledger-item{display:flex;justify-content:space-between;gap:8px;padding:7px 0;
+    font-size:11px;border-bottom:1px solid rgba(255,255,255,.06);color:var(--muted)}
+  .ledger-item b{font-weight:800}
+  .ledger-item b.plus{color:var(--ok)}.ledger-item b.minus{color:#ffb3ba}
+
+  /* ---------- 家长中心 / 转盘抽奖 ---------- */
+  .parent-chip,.wheel-chip{display:flex;align-items:center;gap:6px;padding:5px 12px;
+    border-radius:999px;font-size:11px;font-weight:800;white-space:nowrap}
+  .parent-chip{background:rgba(140,224,168,.14);border:1px solid rgba(140,224,168,.35);color:#b6f2cd}
+  .parent-chip:hover{background:rgba(140,224,168,.26)}
+  .parent-chip.unlocked{background:rgba(140,224,168,.32);box-shadow:0 0 0 1px rgba(140,224,168,.5)}
+  .wheel-chip{background:rgba(255,214,102,.14);border:1px solid rgba(255,214,102,.35);color:#ffe39a}
+  .wheel-chip:hover{background:rgba(255,214,102,.3);transform:translateY(-1px)}
+  .lock-badge{display:inline-block;margin-left:6px;padding:2px 8px;border-radius:999px;
+    font-size:10px;font-weight:800;background:rgba(255,122,134,.18);color:#ffb3ba;vertical-align:middle}
+  .lock-badge.on{background:rgba(140,224,168,.2);color:#b6f2cd}
+  .locked-box{padding:14px;border-radius:14px;background:rgba(255,255,255,.05);
+    border:1px dashed rgba(255,255,255,.2);text-align:center}
+  .locked-box .lock-title{font-size:13px;font-weight:800;color:#fff;margin-bottom:6px}
+  .locked-box .panel-note{margin:0 0 10px}
+  .locked-list{font-size:11px;color:#c3cbeb;line-height:1.9;text-align:left;margin-bottom:10px}
+  .locked-list span{display:inline-block;padding:2px 9px;margin:2px;border-radius:999px;
+    background:rgba(255,255,255,.08)}
+  .wheel-mask,.parent-mask{position:fixed;inset:0;background:rgba(5,8,26,.86);
+    backdrop-filter:blur(5px);z-index:80;display:grid;place-items:center;padding:16px}
+  .parent-mask{z-index:85}
+  .wheel-mask[hidden],.parent-mask[hidden]{display:none}
+  .wheel-dialog,.parent-dialog{width:min(430px,94vw);max-height:92vh;overflow:auto;
+    padding:20px;border-radius:22px;background:linear-gradient(160deg,#28305e,#171c3b);
+    border:1px solid rgba(255,255,255,.16);box-shadow:0 24px 70px rgba(0,0,0,.6);
+    animation:fade .25s ease}
+  /* 幸运转盘：金色灯环 + 糖果色扇区 + 独立图例，奖项再多也不糊成一团 */
+  .wheel-dialog{width:min(470px,94vw);padding:22px 22px 18px;
+    background:radial-gradient(circle at 50% -12%,rgba(255,214,102,.18),transparent 56%),
+               linear-gradient(165deg,#2a3266,#151a38 72%)}
+  .wheel-dialog .dialog-head{justify-content:center;position:relative}
+  .wheel-dialog .dialog-close{position:absolute;right:0;top:0}
+  .wheel-dialog h3{font-size:21px;letter-spacing:1px;text-align:center}
+  .wheel-dialog h3,.parent-dialog h3{margin:0 0 8px;font-size:19px;font-weight:800;color:#fff}
+  .wheel-dialog h3{font-size:21px;letter-spacing:1px}
+  .dialog-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .dialog-close{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.1);
+    color:#e8ecff;font-size:16px;line-height:1;padding:0;flex:none}
+  .dialog-close:hover{background:rgba(255,255,255,.22)}
+  .wheel-meta{display:flex;justify-content:center;gap:8px;margin:10px 0 2px}
+  .wheel-meta span{font-size:11px;color:#aab4dc;padding:5px 12px;border-radius:999px;
+    background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1)}
+  .wheel-meta b{color:#ffe39a;font-size:13px;margin-left:4px}
+  .wheel-stage{position:relative;width:min(320px,74vw);aspect-ratio:1;margin:20px auto 6px;
+    border-radius:50%;filter:drop-shadow(0 16px 30px rgba(0,0,0,.5))}
+  .wheel-lights{position:absolute;inset:-13px;border-radius:50%;pointer-events:none;
+    background:repeating-conic-gradient(from 0deg,
+      rgba(255,236,172,.95) 0deg 2deg,transparent 2deg 15deg);
+    -webkit-mask:radial-gradient(circle,transparent 0 46%,#000 47% 50%,transparent 51%);
+    mask:radial-gradient(circle,transparent 0 46%,#000 47% 50%,transparent 51%);
+    animation:wheelTwinkle 1.5s ease-in-out infinite alternate}
+  @keyframes wheelTwinkle{from{opacity:.5}to{opacity:1}}
+  .wheel-frame{position:absolute;inset:-7px;border-radius:50%;pointer-events:none;
+    border:3px solid rgba(255,214,102,.5);
+    box-shadow:0 0 0 6px rgba(20,25,54,.95),0 0 0 8px rgba(255,255,255,.12),
+               inset 0 0 26px rgba(255,214,102,.2)}
+  .wheel-disc{position:absolute;inset:0;border-radius:50%;overflow:hidden;
+    border:4px solid rgba(255,255,255,.3);background:#4a5488;
+    box-shadow:inset 0 0 0 2px rgba(255,255,255,.16),inset 0 0 42px rgba(0,0,0,.3);
+    transition:transform 4.2s cubic-bezier(.12,.72,.1,1);will-change:transform}
+  .wheel-disc::after{content:'';position:absolute;inset:0;border-radius:50%;pointer-events:none;
+    background:radial-gradient(circle at 32% 24%,rgba(255,255,255,.26),transparent 46%),
+               radial-gradient(circle at 50% 50%,transparent 58%,rgba(0,0,0,.22) 100%)}
+  .wheel-label{position:absolute;left:50%;top:50%;width:96px;margin-left:-48px;margin-top:-11px;
+    padding:0 5px;border-radius:999px;background:rgba(255,255,255,.88);
+    font-size:11px;font-weight:900;color:#2a2f52;text-align:center;line-height:22px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    box-shadow:0 2px 7px rgba(0,0,0,.25)}
+  .wheel-label.tight{display:none}
+  .wheel-pointer{position:absolute;left:50%;top:-18px;transform:translateX(-50%);z-index:4;
+    width:28px;height:40px;background:linear-gradient(180deg,#fff7d9,#ffce5b 55%,#e7912a);
+    clip-path:polygon(50% 100%,0 0,100% 0);filter:drop-shadow(0 4px 6px rgba(0,0,0,.5))}
+  .wheel-pointer::before{content:'';position:absolute;left:50%;top:-5px;transform:translateX(-50%);
+    width:14px;height:14px;border-radius:50%;background:#fff7d9;box-shadow:0 2px 5px rgba(0,0,0,.4)}
+  .wheel-hub{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;
+    width:82px;height:82px;border-radius:50%;display:grid;place-items:center;cursor:pointer;
+    background:radial-gradient(circle at 34% 26%,#fff6cf,#ffd166 52%,#e99a2d 100%);
+    border:4px solid #fff8e0;color:#4a2c05;font-weight:900;font-size:15px;letter-spacing:1px;
+    box-shadow:0 0 0 4px rgba(16,20,45,.35),0 6px 18px rgba(0,0,0,.4),0 0 26px rgba(255,207,92,.5);
+    animation:hubGlow 2s ease-in-out infinite;user-select:none}
+  @keyframes hubGlow{50%{box-shadow:0 0 0 4px rgba(16,20,45,.35),
+    0 6px 18px rgba(0,0,0,.4),0 0 40px rgba(255,207,92,.85)}}
+  .wheel-hub:active{transform:translate(-50%,-50%) scale(.94)}
+  .wheel-hub.off{filter:grayscale(.55);opacity:.6;cursor:default}
+  .wheel-result{text-align:center;min-height:22px;margin:9px 0 2px;font-size:12px;
+    font-weight:700;color:#aab4dc}
+  .wheel-result.win{color:#ffe39a}
+  .wheel-prize{display:none;margin:6px auto 0;padding:12px 16px;border-radius:16px;max-width:320px;
+    background:linear-gradient(135deg,rgba(255,214,102,.24),rgba(255,140,180,.18));
+    border:1px solid rgba(255,214,102,.5);box-shadow:0 8px 26px rgba(0,0,0,.32);
+    animation:prizePop .4s cubic-bezier(.2,1.4,.4,1)}
+  .wheel-prize.show{display:block}
+  .wheel-prize small{display:block;font-size:10px;color:#ffe39a;letter-spacing:3px}
+  .wheel-prize b{display:block;font-size:21px;color:#fff;margin-top:4px;overflow-wrap:anywhere}
+  /* 结果卡片上的色点 = 指针所停扇区的颜色；图例同步高亮，方便核对对应关系 */
+  .wheel-prize .hit-dot{display:inline-block;width:13px;height:13px;border-radius:50%;
+    margin-right:8px;vertical-align:middle;background:#ffe39a;
+    box-shadow:0 0 0 3px rgba(255,255,255,.28),0 0 12px rgba(255,255,255,.35)}
+  .wheel-list .ledger-item.hit{background:rgba(255,214,102,.24);
+    box-shadow:inset 0 0 0 1px rgba(255,214,102,.7);color:#fff}
+  @keyframes prizePop{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+  .wheel-warn{display:none;margin:8px 0 0;padding:9px 12px;border-radius:10px;
+    background:rgba(255,122,134,.15);border:1px solid rgba(255,122,134,.45);
+    color:#ffc2ca;font-size:11px;line-height:1.6;text-align:center}
+  .wheel-warn.show{display:block}
+  .wheel-list{max-height:132px;overflow:auto;margin:9px 0 2px;
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 8px}
+  .wheel-list .ledger-item{display:flex;align-items:center;gap:7px;min-width:0;
+    padding:7px 9px;border:0;border-radius:10px;background:rgba(255,255,255,.06);
+    font-size:11px;color:#dfe5ff}
+  .wheel-list .ledger-item.off{opacity:.42}
+  .wheel-list .ledger-item i{width:10px;height:10px;border-radius:50%;flex:none;
+    box-shadow:0 0 0 2px rgba(255,255,255,.16)}
+  .wheel-list .ledger-item span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .wheel-list .ledger-item b{color:#ffe39a;font-size:11px;flex:none}
+  .wheel-actions,.parent-actions{display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end;margin-top:14px}
+  .wheel-actions{justify-content:center}
+  .wheel-actions button,.parent-actions button{padding:9px 18px;border-radius:999px;
+    font-size:13px;font-weight:700;background:rgba(255,255,255,.12);color:#e8ecff}
+  .wheel-actions button:hover,.parent-actions button:hover{background:rgba(255,255,255,.22)}
+  .wheel-actions button.primary,.parent-actions button.primary{
+    background:var(--grad-primary);color:#fff}
+  .wheel-actions button:disabled{opacity:.45;cursor:default}
+  .wheel-actions #btnSpin{padding:11px 30px;font-size:14px;font-weight:900;letter-spacing:1px;
+    background:linear-gradient(135deg,#ffd977,#ff9f43);color:#4a2c05;
+    box-shadow:0 6px 18px rgba(255,159,67,.32)}
+  .wheel-actions #btnSpin:disabled{filter:grayscale(.6);opacity:.5;box-shadow:none}
+
+  /* ---------- 惊喜盲盒：开盖动画 + 光芒 + 彩带 ---------- */
+  /* 旧转盘仅作逻辑兼容层保留，不显示 */
+  .legacy-wheel{display:none}
+  .box-scene{position:absolute;inset:0;display:grid;place-items:center}
+  /* 背景光芒：缓慢旋转，开盒时放大显现 */
+  .box-rays{position:absolute;width:250px;height:250px;border-radius:50%;pointer-events:none;
+    background:repeating-conic-gradient(from 0deg,rgba(255,226,140,.9) 0deg 8deg,transparent 8deg 23deg);
+    -webkit-mask:radial-gradient(circle,transparent 0 24%,#000 30% 50%,transparent 52%);
+    mask:radial-gradient(circle,transparent 0 24%,#000 30% 50%,transparent 52%);
+    opacity:0;transform:scale(.5);transition:opacity .5s ease,transform .7s cubic-bezier(.2,1.4,.4,1);
+    animation:raysSpin 16s linear infinite}
+  @keyframes raysSpin{from{rotate:0deg}to{rotate:360deg}}
+  .box-scene.reveal .box-rays{opacity:.9;transform:scale(1)}
+  /* 环绕闪烁的小星星 */
+  .box-stars{position:absolute;inset:0;pointer-events:none}
+  .box-stars i{position:absolute;width:15px;height:15px;opacity:.7;
+    background:#fff2b8;filter:drop-shadow(0 0 6px rgba(255,226,140,.9));
+    clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+    animation:starTwinkle 2.4s ease-in-out infinite}
+  .box-stars i:nth-child(1){left:6%;top:22%;animation-delay:0s}
+  .box-stars i:nth-child(2){left:20%;top:6%;animation-delay:.4s;font-size:12px}
+  .box-stars i:nth-child(3){left:80%;top:12%;animation-delay:.8s}
+  .box-stars i:nth-child(4){left:90%;top:48%;animation-delay:1.2s}
+  .box-stars i:nth-child(5){left:12%;top:74%;animation-delay:1.6s}
+  .box-stars i:nth-child(6){left:74%;top:82%;animation-delay:2s}
+  @keyframes starTwinkle{0%,100%{opacity:.25;transform:scale(.7)}50%{opacity:1;transform:scale(1.25)}}
+  /* 盲盒本体 */
+  .mystery-box{position:relative;width:150px;height:140px;cursor:pointer;
+    animation:boxFloat 2.8s ease-in-out infinite;filter:drop-shadow(0 14px 16px rgba(0,0,0,.45))}
+  @keyframes boxFloat{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-11px) rotate(1.5deg)}}
+  .mystery-box:focus-visible{outline:3px solid #ffe39a;outline-offset:6px;border-radius:16px}
+  .box-shadow{position:absolute;left:50%;bottom:-14px;transform:translateX(-50%);
+    width:150px;height:18px;border-radius:50%;background:rgba(0,0,0,.4);filter:blur(6px)}
+  .box-body{position:absolute;left:8px;bottom:0;width:134px;height:92px;border-radius:12px 12px 18px 18px;
+    background:linear-gradient(150deg,#ff9dbb,#ff6b8b 48%,#e23f6d);
+    border:2px solid rgba(255,255,255,.42);
+    box-shadow:inset -12px -8px 20px rgba(0,0,0,.18),inset 10px 8px 18px rgba(255,255,255,.28)}
+  .box-ribbon{position:absolute;left:50%;top:0;transform:translateX(-50%);width:22px;height:100%;
+    background:linear-gradient(90deg,rgba(255,255,255,.2),rgba(255,238,176,.95),rgba(255,255,255,.2))}
+  .box-mark{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);z-index:2;
+    font-size:42px;font-weight:900;color:#fff8dc;text-shadow:0 3px 8px rgba(0,0,0,.3)}
+  .box-lid{position:absolute;left:0;top:20px;width:150px;height:40px;border-radius:12px;z-index:3;
+    background:linear-gradient(150deg,#ffd979,#ffb347);
+    border:2px solid rgba(255,255,255,.5);
+    box-shadow:0 6px 0 rgba(178,88,18,.35),inset 0 3px 9px rgba(255,255,255,.55);
+    transform-origin:50% 100%;transition:transform .55s cubic-bezier(.3,1.3,.5,1),opacity .55s}
+  .box-bow{position:absolute;left:50%;top:-23px;transform:translateX(-50%);font-size:32px;
+    filter:drop-shadow(0 3px 4px rgba(0,0,0,.25))}
+  /* 开盒过程：先晃动，再掀盖 */
+  .box-scene.opening .mystery-box{animation:boxShake .55s ease-in-out}
+  @keyframes boxShake{0%,100%{transform:translateX(0) rotate(0)}
+    20%{transform:translateX(-8px) rotate(-5deg)}40%{transform:translateX(8px) rotate(5deg)}
+    60%{transform:translateX(-6px) rotate(-4deg)}80%{transform:translateX(6px) rotate(4deg)}}
+  .box-scene.reveal .mystery-box{animation:none;opacity:0;transform:scale(.6);pointer-events:none;
+    transition:opacity .3s ease,transform .45s ease}
+  .box-scene.reveal .box-lid{transform:translateY(-118px) rotate(-34deg) scale(.85);opacity:0}
+  .box-scene.reveal .box-body{animation:boxPop .5s cubic-bezier(.2,1.5,.4,1)}
+  /* 揭晓后不再显示未拆的盒子，场景中央直接呈现奖品文字 */
+  .box-prize-reveal{position:absolute;left:50%;top:50%;z-index:6;
+    width:min(88%,330px);transform:translate(-50%,-42%) scale(.7);opacity:0;pointer-events:none;
+    text-align:center;transition:opacity .35s ease,transform .5s cubic-bezier(.2,1.5,.4,1)}
+  .box-scene.reveal .box-prize-reveal{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  .box-prize-reveal .bpr-tag{display:block;font-size:12px;letter-spacing:4px;color:#ffe39a;margin-bottom:8px}
+  .box-prize-reveal .bpr-name{display:block;font-size:30px;font-weight:900;line-height:1.35;color:#fff;
+    text-shadow:0 3px 18px rgba(0,0,0,.5),0 0 26px rgba(255,214,102,.45);overflow-wrap:anywhere;
+    padding:14px 16px;border-radius:18px;
+    background:linear-gradient(135deg,rgba(255,214,102,.24),rgba(255,140,180,.2));
+    border:1px solid rgba(255,226,140,.6);box-shadow:0 12px 34px rgba(0,0,0,.38)}
+  .box-prize-reveal .bpr-note{display:block;font-size:11px;color:#c3cbeb;margin-top:9px}
+  @keyframes boxPop{0%{transform:scale(1)}45%{transform:scale(1.12,.86)}100%{transform:scale(1)}}
+  /* 彩带粒子：从盒心向四周迸发 */
+  .box-burst{position:absolute;inset:0;pointer-events:none}
+  .box-burst i{position:absolute;left:50%;top:50%;width:9px;height:14px;border-radius:3px;opacity:0;
+    background:var(--c,#ffd166)}
+  .box-burst i:nth-child(1){--r:0deg;--c:#ffd166}
+  .box-burst i:nth-child(2){--r:30deg;--c:#ff8fb1}
+  .box-burst i:nth-child(3){--r:60deg;--c:#8fe3c0}
+  .box-burst i:nth-child(4){--r:90deg;--c:#ffd166}
+  .box-burst i:nth-child(5){--r:120deg;--c:#a9b8ff}
+  .box-burst i:nth-child(6){--r:150deg;--c:#ff8fb1}
+  .box-burst i:nth-child(7){--r:180deg;--c:#ffd166}
+  .box-burst i:nth-child(8){--r:210deg;--c:#8fe3c0}
+  .box-burst i:nth-child(9){--r:240deg;--c:#a9b8ff}
+  .box-burst i:nth-child(10){--r:270deg;--c:#ff8fb1}
+  .box-burst i:nth-child(11){--r:300deg;--c:#ffd166}
+  .box-burst i:nth-child(12){--r:330deg;--c:#8fe3c0}
+  .box-scene.reveal .box-burst i{animation:burstFly .95s ease-out forwards;animation-delay:calc(var(--r) / 400)}
+  @keyframes burstFly{
+    0%{opacity:1;transform:translate(-50%,-50%) rotate(var(--r)) translateY(0) scale(.5)}
+    75%{opacity:1}
+    100%{opacity:0;transform:translate(-50%,-50%) rotate(var(--r)) translateY(-150px) scale(1.1)}}
+  @media (prefers-reduced-motion:reduce){
+    .mystery-box,.box-stars i,.box-rays{animation:none}
+    .box-scene.reveal .box-burst i{animation:none}
+  }
+  .parent-status{padding:10px 12px;border-radius:12px;margin:10px 0;
+    background:rgba(255,255,255,.06);font-size:12px;color:#c3cbeb}
+  .parent-dialog .field{width:100%;margin-bottom:9px}
+  .parent-label{display:block;font-size:11px;color:var(--muted);margin:8px 0 4px}
+  .parent-warn{font-size:11px;line-height:1.7;color:#ffb3ba;margin:8px 0}
+
+  .feedback{min-height:24px;margin-top:4px;font-size:14px;font-weight:600;color:var(--muted)}
+  .feedback.ok{color:var(--ok)}
+  .feedback.bad{color:var(--err)}
+  .tips{margin-top:14px;font-size:12px;color:rgba(160,172,215,.65);letter-spacing:.3px}
+
+  .success-card{
+    margin:14px auto 0;max-width:640px;padding:18px 24px;border-radius:18px;
+    background:linear-gradient(135deg,rgba(46,180,130,.22),rgba(70,110,220,.18));
+    border:1px solid rgba(92,226,160,.35);box-shadow:var(--shadow);
+    animation:fade .3s ease;
+  }
+  .success-card .sc-title{font-size:17px;font-weight:800;color:var(--ok)}
+  .success-card .sc-en{margin:10px 0 4px;font-size:clamp(19px,2.6vw,26px);font-weight:800;letter-spacing:.6px}
+  .success-card .sc-note{font-size:12px;color:var(--muted)}
+  .sc-actions{display:flex;justify-content:center;gap:10px;margin-top:14px}
+  .sc-actions button{
+    padding:9px 20px;border-radius:999px;font-size:13px;font-weight:700;
+    background:rgba(255,255,255,.12);transition:.18s;
+  }
+  .sc-actions button:hover{background:rgba(255,255,255,.22)}
+  .sc-actions button.primary{background:#fff;color:#2a3a8c}
+
+  /* ---------- 分步记忆 ---------- */
+  .phase-bar{display:flex;justify-content:center;align-items:center;gap:10px;margin:22px 0 2px;flex-wrap:wrap}
+  .phase{
+    padding:7px 16px;border-radius:999px;font-size:12px;font-weight:700;color:var(--muted);
+    background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);transition:.2s;
+  }
+  .phase.active{background:var(--grad-primary);color:#fff;border-color:transparent;box-shadow:0 5px 16px rgba(74,84,240,.4)}
+  .phase.done{color:var(--ok);border-color:rgba(92,226,160,.4)}
+  .chunk-cards{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin:30px auto 8px;max-width:940px}
+  .chunk-card{
+    width:min(230px,86vw);min-height:142px;padding:18px;border-radius:18px;text-align:left;
+    background:linear-gradient(150deg,rgba(255,255,255,.11),rgba(255,255,255,.04));
+    border:1px solid rgba(255,255,255,.14);box-shadow:0 10px 26px rgba(0,0,0,.22);
+    display:flex;flex-direction:column;justify-content:space-between;gap:10px;transition:.2s;
+  }
+  .chunk-card:hover{transform:translateY(-4px);border-color:rgba(160,145,255,.65)}
+  .chunk-card.revealed{background:linear-gradient(150deg,rgba(110,96,255,.28),rgba(60,90,220,.16));border-color:rgba(160,145,255,.5)}
+  .chunk-card.done{border-color:rgba(92,226,160,.55)}
+  .cc-idx{font-size:11px;color:#b9a8ff;letter-spacing:1px}
+  .cc-cn{font-size:20px;font-weight:800;line-height:1.4}
+  .cc-en{font-size:16px;font-weight:800;color:#d6ccff;line-height:1.45;word-break:break-word}
+  .cc-en.masked{color:var(--muted);font-weight:600;font-size:13px}
+  .cc-tip{font-size:11px;color:var(--muted)}
+  .chunk-progress{margin-top:14px;font-size:12px;color:var(--muted)}
+
+  /* ---------- 单词速记 ---------- */
+  .word-card{width:100%;max-width:720px;text-align:center;padding:10px 16px}
+  .word-cn{font-size:clamp(30px,4.6vw,48px);font-weight:900;letter-spacing:2px;margin:6px 0}
+  .word-meta{font-size:13px;color:var(--muted)}
+  .word-slots{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin:38px 0 30px;min-height:64px}
+  .letter-slot{
+    width:clamp(38px,6vw,54px);height:clamp(48px,7vw,64px);border-radius:12px;
+    border-bottom:3px solid var(--line);background:rgba(255,255,255,.05);
+    display:grid;place-items:center;font-size:clamp(22px,3vw,30px);font-weight:800;
+    transition:.18s;
+  }
+  .letter-slot.filled{background:rgba(255,255,255,.13);border-bottom-color:#b7a8ff}
+  .letter-slot.ok{color:var(--ok);border-bottom-color:var(--ok);background:rgba(92,226,160,.12)}
+  .letter-slot.bad{color:var(--err);border-bottom-color:var(--err);animation:shake .34s ease}
+  .letter-bank{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;max-width:620px;margin:0 auto}
+  .letter-btn{
+    width:clamp(42px,6.2vw,56px);height:clamp(42px,6.2vw,56px);border-radius:14px;
+    background:linear-gradient(150deg,rgba(255,255,255,.17),rgba(255,255,255,.07));
+    border:1px solid rgba(255,255,255,.14);
+    font-size:22px;font-weight:800;box-shadow:0 6px 16px rgba(0,0,0,.2);transition:.15s;
+  }
+  .letter-btn:hover:not(:disabled){transform:translateY(-3px);background:rgba(139,123,255,.4)}
+  .letter-btn:disabled{opacity:.18;cursor:default}
+  .word-progress{margin-top:26px;font-size:12px;color:var(--muted)}
+
+  /* ---------- 语法练习 ---------- */
+  .grammar-card{width:100%;max-width:820px;padding:14px 18px}
+  .grammar-tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:16px}
+  .grammar-tabs button{padding:8px 16px;font-size:13px;font-weight:700;border-radius:999px;
+    border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:var(--text);cursor:pointer;transition:.15s}
+  .grammar-tabs button.active{background:var(--grad-primary);border-color:transparent;color:#fff;box-shadow:0 6px 18px rgba(95,108,255,.35)}
+  .gq-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+  .gq-point{font-size:12px;color:#c9bcff;background:rgba(139,123,255,.16);padding:5px 12px;border-radius:999px}
+  .gq-count{font-size:12px;color:var(--muted)}
+  .gq-stem{font-size:clamp(18px,2.4vw,26px);line-height:1.6;font-weight:700;margin:14px 0 20px;text-align:left;
+    background:rgba(255,255,255,.05);border-radius:16px;padding:18px 20px;border-left:4px solid #8b7bff}
+  .gq-opts{display:flex;flex-direction:column;gap:10px;text-align:left}
+  .gq-opt{display:flex;align-items:center;gap:12px;padding:13px 16px;border-radius:14px;cursor:pointer;
+    background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);font-size:17px;transition:.15s}
+  .gq-opt:hover:not(.locked){background:rgba(139,123,255,.22);transform:translateX(3px)}
+  .gq-opt .gk{display:grid;place-items:center;width:28px;height:28px;flex:none;border-radius:8px;
+    background:rgba(255,255,255,.12);font-weight:800;font-size:14px}
+  .gq-opt.correct{background:rgba(92,226,160,.18);border-color:var(--ok)}
+  .gq-opt.wrong{background:rgba(255,107,107,.18);border-color:var(--err);animation:shake .34s ease}
+  .gq-opt.locked{cursor:default}
+  .gq-detail{margin-top:16px;padding:14px 16px;border-radius:14px;text-align:left;font-size:14px;line-height:1.7;
+    background:rgba(139,123,255,.1);border:1px solid rgba(139,123,255,.25);color:var(--text)}
+  .gq-detail b{color:#c9bcff}
+  .gq-actions{display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+  .gq-actions button{padding:10px 22px;font-size:14px;font-weight:700;border-radius:12px;cursor:pointer;
+    border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:var(--text)}
+  .gq-actions button.primary{background:var(--grad-primary);border-color:transparent;color:#fff}
+  .gq-input{width:100%;padding:14px 16px;border-radius:14px;font-size:18px;text-align:center;
+    background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.18);color:var(--text);outline:none}
+  .gq-input:focus{border-color:#8b7bff}
+  .gk-topics{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;text-align:left}
+  .gk-topic{padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);cursor:pointer;transition:.15s}
+  .gk-topic:hover{background:rgba(139,123,255,.18);transform:translateY(-2px)}
+  .gk-topic h4{margin:0 0 8px;font-size:15px;color:#c9bcff}
+  .gk-topic p{margin:0;font-size:13px;line-height:1.6;color:var(--muted);display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+  .gk-detail{white-space:pre-line}
+  .gq-score{font-size:13px;color:var(--muted);margin-top:8px}
+
+  /* ---------- 底部工具条 ---------- */
+  .toolbar{
+    position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:20;
+    display:flex;align-items:center;gap:5px;padding:8px;border-radius:999px;
+    background:var(--grad-toolbar);
+    box-shadow:0 14px 38px rgba(20,32,120,.55),inset 0 1px 0 rgba(255,255,255,.18);
+    max-width:calc(100vw - 20px);
+  }
+  .toolbar .tb{
+    width:42px;height:42px;border-radius:50%;display:grid;place-items:center;
+    transition:.18s;flex:none;color:#fff;
+  }
+  .toolbar .tb:hover{background:rgba(255,255,255,.2)}
+  .toolbar .tb.on{background:rgba(255,255,255,.26);box-shadow:inset 0 0 0 1px rgba(255,255,255,.4)}
+  .toolbar .tb svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .toolbar .tb-main{
+    height:42px;padding:0 22px;border-radius:999px;background:#fff;color:#2b3c9c;
+    font-size:13px;font-weight:800;white-space:nowrap;transition:.18s;
+  }
+  .toolbar .tb-main:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.22)}
+  .toolbar .sep{width:1px;height:22px;background:rgba(255,255,255,.24);margin:0 3px}
+
+  /* ---------- Toast / 抽屉 ---------- */
+  .toast{
+    position:fixed;top:88px;left:50%;transform:translate(-50%,-14px);z-index:60;
+    padding:11px 22px;border-radius:999px;font-size:13px;font-weight:700;
+    background:rgba(20,24,56,.94);border:1px solid rgba(255,255,255,.16);
+    box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.25s;white-space:nowrap;
+  }
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+  .toast.ok{border-color:rgba(92,226,160,.6);color:var(--ok)}
+  .toast.bad{border-color:rgba(255,122,134,.6);color:var(--err)}
+  .mask{position:fixed;inset:0;background:rgba(5,8,26,.6);z-index:30;opacity:0;pointer-events:none;transition:.25s}
+  .mask.show{opacity:1;pointer-events:auto}
+  .drawer{
+    position:fixed;top:0;right:0;bottom:0;width:min(380px,92vw);z-index:40;
+    background:linear-gradient(165deg,#222a55,#141830);
+    border-left:1px solid rgba(255,255,255,.1);box-shadow:-20px 0 60px rgba(0,0,0,.4);
+    transform:translateX(102%);transition:transform .3s cubic-bezier(.22,.8,.3,1);
+    overflow-y:auto;padding:22px 22px 60px;
+  }
+  .drawer.open{transform:none}
+  .drawer h2{font-size:19px;margin:0 0 4px}
+  .drawer .dsub{font-size:12px;color:var(--muted);margin-bottom:20px}
+  .drawer-close{position:absolute;top:18px;right:18px}
+  .panel{margin-bottom:24px}
+  .panel h3{font-size:12px;letter-spacing:2px;color:#b3a3ff;margin:0 0 12px;font-weight:800}
+  .unit-item{
+    width:100%;text-align:left;padding:11px 13px;border-radius:12px;margin-bottom:7px;
+    background:rgba(255,255,255,.05);border:1px solid transparent;font-size:13px;transition:.18s;
+  }
+  .unit-item:hover{background:rgba(255,255,255,.11)}
+  .unit-item.active{border-color:rgba(139,123,255,.7);background:rgba(139,123,255,.16)}
+  .unit-item small{display:block;color:var(--muted);font-size:11px;margin-top:3px}
+  .stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+  .stat-box{background:rgba(255,255,255,.06);border-radius:12px;padding:12px}
+  .stat-box b{display:block;font-size:21px;font-weight:800}
+  .stat-box span{font-size:11px;color:var(--muted)}
+  .wrong-item{
+    display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:10px;
+    background:rgba(255,122,134,.09);margin-bottom:6px;font-size:12px;
+  }
+  .wrong-item button:first-child{flex:1;text-align:left;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .wrong-item:hover{background:rgba(255,122,134,.16)}
+  .empty{font-size:12px;color:var(--muted);padding:8px 2px}
+  .hist-day{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.5px;margin:14px 2px 7px}
+  .hist-item{display:flex;gap:9px;align-items:flex-start;padding:9px 10px;border-radius:10px;background:rgba(255,255,255,.055);margin-bottom:6px;font-size:12px}
+  .hist-time{color:var(--muted);font-variant-numeric:tabular-nums;flex:none;width:38px}
+  .hist-body{flex:1;min-width:0}
+  .hist-en{font-weight:700;overflow-wrap:anywhere}
+  .hist-cn{color:var(--muted);font-size:11px;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .hist-meta{color:var(--muted);font-size:10px;margin-top:4px}
+  .hist-badge{flex:none;font-size:10px;font-weight:700;padding:3px 7px;border-radius:99px;background:rgba(93,231,163,.16);color:#8ff0c0}
+  .hist-badge.assist{background:rgba(255,196,105,.16);color:#ffd08a}
+  .setting-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;font-size:13px;border-bottom:1px solid rgba(255,255,255,.06)}
+  .switch{width:42px;height:24px;border-radius:99px;background:rgba(255,255,255,.16);position:relative;transition:.2s;flex:none}
+  .switch::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.2s}
+  .switch.on{background:#5f6cff}
+  .switch.on::after{left:21px}
+  .rate{width:110px;accent-color:#8b7bff}
+  textarea{
+    width:100%;height:104px;resize:vertical;border-radius:12px;padding:11px;
+    background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.12);color:var(--text);
+    font-size:12px;line-height:1.6;font-family:ui-monospace,Consolas,monospace;
+  }
+  .import-note{font-size:11px;color:var(--muted);line-height:1.7;margin:8px 0 10px}
+  .btn-row{display:flex;gap:8px;flex-wrap:wrap}
+  .mini-btn{padding:8px 14px;border-radius:10px;font-size:12px;font-weight:700;background:rgba(255,255,255,.1);transition:.18s}
+  .mini-btn:hover{background:rgba(255,255,255,.2)}
+  .mini-btn.primary{background:var(--grad-primary)}
+  .mini-btn.danger{background:rgba(255,122,134,.16);color:#ffb3ba}
+  .danger-zone{margin-top:26px;border-top:1px solid rgba(255,255,255,.1);padding-top:16px}
+
+  @media(max-width:560px){
+    .toolbar{overflow-x:auto;justify-content:flex-start;scrollbar-width:none}
+    .toolbar::-webkit-scrollbar{display:none}
+  }
+  @media(max-width:640px){
+    .topbar{flex-wrap:wrap;gap:10px;padding:12px 14px 8px}
+    .course{max-width:62vw}
+    .mode-switch{order:3;width:100%;margin-left:0}
+    .mode-switch button{flex:1;padding:7px 6px;font-size:11px}
+    .top-right{margin-left:auto;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+    .parent-chip,.wheel-chip{padding:4px 8px;font-size:10px}
+    .parent-chip.unlocked{font-size:10px}
+    .wheel-stage{width:min(262px,70vw);margin:16px auto 4px}
+    .wheel-label{width:80px;margin-left:-40px;font-size:10px}
+    .wheel-hub{width:70px;height:70px;font-size:13px}
+    .wheel-list{grid-template-columns:1fr;max-height:110px}
+    .wheel-dialog{padding:18px 16px 14px}
+    .toolbar{bottom:12px;gap:1px;padding:6px}
+    .toolbar .tb{width:36px;height:36px}
+    .toolbar .tb-main{height:36px;padding:0 12px;font-size:12px}
+    .slot{min-width:50px;margin-bottom:4px}
+    .slot .hint{font-size:12px;max-width:min(120px,100%)}
+    .slots{column-gap:var(--word-gap,16px)}
+    .lbox{width:clamp(17px,5vw,23px);height:clamp(27px,8vw,34px);font-size:clamp(15px,4.4vw,20px)}
+    .tips{font-size:11px}
+    .chunk-card{width:min(200px,84vw);min-height:126px}
+    .filter-bar{padding:8px 14px 0;gap:8px;font-size:11px}
+    .filter-group{gap:6px}
+    .filter-links{gap:10px;width:100%;padding:6px 0 0;border-left:0;
+      border-top:1px solid rgba(255,255,255,.1)}
+    .top-stats{padding:3px 9px;gap:7px}
+    .top-sep{display:none}
+    .drawer{width:min(420px,94vw)}
+  }
+
+  /* ---------- 学习范围筛选 ---------- */
+  .filter-bar{
+    display:flex;align-items:center;justify-content:space-between;gap:12px 18px;flex-wrap:wrap;
+    padding:9px clamp(16px,4vw,44px) 0;font-size:12px;color:var(--muted);
+  }
+  .filter-group{display:flex;align-items:center;gap:9px;flex-wrap:wrap;min-width:0}
+  .filter-links{display:flex;align-items:center;gap:12px;flex:none;padding-left:16px;
+    border-left:1px solid rgba(255,255,255,.14)}
+  .fb-title{letter-spacing:1px;font-weight:800;color:#b3a3ff;white-space:nowrap}
+  .filter-bar label{display:flex;align-items:center;gap:6px;white-space:nowrap}
+  .sel{position:relative;display:inline-flex;align-items:center}
+  .sel::after{content:"▾";position:absolute;right:9px;font-size:10px;color:#c6cbf2;pointer-events:none}
+  select{
+    appearance:none;-webkit-appearance:none;padding:7px 26px 7px 11px;border-radius:9px;
+    background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);
+    color:var(--text);font-size:12px;font-family:inherit;cursor:pointer;max-width:190px;
+  }
+  select:hover{background:rgba(255,255,255,.16)}
+  select option{background:#20264c;color:#fff}
+  .fb-info{font-size:11px;color:#8f9bca}
+  .link-btn{font-size:11px;font-weight:700;color:#b9a8ff;border-bottom:1px dashed rgba(185,168,255,.6);padding:2px 1px}
+  .link-btn:hover{color:#fff}
+
+  /* ---------- 抽屉分页 ---------- */
+  .drawer-tabs{display:flex;flex-wrap:wrap;gap:4px;padding:4px;margin:2px 0 20px;background:rgba(255,255,255,.06);border-radius:12px}
+  .drawer-tabs button{flex:1 1 auto;min-width:54px;padding:9px 4px;border-radius:9px;font-size:12px;font-weight:700;color:var(--muted);transition:.18s}
+  .drawer-tabs button.active{background:var(--grad-primary);color:#fff;box-shadow:0 4px 14px rgba(74,84,240,.35)}
+  .tab-page{animation:fade .25s ease}
+  .panel-note{font-size:11px;color:var(--muted);line-height:1.7;margin:-4px 0 10px}
+  .hr{height:1px;background:rgba(255,255,255,.08);margin:16px 0}
+  .field{
+    width:100%;padding:9px 11px;border-radius:10px;
+    background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.12);
+    color:var(--text);font-size:12px;font-family:inherit;
+  }
+  .field::placeholder{color:rgba(180,190,230,.45)}
+  .field-row{display:flex;gap:7px;margin-bottom:8px;flex-wrap:wrap}
+  .field-row .field{flex:1;min-width:0}
+  .btn-row.tight{gap:6px}
+  .mini-btn.sm{padding:6px 10px;font-size:11px}
+
+  /* ---------- 管理列表 ---------- */
+  .manage-row{
+    display:flex;align-items:center;gap:7px;padding:8px 9px;border-radius:10px;
+    background:rgba(255,255,255,.05);margin-bottom:6px;font-size:12px;
+  }
+  .manage-row .mr-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .manage-row .mr-count{font-size:10px;color:var(--muted);white-space:nowrap}
+  .manage-row select{font-size:11px;padding:5px 22px 5px 8px;max-width:118px}
+  .manage-row .sel::after{right:7px}
+  .mini-icon{
+    width:26px;height:26px;border-radius:8px;display:grid;place-items:center;flex:none;
+    background:rgba(255,255,255,.09);font-size:12px;transition:.18s;
+  }
+  .mini-icon:hover{background:rgba(255,255,255,.22)}
+  .mini-icon.danger:hover{background:rgba(255,122,134,.3);color:#ffb3ba}
+  .mini-icon svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .unit-meta-row{padding:9px 10px;border-radius:10px;background:rgba(255,255,255,.045);margin-bottom:6px}
+  .unit-meta-row .umr-top{font-size:12px;font-weight:700;margin-bottom:7px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .unit-meta-row .umr-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  .unit-meta-row label{font-size:10px;color:var(--muted);display:flex;align-items:center;gap:4px}
+
+  /* ---------- 生词本 ---------- */
+  .vocab-tools{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+  .vocab-item{
+    display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:11px;
+    background:rgba(255,255,255,.055);margin-bottom:6px;border:1px solid transparent;transition:.18s;
+  }
+  .vocab-item:hover{background:rgba(255,255,255,.1)}
+  .vocab-item.selected{border-color:rgba(139,123,255,.65);background:rgba(139,123,255,.14)}
+  .vocab-item input[type=checkbox]{accent-color:#8b7bff;width:15px;height:15px;flex:none;cursor:pointer}
+  .vocab-main{flex:1;min-width:0;text-align:left}
+  .vocab-en{font-size:14px;font-weight:800;letter-spacing:.3px}
+  .vocab-cn{font-size:11px;color:var(--muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .vocab-meta{font-size:10px;color:#8f9bca;margin-top:4px}
+  .badge{display:inline-block;padding:2px 7px;border-radius:999px;font-size:10px;background:rgba(255,255,255,.1);color:#cbd3ff;margin-right:5px}
+  .badge.ok{background:rgba(92,226,160,.18);color:var(--ok)}
+  .set-item{
+    display:flex;align-items:center;gap:8px;padding:10px;border-radius:11px;
+    background:rgba(255,255,255,.05);margin-bottom:7px;
+  }
+  .set-item .si-main{flex:1;min-width:0}
+  .set-item .si-name{font-size:12px;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .set-item .si-meta{font-size:10px;color:var(--muted);margin-top:3px}
+  .count-pill{font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(139,123,255,.2);color:#cdc4ff;white-space:nowrap}
+
+  /* ---------- 教材库 ---------- */
+  /* 教材树：小学 / 初中 → 教材类别 → 三年级(上) 这样的册包 */
+  .tb-group{margin-bottom:16px}
+  .tb-stage{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:900;letter-spacing:.5px;
+    color:#cdc4ff;padding:6px 2px;border-bottom:1px solid rgba(139,123,255,.28);margin-bottom:9px}
+  .tb-bookgroup{margin:0 0 12px 7px;padding-left:11px;border-left:2px solid rgba(139,123,255,.26)}
+  .tb-bookname{font-size:11px;font-weight:800;color:#a7b6ef;margin:2px 0 7px}
+  .tb-card{border:1px solid rgba(255,255,255,.09);border-radius:12px;padding:10px;margin-bottom:8px;background:rgba(255,255,255,.04)}
+  .tb-card.off{opacity:.5}
+  .tb-head{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .tb-title{flex:1;min-width:130px;font-size:12px;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .tb-meta{font-size:10px;color:var(--muted);margin-top:4px;line-height:1.6}
+  .tb-units{margin-top:9px;border-top:1px dashed rgba(255,255,255,.12);padding-top:8px}
+  .tb-unit{display:flex;align-items:center;gap:6px;padding:6px 7px;border-radius:9px;background:rgba(255,255,255,.05);margin-bottom:5px;font-size:11px}
+  .tb-unit.sel{background:rgba(139,123,255,.16);box-shadow:inset 0 0 0 1px rgba(139,123,255,.4)}
+  .tb-unit .u-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer}
+  .tb-unit .u-count{font-size:10px;color:var(--muted);white-space:nowrap}
+  .tb-editor{margin-top:10px;padding:10px;border-radius:11px;background:rgba(0,0,0,.18);border:1px solid rgba(139,123,255,.24)}
+  .tb-editor h4{font-size:12px;font-weight:800;margin:0 0 9px}
+  .editor-row{display:flex;gap:6px;margin-bottom:7px;flex-wrap:wrap}
+  .editor-row .field{flex:1;min-width:130px}
+  textarea.field{min-height:66px;resize:vertical;line-height:1.6}
+  .q-item{display:flex;align-items:flex-start;gap:7px;padding:7px 8px;border-radius:9px;background:rgba(0,0,0,.16);margin-bottom:5px;font-size:11px}
+  .q-item .q-main{flex:1;min-width:0}
+  .q-cn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .q-en{color:#a7b6ef;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .word-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 7px;border-radius:999px;background:rgba(255,255,255,.08);font-size:10px;margin:0 4px 5px 0}
+  .word-chip button{color:#ffb3ba;font-size:11px;line-height:1}
+  .file-input{font-size:10px;color:var(--muted);max-width:100%}
+  .subtle{font-size:10px;color:var(--muted);line-height:1.6}
+
+  /* ---------- 本地数据库 ---------- */
+  .db-hero{border:1px solid rgba(139,123,255,.3);border-radius:14px;padding:12px;margin-bottom:10px;
+    background:linear-gradient(135deg,rgba(76,91,214,.24),rgba(139,123,255,.07))}
+  .db-engine{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:800;flex-wrap:wrap}
+  .db-engine .dot{width:9px;height:9px;border-radius:50%;background:#5ce2a0;box-shadow:0 0 0 4px rgba(92,226,160,.14);flex:none}
+  .db-engine .dot.warn{background:#ffcf6b;box-shadow:0 0 0 4px rgba(255,207,107,.14)}
+  .db-desc{font-size:10.5px;color:var(--muted);line-height:1.75;margin-top:7px}
+  .db-usage{height:7px;border-radius:99px;background:rgba(255,255,255,.09);overflow:hidden;margin:10px 0 5px}
+  .db-usage i{display:block;height:100%;background:linear-gradient(90deg,#5c7bff,#a98bff);border-radius:99px;transition:width .3s}
+  .kv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}
+  .kv{background:rgba(255,255,255,.055);border-radius:10px;padding:8px 9px;min-width:0}
+  .kv b{display:block;font-size:15px;font-weight:800}
+  .kv span{font-size:10px;color:var(--muted)}
+  .db-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;
+    border-bottom:1px dashed rgba(255,255,255,.1);font-size:11px}
+  .db-row:last-child{border-bottom:0}
+  .db-row .lbl{color:var(--muted);flex:none}
+  .db-row .val{font-weight:700;text-align:right;word-break:break-all}
+  .db-note{font-size:10px;color:var(--muted);line-height:1.75;margin-top:9px}
+
+  /* ---------- 统一微交互：按压反馈 / 悬浮抬升 / 焦点环 ---------- */
+  .mode-switch button,.accent-switch button,.grammar-tabs button,.drawer-tabs button,
+  .mini-btn,.gq-actions button,.modal-actions button,.wheel-actions button,.parent-actions button,
+  .toolbar .tb-main,.parent-chip,.wheel-chip,.link-btn{
+    transition:transform var(--duration-tap,130ms) var(--ease-standard),
+               background-color var(--duration-tap,130ms) var(--ease-standard),
+               box-shadow var(--duration-tap,130ms) var(--ease-standard)}
+  .mode-switch button:active,.accent-switch button:active,.grammar-tabs button:active,
+  .drawer-tabs button:active,.mini-btn:active,.gq-actions button:active,
+  .modal-actions button:active,.wheel-actions button:active,.parent-actions button:active,
+  .toolbar .tb-main:active,.parent-chip:active,.wheel-chip:active{transform:scale(.95)}
+  .stat-box,.unit-item,.vocab-item,.set-item,.gk-topic,.best-row{
+    transition:transform var(--duration-tap,150ms) var(--ease-standard),
+               background-color var(--duration-tap,150ms) var(--ease-standard)}
+  .toolbar,.drawer,.modal{box-shadow:var(--sh-3)}
+  .toolbar .tb-main:focus-visible,.mini-btn:focus-visible,.gq-opt:focus-visible,
+  .drawer-tabs button:focus-visible,.grammar-tabs button:focus-visible{
+    outline:2px solid #c9bcff;outline-offset:3px}
+
+/* ============ 打字小鸭 · 样式 ============ */
+#td-root{
+  --bg1: #fff7e6;
+  --bg2: #ffe9c7;
+  --ink: #4a3b2c;
+  --ink-soft: #8a7a68;
+  --card: #ffffff;
+  --shadow: 0 8px 20px rgba(180, 130, 60, 0.15);
+  --radius: 22px;
+  --font: "Comic Sans MS", "PingFang SC", "Microsoft YaHei", "Segoe UI", system-ui, sans-serif;
+
+  /* 手指颜色 */
+  --f-lp: #ff8fa3;
+  --f-lr: #b197fc;
+  --f-lm: #74c0fc;
+  --f-li: #38d9a9;
+  --f-ri: #ffa94d;
+  --f-rm: #ffd43b;
+  --f-rr: #ff922b;
+  --f-rp: #ff6b6b;
+  --f-th: #adb5bd;
+}
+
+#td-root *{ box-sizing: border-box; margin: 0; padding: 0; }
+
+#td-root{ height: 100%; }
+
+#td-root{
+  font-family: var(--font);
+  color: var(--ink);
+  background: linear-gradient(135deg, var(--bg1), var(--bg2));
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#td-root {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 14px 26px 10px;
+}
+
+/* ---------- 顶部栏 ---------- */
+#td-root .topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 0 0 auto;
+  min-height: 56px;
+}
+#td-root .brand { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+#td-root .brand-duck { font-size: 40px; line-height: 1; }
+#td-root .brand-name {
+  font-size: 26px; font-weight: 900; letter-spacing: 1px;
+  color: #e8590c; text-shadow: 1px 2px 0 #fff;
+}
+#td-root .topbar-right { display: flex; align-items: center; gap: 12px; }
+#td-root .star-counter {
+  display: flex; align-items: center; gap: 6px;
+  background: #fff; border-radius: 999px; padding: 7px 16px;
+  font-size: 20px; font-weight: 800; box-shadow: var(--shadow);
+}
+#td-root .star-counter .star-ico { font-size: 22px; }
+#td-root .icon-btn {
+  width: 44px; height: 44px; border: none; border-radius: 50%;
+  background: #fff; font-size: 22px; cursor: pointer; box-shadow: var(--shadow);
+  transition: transform .15s;
+}
+#td-root .icon-btn:hover { transform: translateY(-2px) rotate(-6deg); }
+#td-root .icon-btn.off { opacity: .45; }
+
+/* ---------- 屏幕切换 ---------- */
+#td-root .screen { display: none; flex: 1 1 auto; min-height: 0; flex-direction: column; }
+#td-root .screen.active { display: flex; }
+
+/* ---------- 主菜单 ---------- */
+#td-root #screenMenu { align-items: center; justify-content: flex-start; gap: 14px; overflow-y: auto; padding: 8px 12px 16px; }
+#td-root .menu-hero { text-align: center; }
+#td-root .hero-duck { font-size: 58px; line-height: 1; animation: bob 2.4s ease-in-out infinite; }
+#td-root .menu-hero h1 { font-size: 30px; margin: 6px 0 4px; color: #d9480f; }
+#td-root .menu-hero p { font-size: 15px; color: var(--ink-soft); }
+#td-root .mode-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  width: min(1040px, 100%);
+  margin: 0 auto; /* 与上方成长面板、中间进度卡共用同一条左右基准线 */
+}
+#td-root .mode-card {
+  border: none; border-radius: var(--radius); cursor: pointer;
+  padding: 20px 18px; display: flex; flex-direction: column; align-items: center;
+  gap: 8px; box-shadow: var(--shadow); color: #fff;
+  transition: transform .18s cubic-bezier(.2,.9,.3,1.2), box-shadow .18s;
+  min-height: 132px; padding: 16px 12px;
+}
+#td-root .mode-card:hover { transform: translateY(-8px) scale(1.03); box-shadow: 0 16px 28px rgba(0,0,0,.18); }
+#td-root .mode-card:active { transform: translateY(-2px) scale(.99); }
+#td-root .card-yellow { background: linear-gradient(145deg,#ffd43b,#fab005); }
+#td-root .card-blue   { background: linear-gradient(145deg,#74c0fc,#3b9ae1); }
+#td-root .card-green  { background: linear-gradient(145deg,#51cf66,#2f9e44); }
+#td-root .card-pink   { background: linear-gradient(145deg,#ff8fa3,#f06595); }
+#td-root .card-purple { background: linear-gradient(145deg,#b197fc,#845ef7); }
+#td-root .card-emoji { font-size: 46px; line-height: 1; filter: drop-shadow(0 3px 2px rgba(0,0,0,.15)); }
+#td-root .card-title { font-size: 23px; font-weight: 900; }
+#td-root .card-desc { font-size: 13px; opacity: .92; text-align: center; line-height: 1.4; }
+#td-root .menu-tip {
+  font-size: 15px; color: var(--ink-soft); background: rgba(255,255,255,.6);
+  padding: 9px 20px; border-radius: 999px;
+}
+#td-root .menu-tip span { color: #e8590c; font-weight: 800; }
+
+/* ---------- 游戏工具栏 ---------- */
+#td-root .game-toolbar {
+  display: flex; align-items: center; gap: 18px; flex: 0 0 auto; padding: 4px 0 10px;
+}
+#td-root .back-btn {
+  border: none; background: #fff; border-radius: 999px; padding: 9px 18px;
+  font-family: var(--font); font-size: 16px; font-weight: 800; color: var(--ink);
+  cursor: pointer; box-shadow: var(--shadow); transition: transform .15s;
+}
+#td-root .back-btn:hover { transform: translateX(-3px); }
+#td-root .game-toolbar h2 { font-size: 24px; color: #d9480f; }
+#td-root .game-stats { margin-left: auto; display: flex; gap: 10px; }
+#td-root .stat {
+  background: #fff; border-radius: 16px; padding: 6px 16px; min-width: 78px;
+  text-align: center; box-shadow: var(--shadow);
+}
+#td-root .stat-label { display: block; font-size: 12px; color: var(--ink-soft); }
+#td-root .stat-val { display: block; font-size: 22px; font-weight: 900; color: #e8590c; }
+
+/* ---------- 游戏舞台 ---------- */
+#td-root .stage {
+  flex: 1 1 auto; min-height: 230px; background: rgba(255,255,255,.72);
+  border-radius: var(--radius); box-shadow: var(--shadow);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 10px; padding: 12px; position: relative; overflow: hidden;
+}
+#td-root .stage-instruction { font-size: 18px; color: var(--ink-soft); font-weight: 700; }
+#td-root .target-display {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  min-height: 120px; flex-wrap: wrap;
+}
+#td-root .big-letter {
+  font-size: 96px; font-weight: 900; line-height: 1; color: #fff;
+  background: linear-gradient(145deg,#ffd43b,#fab005);
+  padding: 10px 34px; border-radius: 28px;
+  text-shadow: 0 4px 0 rgba(0,0,0,.12);
+  box-shadow: 0 10px 0 #e0a800, var(--shadow);
+  animation: popin .3s cubic-bezier(.2,.9,.3,1.3);
+}
+#td-root .big-letter.upper { text-transform: uppercase; }
+#td-root .word-letters { display: flex; gap: 8px; }
+#td-root .word-letters .wl {
+  font-size: 52px; font-weight: 900; color: #b9a896;
+  width: 56px; text-align: center; transition: color .15s, transform .15s;
+}
+#td-root .word-letters .wl.done { color: #2f9e44; transform: scale(.9); }
+#td-root .word-letters .wl.current {
+  color: #e8590c; transform: scale(1.18);
+  background: #fff3bf; border-radius: 12px;
+  box-shadow: 0 3px 0 #ffa94d, 0 5px 12px rgba(0,0,0,.12);
+}
+#td-root .word-letters .wl.current::after {
+  content: ''; position: absolute; left: 50%; bottom: -12px; transform: translateX(-50%);
+  border-left: 6px solid transparent; border-right: 6px solid transparent;
+  border-bottom: 7px solid #e8590c; animation: caretBlink 1s steps(2) infinite;
+}
+#td-root .word-letters .wl { position: relative; }
+@keyframes caretBlink { 50% { opacity: 0; } }
+#td-root .word-emoji { font-size: 70px; line-height: 1; margin-bottom: 2px; }
+#td-root .word-meaning { font-size: 18px; color: var(--ink-soft); font-weight: 700; }
+
+#td-root .feedback {
+  position: absolute; top: 42%; left: 50%; transform: translate(-50%,-50%);
+  font-size: 74px; font-weight: 900; pointer-events: none; opacity: 0;
+}
+#td-root .feedback.show-good { color: #2f9e44; animation: fbGood .6s ease-out; }
+#td-root .feedback.show-bad  { color: #fa5252; animation: fbBad .5s ease-out; }
+
+/* 进度条独立成组件，位于舞台与键盘之间，与地鼠/字母完全分离 */
+#td-root .progress-section {
+  flex: 0 0 auto; margin: 8px 4px 0;
+  background: #fff; border-radius: 16px; padding: 7px 16px 9px;
+  box-shadow: var(--shadow);
+}
+#td-root .progress-label {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 14px; font-weight: 800; color: var(--ink-soft); margin-bottom: 7px;
+}
+#td-root .progress-text {
+  background: #fff3bf; color: #e8590c; border-radius: 999px;
+  padding: 2px 12px; font-size: 15px; font-weight: 900;
+}
+#td-root .progress-wrap {
+  height: 16px; background: #ffe8c2; border-radius: 999px; overflow: hidden;
+}
+#td-root .progress-bar {
+  height: 100%; width: 0%; border-radius: 999px;
+  background: linear-gradient(90deg,#51cf66,#ffd43b);
+  transition: width .3s ease;
+}
+
+/* 打地鼠 */
+#td-root .whack-grid {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px 12px;
+  width: min(680px, 100%);
+}
+#td-root .hole {
+  position: relative; height: 70px; border-radius: 50%;
+  background: radial-gradient(ellipse at center, #5f3a1a 0%, #7a4d24 60%, #8a5a2b 100%);
+  box-shadow: inset 0 8px 14px rgba(0,0,0,.4);
+  display: flex; align-items: flex-end; justify-content: center; overflow: hidden;
+}
+#td-root .mole {
+  font-size: 30px; font-weight: 900; color: #fff;
+  width: 58px; height: 58px; border-radius: 50%;
+  background: linear-gradient(145deg,#ffd43b,#f08c00);
+  display: flex; align-items: center; justify-content: center;
+  transform: translateY(100%); transition: transform .18s cubic-bezier(.2,.9,.3,1.3);
+  box-shadow: 0 4px 0 #c26e00;
+}
+#td-root .hole.up .mole { transform: translateY(6%); }
+#td-root .hole.hit .mole { background: linear-gradient(145deg,#51cf66,#2f9e44); box-shadow: 0 4px 0 #237a32; }
+#td-root .hole.miss .mole { background: linear-gradient(145deg,#ff8787,#fa5252); box-shadow: 0 4px 0 #c92a2a; }
+
+/* ---------- 键盘 ---------- */
+#td-root .keyboard-panel { flex: 0 0 auto; margin-top: 12px; }
+#td-root .keyboard {
+  display: flex; flex-direction: column; gap: 8px; align-items: center;
+}
+#td-root .kb-row { display: flex; gap: 8px; justify-content: center; }
+#td-root .key {
+  --kc: #dee2e6;
+  position: relative;
+  width: 64px; height: 50px; border: none; border-radius: 12px;
+  background: #fff; color: var(--ink);
+  font-family: var(--font); font-size: 23px; font-weight: 900;
+  cursor: pointer; box-shadow: 0 5px 0 var(--kc), 0 6px 10px rgba(0,0,0,.12);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform .08s, box-shadow .08s, background .15s;
+}
+#td-root .key::after {
+  content: ''; position: absolute; top: 5px; right: 6px;
+  width: 9px; height: 9px; border-radius: 50%; background: var(--kc);
+}
+#td-root .key.pressed { transform: translateY(5px); box-shadow: 0 0 0 var(--kc), 0 2px 4px rgba(0,0,0,.15); }
+#td-root .key.target {
+  background: #fff9db;
+  animation: keyGlow 1s ease-in-out infinite;
+  z-index: 2;
+}
+#td-root .key.target::before {
+  content: ''; position: absolute; inset: -5px; border-radius: 16px;
+  border: 3px solid #ffb703; animation: ringPulse 1s ease-in-out infinite;
+}
+#td-root .key.correct { background: #d3f9d8 !important; box-shadow: 0 5px 0 #51cf66, 0 0 0 4px #b2f2bb; }
+#td-root .key.wrong { background: #ffe3e3 !important; animation: shake .35s; }
+#td-root .key.space { width: 380px; height: 44px; font-size: 16px; --kc: #adb5bd; color: #868e96; }
+#td-root .key.space::after { display: none; }
+#td-root .fp-lp { --kc: var(--f-lp); }
+#td-root .fp-lr { --kc: var(--f-lr); }
+#td-root .fp-lm { --kc: var(--f-lm); }
+#td-root .fp-li { --kc: var(--f-li); }
+#td-root .fp-ri { --kc: var(--f-ri); }
+#td-root .fp-rm { --kc: var(--f-rm); }
+#td-root .fp-rr { --kc: var(--f-rr); }
+#td-root .fp-rp { --kc: var(--f-rp); }
+#td-root .fp-th { --kc: var(--f-th); }
+
+#td-root .hand-hint {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  margin-top: 10px; font-size: 15px; font-weight: 800; color: var(--ink-soft);
+  min-height: 24px;
+}
+#td-root .hand-hint-dot { width: 14px; height: 14px; border-radius: 50%; background: #dee2e6; }
+#td-root .hand-hint.active { color: var(--ink); }
+
+/* ---------- 图例 ---------- */
+#td-root .legend {
+  flex: 0 0 auto; display: flex; flex-wrap: wrap; align-items: center;
+  justify-content: center; gap: 8px 14px; padding-top: 10px; font-size: 12px;
+  color: var(--ink-soft);
+}
+#td-root .legend-title { font-weight: 800; color: var(--ink); }
+#td-root .legend-item { display: inline-flex; align-items: center; gap: 5px; }
+#td-root .legend-item i { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+
+/* ---------- 弹窗 ---------- */
+#td-root .modal-mask {
+  position: absolute; inset: 0; background: rgba(60,40,20,.35);
+  display: none; align-items: center; justify-content: center; z-index: 50;
+  backdrop-filter: blur(3px);
+}
+#td-root .modal-mask.show { display: flex; }
+#td-root .modal-card {
+  background: #fff; border-radius: 28px; padding: 30px 38px; text-align: center;
+  box-shadow: 0 20px 50px rgba(0,0,0,.25); min-width: 380px; max-width: 560px;
+  animation: popin .35s cubic-bezier(.2,.9,.3,1.2);
+}
+#td-root .result-emoji { font-size: 72px; }
+#td-root .modal-card h2 { font-size: 30px; color: #d9480f; margin: 6px 0 14px; }
+#td-root .result-stars { font-size: 46px; letter-spacing: 6px; margin-bottom: 12px; min-height: 52px; }
+#td-root .result-detail { font-size: 16px; color: var(--ink-soft); margin-bottom: 22px; line-height: 1.7; }
+#td-root .modal-btns { display: flex; gap: 12px; justify-content: center; }
+#td-root .btn {
+  border: none; border-radius: 999px; padding: 12px 30px; cursor: pointer;
+  font-family: var(--font); font-size: 17px; font-weight: 800; transition: transform .15s;
+}
+#td-root .btn:hover { transform: translateY(-2px); }
+#td-root .btn-primary { background: linear-gradient(145deg,#ffa94d,#f76707); color: #fff; box-shadow: 0 5px 0 #d9480f; }
+#td-root .btn-ghost { background: #f1f3f5; color: var(--ink); }
+
+#td-root .help-card { text-align: left; max-width: 560px; }
+#td-root .help-card h2 { text-align: center; }
+#td-root .help-lead { margin-bottom: 10px; font-size: 15px; color: var(--ink-soft); }
+#td-root .help-list { padding-left: 22px; line-height: 1.9; font-size: 15px; }
+#td-root .help-list b { color: #d9480f; }
+#td-root .help-list kbd {
+  background: #fff3bf; border: 2px solid #ffd43b; border-radius: 6px;
+  padding: 0 8px; font-family: var(--font); font-weight: 900;
+}
+#td-root .help-keys { display: flex; gap: 10px; justify-content: center; margin: 18px 0 22px; flex-wrap: wrap; }
+#td-root .hk { border: 3px solid #ddd; border-radius: 12px; padding: 6px 14px; font-weight: 800; font-size: 14px; }
+#td-root .help-card .modal-btns { justify-content: center; }
+
+/* ---------- 动画 ---------- */
+@keyframes bob { 0%,100%{transform:translateY(0) rotate(-3deg)} 50%{transform:translateY(-8px) rotate(3deg)} }
+@keyframes popin { from{transform:scale(.6);opacity:0} to{transform:scale(1);opacity:1} }
+@keyframes keyGlow { 0%,100%{box-shadow:0 5px 0 var(--kc),0 0 0 0 rgba(255,183,3,.5)} 50%{box-shadow:0 5px 0 var(--kc),0 0 0 8px rgba(255,183,3,0)} }
+@keyframes ringPulse { 0%,100%{opacity:1} 50%{opacity:.35} }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+@keyframes fbGood { 0%{opacity:0;transform:translate(-50%,-30%) scale(.5)} 30%{opacity:1;transform:translate(-50%,-60%) scale(1.15)} 100%{opacity:0;transform:translate(-50%,-120%) scale(1)} }
+@keyframes fbBad { 0%{opacity:0;transform:translate(-50%,-50%) scale(.6)} 30%{opacity:1;transform:translate(-50%,-50%) scale(1)} 100%{opacity:0;transform:translate(-50%,-50%) scale(.9)} }
+
+/* ---------- 小屏适配 ---------- */
+@media (max-width: 1000px) {
+  #td-root .mode-grid { grid-template-columns: repeat(2, 1fr); }
+  #td-root .key { width: 52px; height: 52px; font-size: 20px; }
+  #td-root .key.space { width: 300px; }
+  #td-root .big-letter { font-size: 74px; }
+}
+
+/* ================= 新增功能样式 ================= */
+#td-root .card-orange { background: linear-gradient(145deg,#ffa94d,#f76707); }
+#td-root .card-teal   { background: linear-gradient(145deg,#38d9a9,#0ca678); }
+#td-root .card-red    { background: linear-gradient(145deg,#ff8787,#e03131); }
+#td-root .card-indigo { background: linear-gradient(145deg,#8d99ff,#5c6bc0); color:#fff; }
+/* 9 个模式卡在 4 列布局下会落单，最后一张横跨整行更协调 */
+#td-root .mode-grid .mode-card:last-child:nth-child(9) { grid-column: 1 / -1; }
+
+/* 成长面板 */
+#td-root .home-row {
+  display: grid; grid-template-columns: 1fr 1.15fr 1fr; gap: 14px;
+  width: min(1040px, 100%); margin: 0 auto;
+}
+#td-root .home-card {
+  background: rgba(255,255,255,.82); border-radius: 18px; padding: 12px 16px;
+  box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 4px;
+  border: 2px solid rgba(255,255,255,.9);
+}
+#td-root .hc-title { font-size: 14px; font-weight: 800; color: #e8590c; }
+#td-root .hc-main { font-size: 20px; font-weight: 900; color: #343a40; }
+#td-root .hc-main b { color: #f76707; font-size: 26px; }
+#td-root .hc-sub { font-size: 12px; color: var(--ink-soft); }
+/* 每日打卡日历 */
+#td-root .cal-box { margin-top: 6px; }
+#td-root .cal-nav { display: flex; align-items: center; justify-content: space-between; font-size: 12px; font-weight: 800; color: #495057; margin-bottom: 3px; }
+#td-root .cal-nav-btn { border: none; background: rgba(255,255,255,.7); color: #e8590c; font-size: 18px; font-weight: 900; line-height: 1; border-radius: 8px; cursor: pointer; width: 26px; height: 24px; padding: 0; }
+#td-root .cal-nav-btn:hover { background: #ffe8cc; }
+#td-root .cal-week, #td-root .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+#td-root .cal-week i { font-style: normal; text-align: center; font-size: 10px; color: var(--ink-soft); padding-bottom: 2px; }
+#td-root .cal-cell { position: relative; text-align: center; font-size: 11px; line-height: 20px; height: 20px; border-radius: 6px; color: #495057; }
+#td-root .cal-cell.empty { visibility: hidden; }
+#td-root .cal-cell.checked { background: linear-gradient(145deg,#ffd43b,#fab005); color: #5f3dc4; font-weight: 900; box-shadow: 0 1px 0 #e8a100; }
+#td-root .cal-cell.today { outline: 2px solid #f76707; outline-offset: -1px; }
+#td-root .cal-cell.future { color: #adb5bd; }
+/* 鸭群计数 */
+#td-root .duck-count { font-size: 11px; color: #e8590c; font-weight: 800; }
+/* 当前单元进度条：让孩子知道打字练习和课本词表的关系 */
+#td-root .unit-progress-card {
+  /* 间距交给 #screenMenu 的 gap:14px，避免叠加 margin 造成错行；
+     左右与其它卡片一致用 auto 居中 */
+  width: min(1040px, 100%); margin: 0 auto; padding: 12px 16px;
+  background: rgba(255,255,255,.82); border: 2px solid rgba(255,255,255,.9);
+  border-radius: 18px; box-shadow: var(--shadow);
+}
+#td-root .upc-head { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+#td-root .upc-title { font-size:14px; font-weight:800; color:#e8590c; }
+#td-root .upc-name { font-size:12px; font-weight:700; color:var(--ink-soft); }
+#td-root .upc-bar { height:9px; border-radius:99px; background:rgba(80,70,120,.13); overflow:hidden; margin:9px 0 7px; }
+#td-root .upc-bar i { display:block; height:100%; width:0; border-radius:99px;
+  background:linear-gradient(90deg,#ffd43b,#f76707); transition:width .35s ease; }
+#td-root .upc-stats { display:flex; gap:16px; flex-wrap:wrap; font-size:12px; color:var(--ink-soft); }
+#td-root .upc-stats b { color:#343a40; font-size:14px; }
+#td-root .upc-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+#td-root .duck-card { align-items: center; text-align: center; }
+#td-root .duck-stage {
+  font-size: 52px; line-height: 1.1; animation: bob 2.8s ease-in-out infinite;
+  filter: drop-shadow(0 4px 3px rgba(0,0,0,.12));
+}
+#td-root .mini-btn {
+  border: none; border-radius: 999px; cursor: pointer;
+  background: linear-gradient(145deg,#ffd43b,#fab005); color: #5f3dc4;
+  font-family: var(--font); font-weight: 900; font-size: 13px;
+  padding: 7px 14px; box-shadow: 0 3px 0 #e8a100; margin-top: 4px;
+  transition: transform .15s, box-shadow .15s;
+}
+#td-root .mini-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 0 #e8a100; }
+#td-root .mini-btn:active { transform: translateY(1px); box-shadow: 0 1px 0 #e8a100; }
+#td-root .mini-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+#td-root .quick-card { justify-content: center; gap: 10px; }
+#td-root .mini-btn.wide { width: 100%; font-size: 14px; padding: 10px 12px; }
+
+/* 盲打按钮 */
+#td-root .blind-btn { margin-left: 6px; }
+#td-root .blind-btn.on { background: linear-gradient(145deg,#b197fc,#845ef7); color: #fff; }
+#td-root .keyboard.blind .key:not(.target) {
+  color: transparent;
+}
+#td-root .keyboard.blind .key:not(.target)::after {
+  content: '?'; color: rgba(255,255,255,.85); font-size: 22px;
+}
+
+/* 听音打字 */
+#td-root .listen-play {
+  border: none; border-radius: 50%; width: 92px; height: 92px; cursor: pointer;
+  background: linear-gradient(145deg,#38d9a9,#0ca678); color: #fff;
+  font-size: 44px; box-shadow: 0 8px 0 #087f5b, var(--shadow);
+  transition: transform .15s;
+}
+#td-root .listen-play:hover { transform: scale(1.08); }
+#td-root .listen-play:active { transform: translateY(4px); box-shadow: 0 4px 0 #087f5b; }
+#td-root .listen-mask { letter-spacing: 6px; }
+#td-root .wl.masked { color: #adb5bd; }
+
+/* PK 横幅 */
+#td-root .pk-banner {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 16px; border-radius: 999px; font-weight: 900; font-size: 15px;
+  background: linear-gradient(145deg,#ffd43b,#fab005); color: #5f3dc4;
+  box-shadow: var(--shadow); margin-right: 6px;
+}
+#td-root .pk-banner.p2 { background: linear-gradient(145deg,#b197fc,#845ef7); color: #fff; }
+#td-root .listen-wrap { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+#td-root .listen-wrap .word-meaning { display: inline; }
+#td-root .pk-done {
+  font-size: 15px; font-weight: 800; color: #495057; background: #fff;
+  padding: 8px 18px; border-radius: 14px; box-shadow: var(--shadow);
+}
+
+/* 勋章墙 */
+#td-root .wide-card { width: min(720px, 92vw); text-align: center; }
+#td-root .badge-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+  margin: 18px 0 22px;
+}
+#td-root .badge-item {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 12px 6px; border-radius: 14px; background: #f8f9fa;
+  border: 2px dashed #dee2e6;
+}
+#td-root .badge-item.unlocked {
+  background: linear-gradient(145deg,#fff9db,#ffec99);
+  border: 2px solid #ffd43b;
+}
+#td-root .badge-ico { font-size: 36px; filter: grayscale(1); opacity: .35; }
+#td-root .badge-item.unlocked .badge-ico { filter: none; opacity: 1; animation: popin .4s; }
+#td-root .badge-name { font-size: 13px; font-weight: 800; color: #495057; }
+#td-root .badge-desc { font-size: 11px; color: var(--ink-soft); line-height: 1.3; }
+
+/* 闯关地图 */
+#td-root .level-list { display: flex; flex-direction: column; gap: 10px; margin: 18px 0 22px; }
+#td-root .level-item {
+  display: flex; align-items: center; gap: 14px; text-align: left;
+  padding: 12px 16px; border-radius: 14px; border: 2px solid #dee2e6;
+  background: #f8f9fa; cursor: pointer; transition: transform .15s;
+}
+#td-root .level-item.unlocked { background: linear-gradient(145deg,#e6fcf5,#c3fae8); border-color: #38d9a9; }
+#td-root .level-item.cleared { background: linear-gradient(145deg,#fff9db,#ffec99); border-color: #ffd43b; }
+#td-root .level-item.locked { opacity: .55; cursor: not-allowed; }
+#td-root .level-item:not(.locked):hover { transform: translateX(4px); }
+#td-root .level-ico { font-size: 30px; }
+#td-root .level-info { flex: 1; }
+#td-root .level-name { font-size: 15px; font-weight: 800; color: #343a40; }
+#td-root .level-desc { font-size: 12px; color: var(--ink-soft); }
+#td-root .level-state { font-size: 13px; font-weight: 800; color: #f76707; }
+
+/* 单词练习统计 */
+#td-root .word-stat-summary {
+  display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+  margin: 12px 0 14px;
+}
+#td-root .ws-pill {
+  background: #fff3bf; color: #e8590c; border-radius: 999px;
+  padding: 6px 16px; font-size: 13px; font-weight: 800;
+}
+#td-root .word-stat-list {
+  max-height: 44vh; overflow-y: auto; text-align: left;
+  display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px;
+}
+#td-root .ws-row {
+  display: flex; align-items: center; gap: 12px; padding: 9px 14px;
+  border-radius: 12px; background: #f8f9fa; border: 2px solid #e9ecef;
+}
+#td-root .ws-row.hot { background: #fff5f5; border-color: #ffa8a8; }
+#td-root .ws-word { font-size: 18px; font-weight: 900; color: #343a40; min-width: 88px; }
+#td-root .ws-cn { flex: 1; font-size: 13px; color: var(--ink-soft); }
+#td-root .ws-num { font-size: 13px; font-weight: 800; color: #495057; white-space: nowrap; }
+#td-root .ws-num.bad { color: #e03131; }
+
+/* 轻提示 */
+#td-root .toast {
+  /* 必须显式 top:auto：外层 .toast 定义了 top:88px，若这里只设 bottom，
+     绝对定位元素会同时被 top/bottom 拉满，撑成一条深色竖条挡住游戏内容 */
+  position: absolute; top: auto; left: 50%; bottom: 30px; transform: translate(-50%, 20px);
+  background: #343a40; color: #fff; padding: 11px 24px; border-radius: 999px;
+  font-size: 15px; font-weight: 700; opacity: 0; pointer-events: none;
+  transition: opacity .25s, transform .25s; z-index: 50; box-shadow: var(--shadow);
+  max-width: 80vw; text-align: center;
+}
+#td-root .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* 主题皮肤 */
+#td-root.skin-forest {
+  background: linear-gradient(160deg,#d3f9d8,#b2f2bb 45%,#8ce99a);
+}
+#td-root.skin-night {
+  background: linear-gradient(160deg,#5c7cfa,#7048e8 50%,#9775fa);
+}
+#td-root.skin-night .mode-card, #td-root.skin-night .home-card { color: #212529; }
+#td-root.skin-sunset {
+  background: linear-gradient(160deg,#ffd8a8,#ffa8a8 50%,#fcc2d7);
+}
+
+@media (max-width: 1000px) {
+  #td-root .mode-grid { grid-template-columns: repeat(2, 1fr); }
+  #td-root .home-row { grid-template-columns: 1fr; }
+  #td-root .badge-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+
+/* ---------- 集成到 SpellLab 的适配 ---------- */
+#typingView { width: 100%; max-width: 1180px; height: 100%; align-items: stretch; }
+#typingView #td-root { width: 100%; height: 100%; min-height: 600px; }
+#typingView #td-root .td-app { min-height: 600px; }
+/* 打字模式时 SpellLab 主区上下留白收紧，给游戏更多高度 */
+body.td-typing main { padding-top: 6px; padding-bottom: 6px; }
+body.td-typing #typingView { height: 100%; }
+
+/* ---------- 记忆成长中心（错词复习 / 听写 / 闯关 / 统计） ---------- */
+#growthView{width:100%;max-width:1180px;margin:0 auto;align-self:flex-start}
+.growth-head{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:4px 0 16px}
+.growth-head h2{margin:0;font-size:20px;font-weight:800;letter-spacing:.5px}
+.growth-head .gsub{color:var(--muted);font-size:12px}
+.growth-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto;padding:4px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.08)}
+.growth-tabs button{padding:8px 16px;border-radius:999px;font-size:12px;font-weight:700;color:var(--muted);white-space:nowrap;transition:.2s}
+.growth-tabs button.active{background:var(--grad-primary);color:#fff;box-shadow:0 4px 14px rgba(74,84,240,.45)}
+.growth-panel{display:none;animation:fade .25s ease}
+.growth-panel.on{display:block}
+.gcard{background:var(--card);border:1px solid rgba(226,232,255,.12);border-radius:18px;padding:20px 22px;margin-bottom:16px;box-shadow:var(--shadow)}
+.gcard h3{margin:0 0 6px;font-size:15px;font-weight:800}
+.gcard .gnote{color:var(--muted);font-size:12px;line-height:1.7;margin:0 0 14px}
+.gstats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+.gstat{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px;text-align:center}
+.gstat b{display:block;font-size:22px;font-weight:900;background:linear-gradient(135deg,#a99bff,#6ee7ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.gstat span{font-size:11px;color:var(--muted)}
+.grow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.grow button.primary{background:var(--grad-primary);color:#fff;font-weight:800;border-radius:11px;padding:10px 22px;box-shadow:0 6px 18px rgba(74,84,240,.4)}
+.grow button:not(.primary){border:1px solid rgba(226,232,255,.22);border-radius:11px;padding:10px 16px;color:var(--text)}
+.gfield{width:100%;padding:14px 16px;border-radius:14px;border:1px solid var(--line);background:rgba(10,14,34,.7);color:var(--text);font-size:19px;letter-spacing:1px;outline:none}
+.gfield:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(139,123,255,.2)}
+.gfield:disabled{opacity:.65}
+.gprompt{font-size:15px;color:var(--muted);margin:2px 0 12px}
+.gprompt b{color:var(--text);font-size:26px;font-weight:800;letter-spacing:.5px}
+.gfeedback{min-height:26px;margin:12px 0 0;font-weight:700;font-size:14px}
+.gfeedback.ok{color:var(--ok)} .gfeedback.bad{color:var(--err)}
+/* 纸笔听写：家长批阅列表 */
+.pp-label{font-size:12px;color:var(--muted);font-weight:700}
+.pp-badge{font-size:11px;font-weight:800;color:var(--ok);background:rgba(92,226,160,.12);border:1px solid rgba(92,226,160,.35);padding:5px 10px;border-radius:999px}
+.pp-list{display:flex;flex-direction:column;gap:8px}
+.pp-row{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:14px;border:1px solid rgba(226,232,255,.12);background:rgba(255,255,255,.04)}
+.pp-row .pp-no{flex:0 0 30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:900;background:rgba(139,123,255,.18);color:#c3b8ff}
+.pp-row .pp-body{flex:1;min-width:0}
+.pp-row .pp-en{font-size:17px;font-weight:800;word-break:break-word}
+.pp-row .pp-cn{font-size:12px;color:var(--muted);margin-top:2px}
+.pp-row .pp-kind{font-size:10px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 7px;margin-left:6px}
+.pp-row .pp-btns{flex:0 0 auto;display:flex;gap:6px;flex-wrap:wrap}
+.pp-mark{min-width:38px;padding:7px 11px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;font-weight:800;transition:.15s}
+.pp-mark:hover{transform:translateY(-1px)}
+.pp-mark.yes.on{background:rgba(92,226,160,.18);border-color:#5ce2a0;color:#5ce2a0}
+.pp-mark.no.on{background:rgba(255,107,107,.18);border-color:#ff6b6b;color:#ff8787}
+.pp-row.pp-ok{border-color:rgba(92,226,160,.45)} .pp-row.pp-no2{border-color:rgba(255,107,107,.45)}
+.pp-speak{padding:7px 10px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.05)}
+.ganswer{font-size:17px;font-weight:800;color:#ffd76a;margin-top:6px}
+.gprogress{height:8px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden;margin:12px 0}
+.gprogress i{display:block;height:100%;background:linear-gradient(90deg,#6a5cff,#3ddc97);border-radius:99px;transition:width .3s}
+.sr-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:9px;max-height:260px;overflow:auto}
+.sr-item{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px 12px}
+.sr-item .w{font-weight:800;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sr-item .m{font-size:11px;color:var(--muted)}
+.lv{font-size:10px;font-weight:800;padding:2px 7px;border-radius:99px;background:rgba(139,123,255,.22);color:#c9c0ff}
+.due-dot{width:8px;height:8px;border-radius:50%;background:var(--ok);flex:none}
+.due-dot.later{background:var(--muted)}
+/* 闯关地图 */
+.map-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.map-node{position:relative;text-align:left;border:1px solid rgba(226,232,255,.16);border-radius:16px;padding:14px;background:linear-gradient(150deg,rgba(139,123,255,.16),rgba(255,255,255,.04));color:var(--text);transition:.18s;min-height:104px}
+.map-node:hover:not(.locked){transform:translateY(-3px);border-color:var(--accent)}
+.map-node.locked{opacity:.45;cursor:not-allowed;filter:grayscale(.6)}
+.map-node .idx{font-size:11px;color:var(--muted)}
+.map-node .nm{font-weight:800;font-size:13px;margin:5px 0;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.map-node .st{color:#ffd76a;font-size:15px;letter-spacing:2px}
+.map-node .lk{position:absolute;top:10px;right:12px;font-size:15px}
+/* 统计图表 */
+.chart-wrap{width:100%;overflow:hidden}
+.chart-wrap svg{display:block;width:100%;height:auto}
+.chart-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:11px;color:var(--muted)}
+.chart-legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.bar-row{display:flex;align-items:center;gap:10px;margin:9px 0;font-size:12px}
+.bar-row .bl{width:74px;flex:none;color:var(--muted)}
+.bar-row .bt{flex:1;height:14px;background:rgba(255,255,255,.07);border-radius:99px;overflow:hidden}
+.bar-row .bt i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#6a5cff,#3ddc97)}
+.bar-row .bv{width:52px;text-align:right;flex:none;font-weight:700}
+
+/* ---------- 自然拼读 ---------- */
+.ph-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.ph-head h3{margin:0;font-size:15px;font-weight:800}
+.ph-source{display:flex;gap:6px;margin:10px 0 8px;flex-wrap:wrap}
+.ph-source button{border:1px solid rgba(226,232,255,.14);background:rgba(255,255,255,.04);color:var(--muted);
+  border-radius:9px;padding:6px 12px;font-size:12px;font-weight:800;cursor:pointer}
+.ph-source button.on{border-color:var(--accent);background:rgba(139,123,255,.16);color:var(--text)}
+.ph-source .count-pill{margin-left:4px}
+.ph-tb-group{margin:12px 0 4px;font-size:12px;font-weight:800;color:var(--muted);letter-spacing:.4px}
+.ph-tb-row{display:flex;align-items:center;gap:8px;padding:9px 10px;border:1px solid rgba(226,232,255,.12);
+  border-radius:10px;margin-bottom:6px;cursor:pointer;background:rgba(255,255,255,.03)}
+.ph-tb-row:hover{border-color:var(--accent);background:rgba(139,123,255,.1)}
+.ph-tb-row.done{border-color:rgba(61,220,151,.42)}
+.ph-tb-row .ph-name{flex:1;font-weight:700;font-size:13px;min-width:0}
+.ph-tb-row .ph-desc{display:block;font-size:11px;color:var(--muted);font-weight:400;margin-top:2px;overflow-wrap:anywhere}
+/* 音节槽：跟句子练习的词槽同一视觉尺寸——句子按单词分槽，拼读按音节分槽 */
+.ph-chunks{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;
+  font-size:clamp(25px,3.5vw,38px);
+  column-gap:var(--word-gap,22px);row-gap:24px;
+  max-width:min(940px,100%);width:100%;margin:clamp(26px,4vh,46px) auto 10px}
+.ph-chunk{display:flex;flex-direction:column;align-items:center;min-width:62px;max-width:100%;flex:0 0 auto}
+.ph-chunk b{font-weight:900;letter-spacing:.5px;line-height:1.2;text-align:center;
+  color:#fff;text-shadow:0 3px 14px rgba(0,0,0,.28);
+  border-bottom:2px solid rgba(139,123,255,.55);padding-bottom:4px}
+.ph-chunk i{font-style:normal;font-size:13px;color:#a5b0d8;line-height:1.4;
+  text-align:center;margin-top:9px;letter-spacing:.5px}
+.ph-blank{min-height:1.35em;border-bottom:2px solid var(--line);border-radius:3px;transition:.2s}
+.ph-group{margin:12px 0 4px;font-size:12px;font-weight:800;color:var(--muted);letter-spacing:.4px}
+.ph-row{display:flex;align-items:center;gap:8px;padding:9px 10px;border:1px solid rgba(226,232,255,.12);
+  border-radius:12px;background:rgba(255,255,255,.04);margin-bottom:6px;cursor:pointer;transition:.16s}
+.ph-row:hover{border-color:var(--accent);background:rgba(139,123,255,.1)}
+.ph-row.done{border-color:rgba(61,220,151,.42)}
+.ph-row .ph-name{flex:1;font-weight:700;font-size:13px}
+.ph-row .ph-desc{display:block;font-size:11px;color:var(--muted);font-weight:400;margin-top:2px}
+.ph-stars{font-size:12px;letter-spacing:1px;color:#ffcf5c;flex:none}
+.ph-stars .off{opacity:.28}
+.ph-progress{height:8px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden;margin-bottom:12px}
+.ph-progress i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#6a5cff,#3ddc97);transition:width .25s}
+.ph-prompt{font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:6px}
+.ph-prompt b{display:block;color:var(--text);font-size:26px;font-weight:800;letter-spacing:1px;margin-top:4px}
+.ph-prompt .ph-sound{color:#b8adff;font-size:15px;letter-spacing:2px}
+.ph-hint{font-size:11px;color:var(--muted);min-height:16px;margin:4px 0 8px}
+.ph-feedback{min-height:24px;margin-top:10px;font-weight:800;font-size:13px}
+.ph-feedback.ok{color:var(--ok)} .ph-feedback.bad{color:var(--err)}
+/* 自然拼读主视图：与句子拼写并列的练习模式，不再藏在侧边栏 */
+#phonicsView{width:100%;max-width:1000px;margin:0 auto;align-self:flex-start}
+#phonicsView .ph-wrap{width:100%;max-width:1000px;margin:0 auto}
+#phonicsView .panel{background:var(--card);border:1px solid rgba(226,232,255,.12);border-radius:18px;
+  padding:18px 20px;margin-bottom:16px;box-shadow:var(--shadow)}
+#phonicsView .panel h3{font-size:15px;letter-spacing:.5px}
+#phonicsView .ph-head h3{font-size:15px;letter-spacing:0}
+#phonicsView #phPracticePanel{width:100%;padding:clamp(18px,3.5vh,44px) 18px 4px;
+  background:none;border:0;box-shadow:none;border-radius:0;animation:fade .35s ease}
+#phonicsView #phSlots{margin:clamp(28px,5vh,54px) auto 0;display:flex;flex-wrap:wrap;
+  justify-content:center;align-items:flex-start;column-gap:var(--word-gap,22px);
+  row-gap:var(--slot-row-gap,16px);max-width:min(940px,100%);width:100%}
+#phonicsView #phSlots .slot{margin:8px 0 6px;min-width:62px}
+#phonicsView #phSlots .slot .answer{font-size:clamp(25px,3.5vw,38px)}
+#phonicsView .ph-practice-btns{justify-content:center;flex-wrap:wrap;margin-top:12px}
+#phonicsView #phLegacy{display:none}
+@media(max-width:720px){#phonicsView .panel{padding:14px 12px}}
+/* ---------- 获得奖品 ---------- */
+.prize-won{display:flex;align-items:center;gap:10px;padding:9px 10px;border:1px solid rgba(226,232,255,.12);
+  border-radius:12px;background:rgba(255,255,255,.04);margin-bottom:6px;font-size:12px}
+.prize-won .pw-name{flex:1;font-weight:700}
+.prize-won .pw-time{color:var(--muted);font-size:11px}
+.prize-won .pw-tag{border-radius:99px;padding:3px 9px;font-size:11px;font-weight:800;flex:none}
+.prize-won .pw-tag.auto{background:rgba(139,123,255,.18);color:#c7bcff}
+.prize-won .pw-tag.done{background:rgba(61,220,151,.16);color:#5ee0a6}
+.prize-won .pw-tag.wait{background:rgba(255,193,110,.16);color:#ffce82}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">Sp</div>
+      <div>
+        <div class="brand-name">SpellLab <span>单词句子拼写记忆</span></div>
+        <div class="course" id="courseName">加载中…</div>
+      </div>
+    </div>
+    <div class="mode-switch" id="modeSwitch">
+      <button data-mode="sentence" class="active">句子拼写</button>
+      <button data-mode="chunk">分步记忆</button>
+      <button data-mode="word">单词速记</button>
+      <button data-mode="phonics">自然拼读</button>
+      <button data-mode="grammar">语法练习</button>
+      <button data-mode="growth">成长中心</button>
+      <button data-mode="typing">打字练习</button>
+    </div>
+    <div class="top-right">
+      <div class="accent-switch" id="accentSwitch" title="朗读口音与拼读音节标准（英式 / 美式）"><button data-accent="uk" class="active">UK</button><button data-accent="us">US</button></div>
+      <div class="top-stats" title="本轮战绩">
+        <div class="stat"><b id="statStreak">0</b><span>连对</span></div>
+        <div class="stat"><b id="statAcc">--</b><span>正确率</span></div>
+      </div>
+      <button class="points-chip" id="btnPoints" title="学习计划与积分"><b id="statPoints">0</b><span>积分</span></button>
+      <span class="top-sep"></span>
+      <button class="wheel-chip" id="btnWheel" title="打开惊喜盲盒">🎁 抽盲盒</button>
+      <button class="parent-chip" id="btnParent" title="家长中心：输入管理密码后可修改抽奖设置">家长</button>
+      <button class="icon-btn" id="btnMenu" title="学习面板" aria-label="打开学习面板"></button>
+    </div>
+  </header>
+
+  <div class="filter-bar">
+    <div class="filter-group">
+      <span class="fb-title">学习范围</span>
+      <label>学制 <span class="sel"><select id="systemFilter" aria-label="选择学制"></select></span></label>
+      <label>学段 <span class="sel"><select id="stageFilter" aria-label="选择学段"></select></span></label>
+      <label>年级 <span class="sel"><select id="gradeFilter" aria-label="选择年级"></select></span></label>
+      <label>教材 <span class="sel"><select id="bookFilter" aria-label="选择教材版本"></select></span></label>
+      <label>册别 <span class="sel"><select id="volumeFilter" aria-label="选择上册下册"></select></span></label>
+      <span class="fb-info" id="filterInfo"></span>
+    </div>
+    <div class="filter-links">
+      <button class="link-btn" id="btnManage">管理年级 / 教材</button>
+      <button class="link-btn" id="btnLibrary">教材库</button>
+      <button class="link-btn" id="btnStorage">本地数据库</button>
+    </div>
+  </div>
+  <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+  <main>
+    <section class="view" id="sentenceView">
+      <div class="stage" id="stage">
+        <div class="stage-label" id="stageLabel">看中文 · 按词义提示拼出英文</div>
+        <div class="stage-meta">
+          <span class="meta-chip" id="diffChip">正常</span>
+          <span class="meta-chip timer" id="timerChip">用时 00:00</span>
+        </div>
+        <h1 class="question-cn" id="questionCn"></h1>
+        <div class="phase-bar" id="phaseBar" hidden></div>
+        <div class="chunk-cards" id="chunkCards" hidden></div>
+        <div class="chunk-progress" id="chunkProgress" hidden></div>
+        <div class="slots" id="slots"></div>
+        <div class="feedback" id="feedback"></div>
+        <div class="success-card" id="successCard" hidden>
+          <div class="sc-title" id="scTitle">完全正确！</div>
+          <div class="sc-en" id="scEn"></div>
+          <div class="sc-note" id="scNote"></div>
+          <div class="sc-actions">
+            <button id="scSpeak">朗读句子</button>
+            <button id="scStar">本题生词入本</button>
+            <button class="primary" id="scNext">下一题</button>
+          </div>
+        </div>
+        <div class="tips" id="tips">点击横线输入单词 · 空格/回车确认 · 输满字母自动判定 · Tab 跳到下一个空</div>
+      </div>
+    </section>
+
+    <section class="view" id="wordView" hidden>
+      <div class="word-card">
+        <div class="stage-label">单词速记 · 把字母拼成单词</div>
+        <div class="word-cn" id="wordCn"></div>
+        <div class="word-meta" id="wordMeta"></div>
+        <div class="word-slots" id="wordSlots"></div>
+        <div class="letter-bank" id="letterBank"></div>
+        <div class="feedback" id="wordFeedback"></div>
+        <div class="word-progress" id="wordProgress"></div>
+        <div class="tips">可以直接敲键盘字母 · 点击已填字母可撤回 · 退格删除</div>
+      </div>
+    </section>
+
+    <!-- ============ 语法练习（六年级上册语法题库 + 知识点）============ -->
+    <section class="view" id="grammarView" hidden>
+      <div class="grammar-card">
+        <div class="grammar-tabs" id="grammarTabs">
+          <button data-gtab="points" class="active">📖 知识点</button>
+          <button data-gtab="choice">✏️ 单项选择 <span id="gChoiceCount"></span></button>
+          <button data-gtab="fill">📝 填空练习 <span id="gFillCount"></span></button>
+          <button data-gtab="wrong">🔁 错题本 <span id="gWrongCount"></span></button>
+        </div>
+        <div id="grammarPanel"></div>
+      </div>
+    </section>
+
+    <!-- ============ 自然拼读（主练习模式，与句子拼写并列）============ -->
+    <section class="view" id="phonicsView" hidden>
+      <div class="ph-wrap">
+        <div class="panel" id="phPickerPanel">
+          <h3>自然拼读 <span class="count-pill" id="phStat">0 / 0</span></h3>
+          <div class="panel-note">两种来源：<b>内置课程</b>循序渐进打基础；<b>教材单词</b>直接练已导入课本的词，可按单元练，也可按拼读规律自动归类（sh / ee / a_e / 短元音…）。拼读块按<b>音节</b>切开，每个音节一个元音；「听音拼词」先给音节空格，点「拼读提示」再看字母组合和读音；「看词拼读」直接显示。词组与带撇号、连字符的词不参与音节拆分。</div>
+          <div class="ph-source" id="phSourceTabs">
+            <button class="on" data-phsource="builtin">内置课程</button>
+            <button data-phsource="textbook">教材单词 <span class="count-pill" id="phTbStat">0 / 0</span></button>
+          </div>
+          <div class="field-row">
+            <span class="sel"><select id="phMode"><option value="listen">听音拼词</option><option value="read">看词拼读</option></select></span>
+            <button class="mini-btn primary sm" id="phContinue">继续上次</button>
+          </div>
+          <div id="phBuiltinPanel">
+            <div id="phGroupList"></div>
+          </div>
+          <div id="phTextbookPanel" hidden>
+            <div class="ph-scope-note" id="phScopeNote"></div>
+            <div class="field-row">
+              <span class="sel"><select id="phGroupBy" aria-label="分组方式"><option value="unit">按单元</option><option value="pattern">按拼读规律</option></select></span>
+              <span class="sel"><select id="phUnit" aria-label="单元或拼读组"></select></span>
+              <button class="mini-btn primary sm" id="phTbStart">开始练习</button>
+            </div>
+            <div id="phUnitList"></div>
+          </div>
+        </div>
+        <!-- 句子练习同款 stage：中文题干大字 + 按音节输入格 + 成功卡片 -->
+        <section class="stage" id="phPracticePanel" hidden>
+          <div class="stage-label" id="phStageLabel">听发音 · 按音节拼出英文单词</div>
+          <div class="stage-meta">
+            <span class="meta-chip" id="phMetaChip">自然拼读</span>
+            <span class="meta-chip timer" id="phTimerChip">用时 00:00</span>
+          </div>
+          <h1 class="question-cn" id="phQuestionCn"></h1>
+          <div class="slots" id="phSlots"></div>
+          <div class="feedback" id="phFeedbackNew"></div>
+          <div class="success-card" id="phSuccessCard" hidden>
+            <div class="sc-title" id="phScTitle">完全正确！</div>
+            <div class="sc-en" id="phScEn"></div>
+            <div class="sc-note" id="phScNote"></div>
+            <div class="sc-actions">
+              <button id="phScSpeak">🔊 朗读单词</button>
+              <button class="primary" id="phScNext">下一题 →</button>
+            </div>
+          </div>
+          <div class="tips" id="phTips">点击字母格逐段输入 · 输满自动判定 · 空格/回车确认 · Tab 跳到下一个音节</div>
+          <div class="btn-row tight ph-practice-btns">
+            <button class="mini-btn sm" id="phSpeak">🔊 再听一遍</button>
+            <button class="mini-btn sm" id="phChunkBtn">拼读提示</button>
+            <button class="mini-btn sm" id="phShow">看答案</button>
+            <button class="mini-btn sm" id="phShuffle">换一题</button>
+            <button class="mini-btn sm" id="phBack">← 返回课程</button>
+          </div>
+        </section>
+        <!-- 兼容旧逻辑与测试的隐藏接口：真实界面走上面的 slot 格子，phInput/phCheck 仍可用 -->
+        <div id="phLegacy" hidden>
+          <h3 id="phLessonTitle">—</h3>
+          <div class="ph-progress"><i id="phBar"></i></div>
+          <div class="ph-prompt" id="phPrompt"></div>
+          <div class="ph-chunks" id="phChunks"></div>
+          <div class="ph-hint" id="phHint"></div>
+          <input class="gfield" id="phInput" autocomplete="off" spellcheck="false">
+          <div class="ph-feedback" id="phFeedback"></div>
+          <button id="phNext" hidden></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 打字小鸭（集成模式）============ -->
+    <section class="view" id="typingView" hidden>
+      <div id="td-root"><div class="td-app">
+
+    <!-- 顶部栏 -->
+    <header class="topbar">
+      <div class="brand" id="td-brandHome" title="返回主菜单">
+        <span class="brand-duck">🦆</span>
+        <span class="brand-name">打字小鸭</span>
+      </div>
+      <div class="topbar-right">
+        <div class="star-counter" title="我的星星">
+          <span class="star-ico">⭐</span>
+          <span id="td-starTotal">0</span>
+        </div>
+        <button class="icon-btn" id="td-skinBtn" title="切换主题皮肤">🎨</button>
+        <button class="icon-btn" id="td-soundBtn" title="声音开关">🔊</button>
+        <button class="icon-btn" id="td-helpBtn" title="键位帮助">❓</button>
+      </div>
+    </header>
+
+    <!-- 主菜单 -->
+    <section id="td-screenMenu" class="screen active">
+      <div class="menu-hero">
+        <div class="hero-duck" id="td-heroDuck">🦆</div>
+        <h1>一起来练习打字吧！</h1>
+        <p>选一个游戏，用小手指点亮的按键打字，看看你能拿几颗星 ⭐</p>
+      </div>
+
+      <!-- 成长面板：打卡 / 小鸭养成 / 快捷入口 -->
+      <div class="home-row">
+        <div class="home-card checkin-card">
+          <div class="hc-title">📅 每日打卡</div>
+          <div class="hc-main">连续 <b id="td-streakVal">1</b> 天</div>
+          <div class="hc-sub" id="td-checkinTip">今天已打卡，明天见！</div>
+          <div class="cal-box">
+            <div class="cal-nav">
+              <button class="cal-nav-btn" id="td-calPrev" title="上个月">‹</button>
+              <span id="td-calTitle">—</span>
+              <button class="cal-nav-btn" id="td-calNext" title="下个月">›</button>
+            </div>
+            <div class="cal-week"><i>日</i><i>一</i><i>二</i><i>三</i><i>四</i><i>五</i><i>六</i></div>
+            <div class="cal-grid" id="td-calGrid"></div>
+          </div>
+        </div>
+        <div class="home-card duck-card">
+          <div class="hc-title">🦆 我的鸭群</div>
+          <div class="duck-stage" id="td-duckStage">🥚</div>
+          <div class="duck-count" id="td-duckCount">第 1 只 · 共养 1 只</div>
+          <div class="hc-sub" id="td-duckInfo">Lv.1 鸭蛋 · 喂 3⭐ 长大</div>
+          <button class="mini-btn" id="td-feedBtn">喂食 3⭐</button>
+        </div>
+        <div class="home-card quick-card">
+          <button class="mini-btn wide" id="td-badgeBtn">🏅 勋章墙 (<span id="td-badgeCount">0</span>/8)</button>
+          <button class="mini-btn wide" id="td-levelBtn">🗺️ 键位闯关</button>
+          <button class="mini-btn wide" id="td-wordStatsBtn">📊 单词统计</button>
+        </div>
+      </div>
+
+      <!-- 当前单元进度：和 SpellLab 教材词表联动 -->
+      <div class="unit-progress-card" id="td-unitCard">
+        <div class="upc-head">
+          <span class="upc-title">📘 当前单元学习进度</span>
+          <span class="upc-name" id="td-unitName">未选择教材单元</span>
+        </div>
+        <div class="upc-bar"><i id="td-unitBar"></i></div>
+        <div class="upc-stats">
+          <span>单元词 <b id="td-unitWords">0</b></span>
+          <span>已练 <b id="td-unitDone">0</b></span>
+          <span>错过 <b id="td-unitBad">0</b></span>
+          <span>练熟 <b id="td-unitMastered">0</b></span>
+        </div>
+        <div class="upc-actions">
+          <button class="mini-btn" id="td-unitPracticeBtn">▶ 练本单元单词</button>
+          <button class="mini-btn" id="td-unitFocusBtn">🎯 本单元错词重点练</button>
+        </div>
+      </div>
+
+      <div class="mode-grid" id="td-modeGrid">
+        <button class="mode-card card-yellow" data-mode="learn">
+          <span class="card-emoji">🔤</span>
+          <span class="card-title">认识字母</span>
+          <span class="card-desc">跟着高亮，认识每个字母在哪</span>
+        </button>
+        <button class="mode-card card-blue" data-mode="abc">
+          <span class="card-emoji">🔠</span>
+          <span class="card-title">字母连打</span>
+          <span class="card-desc">按顺序连续打出字母，越快越好</span>
+        </button>
+        <button class="mode-card card-green" data-mode="word">
+          <span class="card-emoji">🍎</span>
+          <span class="card-title">单词练习</span>
+          <span class="card-desc">打出简单的英文小单词</span>
+        </button>
+        <button class="mode-card card-indigo" data-mode="weakword">
+          <span class="card-emoji">🎯</span>
+          <span class="card-title">错词重点练</span>
+          <span class="card-desc">专攻你打错最多的那些单词</span>
+        </button>
+        <button class="mode-card card-pink" data-mode="pinyin">
+          <span class="card-emoji">🀄</span>
+          <span class="card-title">拼音练习</span>
+          <span class="card-desc">练习常见汉字的拼音</span>
+        </button>
+        <button class="mode-card card-purple" data-mode="whack">
+          <span class="card-emoji">🔨</span>
+          <span class="card-title">打地鼠</span>
+          <span class="card-desc">字母冒出来，快按对应键打掉它</span>
+        </button>
+        <button class="mode-card card-orange" data-mode="weak">
+          <span class="card-emoji">💪</span>
+          <span class="card-title">错键专项</span>
+          <span class="card-desc">专练你最容易按错的几个键</span>
+        </button>
+        <button class="mode-card card-teal" data-mode="listen">
+          <span class="card-emoji">👂</span>
+          <span class="card-title">听音打字</span>
+          <span class="card-desc">听英文读音，把听到的单词打出来</span>
+        </button>
+        <button class="mode-card card-red" data-mode="pk">
+          <span class="card-emoji">🏆</span>
+          <span class="card-title">亲子 PK</span>
+          <span class="card-desc">和爸爸妈妈轮流打，比谁分高</span>
+        </button>
+      </div>
+      <div class="menu-tip">
+        <span>💡 小提示：</span>每个按键都有颜色，颜色代表该用哪根手指。看看下面的键盘吧！
+      </div>
+    </section>
+
+    <!-- 游戏区 -->
+    <section id="td-screenGame" class="screen">
+      <div class="game-toolbar">
+        <button class="back-btn" id="td-backBtn">← 返回</button>
+        <h2 id="td-gameTitle">认识字母</h2>
+        <div class="game-stats">
+          <div class="stat"><span class="stat-label">得分</span><span class="stat-val" id="td-scoreVal">0</span></div>
+          <div class="stat"><span class="stat-label">连击</span><span class="stat-val" id="td-comboVal">🔥0</span></div>
+          <div class="stat"><span class="stat-label">正确</span><span class="stat-val" id="td-accVal">100%</span></div>
+        </div>
+        <button class="icon-btn blind-btn" id="td-blindBtn" title="盲打挑战：藏起按键字母">🙈</button>
+      </div>
+
+      <!-- 游戏舞台：由 JS 填充具体内容 -->
+      <div class="stage" id="td-stage">
+        <div class="stage-instruction" id="td-stageInstruction">按下这个键：</div>
+        <div class="target-display" id="td-targetDisplay"></div>
+        <div class="feedback" id="td-feedback"></div>
+      </div>
+
+      <!-- 游戏进度条：独立于舞台，与地鼠/字母完全分开 -->
+      <div class="progress-section">
+        <div class="progress-label">
+          <span>🎯 游戏进度</span>
+          <span class="progress-text" id="td-progressText">0%</span>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-bar" id="td-progressBar"></div>
+        </div>
+      </div>
+
+      <!-- 虚拟键盘 -->
+      <div class="keyboard-panel">
+        <div class="keyboard" id="td-keyboard"></div>
+        <div class="hand-hint" id="td-handHint">
+          <span class="hand-hint-dot" id="td-handHintDot"></span>
+          <span id="td-handHintText">该用哪根手指？</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 手指图例 -->
+    <div class="legend" id="td-legend">
+      <span class="legend-title">手指分工：</span>
+      <span class="legend-item"><i style="background:#ff8fa3"></i>小指</span>
+      <span class="legend-item"><i style="background:#b197fc"></i>无名指</span>
+      <span class="legend-item"><i style="background:#74c0fc"></i>中指</span>
+      <span class="legend-item"><i style="background:#38d9a9"></i>食指</span>
+      <span class="legend-item"><i style="background:#ffa94d"></i>右食指</span>
+      <span class="legend-item"><i style="background:#ffd43b"></i>右中指</span>
+      <span class="legend-item"><i style="background:#ff922b"></i>右无名指</span>
+      <span class="legend-item"><i style="background:#ff6b6b"></i>右小指</span>
+      <span class="legend-item"><i style="background:#adb5bd"></i>空格</span>
+    </div>
+
+    <!-- 结算弹窗 -->
+    <div class="modal-mask" id="td-resultModal">
+      <div class="modal-card">
+        <div class="result-emoji" id="td-resultEmoji">🎉</div>
+        <h2 id="td-resultTitle">太棒啦！</h2>
+        <div class="result-stars" id="td-resultStars"></div>
+        <div class="result-detail" id="td-resultDetail"></div>
+        <div class="modal-btns">
+          <button class="btn btn-primary" id="td-againBtn">再玩一次</button>
+          <button class="btn btn-ghost" id="td-menuBtn">回主菜单</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 帮助弹窗 -->
+    <div class="modal-mask" id="td-helpModal">
+      <div class="modal-card help-card">
+        <h2>🖐️ 手指分工小课堂</h2>
+        <p class="help-lead">把手指放在键盘上，跟着颜色找按键：</p>
+        <ul class="help-list">
+          <li><b>左手食指</b>放在 <kbd>F</kbd>，右手食指放在 <kbd>J</kbd>（这两个键上有个小凸点哦）</li>
+          <li>每根手指负责一列斜着的按键，颜色一样的就是同一根手指打的</li>
+          <li>玩游戏时，键盘上会<b>发光</b>提示下一个要按的键，照着按就行</li>
+          <li>按对会"叮"一声加星星，按错了也没关系，再试一次</li>
+        </ul>
+        <div class="help-keys">
+          <span class="hk" style="border-color:#38d9a9">左手 F</span>
+          <span class="hk" style="border-color:#ffa94d">右手 J</span>
+          <span class="hk" style="border-color:#adb5bd">空格 拇指</span>
+        </div>
+        <div class="modal-btns">
+          <button class="btn btn-primary" id="td-helpCloseBtn">知道啦</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 勋章墙弹窗 -->
+    <div class="modal-mask" id="td-badgeModal">
+      <div class="modal-card wide-card">
+        <h2>🏅 我的勋章墙</h2>
+        <p class="help-lead">达成小目标就能解锁勋章，集齐 8 枚超厉害！</p>
+        <div class="badge-grid" id="td-badgeGrid"></div>
+        <div class="modal-btns">
+          <button class="btn btn-primary" id="td-badgeCloseBtn">好的</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 闯关地图弹窗 -->
+    <div class="modal-mask" id="td-levelModal">
+      <div class="modal-card wide-card">
+        <h2>🗺️ 键位闯关地图</h2>
+        <p class="help-lead">从基准键出发，一关一关解锁整个键盘！</p>
+        <div class="level-list" id="td-levelList"></div>
+        <div class="modal-btns">
+          <button class="btn btn-primary" id="td-levelCloseBtn">关闭</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 单词统计弹窗 -->
+    <div class="modal-mask" id="td-wordStatsModal">
+      <div class="modal-card wide-card">
+        <h2>📊 我的单词练习统计</h2>
+        <p class="help-lead">每个单词练了几次、打错几次都记在这里。错得多的记得用「错词重点练」攻一攻！</p>
+        <div class="word-stat-summary" id="td-wordStatSummary"></div>
+        <div class="word-stat-list" id="td-wordStatList"></div>
+        <div class="modal-btns">
+          <button class="btn btn-primary" id="td-wordStatFocusBtn">🎯 重点练错词</button>
+          <button class="btn btn-ghost" id="td-wordStatCloseBtn">关闭</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 轻提示 -->
+    <div class="toast" id="td-toast"></div>
+  
+      </div></div>
+    </section>
+
+    <!-- ============ 成长中心：错词复习 / 听写 / 闯关地图 / 学习统计 ============ -->
+    <section class="view" id="growthView" hidden>
+      <div class="growth-head">
+        <div>
+          <h2>成长中心 🚀</h2>
+          <div class="gsub">把错词变成肌肉记忆 · 复习计划、听写、闯关、进步曲线</div>
+        </div>
+        <div class="growth-tabs" id="growthTabs">
+          <button data-g="review" class="active">错词复习</button>
+          <button data-g="dict">听写练习</button>
+          <button data-g="paper">纸笔听写 👨‍👩‍👧</button>
+          <button data-g="map">闯关地图</button>
+          <button data-g="stats">学习统计</button>
+        </div>
+      </div>
+
+      <div class="growth-panel on" id="gReview">
+        <div class="gcard">
+          <h3>今日复习计划</h3>
+          <p class="gnote">按艾宾浩斯遗忘曲线安排：答对后间隔 1→2→4→7→15→30 天再出现，答错则当天重练。做错的单词和句子会自动进入这里。</p>
+          <div class="gstats">
+            <div class="gstat"><b id="srDue">0</b><span>今日待复习</span></div>
+            <div class="gstat"><b id="srAll">0</b><span>收录词句</span></div>
+            <div class="gstat"><b id="srMastered">0</b><span>已进入长期记忆</span></div>
+          </div>
+          <div class="grow" style="margin-top:14px">
+            <button class="primary" id="srStart">开始今日复习</button>
+            <button id="srStartAll">复习全部词句</button>
+            <button id="srWipe">清空复习计划</button>
+          </div>
+          <div class="gprogress"><i id="srBar" style="width:0%"></i></div>
+          <div class="gprompt" id="srPrompt" hidden></div>
+          <input class="gfield" id="srInput" placeholder="输入英文，回车提交 / 再回车下一题" hidden autocomplete="off" spellcheck="false">
+          <div class="gfeedback" id="srFeedback"></div>
+          <div class="grow" id="srActions" hidden>
+            <button class="primary" id="srShow">显示答案</button>
+            <button id="srAgain">再练一次</button>
+            <button id="srNext">下一个 →</button>
+          </div>
+        </div>
+        <div class="gcard">
+          <h3>复习清单</h3>
+          <p class="gnote">等级越高代表记得越牢；绿点表示今天该复习了。</p>
+          <div class="sr-list" id="srList"></div>
+        </div>
+      </div>
+
+      <div class="growth-panel" id="gDict">
+        <div class="gcard">
+          <h3>听写练习 🎧</h3>
+          <p class="gnote">只听声音不看文字，凭记忆拼出听到的单词或句子。听不清可以多听几遍；听写结果同样计入复习计划和积分。</p>
+          <div class="gstats">
+            <div class="gstat"><b id="dcRound">0</b><span>本轮题数</span></div>
+            <div class="gstat"><b id="dcRight">0</b><span>一次写对</span></div>
+            <div class="gstat"><b id="dcBest">0</b><span>历史最佳连对</span></div>
+          </div>
+          <div class="grow" style="margin:14px 0">
+            <button class="primary" id="dcStart">开始听写</button>
+            <button id="dcSpeak">🔊 再听一遍</button>
+          </div>
+          <div class="gprogress"><i id="dcBar" style="width:0%"></i></div>
+          <div class="gprompt" id="dcPrompt" hidden></div>
+          <input class="gfield" id="dcInput" placeholder="听到什么写什么，回车提交 / 再回车下一题" hidden autocomplete="off" spellcheck="false">
+          <div class="gfeedback" id="dcFeedback"></div>
+          <div class="grow" id="dcActions" hidden>
+            <button class="primary" id="dcNext">下一个 →</button>
+            <button id="dcSkip">跳过这题</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="growth-panel" id="gPaper">
+        <div class="gcard">
+          <h3>纸笔听写 👨‍👩‍👧</h3>
+          <p class="gnote">听中文或英文读音，孩子<strong>写在纸上</strong>，家长按标准答案逐题评判。评分区由家长密码保护，孩子看不到答案，也不会自己给自己打分。</p>
+          <div class="gstats">
+            <div class="gstat"><b id="ppRound">0</b><span>本轮题数</span></div>
+            <div class="gstat"><b id="ppRight">0</b><span>家长判对</span></div>
+            <div class="gstat"><b id="ppRate">--</b><span>正确率</span></div>
+          </div>
+          <div class="grow" style="margin:14px 0">
+            <label class="pp-label">内容 <span class="sel"><select id="ppKind"><option value="mix">单词 + 句子</option><option value="word">只写单词</option><option value="sentence">只写句子</option></select></span></label>
+            <label class="pp-label">读音 <span class="sel"><select id="ppLang"><option value="cn">中文（写英文）</option><option value="en">英文（写英文）</option></select></span></label>
+            <label class="pp-label">题数 <span class="sel"><select id="ppCount"><option value="5">5 题</option><option value="8" selected>8 题</option><option value="12">12 题</option></select></span></label>
+            <button class="primary" id="ppStart">开始听写</button>
+          </div>
+          <div class="gprogress"><i id="ppBar" style="width:0%"></i></div>
+          <div class="gprompt" id="ppPrompt" hidden></div>
+          <div class="grow" id="ppActions" hidden style="margin:12px 0 0">
+            <button id="ppSpeak">🔊 再听一遍</button>
+            <button class="primary" id="ppNext">下一题 →</button>
+            <button id="ppFinish">听写完，家长批阅 →</button>
+          </div>
+          <div class="gfeedback" id="ppFeedback"></div>
+        </div>
+        <div class="gcard" id="ppGradeCard" hidden>
+          <div class="grow" style="justify-content:space-between">
+            <h3 style="margin:0">家长批阅 ✍️</h3>
+            <span class="pp-badge" id="ppLockBadge">🔒 家长已解锁</span>
+          </div>
+          <p class="gnote">对照孩子手写的答案，逐题选择 ✅ 对 / ❌ 错；拿不准可点 🔊 重听。全部批完后点「保存批阅结果」，错题会自动进入复习计划。</p>
+          <div class="pp-list" id="ppList"></div>
+          <div class="grow" style="margin-top:14px">
+            <button class="primary" id="ppSave">保存批阅结果</button>
+            <button id="ppAgain">再听一轮</button>
+          </div>
+          <div class="gfeedback" id="ppGradeFeedback"></div>
+        </div>
+      </div>
+
+      <div class="growth-panel" id="gMap">
+        <div class="gcard">
+          <h3>单词闯关地图 🗺️</h3>
+          <p class="gnote">每个单元就是一关。过关后点亮星星并解锁下一关；想自由练任意一关，打开「自由闯关」即可。星级由该关词句的掌握度自动计算。</p>
+          <div class="grow" style="margin-bottom:14px">
+            <button id="mapToggle">🔓 自由闯关：关</button>
+          </div>
+          <div class="map-grid" id="mapGrid"></div>
+        </div>
+      </div>
+
+      <div class="growth-panel" id="gStats">
+        <div class="gcard">
+          <h3>学习统计 📊</h3>
+          <p class="gnote">全部数据来自本机练习记录，不联网、不上传。图表随每次答题自动更新。</p>
+          <div class="gstats" id="stGrid"></div>
+        </div>
+        <div class="gcard">
+          <h3>近 7 天练习趋势</h3>
+          <div class="chart-wrap" id="stChart"></div>
+          <div class="chart-legend"><span><i style="background:#8b7bff"></i>练习题数</span><span><i style="background:#5ce2a0"></i>一次答对数</span></div>
+        </div>
+        <div class="gcard">
+          <h3>各模式练习分布</h3>
+          <div id="stModes"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toolbar" id="toolbarSentence"></div>
+  <div class="toolbar" id="toolbarWord" hidden></div>
+  <div class="toolbar" id="toolbarChunk" hidden></div>
+  <div class="toast" id="toast"></div>
+  <div class="mask" id="mask"></div>
+
+  <aside class="drawer" id="drawer">
+    <button class="icon-btn drawer-close" id="drawerClose" aria-label="关闭"></button>
+    <h2>学习面板</h2>
+    <div class="dsub" id="saveBadge">数据自动保存在本机</div>
+
+    <div class="drawer-tabs" id="drawerTabs">
+      <button data-tab="learn" id="tabLearn" class="active">学习</button>
+      <button data-tab="history" id="tabHistory">记录</button>
+      <button data-tab="vocab" id="tabVocab">生词本</button>
+      <button data-tab="phonics" id="tabPhonics">拼读</button>
+      <button data-tab="growth" id="tabGrowth">成长</button>
+      <button data-tab="plan" id="tabPlan">计划</button>
+      <button data-tab="lottery" id="tabLottery">抽奖</button>
+      <button data-tab="manage" id="tabManage">管理</button>
+      <button data-tab="library" id="tabLibrary">教材库</button>
+      <button data-tab="storage" id="tabStorage">存储</button>
+    </div>
+
+    <div class="tab-page" id="pageLearn">
+      <div class="panel">
+        <h3>课程单元</h3>
+        <div id="unitList"></div>
+      </div>
+
+      <div class="panel">
+        <h3>学习统计</h3>
+        <div class="stat-grid" id="statGrid"></div>
+      </div>
+
+      <div class="panel">
+        <h3>错题本</h3>
+        <div id="wrongList"></div>
+        <div class="btn-row" style="margin-top:8px"><button class="mini-btn" id="clearWrong">清空错题</button></div>
+      </div>
+
+      <div class="panel">
+        <h3>练习设置</h3>
+        <div class="setting-row"><span>显示逐词中文提示</span><button class="switch" data-set="showHints" id="swHints"></button></div>
+        <div class="setting-row"><span>按字母显示小空格</span><button class="switch" data-set="letterBoxes" id="swLetterBoxes"></button></div>
+        <div class="setting-row"><span>预先露出字母 <b id="revealVal">0</b> 个</span><input class="rate" type="range" id="revealRange" min="0" max="3" step="1" value="0"></div>
+        <div class="subtle" style="margin-top:8px">小空格数量＝该单词的字母数，整句按单词真实宽度横向排列、放不下自动换行；特别长的单词只在自己这一格内折行，不会盖住相邻单词。露出的字母是提示，不用再输入。改动后当前题会重做。</div>
+        <div class="setting-row"><span>单词间距 <b id="gapVal">22</b> px</span><input class="rate" type="range" id="gapRange" min="10" max="44" step="2" value="22"></div>
+        <div class="subtle" style="margin-top:8px">中文提示现在显示在各自单词的正下方，过长时自动换行、不会挤到相邻单词；加大间距后整句更易读。</div>
+        <div class="setting-row"><span>按键 / 判定音效</span><button class="switch" data-set="sound" id="swSound"></button></div>
+        <div class="setting-row"><span>音效音量 <b id="volVal">35</b></span><input class="rate" type="range" id="volRange" min="0" max="100" step="5" value="35"></div>
+        <div class="setting-row"><span>朗读口音 / 拼读标准</span><span class="sel"><select id="accentSel"><option value="uk">英式 UK</option><option value="us">美式 US</option></select></span></div>
+        <div class="subtle" style="margin-top:8px">统一控制朗读发音与拼读音节切分（音节数据来自 soundwhy.com）。如 marathon：英式 ma / ra / thon，美式 mar / a / thon。</div>
+        <div class="setting-row"><span>拼完句子后自动朗读整句</span><button class="switch" data-set="speakOnFinish" id="swSpeakOnFinish"></button></div>
+        <div class="setting-row"><span>朗读延迟 <b id="speakDelayVal">120</b> ms</span><input class="rate" type="range" id="speakDelayRange" min="0" max="600" step="20" value="120"></div>
+        <div class="subtle" style="margin-top:8px">完成音效播完后朗读完整英文句子；默认 120ms，调到 0 可几乎立即朗读。成功卡片上也能重听。</div>
+        <div class="setting-row"><span>练习计时方式</span><span class="sel"><select id="timerModeSel"><option value="count">只显示用时</option><option value="countdown">倒计时</option></select></span></div>
+        <div class="setting-row"><span>难度</span><span class="sel"><select id="difficultySel"><option value="easy">简单</option><option value="normal">正常</option><option value="hard">困难</option></select></span></div>
+        <div class="subtle" style="margin-top:8px">简单 120 秒 / 两级提示 / 多露 1 个字母；正常 60 秒 / 两级提示；困难 35 秒 / 只有首字母提示。选「倒计时」时到点自动显示答案，选「只显示用时」不限时。</div>
+        <div class="setting-row"><span>拼错或用提示时自动加入生词本</span><button class="switch" data-set="autoVocab" id="swAutoVocab"></button></div>
+        <div class="setting-row"><span>启动时询问是否继续上次练习</span><button class="switch" data-set="askResume" id="swAskResume"></button></div>
+        <div class="setting-row"><span>单元练完时询问是否进入下一单元</span><button class="switch" data-set="askNextUnit" id="swAskNextUnit"></button></div>
+        <div class="setting-row"><span>忽略大小写</span><button class="switch" data-set="ignoreCase" id="swCase"></button></div>
+        <div class="setting-row"><span>智能复习（优先薄弱句）</span><button class="switch" data-set="smart" id="swSmart"></button></div>
+        <div class="setting-row"><span>朗读语速 <b id="rateVal">0.9</b></span><input class="rate" type="range" id="rateRange" min="0.6" max="1.2" step="0.1" value="0.9"></div>
+      </div>
+
+      <div class="panel">
+        <h3>自定义题库</h3>
+        <div class="import-note">每行一题，用竖线分隔：<br><code>中文句子 | 英文句子 | 提示1,提示2,提示3</code><br>提示数量需与英文单词数一致（标点自动识别）。未写短语拆分时会自动均分。导入时按顶部选中的年级 / 教材归类。</div>
+        <textarea id="importText" placeholder="今天很冷。| It is cold today. | 它,是,冷的,今天"></textarea>
+        <div class="btn-row" style="margin-top:8px">
+          <button class="mini-btn primary" id="doImport">导入题目</button>
+          <button class="mini-btn" id="fillExample">填入示例</button>
+          <button class="mini-btn danger" id="clearCustom">清空我的题库</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-page" id="pageHistory" hidden>
+      <div class="panel">
+        <h3>练习记录</h3>
+        <div class="panel-note">每完成一道题自动记一条：时间、模式、句子、是否借助提示、用时。最多保留最近 500 条，随全库备份与 SQLite 一起保存。</div>
+        <div class="stat-grid" id="histGrid"></div>
+        <div class="btn-row" style="margin-top:10px">
+          <button class="mini-btn primary" id="exportHistory">导出 CSV</button>
+          <button class="mini-btn danger" id="clearHistory">清空记录</button>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>个人最快纪录</h3>
+        <div class="panel-note">只统计一次答对、未借助提示的用时，每个词 / 句子单独记个人最佳。打破纪录时会弹出鼓励动画。</div>
+        <div class="best-list" id="bestList"></div>
+      </div>
+      <div class="panel">
+        <h3>最近练习</h3>
+        <div id="histList"></div>
+      </div>
+    </div>
+
+    <div class="tab-page" id="pageVocab" hidden>
+      <div class="panel">
+        <h3>添加生词</h3>
+        <div class="panel-note">归属取顶部选中的年级 / 教材（选「全部」时默认小学四年级 · 沪教版）；同一个单词不会重复收录。也可在「单词速记」里点星星一键收藏。</div>
+        <div class="field-row">
+          <input class="field" id="vocabEn" placeholder="英文单词" autocomplete="off" spellcheck="false">
+          <input class="field" id="vocabCn" placeholder="中文词义">
+        </div>
+        <div class="field-row"><input class="field" id="vocabSource" placeholder="来源 / 单元（可留空）"></div>
+        <div class="btn-row tight">
+          <button class="mini-btn primary sm" id="vocabAdd">加入生词本</button>
+          <button class="mini-btn sm" id="vocabImportUnit">导入当前单元单词</button>
+          <button class="mini-btn sm" id="vocabImportWrong">从错题取词</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>我的生词 <span class="count-pill" id="vocabCount">0</span></h3>
+        <div class="field-row"><input class="field" id="vocabSearch" placeholder="搜索英文或中文词义"></div>
+        <div class="vocab-tools">
+          <button class="mini-btn sm" id="vocabSelectAll">全选可见</button>
+          <button class="mini-btn sm" id="vocabSelectNone">清空选择</button>
+          <button class="switch" id="vocabOnlyNew" title="只看未掌握"></button>
+          <span style="font-size:11px;color:var(--muted)">只看未掌握</span>
+        </div>
+        <div id="vocabList"></div>
+      </div>
+
+      <div class="panel">
+        <h3>从生词本创建练习</h3>
+        <div class="panel-note">勾选生词（不选则取当前可见生词，最多 15 个）。每个词生成 1 道听写 + 1 道例句填空，生成后自动成为课程单元，三种模式都能练。</div>
+        <div class="field-row"><input class="field" id="setName" placeholder="练习名称（留空自动生成）"></div>
+        <div class="btn-row tight">
+          <button class="mini-btn primary" id="createSet">生成练习集</button>
+          <span class="count-pill" id="selectedCount">已选 0 词</span>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>生词练习集</h3>
+        <div id="setList"></div>
+      </div>
+    </div>
+
+    <div class="tab-page" id="pagePhonics" hidden>
+      <div class="panel">
+        <h3>自然拼读</h3>
+        <div class="panel-note">拼读练习已经移到主界面，和「句子拼写 / 单词速记」并排显示，练习时不用再打开这个面板。点下面的按钮直接开始。</div>
+        <button class="mini-btn primary" id="phOpenMain">前往拼读练习 →</button>
+      </div>
+    </div>
+
+    <div class="tab-page" id="pageGrowth" hidden>
+      <div class="panel">
+        <h3>记忆成长中心</h3>
+        <div class="panel-note">五个工具都在这里：间隔复习、听写练习、纸笔听写（家长批阅）、闯关地图、学习统计。错词会自动进入复习计划。</div>
+        <div class="stat-grid" id="growthMini"></div>
+        <div class="btn-row" style="margin-top:10px"><button class="mini-btn primary" id="goGrowth">打开成长中心 →</button><button class="mini-btn" id="goPaper">纸笔听写 ✍️</button></div>
+      </div>
+    </div>
+
+    <div class="tab-page" id="pagePlan" hidden>
+      <div class="panel">
+        <h3>我的积分</h3>
+        <div class="plan-head"><div><b id="planPoints">0</b> <span>分</span></div><button class="mini-btn sm" id="planGoLottery">去抽奖</button></div>
+        <div class="panel-note">不借助提示答对一题 +<b id="planPerCorrect">1</b> 分；自然拼读每累计答对 5 个词发一次分。每日计划达标额外加分，未达标扣分。积分可在「抽奖」页使用。</div>
+        <div class="stat-grid" id="planTodayGrid"></div>
+      </div>
+      <div class="panel">
+        <h3>每日学习计划</h3>
+        <div class="setting-row"><span>启用每日计划</span><button class="switch" id="swPlanEnabled"></button></div>
+        <div class="setting-row"><span>计划类型</span><span class="sel"><select id="planType"><option value="units">按单元数</option><option value="minutes">按练习时长</option></select></span></div>
+        <div class="field-row"><input class="field" id="planTarget" type="number" min="1" max="600" value="3" placeholder="每日目标"></div>
+        <div class="field-row"><input class="field" id="planReward" type="number" min="0" max="999" value="20" placeholder="完成奖励分"><input class="field" id="planPenalty" type="number" min="0" max="999" value="10" placeholder="未达标扣分"></div>
+        <div class="field-row"><input class="field" id="planPerCorrectInput" type="number" min="0" max="20" value="1" placeholder="每题一次答对加分"></div>
+        <div class="btn-row tight"><button class="mini-btn primary sm" id="planSave">保存计划</button></div>
+        <div class="panel-note" style="margin-top:10px">「按单元数」＝当天练过的不同单元数；「按练习时长」＝当天累计练习分钟数。每天首次打开时自动结算前一天并加减分。</div>
+      </div>
+      <div class="panel"><h3>最近结算</h3><div id="planResults"></div></div>
+      <div class="panel"><h3>积分流水</h3><div id="planLedger"></div></div>
+    </div>
+
+    <div class="tab-page" id="pageLottery" hidden>
+      <div class="panel">
+        <h3>积分抽奖 · 惊喜盲盒</h3>
+        <div class="plan-head"><div><b id="lotteryPoints">0</b> <span>分</span></div><span class="badge" id="lotteryCostTag">每次 10 分</span></div>
+        <div class="panel-note">点右上角「🎁 抽盲盒」即可开盒，每次消耗 <b id="lotteryCostText">10</b> 分。<b>抽奖次数不限，没中奖可以一直抽</b>，每次都是正常积分。抽中真实奖品后当天不会再中奖，之后每抽一次消耗才翻倍（第 2 次 2 倍、第 3 次 4 倍……）；「再抽一次」是免费重抽，不算中奖、也不触发翻倍。今日已抽 <b id="lotteryDailyText">0</b> 次。奖项概率之和需 ≤ 100%，剩余为「谢谢参与」。</div>
+      </div>
+      <div class="panel">
+        <h3>奖项设置 <span class="lock-badge" id="prizeLockBadge">家长锁定</span></h3>
+        <div class="locked-box" id="prizeLocked" hidden>
+          <div class="lock-title">此项已由家长密码保护</div>
+          <div class="panel-note">孩子可以自由抽奖；修改奖项内容、中奖概率和每次消耗积分需要家长解锁。</div>
+          <div class="locked-list" id="prizeLockedList"></div>
+          <div class="btn-row tight" style="justify-content:center"><button class="mini-btn primary sm" id="prizeUnlock">家长解锁</button></div>
+        </div>
+        <div id="prizeEditor" hidden>
+          <div class="parent-label">每次抽奖基础消耗积分</div>
+          <div class="field-row"><input class="field" id="lotteryCost" type="number" min="1" max="999" value="10" placeholder="每次消耗积分"></div>
+          <div class="parent-label">打字练习每局兑换积分（0–99）</div>
+          <div class="field-row"><input class="field" id="typingPointsInput" type="number" min="0" max="99" value="1" placeholder="每局打字得几分"></div>
+          <div class="panel-note" style="margin:2px 0 8px">打字得分转换：设为 0 则打字练习不计积分；默认每局 1 分，与该局星级无关。</div>
+          <div class="parent-label">奖项与概率</div>
+          <div id="prizeList"></div>
+          <div class="btn-row tight" style="margin-top:10px">
+            <button class="mini-btn sm" id="prizeAdd">添加奖项</button>
+            <button class="mini-btn danger sm" id="prizeReset">恢复默认</button>
+          </div>
+          <div class="panel-note" style="margin-top:8px" id="prizeSum"></div>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>获得的奖品 <span class="count-pill" id="prizePending">0 待兑换</span></h3>
+        <div class="panel-note">「自动兑换」的奖品（如再抽一次）抽到即生效、<b>不扣本次积分</b>；其余奖品显示「待兑换」，<b>线下发给孩子的奖品（如现金），直接点右侧「标记已兑换」即可</b>，无需家长解锁。奖项内容与概率的修改仍受家长锁保护。</div>
+        <div id="prizeWonList"></div>
+      </div>
+      <div class="panel"><h3>最近抽奖</h3><div id="lotteryLog"></div></div>
+    </div>
+
+    <div class="tab-page" id="pageManage" hidden>
+      <div class="panel">
+        <h3>年级管理</h3>
+        <div class="panel-note">年级用于归类课程与筛选学习范围，可添加、改名、删除。内置课程默认归到「小学四年级」。</div>
+        <div class="field-row">
+          <input class="field" id="gradeName" placeholder="新年级名称，如 小学五年级">
+          <button class="mini-btn primary sm" id="gradeAdd">添加</button>
+        </div>
+        <div id="gradeList"></div>
+      </div>
+
+      <div class="panel">
+        <h3>教材版本管理</h3>
+        <div class="panel-note">如 人教版 PEP、沪教版、外研版。删除后关联单元会显示为「未分类」，课程本身不会丢失。</div>
+        <div class="field-row">
+          <input class="field" id="bookName" placeholder="新教材版本名称">
+          <button class="mini-btn primary sm" id="bookAdd">添加</button>
+        </div>
+        <div id="bookList"></div>
+      </div>
+
+      <div class="panel">
+        <h3>课程归属</h3>
+        <div class="panel-note">给每个单元指定年级和教材版本，顶部「学习范围」会据此筛选课程。</div>
+        <div id="unitMetaList"></div>
+      </div>
+
+      <div class="danger-zone">
+        <button class="mini-btn danger" id="resetAll">重置全部学习数据</button>
+      </div>
+    </div>
+
+    <div class="tab-page" id="pageLibrary" hidden>
+      <div class="panel">
+        <h3>新建教材包</h3>
+        <div class="panel-note">一个教材包 = 一册书，可标注上册 / 下册 / 全册，顶部「学习范围」能按册别筛选；包下可包含任意多个单元，每个单元有独立的句子与单词表。教材保存在本机，导出 JSON 后可提交到 Git 管版本或分享给别人。</div>
+        <div class="field-row"><input class="field" id="tbName" placeholder="如 人教版 PEP 四年级上册"></div>
+        <div class="field-row">
+          <span class="sel"><select id="tbGrade"></select></span>
+          <span class="sel"><select id="tbBook"></select></span>
+          <span class="sel"><select id="tbVolume"></select></span>
+          <button class="mini-btn primary sm" id="tbCreate">创建教材包</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>我的教材包 <span class="count-pill" id="tbCount">0</span></h3>
+        <div class="field-row" style="margin-bottom:10px">
+          <label>学段 <span class="sel"><select id="libStage" aria-label="教材库学段"></select></span></label>
+          <span class="subtle" id="libStageTip"></span>
+        </div>
+        <div id="tbList"></div>
+      </div>
+
+      <div class="panel">
+        <h3>单元内容编辑 <span class="count-pill" id="tbEditTitle">未选择</span></h3>
+        <div id="tbEditor"></div>
+      </div>
+
+      <div class="panel">
+        <h3>导入教材包 / 数据备份</h3>
+        <div class="panel-note">粘贴教材包 JSON 或选择 .json 文件导入；导出的教材包可提交到 Git 管理版本。「全库备份」含进度、错题、生词和全部教材。</div>
+        <textarea class="field" id="packIO" placeholder="在此粘贴 JSON；导出时内容也会显示在这里，方便复制"></textarea>
+        <div class="btn-row tight" style="margin-top:8px">
+          <button class="mini-btn primary sm" id="packImport">导入 JSON</button>
+          <input class="file-input" type="file" id="packFile" accept=".json,application/json">
+        </div>
+        <div class="btn-row tight" style="margin-top:8px">
+          <button class="mini-btn sm" id="packExportAll">导出全部教材包</button>
+          <button class="mini-btn sm" id="backupAll">导出全库备份</button>
+          <button class="mini-btn danger sm" id="restoreAll">从备份恢复</button>
+        </div>
+        <div class="subtle" style="margin-top:8px">导入教材包只追加教材；从备份恢复会覆盖当前全部数据，操作前请先导出备份。</div>
+      </div>
+    </div>
+
+    <div class="tab-page" id="pageStorage" hidden>
+      <div class="panel">
+        <h3>本地数据库</h3>
+        <div class="db-hero">
+          <div class="db-engine"><span class="dot" id="dbDot"></span><span id="dbEngine">检测中…</span></div>
+          <div class="db-desc" id="dbDesc"></div>
+          <div class="db-usage"><i id="dbUsageBar" style="width:0%"></i></div>
+          <div class="subtle" id="dbUsageText"></div>
+          <div class="kv-grid" id="dbCounts"></div>
+        </div>
+        <div id="dbRows"></div>
+        <div class="db-note">IndexedDB 是浏览器内置的事务型数据库，容量通常按磁盘剩余空间分配，远大于 localStorage 的约 5 MB。数据仍只保存在本机、不联网；旧版存档会自动迁移。</div>
+        <div class="btn-row tight" style="margin-top:10px">
+          <button class="mini-btn sm" id="dbRefresh">刷新状态</button>
+          <button class="mini-btn sm" id="dbPersist">申请持久化存储</button>
+          <button class="mini-btn sm" id="dbVacuum">立即写入数据库</button>
+        </div>
+      </div>
+
+      <div class="panel" id="dbFilePanel">
+        <h3>同步到本地数据文件</h3>
+        <div class="panel-note">绑定一个真实的 .json 文件后，每次学习数据变化都会自动写回，可直接提交到 Git、放进网盘或拷到另一台电脑。需 Chrome / Edge 且由你点击授权。</div>
+        <div id="dbFileState"></div>
+        <div class="btn-row tight" style="margin-top:8px">
+          <button class="mini-btn primary sm" id="dbBindFile">绑定本地文件</button>
+          <button class="mini-btn sm" id="dbSyncFile">立即同步</button>
+          <button class="mini-btn danger sm" id="dbUnbindFile">解除绑定</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>导出与迁移</h3>
+        <div class="panel-note">全库备份含进度、错题、生词、教材与设置。SQLite 导出生成 .sql 脚本，在命令行执行 <code>sqlite3 spelllab.db &lt; spelllab-日期.sql</code> 即可得到可被外部工具查询的数据库文件。</div>
+        <div class="btn-row tight">
+          <button class="mini-btn sm" id="dbBackup">导出全库备份</button>
+          <button class="mini-btn sm" id="dbExportSQL">导出 SQLite .sql</button>
+        </div>
+        <div class="btn-row tight" style="margin-top:8px">
+          <button class="mini-btn sm" id="dbImportFile">从 JSON 备份恢复</button>
+          <input class="file-input" type="file" id="dbRestoreFile" accept=".json,application/json">
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>数据库维护</h3>
+        <div class="panel-note">清空数据库会重置本机全部学习数据并回到默认状态，不会删除你绑定的文件。操作前建议先导出备份。</div>
+        <div class="btn-row tight"><button class="mini-btn danger sm" id="dbWipe">清空本地数据库</button></div>
+      </div>
+
+      <div class="panel" id="desktopPanel" hidden>
+        <h3>桌面版数据文件</h3>
+        <div class="panel-note">桌面版把全部数据写进一个 SQLite 文件，可用 DB Browser for SQLite、命令行 sqlite3 等工具直接打开查询；备份会自动存到 data/exports/。</div>
+        <div id="desktopDbInfo"></div>
+        <div class="btn-row tight" style="margin-top:8px">
+          <button class="mini-btn sm" id="dbOpenFolder">打开数据文件夹</button>
+          <button class="mini-btn sm" id="dbExportBackup">保存备份到磁盘</button>
+        </div>
+        <div class="btn-row tight" style="margin-top:8px">
+          <button class="mini-btn sm" id="dbImportBackup">从浏览器备份恢复</button>
+          <input class="file-input" type="file" id="desktopImportFile" accept=".json,application/json">
+        </div>
+        <div class="db-note">从网页版迁移：在网页版「存储」页导出全库备份，把文件放到 data/ 目录并命名为 spelllab-backup.json，桌面版首次启动会自动导入；也可在这里直接选择文件恢复。</div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<div class="modal-mask" id="modalMask" hidden>
+  <div class="modal" id="modal" role="dialog" aria-modal="true">
+    <h3 id="modalTitle"></h3>
+    <p id="modalText"></p>
+    <div id="modalResult"></div>
+    <div class="modal-actions" id="modalActions"></div>
+  </div>
+</div>
+
+<!-- 速度突破鼓励动画：纯展示层不拦截输入，2.6 秒自动收起 -->
+<div class="speed-mask" id="speedMask" hidden aria-live="polite">
+  <div class="speed-card">
+    <div class="speed-rays"></div>
+    <div class="speed-confetti" id="speedConfetti"></div>
+    <span class="speed-badge">⚡ 速度突破</span>
+    <div class="speed-icon">🏆</div>
+    <h2>新纪录！</h2>
+    <div class="speed-word" id="speedWord"></div>
+    <div class="speed-times">
+      <div><span>这次用时</span><b id="speedNow"></b></div>
+      <span class="speed-arrow">→</span>
+      <div><span>原纪录</span><b id="speedPrev"></b></div>
+    </div>
+    <div class="speed-gain" id="speedGain"></div>
+  </div>
+</div>
+
+<!-- 惊喜盲盒：结果仍按奖项概率同步产生，再播放开盒动画揭晓；抽奖逻辑与转盘兼容 -->
+<div class="wheel-mask" id="wheelMask" hidden>
+  <div class="wheel-dialog" role="dialog" aria-modal="true">
+    <div class="dialog-head"><h3>惊喜盲盒</h3><button class="dialog-close" id="btnWheelClose" aria-label="关闭">&times;</button></div>
+    <div class="wheel-meta"><span>当前积分 <b id="wheelPoints">0</b></span><span>本次消耗 <b id="wheelCost">10</b> 分</span><span>今日 <b id="wheelDaily">0/3</b> 次</span></div>
+    <div class="wheel-stage">
+      <!-- 盲盒视觉主体 -->
+      <div class="box-scene" id="boxScene">
+        <div class="box-rays" id="boxRays"></div>
+        <div class="box-stars"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="mystery-box" id="mysteryBox" role="button" tabindex="0" title="点盒子抽一次">
+          <div class="box-lid"><span class="box-bow">🎀</span></div>
+          <div class="box-body"><span class="box-mark">?</span><span class="box-ribbon"></span></div>
+          <div class="box-shadow"></div>
+        </div>
+        <div class="box-prize-reveal" id="boxPrizeReveal" aria-live="polite">
+          <span class="bpr-tag" id="boxPrizeTag">恭喜抽中</span>
+          <b class="bpr-name" id="boxPrizeName"></b>
+          <span class="bpr-note" id="boxPrizeNote"></span>
+        </div>
+        <div class="box-burst" id="boxBurst"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+      <!-- 兼容层：旧转盘 DOM 保留但隐藏，供原有概率/旋转回归测试使用 -->
+      <div class="legacy-wheel" aria-hidden="true">
+        <div class="wheel-lights"></div>
+        <div class="wheel-frame"></div>
+        <div class="wheel-disc" id="wheelDisc"></div>
+        <div class="wheel-hub" id="wheelHub">抽奖</div>
+        <div class="wheel-pointer"></div>
+      </div>
+    </div>
+    <div class="wheel-result" id="wheelResult">点「开始抽奖」或点盒子，揭晓惊喜</div>
+    <div class="wheel-prize" id="wheelPrize"><small id="wheelPrizeTag">本次结果</small><b><i class="hit-dot" id="wheelPrizeDot"></i><span id="wheelPrizeName"></span></b></div>
+    <div class="wheel-warn" id="wheelWarn"></div>
+    <div class="wheel-list" id="wheelList"></div>
+    <div class="wheel-actions">
+      <button class="primary" id="btnSpin">开始抽奖</button>
+      <button id="btnWheelDone">收起</button>
+    </div>
+  </div>
+</div>
+
+<!-- 家长中心：解锁后可改管理密码、修改受保护的抽奖设置 -->
+<div class="parent-mask" id="parentMask" hidden>
+  <div class="parent-dialog" role="dialog" aria-modal="true">
+    <div class="dialog-head"><h3>家长中心</h3><button class="dialog-close" id="btnParentClose" aria-label="关闭">&times;</button></div>
+    <div class="parent-status" id="parentStatus">家长模式未解锁</div>
+    <div id="parentLogin">
+      <label class="parent-label" for="parentPwd">管理密码</label>
+      <input class="field" id="parentPwd" type="password" autocomplete="off" placeholder="请输入管理密码">
+      <div class="panel-note" id="parentInitialHint">初始管理密码：<b>1234</b>。首次解锁后请立刻修改；每次重新打开程序都会重新锁定。</div>
+      <div class="parent-actions"><button class="primary" id="btnParentUnlock">解锁</button></div>
+    </div>
+    <div id="parentPanel" hidden>
+      <div class="panel-note">当前受家长密码保护：抽奖与奖项设置、纸笔听写批阅。孩子仍可自由练习和抽奖；保护范围在程序里可以按需扩展。</div>
+      <label class="parent-label" for="parentOld">原密码</label>
+      <input class="field" id="parentOld" type="password" autocomplete="off" placeholder="原管理密码">
+      <label class="parent-label" for="parentNew">新密码（4–32 位）</label>
+      <input class="field" id="parentNew" type="password" autocomplete="off" placeholder="新管理密码">
+      <label class="parent-label" for="parentNew2">确认新密码</label>
+      <input class="field" id="parentNew2" type="password" autocomplete="off" placeholder="再输入一次">
+      <div class="parent-warn">这是防止孩子误改设置的家长锁，不是加密级安全；请勿用本机数据保存敏感信息。</div>
+      <div class="parent-actions">
+        <button id="btnParentLock">立即锁定</button>
+        <button class="primary" id="btnParentChange">修改密码</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* __SPELLLAB_JS_MODULES__ */
+</script>
+</body>
+</html>

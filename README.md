@@ -152,11 +152,35 @@ sqlite3 spelllab.db < spelllab-2026-11-15.sql
 
 改动后当前题会重做；设置随全库备份 / SQLite 一起保存，旧存档导入时会自动补上默认值。
 
+## 源码结构与构建
+
+运行时仍是单文件 `SpellLab.html`（浏览器双击、桌面端打包都只认它），但开发源码已按功能拆成模块：
+
+```
+src/shell.html          HTML 骨架 + 内联样式 + 两个构建占位标记
+src/js/00-*.js … 48-*.js  49 个 JS 模块（数字前缀决定拼接顺序）
+tools/build.py          从 src/ 重建 SpellLab.html；--check 只校验不写文件
+tools/split_legacy.py   一次性迁移工具（旧单文件 → 模块），已迁移后无需再跑
+tests/build.cjs         校验产物与源码一致、产物仍是单文件结构
+```
+
+**改代码请只改 `src/` 下的模块，不要直接编辑 `SpellLab.html`**（产物会被下次构建覆盖）：
+
+```bash
+# 编辑 src/js/ 对应模块后：
+.venv\Scripts\python.exe tools/build.py       # 重建 SpellLab.html
+node tests/build.cjs                          # 确认源码与产物一致
+node tests/features.cjs && node tests/runtime.cjs && node tests/board.cjs
+```
+
+模块按数字前缀顺序拼进同一个 `<script>`，因此顶层 `const` / 函数跨模块共享同一个作用域，与原单文件完全等价。构建保证字节级可重现。
+
 ## 验证脚本
 
 全部是本地脚本，不联网、不改动学习数据：
 
 ```bash
+node tests/build.cjs       # 3 项：源码与产物一致、构建占位不残留、单文件结构完整
 node tests/runtime.cjs     # 84 项：存储、教材库、备份、桌面桥接，以及成长中心的
                            #        错词间隔复习、听写、闯关星级、学习统计等运行时逻辑
 node tests/board.cjs       # 15 项：字母格渲染、露出字母、输入判定、整词模式回退、长词折行
@@ -168,7 +192,7 @@ node tests/features.cjs    # 103 项：自动朗读延迟、练习记录、用�
                            #        词典校订音节表（gingerbread→gin·ger·bread 等）、自然拼读积分 5 词节流、听音打字字母大小写、
                            #        英美口音切换（marathon 英 ma·ra·thon / 美 mar·a·thon、朗读 en-GB/en-US）
 node textbooks/verify.cjs  # 16 个教材包用应用真实导入函数解析
-python -m unittest discover -s desktop/tests   # 25 项 Python 单测（Windows 用 .venv\Scripts\python.exe）
+python -m unittest discover -s desktop/tests   # 29 项 Python 单测（Windows 用 .venv\Scripts\python.exe）
 
 # 可选：重新生成拼读音节参考数据（仅开发时需要）
 .venv\Scripts\python.exe -m pip install pyphen

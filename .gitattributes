@@ -1,0 +1,6 @@
+# SpellLab.html 由 tools/build.py 以 LF 生成；Windows 上按 CRLF 检出以便双击打开，
+# 提交时 git 自动归一化为 LF，避免构建产物出现无意义的行尾 diff。
+SpellLab.html text eol=crlf
+src/** text eol=lf
+tools/*.py text eol=lf
+tests/*.cjs text eol=lf
