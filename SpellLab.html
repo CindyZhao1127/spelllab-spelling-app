@@ -3057,7 +3057,7 @@ const PH_SYLLABLE_DICT={
   centimeter:'cen|ti|me|ter', centimetre:'cen|ti|me|tre', children:'chil|dren',
   computer:'com|pu|ter', dictionary:'dic|tion|ary', diet:'di|et', family:'fam|i|ly',
   gingerbread:'gin|ger|bread', happy:'hap|py', hopeful:'hope|ful', information:'in|for|ma|tion',
-  instruct:'in|struct', jumping:'jump|ing', kilometer:'ki|lo|me|ter',
+  instruct:'in|struct', jumping:'jump|ing',   kilometer:'ki|lo|me|ter', microscope:'mi|cro|scope',
   /* 英美音节不同的词：值写成 {uk,us}，数据来自 soundwhy.com 对齐结果。
      marathon 英式 ma/ra/thon（r 归后一节），美式 mar/a/thon（ar 读 /er/ 成节）。 */
   marathon:{uk:'ma|ra|thon',us:'mar|a|thon'},
@@ -3075,6 +3075,9 @@ const PH_SOUND_FIX={
   'centimeter|2':'m iː', 'centimetre|2':'m iː', 'kilometer|2':'m iː',
   'kilometre|2':'m iː', 'kilometer|0':'k i', 'kilometre|0':'k i',
   'meter|0':'m iː', 'metre|0':'m iː',
+  /* microscope 词典切分 mi/cro/scope：mi 是开音节长音 /aɪ/，cro 的 o 弱读 /ə/，
+     scope 自带神奇 e 已给 əʊ（p 音节归属正确），只需修前两节避免读成短音。 */
+  'microscope|0':'m aɪ', 'microscope|1':'k r ə',
   'millimeter|2':'m iː', 'millimetre|2':'m iː',
   'ready|0':'r e d', 'ready|1':'ɪ', 'readable|0':'r iː d',
   'reading|0':'r iː d', 'tiger|0':'t aɪ',

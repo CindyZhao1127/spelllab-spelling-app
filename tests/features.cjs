@@ -1987,7 +1987,7 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     const o = JSON.parse(run(`JSON.stringify((function(){
       var w=['gingerbread','restaurant','beautiful','readable','reading','family','dictionary',
              'breakfast','bread','tiger','kilometre','kilometer','metre','meter',
-             'millimetre','millimeter'];
+             'millimetre','millimeter','microscope'];
       var r={}; w.forEach(function(x){ r[x]=phonicsChunks(x); }); return r;})())`));
     const letters = word => o[word].map(c=>c[0]);
     assert(JSON.stringify(letters('gingerbread')) === JSON.stringify(['gin','ger','bread']),
@@ -2010,7 +2010,23 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
       '公制单位词未按词典点分音节省略英美尾缀差异: '+JSON.stringify(o));
     assert(o.kilometre[2][1].indexOf('m iː')>=0 && o.kilometre[0][1].indexOf('k i')>=0,
       'kilometre 首音节 ki 与 me 的提示音应分别为短音 i 与长音 iː: '+JSON.stringify(o.kilometre));
-    return 'gin·ger·bread / read·able / ki·lo·me·tre 等均按词典校订表切分';
+    assert(JSON.stringify(letters('microscope')) === JSON.stringify(['mi','cro','scope']),
+      'microscope 应为 mi·cro·scope（词典拆分，不能被兜底规则切成 mic·ros·cope）: '+JSON.stringify(o.microscope));
+    assert(o.microscope[0][1].indexOf('m aɪ')>=0 && o.microscope[1][1].indexOf('k r ə')>=0 &&
+      o.microscope[2][1].indexOf('əʊ')>=0,
+      'microscope 音节提示音应体现长音 aɪ / 弱读 ə / 神奇 e 的 əʊ: '+JSON.stringify(o.microscope));
+    return 'gin·ger·bread / mi·cro·scope / ki·lo·me·tre 等均按词典校订表切分';
+  });
+
+  check('音节词典数据与代码同步：curated 每条都在 PH_SYLLABLE_DICT 中且拆分一致', () => {
+    const data = JSON.parse(fs.readFileSync(path.join(__dirname,'..','textbooks','phonics-syllables.json'),'utf8'));
+    const dict = JSON.parse(run('JSON.stringify(PH_SYLLABLE_DICT)'));
+    const missing = Object.keys(data.curated).filter(k => !(k in dict));
+    assert(missing.length === 0, 'curated 词条未进入代码词典（改了数据要同步 src/js/60-phonics-rules.js）: '+missing.join(','));
+    const mismatch = Object.keys(data.curated).filter(k => k in dict &&
+      data.curated[k].join('|') !== dict[k]);
+    assert(mismatch.length === 0, 'curated 与代码词典拆分不一致: '+mismatch.join(','));
+    return Object.keys(data.curated).length + ' 条 curated 全部与代码词典一致';
   });
 
   check('拼读教材来源复用顶部学习范围：无独立学段/教材/册下拉', () => {
