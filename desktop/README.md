@@ -59,10 +59,10 @@ SpellLab 桌面版  v1.0.0
 
 ## 从网页版迁移
 
-1. 网页版 →「存储」→「导出全库备份」，得到 `spelllab-backup-日期.json`。
+1. 网页版 → 顶部「数据 / 网盘同步」→「数据同步」→「导出全库备份」，得到 `spelllab-backup-日期.json`。
 2. 任选一种：
    - 把文件放进 `desktop/dist/data/`（打包 exe 则放进 exe 同目录的 `data/`），改名为 `spelllab-backup.json`（或保留 `spelllab-data*.json` / `spelllab-backup*.json` 前缀），**桌面版首次启动会自动导入**；
-   - 或在桌面版「存储」页点「从浏览器备份恢复」，直接选文件。
+   - 或在桌面版「数据同步」页点「从浏览器备份恢复」，直接选文件。
 
 反过来，桌面版「保存备份到磁盘」导出的 JSON 也能在网页版「从 JSON 备份恢复」里打开。
 
@@ -76,8 +76,15 @@ SpellLab 桌面版  v1.0.0
 | 朗读 | 浏览器语音引擎 | 窗口内置语音引擎（需系统英文语音包） |
 | 音效 | Web Audio | 同上 |
 | 文件自动同步 | File System Access API（Chrome/Edge） | 不需要，数据本来就在磁盘文件里 |
+| 网盘直连 | 不支持（浏览器 CORS / OAuth 回调限制） | **百度网盘 OAuth**：本地回环授权、凭证 DPAPI 加密、自动/手动备份 |
 
 `SpellLab.html` 通过服务端注入的 `window.__SPELLLAB_DESKTOP__` 标记判断运行模式：有标记时走 `/api/*` 读写 SQLite，没有标记时完全沿用原来的 IndexedDB + localStorage 逻辑。**同一份 HTML，两种运行方式互不干扰。**
+
+## 百度网盘 OAuth 直连
+
+`baidu_cloud.py` 是零三方依赖的百度网盘客户端：用本地回环端口接授权码，token 存在数据目录的 `baidu-oauth.dat`（Windows DPAPI 加密），上传走 `precreate → locateupload → superfile2 → create`，下载走 `filemetas(dlink=1) → GET dlink`。配置接口有 Origin 白名单，凭证不会写进 SQLite 快照或全库备份。
+
+前端入口：「数据同步 → 百度网盘直连（OAuth）」。需要先在百度网盘开放平台创建「软件 / 个人使用」应用，并把回调地址填成 `http://127.0.0.1:8791/oauth/callback`（约 1 小时后生效）。备份文件固定写入 `/apps/{应用名}/SpellLab/spelllab-backup.json`，只覆盖这个固定文件；冲突时界面让你选「用本机覆盖网盘」或「用网盘恢复本机」。主服务端口顺延时会自动跳过回调端口，避免授权码回调被本地服务自己接走；若仍提示端口占用，先关闭遗留的旧版 SpellLab 进程。
 
 ## 本地接口
 
@@ -94,6 +101,13 @@ SpellLab 桌面版  v1.0.0
 | `POST /api/import` | 导入全库备份并存库 |
 | `GET /api/open-folder` | 打开数据文件夹 |
 | `POST /api/reset` | 清空数据库 |
+| `GET /api/baidu/status` | 网盘配置/授权/冲突状态（不含密钥） |
+| `POST /api/baidu/config` | 保存 AppID / AppKey / SecretKey / 回调地址 |
+| `POST /api/baidu/auth/start` | 打开本地回环授权页 |
+| `GET /api/baidu/auth/status` | 轮询授权结果 |
+| `POST /api/baidu/backup/upload` | 上传全库备份（可强制覆盖） |
+| `POST /api/baidu/backup/download` | 下载备份并交给前端恢复 |
+| `POST /api/baidu/disconnect` | 删除本机网盘配置与令牌 |
 
 ## 打包成 exe（可选）
 

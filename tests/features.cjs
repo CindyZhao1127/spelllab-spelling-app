@@ -26,6 +26,8 @@ class El {
     if(/<input\b/.test(this._html)) this._input = new El('', 'input');
   }
   get innerHTML(){ return this._html; }
+  setAttribute(k, v){ (this.attrs || (this.attrs = {}))[k] = String(v); }
+  getAttribute(k){ return (this.attrs || {})[k] || null; }
   addEventListener(t, fn){ (this.listeners[t] = this.listeners[t] || []).push(fn); }
   appendChild(c){ this.children.push(c); return c; }
   querySelector(sel){
@@ -2323,6 +2325,169 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     assert(o.payloadFormat==='spelllab.backup.v1' && o.hasState,
       '备份格式被破坏: '+JSON.stringify(o));
     return '设备 id / 远端 mtime 检测就绪 · 备份格式保持 v1 兼容';
+  });
+
+  check('下拉菜单弹出层使用浅色高对比配色，避免灰底浅字', () => {
+    const css = (html.match(/<style>([\s\S]*?)<\/style>/) || [])[1] || '';
+    const scheme = /select\{[^}]*color-scheme:light/.test(css);
+    const option = /select option\{[^}]*background:#fff;color:#20264c/.test(css);
+    const group = /select optgroup\{[^}]*background:#f3f2ff;color:#3b327a/.test(css);
+    const checked = /select option:checked\{[^}]*background:#6d5df6;color:#fff/.test(css);
+    assert(scheme && option && group && checked, '下拉弹出层配色回归：' +
+      JSON.stringify({scheme:scheme,option:option,group:group,checked:checked}));
+    return 'option 白底深字 · optgroup 浅紫底深字 · 选中项深紫底白字';
+  });
+
+  check('网盘同步入口可从顶部直达数据同步页', () => {
+    const top = /id="btnStorage"[^>]*>\s*数据 \/ 网盘同步\s*</.test(html);
+    const tab = /id="tabStorage"[^>]*>\s*数据同步\s*</.test(html);
+    const panel = /id="dbFilePanel"[\s\S]*?网盘同步（绑定本地数据文件）/.test(html) &&
+                  /id="dbBindFile"/.test(html) && /id="dbSyncFile"/.test(html);
+    assert(top && tab && panel, '网盘同步入口不够显眼：' +
+      JSON.stringify({top:top,tab:tab,panel:panel}));
+    return '顶部「数据 / 网盘同步」→ 抽屉「数据同步」→「绑定本地文件」';
+  });
+
+  check('百度网盘 OAuth 面板与直连接口齐全', () => {
+    const ids = ['bdPanel','bdAppId','bdAppKey','bdSecretKey','bdAppName','bdRedirectUri',
+      'bdAuto','bdSaveConfig','bdAuthorize','bdUpload','bdDownload','bdConflictRow',
+      'bdUseLocal','bdUseRemote'];
+    const missing = ids.filter(id => !new RegExp('id="' + id + '"').test(html));
+    const routes = ['baidu/status','baidu/auth/start','baidu/auth/status',
+      'baidu/backup/upload','baidu/backup/download'].filter(r => code.indexOf(r) < 0);
+    const funcs = ['bdSaveConfig','bdAuthorize','bdUpload','bdDownload','bdDisconnect']
+      .filter(f => !new RegExp('function ' + f + '\\b').test(code));
+    assert(!missing.length && !routes.length && !funcs.length,
+      'OAuth 面板缺项：' + JSON.stringify({missing:missing,routes:routes,funcs:funcs}));
+    assert(/id="bdPanel"[^>]*hidden/.test(html), '百度网盘面板默认应只在桌面版显示');
+    return '配置/授权/上传/恢复/冲突按钮齐全 · 5 个直连接口已接入';
+  });
+
+  check('句子语法标注：开关默认关闭且标注条位于词槽下方', () => {
+    const btn = /id="btnGrammar"[^>]*>\s*语法标注：关\s*</.test(html);
+    const bar = /id="slots"[^>]*><\/div>\s*<div class="grammar-bar" id="grammarBar" hidden>/.test(html);
+    const css = /\.grammar-chip\.gr-sub b\{color:/.test(html);
+    const defOff = run('DEFAULT_STATE.settings.showGrammar') === false;
+    const normalized = run("normalizeState({settings:{}}).settings.showGrammar") === false;
+    assert(btn && bar && css && defOff && normalized,
+      '语法标注结构或默认值不对：' + JSON.stringify({btn:btn,bar:bar,css:css,defOff:defOff,normalized:normalized}));
+    return '默认关闭 · 词槽下方标注条 · 老存档不会被突然打开';
+  });
+
+  check('语法成分识别：陈述句主谓宾与疑问句倒装', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      var a=grammarRoles(tokenize('I like apples.',['我','喜欢','苹果'],''));
+      var b=grammarRoles(tokenize('She is my mother.',['她','是','我的','妈妈'],''));
+      var c=grammarRoles(tokenize('Do you like bananas?',['助动词','你','喜欢','香蕉'],''));
+      return {a:a,b:b,c:c};})())`));
+    assert(o.a[0]==='subject' && o.a[1]==='predicate' && o.a[2]==='object',
+      '陈述句主谓宾识别错误：'+JSON.stringify(o.a));
+    assert(o.b[0]==='subject' && o.b[1]==='predicate' && o.b[2]==='attribute' && o.b[3]==='predicative',
+      '系表结构识别错误：'+JSON.stringify(o.b));
+    assert(o.c[0]==='predicate' && o.c[1]==='subject' && o.c[2]==='predicate' && o.c[3]==='object',
+      '一般疑问句倒装识别错误：'+JSON.stringify(o.c));
+    return 'I like apples / She is my mother / Do you like bananas 三类句型正确';
+  });
+
+  check('语法成分识别：缩写、祈使句、不规则动词与无动词感叹句', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      return {
+        a:grammarRoles(tokenize("It's a fox.",['它','是','一只','狐狸'],'')),
+        b:grammarRoles(tokenize("Don't throw rubbish everywhere.",['别','扔','垃圾','到处'],'')),
+        c:grammarRoles(tokenize('The athlete won a medal.',['这位','运动员','赢得','一枚','奖牌'],'')),
+        d:grammarRoles(tokenize('Happy birthday to you!',['生日','快乐','祝你'],'')),
+        e:grammarRoles(tokenize("What's your name?",['你','叫','什么','名字'],''))
+      };})())`));
+    assert(o.a[0]==='subject|predicate' && o.a[2]==='predicative',
+      '缩写 It\'s 未按主语+谓语拆分：'+JSON.stringify(o.a));
+    assert(o.b[0]==='predicate' && o.b[1]==='predicate' && o.b[2]==='object' && o.b[3]==='adverbial',
+      '否定祈使句识别错误：'+JSON.stringify(o.b));
+    assert(o.c[2]==='predicate' && o.c[4]==='object',
+      '不规则过去式 won 未识别为谓语：'+JSON.stringify(o.c));
+    assert(o.d.slice(0,4).every(Boolean), '无动词感叹句仍有未标注成分：'+JSON.stringify(o.d));
+    assert(o.e[0]==='subject|predicate' && o.e[2]==='predicative',
+      '缩写 What\'s 拆分错误：'+JSON.stringify(o.e));
+    return '缩写/祈使/不规则动词/感叹句都给出成分，无「无法判断」';
+  });
+
+  check('语法标注条练习时只给中文提示，答对后才显示英文', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      var oldOn=state.settings.showGrammar, oldHints=state.settings.showHints;
+      var oldMode=mode, oldTokens=curTokens, oldSolved=solved;
+      state.settings.showGrammar=true; state.settings.showHints=true;
+      mode='sentence'; solved=false;
+      curTokens=tokenize('I like apples.',['我','喜欢','苹果'],'');
+      renderGrammarBar();
+      var before=$('grammarBar').innerHTML;
+      solved=true;
+      renderGrammarBar();
+      var after=$('grammarBar').innerHTML;
+      state.settings.showGrammar=oldOn; state.settings.showHints=oldHints;
+      mode=oldMode; curTokens=oldTokens; solved=oldSolved;
+      renderGrammarBar();
+      return {before:before,after:after};})())`));
+    assert(/主语<\/b>我/.test(o.before) && /宾语<\/b>苹果/.test(o.before),
+      '练习阶段未按中文提示标注：'+o.before);
+    assert(o.before.indexOf('apples')<0, '练习阶段泄露了英文答案：'+o.before);
+    assert(/宾语<\/b>apples/.test(o.after), '答对后未显示英文成分：'+o.after);
+    return '练习中中文提示 · 答对后英文单词 · 不提前泄题';
+  });
+
+  check('整体词库：6 套各自独立成教材类别，且不写进存档', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      var banks=WORDBANK_DATA.map(function(b){return {id:b.id,name:b.name,n:b.words.length,bookId:b.bookId};});
+      var old=JSON.parse(JSON.stringify(state.filter));
+      var per=banks.map(function(b){
+        state.filter={stageId:'all',gradeId:'all',bookId:b.bookId,volumeId:'all'};
+        var vis=units();
+        return {id:b.id,visible:vis.length,wb:vis.filter(function(u){return isWordBankUnit(u);}).length,
+                same:vis.every(function(u){return u.bankBookId===b.bookId&&Array.isArray(u.sentences);}),
+                scope:vis[0]?vis[0].scope:''};
+      });
+      state.filter=old;
+      return {banks:banks,per:per,
+              inState:JSON.stringify(state).indexOf('WORDBANK')>=0,
+              allOff:units().filter(function(u){return isWordBankUnit(u);}).length};
+    })())`));
+    assert(o.banks.length===6 && o.banks.every(b=>b.n>500&&/^b_wb_/.test(b.bookId)),
+      '词库数量、词数或类别 id 不对：'+JSON.stringify(o.banks));
+    assert(new Set(o.banks.map(b=>b.bookId)).size===6, '6 套词库的教材类别 id 必须各不相同');
+    assert(o.per.every(p=>p.visible===1&&p.wb===1&&p.same&&/整体词库/.test(p.scope)),
+      '每套词库应独立只显示自己一个完整单元：'+JSON.stringify(o.per));
+    assert(o.allOff===0 && !o.inState, '词库不应出现在默认存档/默认单元列表里');
+    return '6 套词库 / '+o.banks.reduce((a,b)=>a+b.n,0)+' 词 · 各自一个类别和完整单元 · 不进存档';
+  });
+
+  check('整体词库：旧合并类别存档迁移到独立类别', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      var s=normalizeState({filter:{stageId:'all',gradeId:'all',bookId:'b_wordbank',volumeId:'all'},
+                            books:[{id:'b_wordbank',name:'整体词库'}]});
+      return {books:s.books.filter(function(b){return /wordbank|b_wb_/.test(b.id);}).map(function(b){return b.id;}),
+              filter:s.filter.bookId,count:wordBankBooks().length};
+    })())`));
+    assert(o.count===6 && o.books.length===6 && o.books.indexOf('b_wordbank')<0,
+      '旧合并类别未迁移为 6 套独立类别：'+JSON.stringify(o));
+    assert(o.filter==='all', '旧筛选值应清空，实际 '+o.filter);
+    return '旧 b_wordbank 自动换成 6 套独立类别，筛选重置为全部';
+  });
+
+  check('整体词库：单词速记可取词，句子模式被挡回', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      var oldF=JSON.parse(JSON.stringify(state.filter)), oldM=mode, oldPos=unitPos;
+      var oldWord=wordCur;
+      state.filter={stageId:'all',gradeId:'all',bookId:'b_wb_primary',volumeId:'all'};
+      unitPos=0;
+      setMode('sentence');
+      var afterBlock=mode;
+      var picked=wordCur?wordCur[0]:'';
+      var enCount=(currentUnit().words||[]).length;
+      setMode('word');
+      state.filter=oldF; mode=oldM; unitPos=oldPos; wordCur=oldWord;
+      return {afterBlock:afterBlock,picked:picked,enCount:enCount};
+    })())`));
+    assert(o.afterBlock==='word', '句子模式未挡回单词速记，实际 mode='+o.afterBlock);
+    assert(o.picked && /^[A-Za-z]/.test(o.picked), '单词速记未成功取词：'+o.picked);
+    return '切到词库自动进单词速记，成功取词 '+o.picked+'（该库 '+o.enCount+' 词）';
   });
 
   const failed = results.filter(r => r[1] === 'FAIL');

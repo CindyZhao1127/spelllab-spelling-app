@@ -1,10 +1,13 @@
 /* ---------------- 学习面板 ---------------- */
 function renderDrawer(){
   const us=units();
-  $('unitList').innerHTML=us.map((u,i)=>
-    '<button class="unit-item'+(i===unitPos?' active':'')+'" data-unit="'+i+'">'+esc(u.name)+
-    '<small>'+esc(u.scope)+' · '+esc(u.book)+' · '+u.sentences.length+' 题 · '+((u.words||[]).length)+' 词</small></button>'
-  ).join('');
+  $('unitList').innerHTML=us.map((u,i)=>{
+    const bank=isWordBankUnit(u);
+    const detail=bank ? ('整体词库 · '+((u.words||[]).length)+' 词 · 单词速记')
+      : (esc(u.scope)+' · '+esc(u.book)+' · '+u.sentences.length+' 题 · '+((u.words||[]).length)+' 词');
+    return '<button class="unit-item'+(i===unitPos?' active':'')+'" data-unit="'+i+'">'+
+      esc(u.name)+'<small>'+detail+'</small></button>';
+  }).join('');
   const s=state.stats, acc=s.attempted?Math.round(s.correct/s.attempted*100)+'%':'--';
   $('statGrid').innerHTML=
     box(s.todayDone,'今日完成')+box(acc,'总正确率')+box(s.best,'最佳连对')+
@@ -56,7 +59,7 @@ function switchTab(t){
   if(t==='lottery') renderLottery();
   if(t==='manage') renderManagement();
   if(t==='library') renderLibrary();
-  if(t==='storage') renderStorage();
+  if(t==='storage'){ renderStorage(); if(DESKTOP && STORE.mode==='sqlite') bdStatus(true); }
 }
 function openDrawer(open,tab){
   $('drawer').classList.toggle('open',open);
@@ -65,7 +68,7 @@ function openDrawer(open,tab){
 }
 function setSetting(k,v){
   state.settings[k]=v; saveState(); renderDrawer();
-  if(k==='showHints'){ $('stage').classList.toggle('hide-hints',!v); $('sHints').classList.toggle('on',v); }
+  if(k==='showHints'){ $('stage').classList.toggle('hide-hints',!v); $('sHints').classList.toggle('on',v); renderGrammarBar(); }
   if(k==='letterBoxes') refreshBoardSettings();
   if(k==='difficulty'||k==='timerMode'){ startQuestionTimer(); if(mode!=='word') refreshBoardSettings(); }
   if(k==='smart' && mode!=='word'){

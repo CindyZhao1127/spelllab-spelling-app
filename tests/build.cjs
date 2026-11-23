@@ -8,6 +8,18 @@ const shellPath = path.join(root, 'src', 'shell.html');
 const jsDir = path.join(root, 'src', 'js');
 const htmlPath = path.join(root, 'SpellLab.html');
 const MARK_JS = '/* __SPELLLAB_JS_MODULES__ */';
+const MARK_BANK = '__SPELLLAB_WORDBANK_DATA__';
+const bankDir = path.join(root, 'textbooks', 'wordbank');
+const bankKeys = ['primary', 'junior', 'gaokao', 'cet4', 'cet6', 'itbiz'];
+// 与 tools/build.py 一致：把词库 JSON 压成数组字面量注入数据模块
+function wordbankLiteral(){
+  const banks = bankKeys.map(k => {
+    const obj = JSON.parse(fs.readFileSync(path.join(bankDir, k + '.json'), 'utf8'));
+    return {id: obj.id, name: obj.name, desc: obj.desc || '',
+      bookId: 'b_wb_' + k, words: obj.words};
+  });
+  return JSON.stringify(banks);
+}
 
 let fail = 0;
 function check(name, fn){
@@ -39,11 +51,13 @@ check('src/ 重建结果与 SpellLab.html 字节一致', () => {
   assert(shell.indexOf(MARK_JS) >= 0, 'shell 缺少 JS 占位标记');
   const mods = fs.readdirSync(jsDir).filter(f => f.endsWith('.js'))
     .sort((a, b) => numericPrefix(a) - numericPrefix(b) || a.localeCompare(b));
-  const js = mods.map(f => {
+  let js = mods.map(f => {
     const text = fs.readFileSync(path.join(jsDir, f), 'utf8');
     assert(text.indexOf('</script') < 0, f + ' 含 </script>');
     return text.endsWith('\n') ? text.slice(0, -1) : text;
   }).join('\n');
+  assert(js.indexOf(MARK_BANK) >= 0, '数据模块缺少词库占位标记');
+  js = js.replace(MARK_BANK, wordbankLiteral());
   const rebuilt = shell.replace(MARK_JS, js);
   const current = fs.readFileSync(htmlPath, 'utf8');
   // Windows 下 git checkout 会把产物转成 CRLF，源码模块是 LF；按行尾归一化后比较内容。
@@ -62,5 +76,44 @@ check('产物仍是单文件结构（script/style 各一处）', () => {
   return '单 <script> + 单 <style>，无占位残留';
 });
 
-console.log('\n合计 3 项，失败 ' + fail + ' 项');
+check('整体词库数据齐全且已内嵌进产物', () => {
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  assert(html.indexOf(MARK_BANK) < 0, '产物中残留词库占位标记');
+  const start = html.indexOf('const WORDBANK_DATA');
+  assert(start >= 0, '产物缺少 WORDBANK_DATA 常量');
+  const eq = html.indexOf('=', start);
+  const bracket = html.indexOf('[', eq);
+  // 从数组起点用 JSON 逐字符扫描到匹配的右括号（跳过字符串内的括号）
+  let depth = 0, inStr = false, esc = false, end = -1;
+  for (let i = bracket; i < html.length; i++) {
+    const c = html[i];
+    if (inStr) {
+      if (esc) esc = false;
+      else if (c === '\\') esc = true;
+      else if (c === '"') inStr = false;
+      continue;
+    }
+    if (c === '"') inStr = true;
+    else if (c === '[' || c === '{') depth++;
+    else if (c === ']' || c === '}') {
+      depth--;
+      if (depth === 0) { end = i + 1; break; }
+    }
+  }
+  assert(end > bracket, 'WORDBANK_DATA 数组边界解析失败');
+  const banks = JSON.parse(html.slice(bracket, end));
+  assert(banks.length === bankKeys.length, '词库数量不对：' + banks.length);
+  let total = 0;
+  banks.forEach(b => {
+    assert(Array.isArray(b.words) && b.words.length > 500, b.name + ' 词数异常');
+    assert(/^b_wb_[a-z0-9]+$/.test(b.bookId || ''), b.name + ' 缺少独立教材类别 id');
+    assert(b.words.every(w => Array.isArray(w) && w.length === 2 &&
+      /^[A-Za-z][A-Za-z'-]*$/.test(w[0]) && w[1]), b.name + ' 含非法词条');
+    total += b.words.length;
+  });
+  assert(new Set(banks.map(b => b.bookId)).size === banks.length, '词库类别 id 有重复');
+  return banks.length + ' 套独立词库 / 共 ' + total + ' 词已内嵌';
+});
+
+console.log('\n合计 4 项，失败 ' + fail + ' 项');
 if(fail) process.exitCode = 1;

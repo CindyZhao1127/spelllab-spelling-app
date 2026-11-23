@@ -43,9 +43,10 @@ function setUnitScope(id,key,v){
   renderFilters(); setMode(mode); renderDrawer(); toast('课程归属已更新','ok');
 }
 function scopeOptions(list,cur){
-  /* 归属下拉同样按学段分组，学段名直接作为 optgroup 标签 */
+  /* 归属下拉同样按学段分组，学段名直接作为 optgroup 标签；
+     内置整体词库是固定练习类别，不能当作普通教材的归属 */
   if(list===state.grades) return optionGroups(list,g=>stageOfGrade(g.id),cur,'未分类','none');
-  return optionGroups(list,stageOfBook,cur,'未分类','none');
+  return optionGroups(list.filter(b=>!isWordBankBookId(b&&b.id)),stageOfBook,cur,'未分类','none');
 }
 function renderGrades(){
   const counts={}; allUnits().forEach(u=>counts[u.gradeId]=(counts[u.gradeId]||0)+1);
@@ -58,7 +59,8 @@ function renderGrades(){
 }
 function renderBooks(){
   const counts={}; allUnits().forEach(u=>counts[u.bookId]=(counts[u.bookId]||0)+1);
-  $('bookList').innerHTML=state.books.length?state.books.map(b=>
+  const books=state.books.filter(b=>!isWordBankBookId(b&&b.id));
+  $('bookList').innerHTML=books.length?books.map(b=>
     '<div class="manage-row"><span class="mr-name">'+esc(b.name)+'</span>'+
     '<span class="mr-count">'+(counts[b.id]||0)+' 单元</span>'+
     '<button class="mini-icon" data-rename-book="'+esc(b.id)+'" title="改名">'+icon('edit')+'</button>'+
@@ -66,7 +68,8 @@ function renderBooks(){
   ).join(''):'<div class="empty">还没有教材版本，添加一个吧</div>';
 }
 function renderUnitMetaList(){
-  $('unitMetaList').innerHTML=allUnits().map(u=>
+  /* 词库单元的归属固定内置，不出现在可编辑列表里，避免误改后筛选失效 */
+  $('unitMetaList').innerHTML=allUnits().filter(u=>!isWordBankUnit(u)).map(u=>
     '<div class="unit-meta-row"><div class="umr-top">'+esc(u.name)+
       ' <span style="color:var(--muted);font-weight:400">· '+u.sentences.length+' 题</span></div>'+
       '<div class="umr-row">'+

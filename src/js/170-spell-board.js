@@ -86,6 +86,8 @@ function renderBoard(tokens, cn, label, tip, onComplete){
     slots.push(el); draft.push('');
   });
   if(useBoxes) slots.forEach((s,i)=>{ if(s) paintBoxes(i); });
+  syncGrammarToggle();
+  renderGrammarBar();
   renderHeader();
   updateChunkMain();
   startQuestionTimer();
@@ -218,6 +220,7 @@ function finishQuestion(){
   $('scEn').textContent=cq.q.en;
   $('scNote').textContent=assisted?'不借助提示再做一次，记忆会更牢':'已加入掌握清单 · 连对 '+state.stats.streak+' 题';
   $('successCard').hidden=false;
+  renderGrammarBar(); // 答对后才显示英文成分，练习阶段只给中文提示
   renderHeader(); renderDrawer(); updateChunkMain();
   if(state.settings.speakOnFinish && mode!=='word'){
     const en=cq.q.en;

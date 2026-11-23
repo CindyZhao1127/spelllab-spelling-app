@@ -1,0 +1,42 @@
+{
+  "format": "spelllab.wordbank.v1",
+  "source": "qwerty-learner (MIT) + SpellLab textbooks",
+  "banks": [
+    {
+      "id": "wb_primary",
+      "name": "小学词汇大全",
+      "file": "wordbank/primary.json",
+      "count": 784
+    },
+    {
+      "id": "wb_junior",
+      "name": "初中词汇大全",
+      "file": "wordbank/junior.json",
+      "count": 1824
+    },
+    {
+      "id": "wb_gaokao",
+      "name": "高考3500词",
+      "file": "wordbank/gaokao.json",
+      "count": 3547
+    },
+    {
+      "id": "wb_cet4",
+      "name": "大学英语四级",
+      "file": "wordbank/cet4.json",
+      "count": 2607
+    },
+    {
+      "id": "wb_cet6",
+      "name": "大学英语六级",
+      "file": "wordbank/cet6.json",
+      "count": 2343
+    },
+    {
+      "id": "wb_itbiz",
+      "name": "IT与商务英语",
+      "file": "wordbank/itbiz.json",
+      "count": 3877
+    }
+  ]
+}

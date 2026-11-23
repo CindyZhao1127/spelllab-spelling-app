@@ -13,6 +13,8 @@ function unitMeta(u){
 }
 function allUnits(){
   const base = BUILTIN_UNITS.slice();
+  /* 六套整体词库：运行时虚拟注入，不写入存档；各自是一个独立教材类别，不受年级/册别影响 */
+  wordBankUnits().forEach(u=>base.push(u));
   if(state.custom.length){
     const cm=state.customMeta||{};
     base.push({
@@ -49,6 +51,10 @@ let filterFallback=false;
 function unitsInScope(){
   const f=state.filter||{};
   return allUnits().filter(u=>{
+    if(isWordBankUnit(u)){
+      /* 词库单元只看自己那套教材类别：选中哪套词库才显示哪套，避免混进普通教材 */
+      return !!f.bookId && f.bookId===(u.bankBookId||u.bookId);
+    }
     if(f.stageId && f.stageId!=='all' && stageOfGrade(u.gradeId)!==f.stageId) return false;
     if(f.gradeId && f.gradeId!=='all' && !sameGrade(u.gradeId,f.gradeId)) return false;
     if(f.bookId && f.bookId!=='all' && u.bookId!==f.bookId) return false;

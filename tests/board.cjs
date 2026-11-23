@@ -35,6 +35,8 @@ class El {
     if(/<input\b/.test(this._html)) this._input = new El('', 'input');
   }
   get innerHTML(){ return this._html; }
+  setAttribute(k, v){ (this.attrs || (this.attrs = {}))[k] = String(v); }
+  getAttribute(k){ return (this.attrs || {})[k] || null; }
   addEventListener(t, fn){ (this.listeners[t] = this.listeners[t] || []).push(fn); }
   appendChild(c){ this.children.push(c); return c; }
   querySelector(sel){

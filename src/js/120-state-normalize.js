@@ -34,6 +34,14 @@ function normalizeState(s){
   if(out.history.length>HISTORY_LIMIT) out.history=out.history.slice(-HISTORY_LIMIT);
   if(!out.grades.length) out.grades=clone(DEFAULT_GRADES);
   if(!out.books.length) out.books=clone(DEFAULT_BOOKS);
+  /* 六套整体词库：各自作为独立教材类别，老存档幂等补齐；旧合并类别迁移掉 */
+  wordBankBooks().forEach(function(b){
+    if(!out.books.some(x=>x&&x.id===b.id)) out.books.push({id:b.id,name:b.name});
+  });
+  out.books=out.books.filter(x=>x&&x.id!==WORDBANK_LEGACY_BOOK_ID);
+  if(out.filter.bookId===WORDBANK_LEGACY_BOOK_ID ||
+     (isWordBankBookId(out.filter.bookId) && !wordBankBooks().some(b=>b.id===out.filter.bookId)))
+    out.filter.bookId='all';
   /* 学制与学段筛选：默认六三制 / 全部学段；旧存档缺字段时自动补齐 */
   out.system=out.system==='54'?'54':'63';
   if(!out.filter.stageId||!STAGES.some(x=>x.id===out.filter.stageId)) out.filter.stageId='all';
@@ -155,6 +163,8 @@ function normalizeState(s){
   const st=out.settings;
   /* 英美口音：影响朗读 voice 和拼读音节/音素校订（数据源 soundwhy.com） */
   if(st.accent!=='us') st.accent='uk';
+  /* 语法成分标注默认关闭；老存档缺字段时不会突然打开 */
+  st.showGrammar=!!st.showGrammar;
   st.wordGap=Math.max(10,Math.min(44,Number(st.wordGap)||22));
   st.speakDelayMs=Math.max(0,Math.min(600,Number(st.speakDelayMs)||0));
   st.revealLetters=Math.max(0,Math.min(3,Number(st.revealLetters)||0));

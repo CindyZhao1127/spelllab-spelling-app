@@ -22,8 +22,13 @@ function renderFilters(){
   const grades=gradeOptions(systemId());
   $('gradeFilter').innerHTML=optionGroups(grades,x=>stageOfGrade(x.id),
     canonicalGradeId(f.gradeId||'all',systemId()),'全部年级','all',x=>x.name,stage);
-  $('bookFilter').innerHTML=optionGroups(state.books,stageOfBook,f.bookId||'all',
-    '全部教材','all',null,stage);
+  const bookOpts=state.books.filter(b=>b&&!isWordBankBookId(b.id));
+  const bankOpts=wordBankBooks();
+  $('bookFilter').innerHTML=optionGroups(bookOpts,stageOfBook,f.bookId||'all',
+    '全部教材','all',null,stage)+
+    '<optgroup label="整体词库（每套独立练习）">'+bankOpts.map(b=>
+      '<option value="'+esc(b.id)+'"'+(f.bookId===b.id?' selected':'')+'>'+esc(b.name)+'</option>'
+    ).join('')+'</optgroup>';
   $('volumeFilter').innerHTML='<option value="all">全部册别</option>'+
     VOLUMES.map(v=>'<option value="'+esc(v.id)+'">'+esc(v.name)+'</option>').join('');
   $('gradeFilter').value=canonicalGradeId(f.gradeId||'all',systemId());
@@ -40,6 +45,11 @@ function setFilter(k,v){
     state.filter.gradeId='all'; state.filter.bookId='all'; state.filter.volumeId='all';
   }
   saveState(); resetScopePosition();
+  /* 切到任一整体词库时直接进入单词速记，避免空句子模式报错 */
+  if(k==='bookId' && isWordBankBookId(v) && isWordBankUnit(currentUnit())){
+    const bk=wordBankBooks().find(b=>b.id===v);
+    mode='word'; toast((bk?bk.name:'整体词库')+' · 已切换到单词速记','ok');
+  }
   renderFilters(); renderLibrary(); setMode(mode); renderDrawer();
 }
 function setSystem(v){
@@ -56,7 +66,9 @@ function setSystem(v){
 function renderHeader(){
   if(typeof renderProfileChip==='function') renderProfileChip();
   const u=currentUnit();
-  $('courseName').textContent=(filterFallback?'该范围暂无课程 · ':'')+u.scope+' · '+u.name+' ('+u.sentences.length+'题)';
+  const bank=isWordBankUnit(u);
+  const count=bank?(u.words||[]).length:(u.sentences||[]).length;
+  $('courseName').textContent=(filterFallback?'该范围暂无课程 · ':'')+u.scope+' · '+u.name+' ('+count+(bank?'词':'题')+')';
   const total = order().length||1;
   $('progressBar').style.width = ((qPos+1)/total*100)+'%';
   $('statStreak').textContent = state.stats.streak;

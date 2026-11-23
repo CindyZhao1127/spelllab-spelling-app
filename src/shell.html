@@ -179,6 +179,28 @@
     white-space:normal;overflow-wrap:anywhere;pointer-events:none;
   }
   .hide-hints .slot .hint{visibility:hidden}
+  /* ---------- 句子语法成分标注条（词槽下方） ---------- */
+  .grammar-bar{
+    margin:14px auto 0;max-width:min(760px,96%);display:flex;flex-wrap:wrap;
+    justify-content:center;align-items:center;gap:6px 8px;
+  }
+  .grammar-bar[hidden]{display:none}
+  .grammar-note{width:100%;text-align:center;font-size:11px;color:rgba(160,172,215,.62);letter-spacing:.3px}
+  .grammar-chip{
+    padding:4px 10px;border-radius:999px;font-size:12px;line-height:1.5;
+    background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);
+    color:#e2e7ff;white-space:nowrap;
+  }
+  .grammar-chip b{font-weight:800;margin-right:6px}
+  .grammar-chip.gr-sub b{color:#8fd0ff}
+  .grammar-chip.gr-pred b{color:#ff9db3}
+  .grammar-chip.gr-obj b{color:#ffd58f}
+  .grammar-chip.gr-predc b{color:#c3a6ff}
+  .grammar-chip.gr-attr b{color:#8fe0c0}
+  .grammar-chip.gr-adv b{color:#a8c4ff}
+  .grammar-chip.gr-comp b{color:#f0a9e6}
+  .grammar-chip.gr-conj b{color:#c8d0e8}
+  .grammar-chip.gr-lead b{color:#c8d0e8}
   .slot.correct .answer{color:var(--ok)}
   .slot.correct .line{background:rgba(92,226,160,.75)}
   .slot.correct::after{
@@ -229,6 +251,10 @@
     background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:#cbd3ff;
   }
   .meta-chip.timer{font-variant-numeric:tabular-nums;min-width:88px;text-align:center}
+  /* 语法成分标注：与难度/计时胶囊同一行，默认关闭 */
+  button.meta-chip.grammar-toggle{cursor:pointer;font-family:inherit;transition:background .18s,border-color .18s,color .18s}
+  button.meta-chip.grammar-toggle:hover{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.24)}
+  button.meta-chip.grammar-toggle.on{background:rgba(146,124,255,.28);border-color:rgba(178,160,255,.62);color:#f3efff}
   .meta-chip.timer.urgent{background:rgba(255,122,134,.18);border-color:rgba(255,122,134,.5);color:#ffb3ba;animation:pulse 1s infinite}
   @keyframes pulse{50%{opacity:.55}}
   .points-chip{display:flex;align-items:center;gap:7px;padding:5px 12px;border-radius:999px;
@@ -770,6 +796,7 @@
     .slots{column-gap:var(--word-gap,16px)}
     .lbox{width:clamp(17px,5vw,23px);height:clamp(27px,8vw,34px);font-size:clamp(15px,4.4vw,20px)}
     .tips{font-size:11px}
+    .grammar-chip{font-size:11px;padding:3px 8px}
     .chunk-card{width:min(200px,84vw);min-height:126px}
     .filter-bar{padding:8px 14px 0;gap:8px;font-size:11px}
     .filter-group{gap:6px}
@@ -796,9 +823,13 @@
     appearance:none;-webkit-appearance:none;padding:7px 26px 7px 11px;border-radius:9px;
     background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);
     color:var(--text);font-size:12px;font-family:inherit;cursor:pointer;max-width:190px;
+    /* 弹出层跟随系统浅色方案：避免 Chromium 把 optgroup 画成灰底浅字 */
+    color-scheme:light;
   }
   select:hover{background:rgba(255,255,255,.16)}
-  select option{background:#20264c;color:#fff}
+  select option{background:#fff;color:#20264c}
+  select option:checked{background:#6d5df6;color:#fff}
+  select optgroup{background:#f3f2ff;color:#3b327a;font-style:normal;font-weight:700}
   .fb-info{font-size:11px;color:#8f9bca}
   .link-btn{font-size:11px;font-weight:700;color:#b9a8ff;border-bottom:1px dashed rgba(185,168,255,.6);padding:2px 1px}
   .link-btn:hover{color:#fff}
@@ -916,6 +947,11 @@
   .db-row .lbl{color:var(--muted);flex:none}
   .db-row .val{font-weight:700;text-align:right;word-break:break-all}
   .db-note{font-size:10px;color:var(--muted);line-height:1.75;margin-top:9px}
+  .bd-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 10px;margin-top:10px}
+  .bd-form label{display:flex;flex-direction:column;gap:4px;font-size:10px;color:var(--muted)}
+  .bd-form .field{font-size:11px;padding:7px 9px}
+  .bd-form .wide{grid-column:1/-1}
+  .bd-form input[type=checkbox]{accent-color:#8b7bff}
 
   /* ---------- 统一微交互：按压反馈 / 悬浮抬升 / 焦点环 ---------- */
   .mode-switch button,.accent-switch button,.grammar-tabs button,.drawer-tabs button,
@@ -1682,7 +1718,7 @@ body.td-typing #typingView { height: 100%; }
     <div class="filter-links">
       <button class="link-btn" id="btnManage">管理年级 / 教材</button>
       <button class="link-btn" id="btnLibrary">教材库</button>
-      <button class="link-btn" id="btnStorage">本地数据库</button>
+      <button class="link-btn" id="btnStorage" title="数据库、全库备份与网盘同步">数据 / 网盘同步</button>
     </div>
   </div>
   <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
@@ -1694,12 +1730,16 @@ body.td-typing #typingView { height: 100%; }
         <div class="stage-meta">
           <span class="meta-chip" id="diffChip">正常</span>
           <span class="meta-chip timer" id="timerChip">用时 00:00</span>
+          <button type="button" class="meta-chip grammar-toggle" id="btnGrammar"
+                  title="在词槽下方标出主语、谓语、宾语等语法成分（默认关闭）"
+                  aria-pressed="false">语法标注：关</button>
         </div>
         <h1 class="question-cn" id="questionCn"></h1>
         <div class="phase-bar" id="phaseBar" hidden></div>
         <div class="chunk-cards" id="chunkCards" hidden></div>
         <div class="chunk-progress" id="chunkProgress" hidden></div>
         <div class="slots" id="slots"></div>
+        <div class="grammar-bar" id="grammarBar" hidden></div>
         <div class="feedback" id="feedback"></div>
         <div class="success-card" id="successCard" hidden>
           <div class="sc-title" id="scTitle">完全正确！</div>
@@ -2237,7 +2277,7 @@ body.td-typing #typingView { height: 100%; }
       <button data-tab="lottery" id="tabLottery">抽奖</button>
       <button data-tab="manage" id="tabManage">管理</button>
       <button data-tab="library" id="tabLibrary">教材库</button>
-      <button data-tab="storage" id="tabStorage">存储</button>
+      <button data-tab="storage" id="tabStorage">数据同步</button>
     </div>
 
     <div class="tab-page" id="pageLearn">
@@ -2531,8 +2571,8 @@ body.td-typing #typingView { height: 100%; }
       </div>
 
       <div class="panel" id="dbFilePanel">
-        <h3>同步到本地数据文件</h3>
-        <div class="panel-note">绑定一个真实的 .json 文件后，每次学习数据变化都会自动写回，可直接提交到 Git、放进网盘或拷到另一台电脑。需 Chrome / Edge 且由你点击授权。</div>
+        <h3>网盘同步（绑定本地数据文件）</h3>
+        <div class="panel-note">先在坚果云 / OneDrive / 百度网盘的同步目录里建一个 <code>spelllab.json</code>，再点下面的「绑定本地文件」选中它。之后每次学习数据变化都会自动写回，另一台设备打开后点「立即同步」即可恢复授权并读取该文件。需 Chrome / Edge；Safari / Firefox 请用下方「导出全库备份 / 从 JSON 备份恢复」。</div>
         <div id="dbFileState"></div>
         <div class="btn-row tight" style="margin-top:8px">
           <button class="mini-btn primary sm" id="dbBindFile">绑定本地文件</button>
@@ -2542,6 +2582,34 @@ body.td-typing #typingView { height: 100%; }
         <div class="btn-row tight" id="dbConflictRow" style="margin-top:8px" hidden>
           <button class="mini-btn sm" id="dbUseLocal">用本机数据覆盖文件</button>
           <button class="mini-btn sm" id="dbUseRemote">从文件恢复本机</button>
+        </div>
+      </div>
+
+      <div class="panel" id="bdPanel" hidden>
+        <h3>百度网盘直连（OAuth）</h3>
+        <div class="panel-note">仅桌面版可用。先在 <a href="https://pan.baidu.com/union/console/applist" target="_blank" rel="noopener">百度网盘开放平台</a> 完成实名认证并创建「软件 / 个人使用」应用，拿到 AppID、AppKey、SecretKey；在「安全设置」里把回调地址填成 <code id="bdRedirectHint">http://127.0.0.1:8791/oauth/callback</code>（填写后约 1 小时生效）。应用名称要和下方的「应用文件夹名」一致，备份只会写进你网盘的 <code>/apps/应用名/SpellLab/</code> 目录。授权失败且提示回调端口被占用时，先关掉其他旧 SpellLab 窗口再点「授权登录」。</div>
+        <div class="bd-form">
+          <label>AppID<input class="field" id="bdAppId" type="text" autocomplete="off" placeholder="开放平台应用 ID"></label>
+          <label>AppKey<input class="field" id="bdAppKey" type="text" autocomplete="off" placeholder="应用的 AppKey"></label>
+          <label class="wide">SecretKey<input class="field" id="bdSecretKey" type="password" autocomplete="new-password" placeholder="只保存在本机，不进备份文件"></label>
+          <label>应用文件夹名<input class="field" id="bdAppName" type="text" autocomplete="off" placeholder="创建应用时填的名称"></label>
+          <label>回调地址<input class="field" id="bdRedirectUri" type="text" value="http://127.0.0.1:8791/oauth/callback"></label>
+          <label class="wide"><span><input id="bdAuto" type="checkbox"> 学习数据变化后自动备份（约 20 秒合并一次）</span></label>
+        </div>
+        <div id="bdState"></div>
+        <div class="btn-row tight" style="margin-top:8px">
+          <button class="mini-btn primary sm" id="bdSaveConfig">保存配置</button>
+          <button class="mini-btn sm" id="bdAuthorize">授权登录</button>
+          <button class="mini-btn sm" id="bdRefresh">刷新状态</button>
+          <button class="mini-btn danger sm" id="bdDisconnect">解除绑定</button>
+        </div>
+        <div class="btn-row tight" style="margin-top:8px">
+          <button class="mini-btn sm" id="bdUpload">上传备份</button>
+          <button class="mini-btn sm" id="bdDownload">从网盘恢复</button>
+        </div>
+        <div class="btn-row tight" id="bdConflictRow" style="margin-top:8px" hidden>
+          <button class="mini-btn sm" id="bdUseLocal">用本机覆盖网盘</button>
+          <button class="mini-btn sm" id="bdUseRemote">用网盘恢复本机</button>
         </div>
       </div>
 
@@ -2576,7 +2644,7 @@ body.td-typing #typingView { height: 100%; }
           <button class="mini-btn sm" id="dbImportBackup">从浏览器备份恢复</button>
           <input class="file-input" type="file" id="desktopImportFile" accept=".json,application/json">
         </div>
-        <div class="db-note">从网页版迁移：在网页版「存储」页导出全库备份，把文件放到 data/ 目录并命名为 spelllab-backup.json，桌面版首次启动会自动导入；也可在这里直接选择文件恢复。</div>
+        <div class="db-note">从网页版迁移：在网页版顶部「数据 / 网盘同步」→「数据同步」页导出全库备份，把文件放到 data/ 目录并命名为 spelllab-backup.json，桌面版首次启动会自动导入；也可在这里直接选择文件恢复。</div>
       </div>
     </div>
   </aside>

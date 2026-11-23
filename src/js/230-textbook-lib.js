@@ -306,7 +306,8 @@ function emitJSON(filename,obj){
   return text;
 }
 function renderLibrary(){
-  const bs=state.books||[],sc=activeScopeIds();
+  /* 整体词库是内置练习类别，不作为「新建教材包」的归属，避免误选 */
+  const bs=(state.books||[]).filter(b=>b&&!isWordBankBookId(b.id)),sc=activeScopeIds();
   const stage=(state.filter&&state.filter.stageId)||'all';
   const gs=gradeOptions(systemId());
   renderStageControls();

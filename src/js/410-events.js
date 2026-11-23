@@ -1,7 +1,14 @@
 /* ---------------- 事件绑定 ---------------- */
 function setMode(m){
+  /* 整体词库无句子：句子/分步模式一律挡回单词速记，避免空题渲染崩溃 */
+  if((m==='sentence'||m==='chunk') && typeof isWordBankUnit==='function' && isWordBankUnit(currentUnit())){
+    m='word';
+    if(typeof toast==='function') toast('整体词库请用「单词速记」模式练习');
+  }
   var prev = mode;
   mode=m;
+  /* 语法标注只属于句子/字母格练习区，切到其它模式立即收起 */
+  if($('grammarBar') && ['sentence','chunk'].indexOf(m)<0) $('grammarBar').hidden=true;
   clearTimeout(chunkTimer);
   // 切模式时收起学习面板与遮罩，避免深色抽屉盖住新视图（打字模式尤其明显）
   if($('drawer') && $('drawer').classList.contains('open')) openDrawer(false);
@@ -73,6 +80,9 @@ function bind(){
       hideModal(); sessionSuspended=false; snapshotSession();
     }
   });
+
+  /* 句子语法成分标注开关（默认关闭，只影响当前练习区的展示） */
+  if($('btnGrammar')) $('btnGrammar').addEventListener('click',toggleGrammar);
 
   /* 练习显示 / 计时 / 难度 */
   $('gapRange').addEventListener('input',e=>{
@@ -204,6 +214,10 @@ function bind(){
     unitPos=Number(b.dataset.unit); qPos=0; wordCur=null;
     unitRoundCount=0; unitRoundPrompted=false;
     sessionOrder={unitId:'',list:[]};
+    /* 整体词库没有句子，只能练单词速记 */
+    if(isWordBankUnit(currentUnit()) && (mode==='sentence'||mode==='chunk')){
+      setMode('word'); toast('整体词库用「单词速记」模式练习','ok');
+    }
     openDrawer(false);
     setMode(mode);
     renderHeader(); renderDrawer();

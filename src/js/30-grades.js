@@ -23,7 +23,7 @@ function volumeName(id){ const v=VOLUMES.find(x=>x.id===id); return v?v.name:'�
 function packVolume(p){ return (p && p.volume!=null) ? p.volume : (inferVolume(p&&p.name)||''); }
 const clone = o => JSON.parse(JSON.stringify(o));
 const HISTORY_LIMIT = 500;   // 练习记录最多保留 500 条，避免存档无限膨胀
-function gradeName(id){ const g=(state.grades||[]).find(x=>x.id===id); return g?g.name:'未分类'; }
+function gradeName(id){ if(id==='wb') return '整体词库'; const g=(state.grades||[]).find(x=>x.id===id); return g?g.name:'未分类'; }
 function bookName(id){ const b=(state.books||[]).find(x=>x.id===id); return b?b.name:'未分类'; }
 /* 学段 / 学制：小学 / 初中 / 其他；六三制（小学 1–6，初中 7–9）或五四制（小学 1–5，初中 6–9）。
    初中教材包导入时会自建 g7~g9 / j1~j3，名称也是「初中七年级」，这里统一折算成年级序号，
@@ -89,6 +89,7 @@ function sameGrade(a,b){
   return x>0&&y>0&&x===y;
 }
 function stageOfBook(b){
+  if(isWordBankBookId(b&&b.id)) return 'other';
   const nm=String((b&&b.name)||'');
   if(/初中|七年级|八年级|九年级/.test(nm)) return 'junior';
   return systemId()==='54'&&/六年级/.test(nm)?'junior':'primary';

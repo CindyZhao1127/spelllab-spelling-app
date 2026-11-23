@@ -22,9 +22,11 @@ import subprocess
 import sys
 import threading
 import time
+import urllib.parse
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
+from baidu_cloud import BaiduCloud
 from storage import Store, default_db_path
 
 APP_VERSION = "1.0.0"
@@ -117,12 +119,20 @@ class Handler(BaseHTTPRequestHandler):
             return False
         return True
 
+    def _baidu(self):
+        cloud = getattr(self.server, "baidu", None)
+        if cloud is None:
+            self._json({"error": "当前服务未启用百度网盘直连"}, 400)
+            return None
+        return cloud
+
     def _route(self, method: str):
         if not self._guard_host():
             return
         if not self._guard_origin(method):
             return
         path = self.path.split("?", 1)[0].rstrip("/") or "/"
+        query = urllib.parse.parse_qs(self.path.split("?", 1)[1] if "?" in self.path else "")
         store = self.server.store  # type: Store
         try:
             if method == "GET" and path in ("/", "/index.html", "/SpellLab.html"):
@@ -140,7 +150,11 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(store.info())
             if method == "POST" and path == "/api/save":
                 state = json.loads(self._body().decode("utf-8"))
-                return self._json(store.save(state))
+                result = store.save(state)
+                cloud = getattr(self.server, "baidu", None)
+                if cloud is not None:
+                    cloud.schedule_auto()
+                return self._json(result)
             if method == "POST" and path == "/api/export":
                 payload = json.loads(self._body().decode("utf-8"))
                 target = store.export_text(payload.get("text") or "",
@@ -150,6 +164,45 @@ class Handler(BaseHTTPRequestHandler):
                 state = store.import_text(self._body().decode("utf-8"))
                 result = store.save(state)
                 return self._json({"ok": True, "state": state, "save": result})
+            # ---- 百度网盘 OAuth 直连（仅桌面版） ----
+            if method == "GET" and path == "/api/baidu/status":
+                cloud = self._baidu()
+                if cloud is None:
+                    return
+                return self._json(cloud.status(check_remote=(query.get("remote", ["1"])[0] != "0")))
+            if method == "GET" and path == "/api/baidu/auth/status":
+                cloud = self._baidu()
+                if cloud is None:
+                    return
+                return self._json(cloud.auth_status())
+            if method == "POST" and path == "/api/baidu/config":
+                cloud = self._baidu()
+                if cloud is None:
+                    return
+                data = json.loads(self._body().decode("utf-8"))
+                return self._json(cloud.configure(data))
+            if method == "POST" and path == "/api/baidu/auth/start":
+                cloud = self._baidu()
+                if cloud is None:
+                    return
+                return self._json(cloud.start_auth())
+            if method == "POST" and path == "/api/baidu/backup/upload":
+                cloud = self._baidu()
+                if cloud is None:
+                    return
+                body = json.loads(self._body().decode("utf-8") or "{}")
+                return self._json(cloud.upload_backup(body.get("text") or "",
+                                                      force=body.get("force") is True))
+            if method == "POST" and path == "/api/baidu/backup/download":
+                cloud = self._baidu()
+                if cloud is None:
+                    return
+                return self._json(cloud.download_backup())
+            if method == "POST" and path == "/api/baidu/disconnect":
+                cloud = self._baidu()
+                if cloud is None:
+                    return
+                return self._json(cloud.disconnect())
             if method == "GET" and path == "/api/open-folder":
                 folder = str(store.db_path.parent)
                 if sys.platform == "win32":
@@ -204,10 +257,13 @@ def port_in_use(port: int) -> bool:
         probe.close()
 
 
-def make_server(port: int, store: Store):
+def make_server(port: int, store: Store, reserve_ports=()):
     requested = port
+    # 回调端口（默认 8791）必须留给 OAuth 本地监听，主服务顺延时绝不能占用，
+    # 否则百度授权码回调会被主服务接走，表现为「保存配置后授权失败」。
+    reserved = {int(p) for p in (reserve_ports or ()) if p}
     for candidate in [port] + list(range(port + 1, port + 20)) + [0]:
-        if port_in_use(candidate):
+        if candidate in reserved or port_in_use(candidate):
             continue
         try:
             server = ThreadingHTTPServer(("127.0.0.1", candidate), Handler)
@@ -305,7 +361,9 @@ def main(argv=None):
 
     store = Store(args.db)
     migration = store.auto_migrate()
-    server = make_server(args.port, store)
+    cloud = BaiduCloud(store.db_path.parent, store)
+    server = make_server(args.port, store, reserve_ports=(cloud.callback_port,))
+    server.baidu = cloud
     port = server.server_address[1]
     server.html_bytes = build_html(html_path, port)
     url = "http://127.0.0.1:%d/" % port

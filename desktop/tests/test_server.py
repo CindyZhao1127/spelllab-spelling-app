@@ -15,6 +15,7 @@ DESKTOP_DIR = Path(__file__).resolve().parents[1]
 ROOT_DIR = DESKTOP_DIR.parent
 sys.path.insert(0, str(DESKTOP_DIR))
 import app  # noqa: E402
+from baidu_cloud import BaiduCloud  # noqa: E402
 from storage import Store  # noqa: E402
 
 
@@ -24,6 +25,7 @@ class ServerTest(unittest.TestCase):
         cls.tmp = tempfile.TemporaryDirectory()
         cls.store = Store(Path(cls.tmp.name) / "server.db")
         cls.server = app.make_server(0, cls.store)
+        cls.server.baidu = BaiduCloud(Path(cls.tmp.name), cls.store)
         cls.port = cls.server.server_address[1]
         cls.server.html_bytes = app.build_html(ROOT_DIR / "SpellLab.html", cls.port)
         cls.thread = threading.Thread(
@@ -93,6 +95,23 @@ class ServerTest(unittest.TestCase):
             if thread is not None:
                 thread.join(timeout=2)
             blocker.close()
+            tmp.cleanup()
+
+    def test_reserved_callback_port_is_skipped(self):
+        """OAuth 回调端口即使空闲，主服务也必须跳过，留给授权回调监听。"""
+        probe = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        probe.bind(("127.0.0.1", 0))
+        reserved = probe.getsockname()[1]
+        probe.close()
+        tmp = tempfile.TemporaryDirectory()
+        server = None
+        try:
+            store = Store(Path(tmp.name) / "reserve.db")
+            server = app.make_server(reserved, store, reserve_ports=(reserved,))
+            self.assertNotEqual(server.server_address[1], reserved)
+        finally:
+            if server is not None:
+                server.server_close()
             tmp.cleanup()
 
     def test_occupied_port_is_not_reported_as_our_service(self):
@@ -177,6 +196,34 @@ class ServerTest(unittest.TestCase):
         self.assertEqual(status, 404)
         self.assertIn("error", data)
         status, data = self.jcall("/api/ping", host="evil.example.com")
+        self.assertEqual(status, 403)
+
+    def test_baidu_status_and_config_routes(self):
+        """网盘配置接口只返回非敏感字段，且配置后会进入已配置未授权状态。"""
+        status, data = self.jcall("/api/baidu/status")
+        self.assertEqual(status, 200)
+        self.assertFalse(data["configured"])
+        self.assertFalse(data["authorized"])
+
+        status, data = self.jcall("/api/baidu/config", {
+            "appId": "123", "appKey": "key", "secretKey": "secret",
+            "appName": "SpellLab", "redirectUri": "http://127.0.0.1:8791/oauth/callback",
+            "auto": False,
+        })
+        self.assertEqual(status, 200)
+        self.assertTrue(data["configured"])
+        self.assertFalse(data["authorized"])
+        self.assertNotIn("secretKey", data)
+        self.assertNotIn("secret", json.dumps(data, ensure_ascii=False))
+
+        status, data = self.jcall("/api/baidu/status")
+        self.assertEqual(status, 200)
+        self.assertEqual(data["appName"], "SpellLab")
+
+        # 外部网页不能改写本机网盘凭证
+        status, _ = self.post_with_origin(
+            "/api/baidu/config", {"appId": "9", "appKey": "x", "secretKey": "y",
+                                  "appName": "Evil"}, "https://evil.example.com")
         self.assertEqual(status, 403)
 
     def post_with_origin(self, path, payload, origin, content_type="application/json"):

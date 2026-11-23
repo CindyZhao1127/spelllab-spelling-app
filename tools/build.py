@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import argparse
 import difflib
+import json
 import re
 import sys
 from pathlib import Path
@@ -31,6 +32,9 @@ OUTPUT = ROOT / "SpellLab.html"
 # 源码中的占位标记，构建时替换；产物里不保留。
 MARK_JS = "/* __SPELLLAB_JS_MODULES__ */"
 STYLE_MARK = "/* __SPELLLAB_CSS_MODULES__ */"
+# 整体词库数据由 textbooks/build_wordbank.py 生成，构建时内嵌为前端常量。
+WORDBANK_DIR = ROOT / "textbooks" / "wordbank"
+WORDBANK_BANKS = ["primary", "junior", "gaokao", "cet4", "cet6", "itbiz"]
 
 
 def read_text(path: Path) -> str:
@@ -62,6 +66,22 @@ def build() -> str:
         # 空行是原文的一部分，必须保留，否则重组后注释块之间的空行会丢失。
         chunks.append(text[:-1] if text.endswith("\n") else text)
     js = "\n".join(chunks)
+
+    # 内嵌整体词库：把 textbooks/wordbank/*.json 压成 WORDBANK_DATA 常量。
+    # 数据模块（25-wordbank-data.js）用占位符引用，构建时替换；源码里保持小体积。
+    bank_placeholder = "__SPELLLAB_WORDBANK_DATA__"
+    if bank_placeholder in js:
+        banks = []
+        for key in WORDBANK_BANKS:
+            path = WORDBANK_DIR / (key + ".json")
+            if not path.is_file():
+                raise SystemExit("缺少词库数据：%s（先跑 textbooks/build_wordbank.py）" % path)
+            obj = json.loads(path.read_text(encoding="utf-8"))
+            # 每套词库是独立的教材类别，bookId 供顶部筛选直接选中该套词库
+            banks.append({"id": obj["id"], "name": obj["name"], "desc": obj.get("desc", ""),
+                          "bookId": "b_wb_" + key, "words": obj["words"]})
+        js = js.replace(bank_placeholder,
+                        json.dumps(banks, ensure_ascii=False, separators=(",", ":")))
 
     # 样式目前仍在 shell 内联，CSS 模块目录存在时一并拼接。
     css_files = sorted((ROOT / "src" / "css").glob("*.css")) if (ROOT / "src" / "css").is_dir() else []
