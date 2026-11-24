@@ -1,7 +1,7 @@
 /* ---------------- 多孩子档案常量（须早于 80-state 的 loadState 初始化） ---------------- */
 const PROFILE_FIELDS = [
   'progress','wrong','wordStats','history','bestTimes','stats','settings','filter',
-  'vocab','practiceSets','session','phonics','grammar','memo','typingDuck','seq'
+  'vocab','practiceSets','session','phonics','grammar','pronunciation','memo','typingDuck','seq'
 ];
 /* 积分与抽奖：余额 / 记录按孩子，规则（每答对几分、奖项、消耗）全孩子共享。 */
 const PROFILE_PLAN_CHILD = ['points','ledger','results','since','lastEval'];

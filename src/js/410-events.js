@@ -174,6 +174,7 @@ function bind(){
       case 'sPrev': gotoQuestion(-1); break;
       case 'sNext': gotoQuestion(1); break;
       case 'sSpeak': speak(cq.q.en); break;
+      case 'sPron': if(cq.q) pronOpen(cq.q.en,'句子练习'); break;
       case 'sStar': starQuestionWords(); break;
       case 'sHints': setSetting('showHints',!state.settings.showHints); break;
       case 'sHint': hintCurrent(); break;
@@ -187,6 +188,7 @@ function bind(){
     const b=e.target.closest('button'); if(!b) return;
     switch(b.id){
       case 'wSpeak': if(wordCur) speak(wordCur[0]); break;
+      case 'wPron': if(wordCur) pronOpen(wordCur[0],'单词速记'); break;
       case 'wStar': starCurrentWord(); break;
       case 'wShuffle': pickWord(); break;
       case 'wAnswer': showWordAnswer(); break;
@@ -219,6 +221,16 @@ function bind(){
   });
   $('scSpeak').addEventListener('click',()=>speak(currentQuestion().q.en));
   $('scNext').addEventListener('click',()=>{ if(mode==='chunk') chunkNextQuestion(1); else gotoQuestion(1); });
+  /* 发音练习弹窗：开始 / 停止 / 再读一次 / 听标准发音 / 关闭 */
+  if($('pronStart')) $('pronStart').addEventListener('click',pronStart);
+  if($('pronStop')) $('pronStop').addEventListener('click',()=>pronStop(true));
+  if($('pronReplay')) $('pronReplay').addEventListener('click',()=>{
+    if(pronSession) speak(pronSession.text);
+  });
+  if($('pronClose')) $('pronClose').addEventListener('click',pronClose);
+  if($('pronMask')) $('pronMask').addEventListener('click',e=>{
+    if(e.target===$('pronMask')) pronClose();
+  });
 
   $('unitList').addEventListener('click',e=>{
     const b=e.target.closest('button[data-unit]'); if(!b) return;
@@ -343,6 +355,7 @@ function bind(){
     const b=e.target.closest&&e.target.closest('button');
     if(b){
       if(b.dataset.vocabSpeak){ const v=state.vocab.find(x=>x.id===b.dataset.vocabSpeak); if(v) speak(v.en); }
+      else if(b.dataset.vocabPron){ const v=state.vocab.find(x=>x.id===b.dataset.vocabPron); if(v) pronOpen(v.en,'生词本'); }
       else if(b.dataset.vocabDetail){
         const box=$('vocabDetail-'+b.dataset.vocabDetail);
         if(box){ box.hidden=!box.hidden; b.textContent=box.hidden?'详':'收起'; }

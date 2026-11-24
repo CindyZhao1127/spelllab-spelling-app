@@ -275,6 +275,32 @@
     background:rgba(255,255,255,.12);color:#e8ecff}
   .modal-actions button:hover{background:rgba(255,255,255,.22)}
   .modal-actions button.primary{background:var(--grad-primary);color:#fff}
+  /* 发音练习：识别结果、分数与逐词对错 */
+  .pron-modal{width:min(560px,94vw)}
+  .pron-source{display:inline-block;margin-left:6px;padding:2px 8px;border-radius:99px;
+    background:rgba(255,255,255,.10);font-size:11px;color:#c3cbeb;font-weight:600}
+  .pron-target{margin:12px 0 8px;padding:14px 16px;border-radius:14px;
+    background:rgba(255,255,255,.07);font-size:20px;font-weight:800;color:#fff;overflow-wrap:anywhere}
+  .pron-status{font-size:12px;color:#c3cbeb;line-height:1.6;min-height:20px}
+  .pron-heard{margin-top:10px;font-size:12px;color:#c3cbeb;overflow-wrap:anywhere}
+  .pron-score{margin-top:10px;display:flex;align-items:baseline;gap:5px}
+  .pron-score b{font-size:38px;line-height:1;font-weight:900}
+  .pron-score span{font-size:12px;color:var(--muted)}
+  .pron-score.good b{color:#8ff0c0}.pron-score.mid b{color:#ffd08a}.pron-score.bad b{color:#ff9a9a}
+  .pron-tokens{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+  .pron-token{padding:4px 9px;border-radius:9px;font-size:12px;font-weight:700;background:rgba(255,255,255,.08);color:#e8ecff}
+  .pron-token.ok{background:rgba(93,231,163,.18);color:#8ff0c0}
+  .pron-token.bad{background:rgba(255,154,154,.18);color:#ff9a9a}
+  .pron-token.miss{background:rgba(255,196,105,.18);color:#ffd08a}
+  .pron-token.extra{background:rgba(255,154,154,.12);color:#ffb3b3}
+  .pron-best{margin-top:10px;font-size:11px;color:var(--muted)}
+  .pron-note{margin-top:12px;font-size:11px;line-height:1.6;color:var(--muted)}
+  .badge.good{background:rgba(93,231,163,.18);color:#8ff0c0}
+  .badge.mid{background:rgba(255,196,105,.18);color:#ffd08a}
+  .badge.bad{background:rgba(255,154,154,.18);color:#ff9a9a}
+  .hist-badge.good{background:rgba(93,231,163,.18);color:#8ff0c0}
+  .hist-badge.mid{background:rgba(255,196,105,.18);color:#ffd08a}
+  .hist-badge.bad{background:rgba(255,154,154,.18);color:#ff9a9a}
   /* 速度突破：不拦截输入，答完题自动弹 2.6 秒；缩为右上角小卡片，不遮挡中央单词 */
   .speed-mask{position:fixed;inset:0;z-index:90;display:flex;align-items:flex-start;justify-content:flex-end;
     padding:64px 14px 0;pointer-events:none}
@@ -2366,6 +2392,12 @@ body.td-typing #typingView { height: 100%; }
         <div class="best-list" id="bestList"></div>
       </div>
       <div class="panel">
+        <h3>发音练习成绩</h3>
+        <div class="panel-note">句子练习、单词速记和生词本里的朗读打分会记在这里，最多保留最近 200 条；每项词 / 句的历史最好成绩单独保存。</div>
+        <div class="stat-grid" id="pronGrid"></div>
+        <div id="pronList" style="margin-top:10px"></div>
+      </div>
+      <div class="panel">
         <h3>最近练习</h3>
         <div id="histList"></div>
       </div>
@@ -2671,6 +2703,26 @@ body.td-typing #typingView { height: 100%; }
     <p id="modalText"></p>
     <div id="modalResult"></div>
     <div class="modal-actions" id="modalActions"></div>
+  </div>
+</div>
+
+<!-- 发音练习：朗读词/句 → 浏览器识别 → 逐词比对给分 -->
+<div class="modal-mask" id="pronMask" hidden>
+  <div class="modal pron-modal" role="dialog" aria-modal="true" aria-label="发音练习">
+    <h3>发音练习 <span class="pron-source" id="pronSource"></span></h3>
+    <div class="pron-target" id="pronTarget"></div>
+    <div class="pron-status" id="pronStatus">请允许麦克风后开始朗读</div>
+    <div class="pron-heard" id="pronHeard" hidden></div>
+    <div class="pron-score" id="pronScore" hidden><b id="pronScoreNum">0</b><span>分</span></div>
+    <div class="pron-tokens" id="pronTokens" hidden></div>
+    <div class="pron-best" id="pronBest"></div>
+    <div class="modal-actions">
+      <button class="mini-btn primary" id="pronStart">开始朗读</button>
+      <button class="mini-btn" id="pronStop" hidden>停止</button>
+      <button class="mini-btn" id="pronReplay">听标准发音</button>
+      <button class="mini-btn" id="pronClose">关闭</button>
+    </div>
+    <div class="pron-note">使用 Chrome / Edge 内置语音识别，需要联网和麦克风权限。评分按识别到的文字逐词比对，不是音素级评测；口音或环境噪声可能影响结果。成绩只保存在当前孩子档案里。</div>
   </div>
 </div>
 

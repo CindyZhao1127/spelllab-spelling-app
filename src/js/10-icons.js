@@ -3,6 +3,7 @@ const PATHS = {
   left:'<path d="M15 18l-6-6 6-6"/>',
   right:'<path d="M9 18l6-6-6-6"/>',
   volume:'<path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 010 7"/><path d="M18.5 5.5a9 9 0 010 13"/>',
+  mic:'<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0014 0"/><path d="M12 17v5M8 22h8"/>',
   bulb:'<path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 00-4 12.7V17h8v-2.3A7 7 0 0012 2z"/>',
   eye:'<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/>',
   eyeoff:'<path d="M17.9 17.9A10.4 10.4 0 0112 19C5 19 1 12 1 12a18 18 0 015.1-5.9"/><path d="M9.9 4.2A10 10 0 0112 4c7 0 11 7 11 7a17 17 0 01-2.2 3.2"/><path d="M1 1l22 22"/>',

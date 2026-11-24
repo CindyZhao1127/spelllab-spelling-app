@@ -92,6 +92,7 @@ function renderToolbars(){
   $('toolbarSentence').innerHTML =
     tb('sPrev','left','上一题')+
     tb('sSpeak','volume','朗读英文句子')+
+    tb('sPron','mic','朗读句子并打分')+
     tb('sStar','star','把本题单词加入生词本')+
     tb('sHints','eye','显示/隐藏逐词中文提示')+
     tb('sHint','bulb','给一个提示')+
@@ -104,6 +105,7 @@ function renderToolbars(){
     tb('sMenu','menu','学习面板');
   $('toolbarWord').innerHTML =
     tb('wSpeak','volume','朗读这个单词')+
+    tb('wPron','mic','朗读单词并打分')+
     tb('wStar','star','把这个词加入生词本')+
     tb('wShuffle','shuffle','换一个单词')+
     tb('wAnswer','key','看答案')+

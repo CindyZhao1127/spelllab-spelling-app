@@ -2552,6 +2552,42 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     return o.count+' 条释义 · 点击展开/收起 · 生词本可查';
   });
 
+  check('发音练习：句子、单词、生词本三处入口与统一面板', () => {
+    assert(/tb\('sPron','mic'/.test(html) && /tb\('wPron','mic'/.test(html) && /data-vocab-pron/.test(html),
+      '缺少朗读打分入口');
+    assert(/id="pronMask"/.test(html) && /id="pronScoreNum"/.test(html) && /id="pronGrid"/.test(html),
+      '发音面板或记录区缺失');
+    assert(run('pronSupported()') === false, '测试环境无语音识别时应安全降级');
+    return '3 个入口 · 统一面板 · 不支持时安全降级';
+  });
+
+  check('发音打分：逐词对齐，读对满分、漏读和错词扣分', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      var a=pronScore('The cat is on the mat','The cat is on mat');
+      var b=pronScore('beautiful','beautiful');
+      var c=pronScore('beautiful','beatiful');
+      var d=pronScore('hello','hello world');
+      return {a:a,b:b,c:c,d:d};})())`));
+    assert(o.b.score===100, '完全读对应为 100 分');
+    assert(o.a.score===83 && o.a.ops.some(x=>x.op==='bad'||x.op==='miss'), '漏读 a 应标错且扣分：'+JSON.stringify(o.a));
+    assert(o.c.score>=80 && o.c.score<100, '拼错一个字母应扣分但不至于 0：'+o.c.score);
+    assert(o.d.score===50 && o.d.extras.length===1, '多读单词应计 extra 并扣分：'+JSON.stringify(o.d));
+    return '漏读 83 · 拼错 '+o.c.score+' · 多读 50';
+  });
+
+  check('发音成绩：按孩子保存、最佳分不回退、老存档补结构', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      state.pronunciation={records:[],best:{}};
+      pronStore('单词速记','apple',pronScore('apple','apple'));
+      pronStore('生词本','apple',pronScore('apple','aple'));
+      var s=normalizeState({pronunciation:{records:[1,2],best:[]}});
+      return {n:state.pronunciation.records.length,best:state.pronunciation.best.apple.score,
+              legacy:{n:s.pronunciation.records.length,best:typeof s.pronunciation.best}};})())`));
+    assert(o.n===2 && o.best===100, '成绩未写入或最佳分被低分覆盖：'+JSON.stringify(o));
+    assert(o.legacy.n===2 && o.legacy.best==='object', '老存档未补齐发音结构');
+    return '2 条记录 · 最佳分保持 100 · 老存档平滑升级';
+  });
+
   const failed = results.filter(r => r[1] === 'FAIL');
   results.forEach(r => console.log('[' + r[1] + ']   ' + r[0] + (r[2] ? '  -> ' + r[2] : '')));
   console.log('\n合计 ' + results.length + ' 项，失败 ' + failed.length + ' 项');

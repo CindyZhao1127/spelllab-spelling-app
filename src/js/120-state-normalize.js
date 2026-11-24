@@ -172,6 +172,14 @@ function normalizeState(s){
   if(['auto','ordered','shuffle'].indexOf(st.wordLetterOrder)<0) st.wordLetterOrder='auto';
   if(!DIFFICULTY[st.difficulty]) st.difficulty='normal';
   if(st.timerMode!=='countdown') st.timerMode='count';
+  /* 发音练习成绩：老存档补空结构，记录限长 200 条，避免备份无限增大。 */
+  if(!out.pronunciation || typeof out.pronunciation!=='object' || Array.isArray(out.pronunciation))
+    out.pronunciation={records:[],best:{}};
+  if(!Array.isArray(out.pronunciation.records)) out.pronunciation.records=[];
+  if(!out.pronunciation.best || typeof out.pronunciation.best!=='object' || Array.isArray(out.pronunciation.best))
+    out.pronunciation.best={};
+  if(out.pronunciation.records.length>200)
+    out.pronunciation.records=out.pronunciation.records.slice(-200);
   /* 个人最快用时：旧存档没有这个命名空间，补齐为空对象；
      非法条目直接丢弃，避免记录页出现 NaN 或负数。 */
   if(!out.bestTimes || typeof out.bestTimes!=='object' || Array.isArray(out.bestTimes)) out.bestTimes={};

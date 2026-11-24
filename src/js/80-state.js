@@ -15,6 +15,8 @@ const DEFAULT_STATE = {
   session:null, plan:clone(DEFAULT_PLAN), lottery:clone(DEFAULT_LOTTERY),
   phonics:clone(DEFAULT_PHONICS),
   grammar:{done:{},wrong:[],stats:{answered:0,correct:0},pointsPaid:{}},
+  /* 发音练习：逐次成绩与每项最佳，按孩子档案隔离，随全库备份一起保存 */
+  pronunciation:{records:[],best:{}},
   parent:clone(DEFAULT_PARENT),
   /* 记忆进阶模块：错词间隔复习 / 关卡星级 / 听写。独立命名空间，
      与旧存档天然兼容（normalizeState 会补齐），备份导出自动带上。 */

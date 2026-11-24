@@ -19,6 +19,7 @@ function addHistory(rec){
 }
 function renderHistory(){
   const h=(Array.isArray(state.history)?state.history:[]).slice().sort((a,b)=>(b.t||0)-(a.t||0));
+  renderPronRecords();
   const tk=today();
   const okCount=h.filter(x=>x.ok).length;
   const mins=Math.round(h.reduce((n,x)=>n+(Number(x.ms)||0),0)/60000);
