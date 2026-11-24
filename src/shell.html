@@ -2303,6 +2303,8 @@ body.td-typing #typingView { height: 100%; }
         <div class="setting-row"><span>按字母显示小空格</span><button class="switch" data-set="letterBoxes" id="swLetterBoxes"></button></div>
         <div class="setting-row"><span>预先露出字母 <b id="revealVal">0</b> 个</span><input class="rate" type="range" id="revealRange" min="0" max="3" step="1" value="0"></div>
         <div class="subtle" style="margin-top:8px">小空格数量＝该单词的字母数，整句按单词真实宽度横向排列、放不下自动换行；特别长的单词只在自己这一格内折行，不会盖住相邻单词。露出的字母是提示，不用再输入。改动后当前题会重做。</div>
+        <div class="setting-row"><span>单词字母块顺序</span><span class="sel"><select id="wordOrderSel"><option value="auto">先顺序，熟悉后打乱</option><option value="ordered">始终按顺序</option><option value="shuffle">始终打乱</option></select></span></div>
+        <div class="subtle" style="margin-top:8px">单词速记下方的字母块：新词按顺序排列当提示，同一个词拼对 2 次算掌握，之后打乱顺序增加难度；也可以在上面固定一种方式。切换后当前词立即重排。</div>
         <div class="setting-row"><span>单词间距 <b id="gapVal">22</b> px</span><input class="rate" type="range" id="gapRange" min="10" max="44" step="2" value="22"></div>
         <div class="subtle" style="margin-top:8px">中文提示现在显示在各自单词的正下方，过长时自动换行、不会挤到相邻单词；加大间距后整句更易读。</div>
         <div class="setting-row"><span>按键 / 判定音效</span><button class="switch" data-set="sound" id="swSound"></button></div>

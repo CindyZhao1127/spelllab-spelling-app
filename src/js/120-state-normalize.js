@@ -168,6 +168,8 @@ function normalizeState(s){
   st.wordGap=Math.max(10,Math.min(44,Number(st.wordGap)||22));
   st.speakDelayMs=Math.max(0,Math.min(600,Number(st.speakDelayMs)||0));
   st.revealLetters=Math.max(0,Math.min(3,Number(st.revealLetters)||0));
+  /* 字母块顺序：auto=不熟时顺序提示、掌握后打乱；老存档默认 auto */
+  if(['auto','ordered','shuffle'].indexOf(st.wordLetterOrder)<0) st.wordLetterOrder='auto';
   if(!DIFFICULTY[st.difficulty]) st.difficulty='normal';
   if(st.timerMode!=='countdown') st.timerMode='count';
   /* 个人最快用时：旧存档没有这个命名空间，补齐为空对象；

@@ -1,4 +1,12 @@
-/* ---------------- 单词速记模式 ---------------- */
+/* ---------------- 单词速记模式 ----------------
+   下方字母块：不熟的单词按正确顺序当提示，答对 2 次（m>=2，即界面上的「已熟练掌握」）
+   之后再打乱，逐步加难度；用户也可在练习设置里固定顺序 / 固定打乱。 */
+function wordLetterOrder(en){
+  const v=state.settings&&state.settings.wordLetterOrder;
+  if(v==='ordered'||v==='shuffle') return v;
+  const m=Number((state.wordStats[en]||{}).m)||0;
+  return m>=2?'shuffle':'ordered';
+}
 function pickWord(){
   const list=currentUnit().words||[];
   if(!list.length){ $('wordCn').textContent='这个单元暂时没有单词卡'; return; }
@@ -15,11 +23,16 @@ function pickWord(){
 function renderWord(){
   if(!wordCur){ pickWord(); return; }
   const en=wordCur[0];
+  const ordered=wordLetterOrder(en)==='ordered';
   wordSolved=false; wordAssisted=false; placed=[];
-  letters=shuffle(en.split('').map((ch,i)=>({id:i,ch:ch,used:false})));
-  if(letters.length>2 && letters.map(l=>l.ch).join('')===en) letters=shuffle(letters);
+  letters=en.split('').map((ch,i)=>({id:i,ch:ch,used:false}));
+  if(!ordered){
+    letters=shuffle(letters);
+    if(letters.length>2 && letters.map(l=>l.ch).join('')===en) letters=shuffle(letters);
+  }
   $('wordCn').textContent=wordCur[1]||'拼出这个单词';
-  $('wordMeta').textContent=en.length+' 个字母 · '+(currentUnit().name||'');
+  $('wordMeta').textContent=en.length+' 个字母 · '+(currentUnit().name||'')+
+    ' · '+(ordered?'字母顺序提示':'字母打乱挑战');
   $('wordFeedback').textContent=''; $('wordFeedback').className='feedback';
   const done=Object.values(state.wordStats).filter(x=>(x.m||0)>=2).length;
   $('wordProgress').textContent='已熟练掌握 '+done+' 个单词 · 本单元共 '+(currentUnit().words||[]).length+' 个';

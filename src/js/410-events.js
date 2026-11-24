@@ -99,6 +99,7 @@ function bind(){
     saveState();
   });
   $('timerModeSel').addEventListener('change',e=>setSetting('timerMode',e.target.value));
+  if($('wordOrderSel')) $('wordOrderSel').addEventListener('change',e=>setSetting('wordLetterOrder',e.target.value));
   $('difficultySel').addEventListener('change',e=>setSetting('difficulty',e.target.value));
   /* 英美口音：顶栏切换与设置下拉双向同步，重绘当前拼读题的音节格 */
   const setAccent=a=>{

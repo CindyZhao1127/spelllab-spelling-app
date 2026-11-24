@@ -2490,6 +2490,37 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     return '切到词库自动进单词速记，成功取词 '+o.picked+'（该库 '+o.enCount+' 词）';
   });
 
+  check('单词字母块：新词顺序提示，掌握后打乱，设置可固定', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      var oldS=JSON.parse(JSON.stringify(state.settings));
+      var oldW=wordCur, oldStats=JSON.parse(JSON.stringify(state.wordStats));
+      var oldRnd=Math.random, en='keyboard';
+      wordCur=[en,'键盘'];
+      state.wordStats[en]={m:0,ok:0,bad:0};
+      state.settings.wordLetterOrder='auto';
+      renderWord(); var fresh=letters.map(function(l){return l.ch;}).join('');
+      state.wordStats[en]={m:2,ok:2,bad:0};
+      Math.random=function(){return 0;};
+      renderWord(); var mastered=letters.map(function(l){return l.ch;}).join('');
+      state.settings.wordLetterOrder='ordered';
+      renderWord(); var ordered=letters.map(function(l){return l.ch;}).join('');
+      state.settings.wordLetterOrder='shuffle';
+      renderWord(); var shuffled=letters.map(function(l){return l.ch;}).join('');
+      Math.random=oldRnd;
+      var meta=$('wordMeta').textContent;
+      var legacy=normalizeState({settings:{wordLetterOrder:'bad'}}).settings.wordLetterOrder;
+      state.settings=oldS; state.wordStats=oldStats; wordCur=oldW;
+      return {fresh:fresh,mastered:mastered,ordered:ordered,shuffled:shuffled,meta:meta,legacy:legacy};
+    })())`));
+    assert(o.fresh==='keyboard', '新词应按顺序显示字母，实际 '+o.fresh);
+    assert(o.mastered!=='keyboard' && o.shuffled!=='keyboard', '掌握后 / 打乱模式应打乱字母');
+    assert(o.ordered==='keyboard', '固定顺序模式仍应按顺序显示');
+    assert(/打乱挑战/.test(o.meta), '当前提示状态未显示：'+o.meta);
+    assert(o.legacy==='auto', '非法设置值应回退 auto，实际 '+o.legacy);
+    assert(/id="wordOrderSel"/.test(html), '练习设置缺少字母顺序下拉');
+    return '新词顺序 → 2 次答对后打乱 · 可固定顺序/打乱 · 老存档默认 auto';
+  });
+
   const failed = results.filter(r => r[1] === 'FAIL');
   results.forEach(r => console.log('[' + r[1] + ']   ' + r[0] + (r[2] ? '  -> ' + r[2] : '')));
   console.log('\n合计 ' + results.length + ' 项，失败 ' + failed.length + ' 项');

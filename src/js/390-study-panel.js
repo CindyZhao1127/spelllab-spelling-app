@@ -32,6 +32,7 @@ function renderDrawer(){
   const delay=Math.max(0,Math.min(600,Number(state.settings.speakDelayMs)||0));
   $('speakDelayRange').value=delay; $('speakDelayVal').textContent=delay;
   $('timerModeSel').value=state.settings.timerMode;
+  if($('wordOrderSel')) $('wordOrderSel').value=state.settings.wordLetterOrder||'auto';
   $('difficultySel').value=state.settings.difficulty;
   if($('accentSel')) $('accentSel').value=speechAccent();
   if($('accentSwitch')) $('accentSwitch').querySelectorAll('button').forEach(b=>
@@ -70,6 +71,7 @@ function setSetting(k,v){
   state.settings[k]=v; saveState(); renderDrawer();
   if(k==='showHints'){ $('stage').classList.toggle('hide-hints',!v); $('sHints').classList.toggle('on',v); renderGrammarBar(); }
   if(k==='letterBoxes') refreshBoardSettings();
+  if(k==='wordLetterOrder' && mode==='word' && wordCur) renderWord();
   if(k==='difficulty'||k==='timerMode'){ startQuestionTimer(); if(mode!=='word') refreshBoardSettings(); }
   if(k==='smart' && mode!=='word'){
     const curIdx=currentQuestion().idx;

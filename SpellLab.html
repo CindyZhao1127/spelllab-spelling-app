@@ -2303,6 +2303,8 @@ body.td-typing #typingView { height: 100%; }
         <div class="setting-row"><span>按字母显示小空格</span><button class="switch" data-set="letterBoxes" id="swLetterBoxes"></button></div>
         <div class="setting-row"><span>预先露出字母 <b id="revealVal">0</b> 个</span><input class="rate" type="range" id="revealRange" min="0" max="3" step="1" value="0"></div>
         <div class="subtle" style="margin-top:8px">小空格数量＝该单词的字母数，整句按单词真实宽度横向排列、放不下自动换行；特别长的单词只在自己这一格内折行，不会盖住相邻单词。露出的字母是提示，不用再输入。改动后当前题会重做。</div>
+        <div class="setting-row"><span>单词字母块顺序</span><span class="sel"><select id="wordOrderSel"><option value="auto">先顺序，熟悉后打乱</option><option value="ordered">始终按顺序</option><option value="shuffle">始终打乱</option></select></span></div>
+        <div class="subtle" style="margin-top:8px">单词速记下方的字母块：新词按顺序排列当提示，同一个词拼对 2 次算掌握，之后打乱顺序增加难度；也可以在上面固定一种方式。切换后当前词立即重排。</div>
         <div class="setting-row"><span>单词间距 <b id="gapVal">22</b> px</span><input class="rate" type="range" id="gapRange" min="10" max="44" step="2" value="22"></div>
         <div class="subtle" style="margin-top:8px">中文提示现在显示在各自单词的正下方，过长时自动换行、不会挤到相邻单词；加大间距后整句更易读。</div>
         <div class="setting-row"><span>按键 / 判定音效</span><button class="switch" data-set="sound" id="swSound"></button></div>
@@ -3366,7 +3368,7 @@ const DEFAULT_STATE = {
   settings:{showHints:true,speakOnFinish:true,speakDelayMs:120,ignoreCase:true,smart:true,
     rate:0.9,sound:true,volume:0.35,letterBoxes:true,revealLetters:0,wordGap:22,
     timerMode:'count',difficulty:'normal',autoVocab:true,askResume:true,askNextUnit:true,accent:'uk',
-    showGrammar:false},
+    showGrammar:false,wordLetterOrder:'auto'},
   custom:[], customMeta:{gradeId:'g4',bookId:'b_hj'},
   grades:DEFAULT_GRADES, books:DEFAULT_BOOKS, unitMeta:{},
   system:'63',
@@ -3672,6 +3674,8 @@ function normalizeState(s){
   st.wordGap=Math.max(10,Math.min(44,Number(st.wordGap)||22));
   st.speakDelayMs=Math.max(0,Math.min(600,Number(st.speakDelayMs)||0));
   st.revealLetters=Math.max(0,Math.min(3,Number(st.revealLetters)||0));
+  /* 字母块顺序：auto=不熟时顺序提示、掌握后打乱；老存档默认 auto */
+  if(['auto','ordered','shuffle'].indexOf(st.wordLetterOrder)<0) st.wordLetterOrder='auto';
   if(!DIFFICULTY[st.difficulty]) st.difficulty='normal';
   if(st.timerMode!=='countdown') st.timerMode='count';
   /* 个人最快用时：旧存档没有这个命名空间，补齐为空对象；
@@ -5150,7 +5154,15 @@ function chunkMainAction(){
   checkAll();
 }
 
-/* ---------------- 单词速记模式 ---------------- */
+/* ---------------- 单词速记模式 ----------------
+   下方字母块：不熟的单词按正确顺序当提示，答对 2 次（m>=2，即界面上的「已熟练掌握」）
+   之后再打乱，逐步加难度；用户也可在练习设置里固定顺序 / 固定打乱。 */
+function wordLetterOrder(en){
+  const v=state.settings&&state.settings.wordLetterOrder;
+  if(v==='ordered'||v==='shuffle') return v;
+  const m=Number((state.wordStats[en]||{}).m)||0;
+  return m>=2?'shuffle':'ordered';
+}
 function pickWord(){
   const list=currentUnit().words||[];
   if(!list.length){ $('wordCn').textContent='这个单元暂时没有单词卡'; return; }
@@ -5167,11 +5179,16 @@ function pickWord(){
 function renderWord(){
   if(!wordCur){ pickWord(); return; }
   const en=wordCur[0];
+  const ordered=wordLetterOrder(en)==='ordered';
   wordSolved=false; wordAssisted=false; placed=[];
-  letters=shuffle(en.split('').map((ch,i)=>({id:i,ch:ch,used:false})));
-  if(letters.length>2 && letters.map(l=>l.ch).join('')===en) letters=shuffle(letters);
+  letters=en.split('').map((ch,i)=>({id:i,ch:ch,used:false}));
+  if(!ordered){
+    letters=shuffle(letters);
+    if(letters.length>2 && letters.map(l=>l.ch).join('')===en) letters=shuffle(letters);
+  }
   $('wordCn').textContent=wordCur[1]||'拼出这个单词';
-  $('wordMeta').textContent=en.length+' 个字母 · '+(currentUnit().name||'');
+  $('wordMeta').textContent=en.length+' 个字母 · '+(currentUnit().name||'')+
+    ' · '+(ordered?'字母顺序提示':'字母打乱挑战');
   $('wordFeedback').textContent=''; $('wordFeedback').className='feedback';
   const done=Object.values(state.wordStats).filter(x=>(x.m||0)>=2).length;
   $('wordProgress').textContent='已熟练掌握 '+done+' 个单词 · 本单元共 '+(currentUnit().words||[]).length+' 个';
@@ -7872,6 +7889,7 @@ function renderDrawer(){
   const delay=Math.max(0,Math.min(600,Number(state.settings.speakDelayMs)||0));
   $('speakDelayRange').value=delay; $('speakDelayVal').textContent=delay;
   $('timerModeSel').value=state.settings.timerMode;
+  if($('wordOrderSel')) $('wordOrderSel').value=state.settings.wordLetterOrder||'auto';
   $('difficultySel').value=state.settings.difficulty;
   if($('accentSel')) $('accentSel').value=speechAccent();
   if($('accentSwitch')) $('accentSwitch').querySelectorAll('button').forEach(b=>
@@ -7910,6 +7928,7 @@ function setSetting(k,v){
   state.settings[k]=v; saveState(); renderDrawer();
   if(k==='showHints'){ $('stage').classList.toggle('hide-hints',!v); $('sHints').classList.toggle('on',v); renderGrammarBar(); }
   if(k==='letterBoxes') refreshBoardSettings();
+  if(k==='wordLetterOrder' && mode==='word' && wordCur) renderWord();
   if(k==='difficulty'||k==='timerMode'){ startQuestionTimer(); if(mode!=='word') refreshBoardSettings(); }
   if(k==='smart' && mode!=='word'){
     const curIdx=currentQuestion().idx;
@@ -8227,6 +8246,7 @@ function bind(){
     saveState();
   });
   $('timerModeSel').addEventListener('change',e=>setSetting('timerMode',e.target.value));
+  if($('wordOrderSel')) $('wordOrderSel').addEventListener('change',e=>setSetting('wordLetterOrder',e.target.value));
   $('difficultySel').addEventListener('change',e=>setSetting('difficulty',e.target.value));
   /* 英美口音：顶栏切换与设置下拉双向同步，重绘当前拼读题的音节格 */
   const setAccent=a=>{

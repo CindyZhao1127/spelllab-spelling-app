@@ -6,7 +6,7 @@ const DEFAULT_STATE = {
   settings:{showHints:true,speakOnFinish:true,speakDelayMs:120,ignoreCase:true,smart:true,
     rate:0.9,sound:true,volume:0.35,letterBoxes:true,revealLetters:0,wordGap:22,
     timerMode:'count',difficulty:'normal',autoVocab:true,askResume:true,askNextUnit:true,accent:'uk',
-    showGrammar:false},
+    showGrammar:false,wordLetterOrder:'auto'},
   custom:[], customMeta:{gradeId:'g4',bookId:'b_hj'},
   grades:DEFAULT_GRADES, books:DEFAULT_BOOKS, unitMeta:{},
   system:'63',
