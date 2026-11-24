@@ -9,8 +9,13 @@ const jsDir = path.join(root, 'src', 'js');
 const htmlPath = path.join(root, 'SpellLab.html');
 const MARK_JS = '/* __SPELLLAB_JS_MODULES__ */';
 const MARK_BANK = '__SPELLLAB_WORDBANK_DATA__';
+const MARK_DETAIL = '__SPELLLAB_WORD_DETAILS__';
 const bankDir = path.join(root, 'textbooks', 'wordbank');
 const bankKeys = ['primary', 'junior', 'gaokao', 'cet4', 'cet6', 'itbiz'];
+function wordDetailsLiteral(){
+  const obj = JSON.parse(fs.readFileSync(path.join(root, 'textbooks', 'word-details.json'), 'utf8'));
+  return JSON.stringify(obj.details);
+}
 // 与 tools/build.py 一致：把词库 JSON 压成数组字面量注入数据模块
 function wordbankLiteral(){
   const banks = bankKeys.map(k => {
@@ -57,7 +62,9 @@ check('src/ 重建结果与 SpellLab.html 字节一致', () => {
     return text.endsWith('\n') ? text.slice(0, -1) : text;
   }).join('\n');
   assert(js.indexOf(MARK_BANK) >= 0, '数据模块缺少词库占位标记');
+  assert(js.indexOf(MARK_DETAIL) >= 0, '数据模块缺少释义占位标记');
   js = js.replace(MARK_BANK, wordbankLiteral());
+  js = js.replace(MARK_DETAIL, wordDetailsLiteral());
   const rebuilt = shell.replace(MARK_JS, js);
   const current = fs.readFileSync(htmlPath, 'utf8');
   // Windows 下 git checkout 会把产物转成 CRLF，源码模块是 LF；按行尾归一化后比较内容。
@@ -115,5 +122,38 @@ check('整体词库数据齐全且已内嵌进产物', () => {
   return banks.length + ' 套独立词库 / 共 ' + total + ' 词已内嵌';
 });
 
-console.log('\n合计 4 项，失败 ' + fail + ' 项');
+function jsonEnd(html, open){
+  let depth = 0, inStr = false, esc = false;
+  for (let i = open; i < html.length; i++) {
+    const c = html[i];
+    if (inStr) {
+      if (esc) esc = false;
+      else if (c === '\\') esc = true;
+      else if (c === '"') inStr = false;
+      continue;
+    }
+    if (c === '"') inStr = true;
+    else if (c === '{' || c === '[') depth++;
+    else if (c === '}' || c === ']') { depth--; if (depth === 0) return i + 1; }
+  }
+  return -1;
+}
+
+check('详细释义词典已内嵌且常用词有多义项', () => {
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  assert(html.indexOf(MARK_DETAIL) < 0, '产物中残留释义占位标记');
+  const start = html.indexOf('const WORD_DETAILS');
+  assert(start >= 0, '产物缺少 WORD_DETAILS 常量');
+  const eq = html.indexOf('=', start), open = html.indexOf('{', eq);
+  const end = jsonEnd(html, open);
+  assert(end > open, 'WORD_DETAILS 对象边界解析失败');
+  const details = JSON.parse(html.slice(open, end));
+  const count = Object.keys(details).length;
+  assert(count > 7000, '释义词条数不足：' + count);
+  assert(/取消/.test(details.cancel || ''), 'cancel 缺详细释义');
+  assert(details.apple && details.nice, '常用词释义缺失');
+  return count + ' 条释义已内嵌（默认常用义，按钮展开多义项）';
+});
+
+console.log('\n合计 5 项，失败 ' + fail + ' 项');
 if(fail) process.exitCode = 1;

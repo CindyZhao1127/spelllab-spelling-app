@@ -57,9 +57,11 @@ function renderVocab(){
       '<div class="vocab-main">'+
         '<div class="vocab-en">'+esc(v.en)+((v.m||0)>=3?' <span class="badge ok">已掌握</span>':'')+'</div>'+
         '<div class="vocab-cn">'+esc(v.cn)+'</div>'+
+        '<div class="vocab-detail" id="vocabDetail-'+esc(v.id)+'" hidden>'+esc(wordDetail(v.en,v.cn))+'</div>'+
         '<div class="vocab-meta"><span class="badge">'+esc(gradeName(v.gradeId))+'</span>'+
           '<span class="badge">'+esc(bookName(v.bookId))+'</span>'+esc(v.source)+' · 拼对 '+(v.ok||0)+' 次</div>'+
       '</div>'+
+      '<button class="mini-icon" data-vocab-detail="'+esc(v.id)+'" title="详细释义">详</button>'+
       '<button class="mini-icon" data-vocab-speak="'+esc(v.id)+'" title="朗读">'+icon('volume')+'</button>'+
       '<button class="mini-icon" data-vocab-master="'+esc(v.id)+'" title="标记掌握 / 取消">'+icon('star')+'</button>'+
       '<button class="mini-icon danger" data-vocab-del="'+esc(v.id)+'" title="移除">'+icon('trash')+'</button>'+

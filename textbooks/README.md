@@ -34,7 +34,9 @@
 | 大学英语六级 | 2343 | qwerty-learner 开源 CET-6 词库 |
 | IT 与商务英语 | 3877 | qwerty-learner 的 `it-words` + BEC 剑桥商务英语（2/3 级）合并去重，适合 IT 公司与外企职场 |
 
-数据文件在 `wordbank/*.json`（`spelllab.wordbank.v1`，只含 `[英文, 中文]` 二元组），由 `build_wordbank.py` 生成并由 `tools/build.py` 内嵌进单文件 HTML。词库**不写进存档**：作为虚拟单元运行时注入，孩子的掌握进度按单词记在各自档案的 `wordStats` 里，因此多档案互不干扰、备份体积也不膨胀。
+数据文件在 `wordbank/*.json`（`spelllab.wordbank.v1`，只含 `[英文, 中文]` 二元组），由 `build_wordbank.py` 生成并由 `tools/build.py` 内嵌进单文件 HTML。
+
+**详细释义**：`word-details.json`（`spelllab.worddetails.v1`，8177 条）由 `build_word_details.py` 从 `source/wordbank/` 的原始 `trans` 多义项合并去重生成，教材词缺的用自带中文兜底；同样由 `tools/build.py` 内嵌，练习时点「详细释义」展开、默认仍显示常用义，不写入存档。词库**不写进存档**：作为虚拟单元运行时注入，孩子的掌握进度按单词记在各自档案的 `wordStats` 里，因此多档案互不干扰、备份体积也不膨胀。
 
 **数据来源与许可**：小学 / 初中来自本项目教材包；高考 / 四六级 / IT / 商务来自开源项目 [qwerty-learner](https://github.com/2778354388/qwerty-learner)（MIT 许可），原始 JSON 保留在 `source/wordbank/` 便于复现，中文释义经清洗（去词性前缀、音标、冗余义项，截断到 22 字）。词库供学习参考，不保证与最新考试大纲逐词一致。小学 / 初中汇总词数少于教材包原始词数，是因为跨册按英文去重、并剔除了应用不支持的词组 / 缩写 / 带括号条目。
 

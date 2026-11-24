@@ -638,6 +638,17 @@
   .letter-btn:hover:not(:disabled){transform:translateY(-3px);background:rgba(139,123,255,.4)}
   .letter-btn:disabled{opacity:.18;cursor:default}
   .word-progress{margin-top:26px;font-size:12px;color:var(--muted)}
+  .word-detail-row{margin:2px 0 4px}
+  .word-detail-box{
+    max-width:620px;margin:6px auto 10px;padding:11px 14px;border-radius:12px;text-align:left;
+    background:rgba(139,123,255,.13);border:1px solid rgba(139,123,255,.38);
+    color:var(--text);font-size:13px;line-height:1.8;white-space:pre-wrap;overflow-wrap:anywhere;
+    max-height:190px;overflow:auto;
+  }
+  .vocab-detail{
+    margin-top:5px;padding:7px 9px;border-radius:8px;font-size:11px;line-height:1.7;
+    color:var(--muted);background:rgba(139,123,255,.12);white-space:pre-wrap;overflow-wrap:anywhere;
+  }
 
   /* ---------- 语法练习 ---------- */
   .grammar-card{width:100%;max-width:820px;padding:14px 18px}
@@ -1759,6 +1770,8 @@ body.td-typing #typingView { height: 100%; }
       <div class="word-card">
         <div class="stage-label">单词速记 · 把字母拼成单词</div>
         <div class="word-cn" id="wordCn"></div>
+        <div class="word-detail-row"><button class="mini-btn sm" id="btnWordDetail" title="展开这个词的全部义项">详细释义</button></div>
+        <div class="word-detail-box" id="wordDetailBox" hidden></div>
         <div class="word-meta" id="wordMeta"></div>
         <div class="word-slots" id="wordSlots"></div>
         <div class="letter-bank" id="letterBank"></div>

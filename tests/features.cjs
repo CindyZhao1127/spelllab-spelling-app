@@ -2521,6 +2521,37 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     return '新词顺序 → 2 次答对后打乱 · 可固定顺序/打乱 · 老存档默认 auto';
   });
 
+  check('单词详细释义：默认常用义，按钮展开多义项，生词本也有入口', () => {
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      var oldVocab=state.vocab, oldWord=wordCur;
+      var detail=wordDetail('cancel','取消');
+      var fallback=wordDetail('zzzz-not-a-word','备用义');
+      var count=Object.keys(WORD_DETAILS).length;
+      wordCur=['cancel','取消'];
+      renderWord();
+      var hiddenBefore=$('wordDetailBox').hidden;
+      $('btnWordDetail').listeners.click[0]();
+      var shown=$('wordDetailBox').textContent, label=$('btnWordDetail').textContent;
+      $('btnWordDetail').listeners.click[0]();
+      var hiddenAfter=$('wordDetailBox').hidden;
+      state.vocab=[{id:'vdemo',en:'cancel',cn:'取消',m:0,ok:0,bad:0,
+                    source:'测试',gradeId:'g4',bookId:'b_hj',added:0}];
+      renderVocab();
+      var vocabHtml=$('vocabList').innerHTML;
+      state.vocab=oldVocab; wordCur=oldWord;
+      return {detail:detail,fallback:fallback,count:count,hiddenBefore:hiddenBefore,
+              shown:shown,label:label,hiddenAfter:hiddenAfter,vocabHtml:vocabHtml};
+    })())`));
+    assert(o.count>7000, '详细释义词典词条不足：'+o.count);
+    assert(o.detail.indexOf('取消')>=0 && o.detail.length>3, 'cancel 未取到详细释义：'+o.detail);
+    assert(o.fallback==='备用义', '查不到的词应回退常用义，实际 '+o.fallback);
+    assert(o.hiddenBefore===true && o.hiddenAfter===true, '详细释义默认应收起，换词后也要收起');
+    assert(o.shown.indexOf('取消')>=0 && o.label==='收起释义', '点按钮未展开详细释义');
+    assert(/data-vocab-detail="vdemo"/.test(o.vocabHtml) && /vocabDetail-vdemo/.test(o.vocabHtml),
+      '生词本缺少详细释义按钮或面板');
+    return o.count+' 条释义 · 点击展开/收起 · 生词本可查';
+  });
+
   const failed = results.filter(r => r[1] === 'FAIL');
   results.forEach(r => console.log('[' + r[1] + ']   ' + r[0] + (r[2] ? '  -> ' + r[2] : '')));
   console.log('\n合计 ' + results.length + ' 项，失败 ' + failed.length + ' 项');

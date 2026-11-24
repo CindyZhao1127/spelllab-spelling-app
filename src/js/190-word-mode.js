@@ -34,6 +34,9 @@ function renderWord(){
   $('wordMeta').textContent=en.length+' 个字母 · '+(currentUnit().name||'')+
     ' · '+(ordered?'字母顺序提示':'字母打乱挑战');
   $('wordFeedback').textContent=''; $('wordFeedback').className='feedback';
+  /* 换词 / 重做时收起上一个词的详细释义，避免显示成别的词 */
+  if($('wordDetailBox')) $('wordDetailBox').hidden=true;
+  if($('btnWordDetail')) $('btnWordDetail').textContent='详细释义';
   const done=Object.values(state.wordStats).filter(x=>(x.m||0)>=2).length;
   $('wordProgress').textContent='已熟练掌握 '+done+' 个单词 · 本单元共 '+(currentUnit().words||[]).length+' 个';
   drawWordSlots(); drawLetterBank(); renderHeader();

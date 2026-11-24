@@ -83,6 +83,16 @@ def build() -> str:
         js = js.replace(bank_placeholder,
                         json.dumps(banks, ensure_ascii=False, separators=(",", ":")))
 
+    # 内嵌详细释义词典：textbooks/build_word_details.py 生成，默认不显示、点按钮才展开。
+    detail_placeholder = "__SPELLLAB_WORD_DETAILS__"
+    if detail_placeholder in js:
+        detail_path = ROOT / "textbooks" / "word-details.json"
+        if not detail_path.is_file():
+            raise SystemExit("缺少释义数据：%s（先跑 textbooks/build_word_details.py）" % detail_path)
+        details = json.loads(detail_path.read_text(encoding="utf-8"))["details"]
+        js = js.replace(detail_placeholder,
+                        json.dumps(details, ensure_ascii=False, separators=(",", ":")))
+
     # 样式目前仍在 shell 内联，CSS 模块目录存在时一并拼接。
     css_files = sorted((ROOT / "src" / "css").glob("*.css")) if (ROOT / "src" / "css").is_dir() else []
     if css_files:

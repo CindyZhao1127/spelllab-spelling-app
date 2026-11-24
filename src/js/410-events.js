@@ -195,6 +195,16 @@ function bind(){
       case 'wMenu': openDrawer(true); break;
     }
   });
+  /* 详细释义：默认只给常用义，点开才展开词典里的多义项 */
+  if($('btnWordDetail')) $('btnWordDetail').addEventListener('click',()=>{
+    if(!wordCur) return;
+    const box=$('wordDetailBox'), btn=$('btnWordDetail');
+    if(!box||!btn) return;
+    if(box.hidden){
+      box.textContent=wordDetail(wordCur[0],wordCur[1]);
+      box.hidden=false; btn.textContent='收起释义';
+    }else{ box.hidden=true; btn.textContent='详细释义'; }
+  });
   $('toolbarChunk').addEventListener('click',e=>{
     const b=e.target.closest('button'); if(!b) return;
     switch(b.id){
@@ -333,6 +343,10 @@ function bind(){
     const b=e.target.closest&&e.target.closest('button');
     if(b){
       if(b.dataset.vocabSpeak){ const v=state.vocab.find(x=>x.id===b.dataset.vocabSpeak); if(v) speak(v.en); }
+      else if(b.dataset.vocabDetail){
+        const box=$('vocabDetail-'+b.dataset.vocabDetail);
+        if(box){ box.hidden=!box.hidden; b.textContent=box.hidden?'详':'收起'; }
+      }
       else if(b.dataset.vocabMaster) toggleVocabMastered(b.dataset.vocabMaster);
       else if(b.dataset.vocabDel) removeVocab(b.dataset.vocabDel);
       return;
