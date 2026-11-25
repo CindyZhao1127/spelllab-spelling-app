@@ -200,7 +200,7 @@ node tests/features.cjs    # 125 项：自动朗读延迟、练习记录、用�
                            #        句子语法成分标注（默认关闭 / 缩写与不规则动词 / 练习中不泄题）、
                            #        6 套独立整体词库虚拟单元、旧类别迁移、单词字母块顺序渐进、
                            #        详细释义按钮展开与模式保护、发音识别打分与成绩存档
-node textbooks/verify.cjs  # 16 个教材包用应用真实导入函数解析
+node textbooks/verify.cjs  # 17 个教材包用应用真实导入函数解析（含北师大七上）
 python -m unittest discover -s desktop/tests   # 38 项 Python 单测（含百度网盘 OAuth 与回调端口预留；Windows 用 .venv\Scripts\python.exe）
 
 # 可选：重新生成整体词库数据（仅开发时需要，依赖 source/wordbank/ 原始文件）

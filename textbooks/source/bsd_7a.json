@@ -1,0 +1,170 @@
+[
+  {
+    "id": "7a",
+    "name": "北师大版初中英语 七年级上册（2024新版·2024秋启用）",
+    "gradeId": "g7",
+    "edition": "2024新版 · 2024秋启用",
+    "sources": [
+      "https://www.dzkbw.com/books/bsd/yingyu/7s_2024/",
+      "https://mip.21cnjy.com/P/24187620.html",
+      "https://mip.21cnjy.com/P/22019060.html",
+      "https://www.21cnjy.com/d-24788469.shtml",
+      "https://mip.21cnjy.com/P/24788458.html"
+    ],
+    "units": [
+      {
+        "name": "Starter",
+        "words": [
+          ["useful", "有用的"], ["study", "学习；研究"], ["travel", "旅行"], ["work", "工作"],
+          ["international", "国际的"], ["meeting", "会议"], ["business", "商业；贸易"],
+          ["cooperation", "合作"], ["brave", "勇敢的"], ["try", "尝试"], ["progress", "进步"],
+          ["mistake", "错误"], ["keep", "保持"], ["success", "成功"], ["chance", "机会"],
+          ["make", "制作；结交"], ["friend", "朋友"], ["from", "从；来自"], ["welcome", "欢迎"],
+          ["class", "班级；课"], ["age", "年龄"], ["country", "国家"], ["tall", "高的"],
+          ["short", "矮的；短的"], ["thin", "瘦的"], ["long", "长的"], ["hair", "头发"],
+          ["bag", "包；袋子"], ["shoes", "鞋"], ["hat", "帽子"], ["glasses", "眼镜"],
+          ["strong", "强壮的"], ["family", "家庭"], ["mother", "妈妈"], ["father", "爸爸"],
+          ["sister", "姐妹"], ["brother", "兄弟"], ["grandma", "奶奶；外婆"],
+          ["grandpa", "爷爷；外公"], ["aunt", "姑姑；阿姨"], ["uncle", "叔叔；舅舅"],
+          ["cute", "可爱的"], ["kind", "善良的"], ["love", "爱；喜爱"], ["ride", "骑；乘"],
+          ["bike", "自行车"], ["yard", "院子"], ["over", "超过；在上方"], ["teacher", "老师"],
+          ["name", "名字"]
+        ],
+        "sentences": [
+          {"cn": "这是我的家庭。", "en": "This is my family."},
+          {"cn": "我爱我的妈妈和爸爸。", "en": "I love my mother and father."},
+          {"cn": "我的朋友又高又瘦。", "en": "My friend is tall and thin."},
+          {"cn": "我们在学校学习英语。", "en": "We study English at school."},
+          {"cn": "很高兴认识你。", "en": "Nice to meet you."},
+          {"cn": "努力学习并取得进步。", "en": "Study hard and make progress."},
+          {"cn": "我的老师勇敢又善良。", "en": "My teacher is brave and kind."},
+          {"cn": "坚持下去，成功就会到来。", "en": "Keep trying and success will come."}
+        ]
+      },
+      {
+        "name": "Unit 1 Family",
+        "words": [
+          ["grandparent", "祖父；祖母；外祖父；外祖母"], ["husband", "丈夫"], ["wife", "妻子"],
+          ["daughter", "女儿"], ["son", "儿子"], ["same", "相同的"], ["policeman", "男警察"],
+          ["only", "只；仅仅"], ["together", "在一起"], ["member", "成员"], ["sweet", "甜的；令人愉快的"],
+          ["active", "积极的；活跃的"], ["caring", "关心他人的"], ["polite", "有礼貌的"],
+          ["noisy", "吵闹的"], ["violin", "小提琴"], ["hers", "她的"], ["pilot", "飞行员"],
+          ["biscuit", "饼干"], ["burn", "烧焦；燃烧"], ["chess", "国际象棋"], ["really", "确实；的确"],
+          ["mine", "我的"], ["yours", "你的"], ["ours", "我们的"], ["theirs", "他们的"],
+          ["character", "品质；性格"], ["trait", "特征；特点"], ["hobby", "业余爱好"],
+          ["activity", "活动"], ["handsome", "英俊的"], ["pretty", "漂亮的"], ["smart", "聪明的"],
+          ["patient", "有耐心的"], ["model", "模型；模范"], ["housework", "家务劳动"],
+          ["twin", "双胞胎之一"], ["different", "不同的"], ["both", "两者都"], ["weekend", "周末"],
+          ["water", "浇水；水"], ["cleaning", "打扫"], ["tidy", "整洁的；整理"], ["Sunday", "星期日"],
+          ["spend", "花费；度过"], ["fun", "乐趣；有趣的"], ["usually", "通常"], ["dumpling", "饺子"],
+          ["delicious", "美味的"], ["chat", "聊天"], ["introduce", "介绍"], ["number", "数字；号码"],
+          ["teach", "教"], ["engineer", "工程师"], ["funny", "滑稽的"], ["forward", "向前"],
+          ["classmate", "同班同学"], ["pleased", "高兴的"]
+        ],
+        "sentences": [
+          {"cn": "我的祖父母善良又有礼貌。", "en": "My grandparent is kind and polite."},
+          {"cn": "我的姐姐和哥哥住在一起。", "en": "My sister and brother live together."},
+          {"cn": "我经常聊天并且下象棋。", "en": "I often chat and play chess."},
+          {"cn": "我的爱好是拉小提琴。", "en": "My hobby is playing the violin."},
+          {"cn": "那对双胞胎女孩看起来一样。", "en": "The twin girls look the same."},
+          {"cn": "我在星期日帮忙做家务。", "en": "I help with housework on Sunday."},
+          {"cn": "我们通常一起度过时光。", "en": "We usually spend time together."},
+          {"cn": "这个饺子真的很好吃。", "en": "The dumpling is really delicious."}
+        ]
+      },
+      {
+        "name": "Unit 2 School Life",
+        "words": [
+          ["life", "生活；生命"], ["history", "历史"], ["geography", "地理"], ["information", "信息"],
+          ["communication", "通信；交际"], ["technology", "技术"], ["chemistry", "化学"],
+          ["biology", "生物学"], ["physics", "物理学"], ["paint", "用颜料画"], ["gymnastics", "体操"],
+          ["more", "更多的"], ["quite", "相当"], ["after-school", "课后的"], ["break", "休息；打破"],
+          ["practice", "练习"], ["club", "俱乐部；社团"], ["start", "开始"], ["end", "结束"],
+          ["exciting", "令人兴奋的"], ["country", "国家"], ["noon", "中午"], ["until", "直到"],
+          ["finish", "完成"], ["preparation", "准备"], ["prepare", "预备"], ["textbook", "教科书"],
+          ["notebook", "笔记本"], ["tape", "磁带；胶带"], ["bottle", "瓶子"], ["snack", "点心"],
+          ["case", "盒；箱"], ["everything", "一切"], ["ready", "准备好"], ["check", "检查"],
+          ["dining", "进餐"], ["hall", "礼堂；大厅"], ["lab", "实验室"], ["field", "运动场；田地"],
+          ["gym", "体育馆"], ["experiment", "实验"], ["skill", "技能"], ["special", "特别的"],
+          ["Monday", "星期一"], ["Tuesday", "星期二"], ["Friday", "星期五"], ["outside", "在外面"],
+          ["during", "在……期间"], ["enjoy", "享受；喜爱"], ["blog", "博客"], ["post", "帖子；邮寄"],
+          ["tennis", "网球"], ["excuse", "原谅"], ["carry", "拿；提"], ["weekday", "工作日"]
+        ],
+        "sentences": [
+          {"cn": "我学习历史和地理。", "en": "I study history and geography."},
+          {"cn": "信息技术令人兴奋。", "en": "Information technology is exciting."},
+          {"cn": "我们放学后有一个科学俱乐部。", "en": "We have a science club after school."},
+          {"cn": "实验室在大厅旁边。", "en": "The lab is next to the hall."},
+          {"cn": "我每天练习英语。", "en": "I practice English every day."},
+          {"cn": "我最喜欢的科目是物理。", "en": "My favourite subject is physics."},
+          {"cn": "我们中午前完成作业。", "en": "We finish our homework before noon."},
+          {"cn": "课间我检查我的笔记本。", "en": "During the break I check my notebook."}
+        ]
+      },
+      {
+        "name": "Unit 3 Home and Places",
+        "words": [
+          ["furniture", "家具"], ["equipment", "设备；器材"], ["kitchen", "厨房"], ["bathroom", "浴室"],
+          ["bedroom", "卧室"], ["bookcase", "书架"], ["machine", "机器"], ["fridge", "冰箱"],
+          ["cooker", "厨灶"], ["sofa", "沙发"], ["flat", "公寓"], ["sound", "声音；听起来"],
+          ["thing", "物品；事物"], ["shower", "淋浴"], ["comfortable", "舒适的"], ["cream", "奶油；奶油色"],
+          ["inside", "在里面"], ["dictionary", "词典"], ["bookshelf", "书架"], ["need", "需要"],
+          ["either", "也；两者之一"], ["messy", "凌乱的"], ["guess", "猜测"], ["easily", "容易地"],
+          ["building", "建筑物"], ["crop", "庄稼"], ["mall", "购物商场"], ["e-pal", "网友"],
+          ["central", "中心的"], ["community", "社区"], ["around", "周围；大约"],
+          ["friendly", "友好的"], ["neighbourhood", "街区"], ["luckily", "幸运地"],
+          ["describe", "描述"], ["dream", "梦想"], ["forest", "森林"], ["fresh", "新鲜的"],
+          ["view", "景色；看法"], ["magic", "魔法；有魔力的"], ["cloud", "云"],
+          ["fantastic", "极好的"], ["office", "办公室"], ["onto", "向；朝"], ["road", "道路"],
+          ["opposite", "在……对面"], ["station", "车站"], ["along", "沿着"], ["past", "经过；过去的"],
+          ["bookshop", "书店"], ["block", "街区；大楼"], ["row", "一排"], ["shape", "形状"],
+          ["practise", "练习"]
+        ],
+        "sentences": [
+          {"cn": "公寓里有一张沙发。", "en": "There is a sofa in the flat."},
+          {"cn": "浴室在卧室旁边。", "en": "The bathroom is next to the bedroom."},
+          {"cn": "我的书柜在学习室里。", "en": "My bookcase is in the study."},
+          {"cn": "厨房干净又整洁。", "en": "The kitchen is clean and tidy."},
+          {"cn": "我住在一个友好的街区。", "en": "I live in a friendly neighbourhood."},
+          {"cn": "沿着这条路走然后左转。", "en": "Go along the road and turn left."},
+          {"cn": "邮局在车站对面。", "en": "The post office is opposite the station."},
+          {"cn": "我们需要一本词典和一个笔记本。", "en": "We need a dictionary and a notebook."}
+        ]
+      },
+      {
+        "name": "Unit 4 Interests and Abilities",
+        "words": [
+          ["future", "将来；未来"], ["ice-skate", "滑冰"], ["ski", "滑雪"], ["swimmer", "游泳者"],
+          ["writer", "作家"], ["artist", "艺术家"], ["scientist", "科学家"], ["musician", "音乐家"],
+          ["singer", "歌手"], ["energetic", "精力充沛的"], ["hope", "希望"], ["Olympic", "奥林匹克的"],
+          ["amazing", "令人惊奇的"], ["voice", "嗓音"], ["relaxed", "放松的"], ["curious", "好奇的"],
+          ["especially", "尤其"], ["nature", "大自然"], ["join", "加入"], ["drama", "戏剧"],
+          ["dragon", "龙"], ["matter", "要紧；事情"], ["disability", "缺陷；障碍"], ["type", "打字；类型"],
+          ["language", "语言"], ["still", "仍然"], ["manage", "设法完成"], ["own", "自己的；拥有"],
+          ["songwriter", "词曲作者"], ["key", "键；钥匙"], ["each", "每个"], ["other", "其他的"],
+          ["record", "记录；纪录"], ["winner", "获胜者"], ["talent", "天赋；天才"], ["himself", "他自己"],
+          ["just", "只是；仅仅"], ["effort", "努力"], ["application", "申请；应用"],
+          ["festival", "节日；会演"], ["volunteer", "志愿者"], ["grade", "年级；等级"],
+          ["personality", "性格"], ["creative", "有创造力的"], ["teamwork", "协同工作"],
+          ["apply", "申请"], ["as", "作为；像"], ["consider", "考虑"], ["instrument", "乐器"],
+          ["afraid", "害怕的"], ["ability", "能力"], ["skill", "技能"], ["guitar", "吉他"],
+          ["running", "跑步"], ["painting", "绘画"], ["cooking", "烹饪"], ["singing", "唱歌"],
+          ["dancing", "跳舞"], ["reading", "阅读"], ["gardening", "园艺"], ["excited", "兴奋的"],
+          ["crazy", "热衷的；狂热的"], ["vet", "兽医"]
+        ],
+        "sentences": [
+          {"cn": "我的爱好是弹吉他。", "en": "My hobby is playing the guitar."},
+          {"cn": "我会游泳和滑雪。", "en": "I can swim and ski."},
+          {"cn": "她想成为一名作家。", "en": "She wants to be a writer."},
+          {"cn": "他对大自然充满好奇。", "en": "He is curious about nature."},
+          {"cn": "音乐让我放松。", "en": "Music makes me relaxed."},
+          {"cn": "我想加入戏剧俱乐部。", "en": "I want to join the drama club."},
+          {"cn": "天赋和努力都很重要。", "en": "Talent and effort are important."},
+          {"cn": "他能独自完成这件事。", "en": "He can manage it on his own."},
+          {"cn": "她是一名志愿者，并且帮助别人。", "en": "She is a volunteer and helps others."},
+          {"cn": "我喜欢唱歌和跳舞。", "en": "I like singing and dancing."}
+        ]
+      }
+    ]
+  }
+]
