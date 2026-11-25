@@ -1,6 +1,6 @@
 # SpellLab · 单词句子拼写记忆
 
-一个**单文件、离线可用**的英语拼写练习网页应用。打开 `SpellLab.html` 即可使用，无需安装、无需联网、无需后端；所有学习数据保存在浏览器内置的 **IndexedDB 本地数据库**中，`localStorage` 作为兼容镜像与降级通道。
+一个**单文件、离线可用**的英语拼写练习网页应用。打开 `SpellLab.html` 即可使用核心功能，无需安装、无需联网、无需后端；所有学习数据保存在浏览器内置的 **IndexedDB 本地数据库**中，`localStorage` 作为兼容镜像与降级通道。发音识别（朗读打分）与百度网盘直连需要联网，详见[使用说明.md](使用说明.md)。
 
 同一份 `SpellLab.html` 也可以作为 **Python 桌面程序**运行：`desktop/app.py` 用标准库起本地服务 + 真实 SQLite 数据库文件，并用独立应用窗口呈现，零第三方依赖。详见 [desktop/README.md](desktop/README.md)。
 
