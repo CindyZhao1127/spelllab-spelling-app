@@ -197,6 +197,12 @@ function bind(){
       case 'wMenu': openDrawer(true); break;
     }
   });
+  /* 字母顺序：卡片上的按钮循环切换自动/顺序/打乱，和练习设置下拉双向同步 */
+  if($('btnWordOrder')) $('btnWordOrder').addEventListener('click',()=>{
+    if(!wordCur) return;
+    const next=cycleWordOrder();
+    toast('字母顺序：'+(next==='ordered'?'始终顺序':next==='shuffle'?'始终打乱':'自动（熟悉后打乱）')+' · 当前词已重排','ok');
+  });
   /* 详细释义：默认只给常用义，点开才展开词典里的多义项 */
   if($('btnWordDetail')) $('btnWordDetail').addEventListener('click',()=>{
     if(!wordCur) return;

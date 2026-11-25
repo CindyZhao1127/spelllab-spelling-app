@@ -2506,11 +2506,18 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
       renderWord(); var ordered=letters.map(function(l){return l.ch;}).join('');
       state.settings.wordLetterOrder='shuffle';
       renderWord(); var shuffled=letters.map(function(l){return l.ch;}).join('');
+      state.settings.wordLetterOrder='auto';
+      renderWord(); var btnAuto=$('btnWordOrder').textContent;
+      var clickedMode=cycleWordOrder(), btnAfter=$('btnWordOrder').textContent;
+      var handler=$('btnWordOrder').listeners.click && $('btnWordOrder').listeners.click[0];
+      if(handler) handler();
+      var afterClick=state.settings.wordLetterOrder;
       Math.random=oldRnd;
       var meta=$('wordMeta').textContent;
       var legacy=normalizeState({settings:{wordLetterOrder:'bad'}}).settings.wordLetterOrder;
       state.settings=oldS; state.wordStats=oldStats; wordCur=oldW;
-      return {fresh:fresh,mastered:mastered,ordered:ordered,shuffled:shuffled,meta:meta,legacy:legacy};
+      return {fresh:fresh,mastered:mastered,ordered:ordered,shuffled:shuffled,meta:meta,legacy:legacy,
+              btnAuto:btnAuto,btnAfter:btnAfter,clickedMode:clickedMode,afterClick:afterClick,hasHandler:!!handler};
     })())`));
     assert(o.fresh==='keyboard', '新词应按顺序显示字母，实际 '+o.fresh);
     assert(o.mastered!=='keyboard' && o.shuffled!=='keyboard', '掌握后 / 打乱模式应打乱字母');
@@ -2518,7 +2525,11 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     assert(/打乱挑战/.test(o.meta), '当前提示状态未显示：'+o.meta);
     assert(o.legacy==='auto', '非法设置值应回退 auto，实际 '+o.legacy);
     assert(/id="wordOrderSel"/.test(html), '练习设置缺少字母顺序下拉');
-    return '新词顺序 → 2 次答对后打乱 · 可固定顺序/打乱 · 老存档默认 auto';
+    assert(/id="btnWordOrder"/.test(html), '单词卡片缺少字母顺序按钮');
+    assert(o.btnAuto==='字母：自动' && o.clickedMode==='ordered' && o.btnAfter==='字母：顺序',
+      '按钮未循环切换或文案未更新：'+JSON.stringify(o));
+    assert(o.hasHandler && o.afterClick==='shuffle', '点击按钮未切换设置：'+JSON.stringify(o));
+    return '新词顺序 → 2 次答对后打乱 · 卡片按钮循环切换自动/顺序/打乱 · 老存档默认 auto';
   });
 
   check('单词详细释义：默认常用义，按钮展开多义项，生词本也有入口', () => {

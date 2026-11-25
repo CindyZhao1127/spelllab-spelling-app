@@ -1,9 +1,37 @@
 /* ---------------- 单词速记模式 ----------------
    下方字母块：不熟的单词按正确顺序当提示，答对 2 次（m>=2，即界面上的「已熟练掌握」）
-   之后再打乱，逐步加难度；用户也可在练习设置里固定顺序 / 固定打乱。 */
-function wordLetterOrder(en){
+   之后再打乱，逐步加难度；卡片上的「字母顺序」按钮和练习设置下拉都能固定顺序 / 固定打乱。 */
+const WORD_ORDER_MODES=['auto','ordered','shuffle'];
+function wordOrderInfo(){
   const v=state.settings&&state.settings.wordLetterOrder;
-  if(v==='ordered'||v==='shuffle') return v;
+  const mode=WORD_ORDER_MODES.indexOf(v)>=0?v:'auto';
+  const label=mode==='ordered'?'字母：顺序':mode==='shuffle'?'字母：打乱':'字母：自动';
+  const desc=mode==='ordered'?'始终按顺序显示字母':mode==='shuffle'?'始终打乱字母':
+    '新词顺序提示，拼对 2 次后打乱';
+  const next=WORD_ORDER_MODES[(WORD_ORDER_MODES.indexOf(mode)+1)%WORD_ORDER_MODES.length];
+  const nextDesc=next==='ordered'?'始终顺序':next==='shuffle'?'始终打乱':'自动（熟悉后打乱）';
+  return {mode:mode,label:label,desc:desc,next:next,
+    title:'当前：'+desc+'。点击切换为'+nextDesc+'。'};
+}
+function updateWordOrderButton(){
+  const wo=wordOrderInfo(), b=$('btnWordOrder');
+  if(b){
+    b.textContent=wo.label;
+    b.title=wo.title;
+    b.setAttribute('aria-label',wo.title);
+    b.classList.toggle('on',wo.mode!=='auto');
+  }
+  return wo;
+}
+function cycleWordOrder(){
+  const next=wordOrderInfo().next;
+  setSetting('wordLetterOrder',next);
+  updateWordOrderButton();
+  return next;
+}
+function wordLetterOrder(en){
+  const v=wordOrderInfo().mode;
+  if(v!=='auto') return v;
   const m=Number((state.wordStats[en]||{}).m)||0;
   return m>=2?'shuffle':'ordered';
 }
@@ -33,6 +61,7 @@ function renderWord(){
   $('wordCn').textContent=wordCur[1]||'拼出这个单词';
   $('wordMeta').textContent=en.length+' 个字母 · '+(currentUnit().name||'')+
     ' · '+(ordered?'字母顺序提示':'字母打乱挑战');
+  updateWordOrderButton();
   $('wordFeedback').textContent=''; $('wordFeedback').className='feedback';
   /* 换词 / 重做时收起上一个词的详细释义，避免显示成别的词 */
   if($('wordDetailBox')) $('wordDetailBox').hidden=true;

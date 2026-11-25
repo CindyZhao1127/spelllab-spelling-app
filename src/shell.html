@@ -664,7 +664,7 @@
   .letter-btn:hover:not(:disabled){transform:translateY(-3px);background:rgba(139,123,255,.4)}
   .letter-btn:disabled{opacity:.18;cursor:default}
   .word-progress{margin-top:26px;font-size:12px;color:var(--muted)}
-  .word-detail-row{margin:2px 0 4px}
+  .word-detail-row{margin:2px 0 4px;display:flex;justify-content:center;flex-wrap:wrap;gap:8px}
   .word-detail-box{
     max-width:620px;margin:6px auto 10px;padding:11px 14px;border-radius:12px;text-align:left;
     background:rgba(139,123,255,.13);border:1px solid rgba(139,123,255,.38);
@@ -1796,7 +1796,10 @@ body.td-typing #typingView { height: 100%; }
       <div class="word-card">
         <div class="stage-label">单词速记 · 把字母拼成单词</div>
         <div class="word-cn" id="wordCn"></div>
-        <div class="word-detail-row"><button class="mini-btn sm" id="btnWordDetail" title="展开这个词的全部义项">详细释义</button></div>
+        <div class="word-detail-row">
+          <button class="mini-btn sm" id="btnWordOrder" title="切换字母顺序：自动 → 始终顺序 → 始终打乱">字母：自动</button>
+          <button class="mini-btn sm" id="btnWordDetail" title="展开这个词的全部义项">详细释义</button>
+        </div>
         <div class="word-detail-box" id="wordDetailBox" hidden></div>
         <div class="word-meta" id="wordMeta"></div>
         <div class="word-slots" id="wordSlots"></div>

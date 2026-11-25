@@ -664,7 +664,7 @@
   .letter-btn:hover:not(:disabled){transform:translateY(-3px);background:rgba(139,123,255,.4)}
   .letter-btn:disabled{opacity:.18;cursor:default}
   .word-progress{margin-top:26px;font-size:12px;color:var(--muted)}
-  .word-detail-row{margin:2px 0 4px}
+  .word-detail-row{margin:2px 0 4px;display:flex;justify-content:center;flex-wrap:wrap;gap:8px}
   .word-detail-box{
     max-width:620px;margin:6px auto 10px;padding:11px 14px;border-radius:12px;text-align:left;
     background:rgba(139,123,255,.13);border:1px solid rgba(139,123,255,.38);
@@ -1796,7 +1796,10 @@ body.td-typing #typingView { height: 100%; }
       <div class="word-card">
         <div class="stage-label">单词速记 · 把字母拼成单词</div>
         <div class="word-cn" id="wordCn"></div>
-        <div class="word-detail-row"><button class="mini-btn sm" id="btnWordDetail" title="展开这个词的全部义项">详细释义</button></div>
+        <div class="word-detail-row">
+          <button class="mini-btn sm" id="btnWordOrder" title="切换字母顺序：自动 → 始终顺序 → 始终打乱">字母：自动</button>
+          <button class="mini-btn sm" id="btnWordDetail" title="展开这个词的全部义项">详细释义</button>
+        </div>
         <div class="word-detail-box" id="wordDetailBox" hidden></div>
         <div class="word-meta" id="wordMeta"></div>
         <div class="word-slots" id="wordSlots"></div>
@@ -5243,10 +5246,38 @@ function chunkMainAction(){
 
 /* ---------------- 单词速记模式 ----------------
    下方字母块：不熟的单词按正确顺序当提示，答对 2 次（m>=2，即界面上的「已熟练掌握」）
-   之后再打乱，逐步加难度；用户也可在练习设置里固定顺序 / 固定打乱。 */
-function wordLetterOrder(en){
+   之后再打乱，逐步加难度；卡片上的「字母顺序」按钮和练习设置下拉都能固定顺序 / 固定打乱。 */
+const WORD_ORDER_MODES=['auto','ordered','shuffle'];
+function wordOrderInfo(){
   const v=state.settings&&state.settings.wordLetterOrder;
-  if(v==='ordered'||v==='shuffle') return v;
+  const mode=WORD_ORDER_MODES.indexOf(v)>=0?v:'auto';
+  const label=mode==='ordered'?'字母：顺序':mode==='shuffle'?'字母：打乱':'字母：自动';
+  const desc=mode==='ordered'?'始终按顺序显示字母':mode==='shuffle'?'始终打乱字母':
+    '新词顺序提示，拼对 2 次后打乱';
+  const next=WORD_ORDER_MODES[(WORD_ORDER_MODES.indexOf(mode)+1)%WORD_ORDER_MODES.length];
+  const nextDesc=next==='ordered'?'始终顺序':next==='shuffle'?'始终打乱':'自动（熟悉后打乱）';
+  return {mode:mode,label:label,desc:desc,next:next,
+    title:'当前：'+desc+'。点击切换为'+nextDesc+'。'};
+}
+function updateWordOrderButton(){
+  const wo=wordOrderInfo(), b=$('btnWordOrder');
+  if(b){
+    b.textContent=wo.label;
+    b.title=wo.title;
+    b.setAttribute('aria-label',wo.title);
+    b.classList.toggle('on',wo.mode!=='auto');
+  }
+  return wo;
+}
+function cycleWordOrder(){
+  const next=wordOrderInfo().next;
+  setSetting('wordLetterOrder',next);
+  updateWordOrderButton();
+  return next;
+}
+function wordLetterOrder(en){
+  const v=wordOrderInfo().mode;
+  if(v!=='auto') return v;
   const m=Number((state.wordStats[en]||{}).m)||0;
   return m>=2?'shuffle':'ordered';
 }
@@ -5276,6 +5307,7 @@ function renderWord(){
   $('wordCn').textContent=wordCur[1]||'拼出这个单词';
   $('wordMeta').textContent=en.length+' 个字母 · '+(currentUnit().name||'')+
     ' · '+(ordered?'字母顺序提示':'字母打乱挑战');
+  updateWordOrderButton();
   $('wordFeedback').textContent=''; $('wordFeedback').className='feedback';
   /* 换词 / 重做时收起上一个词的详细释义，避免显示成别的词 */
   if($('wordDetailBox')) $('wordDetailBox').hidden=true;
@@ -8668,6 +8700,12 @@ function bind(){
       case 'wPaper': goPaperDict(); break;
       case 'wMenu': openDrawer(true); break;
     }
+  });
+  /* 字母顺序：卡片上的按钮循环切换自动/顺序/打乱，和练习设置下拉双向同步 */
+  if($('btnWordOrder')) $('btnWordOrder').addEventListener('click',()=>{
+    if(!wordCur) return;
+    const next=cycleWordOrder();
+    toast('字母顺序：'+(next==='ordered'?'始终顺序':next==='shuffle'?'始终打乱':'自动（熟悉后打乱）')+' · 当前词已重排','ok');
   });
   /* 详细释义：默认只给常用义，点开才展开词典里的多义项 */
   if($('btnWordDetail')) $('btnWordDetail').addEventListener('click',()=>{
