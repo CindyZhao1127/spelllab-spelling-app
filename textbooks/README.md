@@ -46,7 +46,9 @@
 
 数据文件在 `wordbank/*.json`（`spelllab.wordbank.v1`，只含 `[英文, 中文]` 二元组），由 `build_wordbank.py` 生成并由 `tools/build.py` 内嵌进单文件 HTML。
 
-**详细释义**：`word-details.json`（`spelllab.worddetails.v1`，8177 条）由 `build_word_details.py` 从 `source/wordbank/` 的原始 `trans` 多义项合并去重生成，教材词缺的用自带中文兜底；同样由 `tools/build.py` 内嵌，练习时点「详细释义」展开、默认仍显示常用义，不写入存档。词库**不写进存档**：作为虚拟单元运行时注入，孩子的掌握进度按单词记在各自档案的 `wordStats` 里，因此多档案互不干扰、备份体积也不膨胀。
+**详细释义**：`word-details.json`（`spelllab.worddetails.v1`，8177 条）由 `build_word_details.py` 从 `source/wordbank/` 的原始 `trans` 多义项合并去重生成，教材词缺的用自带中文兜底；同样由 `tools/build.py` 内嵌，练习时点「详细释义」展开、默认仍显示常用义，不写入存档。
+
+**音标词典**：`word-phonetics.json`（`spelllab.phonetics.v1`，7780 条）由 `build_phonetics.py` 从 `source/wordbank/` 的原始 `usphone/ukphone` 提取（英美双音标 5303 条），由 `tools/build.py` 内嵌；单词卡片默认显示音标、跟随口音设置选英美，练习设置或卡片按钮可关闭，生词本同步显示。和释义一样不写入存档。词库**不写进存档**：作为虚拟单元运行时注入，孩子的掌握进度按单词记在各自档案的 `wordStats` 里，因此多档案互不干扰、备份体积也不膨胀。
 
 **数据来源与许可**：小学 / 初中来自本项目教材包；高考 / 四六级 / IT / 商务来自开源项目 [qwerty-learner](https://github.com/2778354388/qwerty-learner)（MIT 许可），原始 JSON 保留在 `source/wordbank/` 便于复现，中文释义经清洗（去词性前缀、音标、冗余义项，截断到 22 字）。词库供学习参考，不保证与最新考试大纲逐词一致。小学 / 初中汇总词数少于教材包原始词数，是因为跨册按英文去重、并剔除了应用不支持的词组 / 缩写 / 带括号条目。
 

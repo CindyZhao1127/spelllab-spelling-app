@@ -197,6 +197,10 @@ function bind(){
       case 'wMenu': openDrawer(true); break;
     }
   });
+  /* 音标提示：卡片按钮和练习设置开关双向同步，只影响显示不影响判定 */
+  if($('btnWordPhonetic')) $('btnWordPhonetic').addEventListener('click',()=>{
+    setSetting('showPhonetic',!state.settings.showPhonetic);
+  });
   /* 字母顺序：卡片上的按钮循环切换自动/顺序/打乱，和练习设置下拉双向同步 */
   if($('btnWordOrder')) $('btnWordOrder').addEventListener('click',()=>{
     if(!wordCur) return;

@@ -643,6 +643,7 @@
   /* ---------- 单词速记 ---------- */
   .word-card{width:100%;max-width:720px;text-align:center;padding:10px 16px}
   .word-cn{font-size:clamp(30px,4.6vw,48px);font-weight:900;letter-spacing:2px;margin:6px 0}
+  .word-phonetic{font-size:18px;color:#d6ccff;letter-spacing:.6px;margin:-2px 0 8px;min-height:22px}
   .word-meta{font-size:13px;color:var(--muted)}
   .word-slots{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin:38px 0 30px;min-height:64px}
   .letter-slot{
@@ -921,6 +922,7 @@
   .vocab-item input[type=checkbox]{accent-color:#8b7bff;width:15px;height:15px;flex:none;cursor:pointer}
   .vocab-main{flex:1;min-width:0;text-align:left}
   .vocab-en{font-size:14px;font-weight:800;letter-spacing:.3px}
+  .vocab-phon{font-size:11px;font-weight:600;color:#cbd3ff;letter-spacing:.2px}
   .vocab-cn{font-size:11px;color:var(--muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .vocab-meta{font-size:10px;color:#8f9bca;margin-top:4px}
   .badge{display:inline-block;padding:2px 7px;border-radius:999px;font-size:10px;background:rgba(255,255,255,.1);color:#cbd3ff;margin-right:5px}
@@ -1796,7 +1798,9 @@ body.td-typing #typingView { height: 100%; }
       <div class="word-card">
         <div class="stage-label">单词速记 · 把字母拼成单词</div>
         <div class="word-cn" id="wordCn"></div>
+        <div class="word-phonetic" id="wordPhonetic" hidden></div>
         <div class="word-detail-row">
+          <button class="mini-btn sm" id="btnWordPhonetic" title="显示 / 隐藏音标提示">音标：开</button>
           <button class="mini-btn sm" id="btnWordOrder" title="切换字母顺序：自动 → 始终顺序 → 始终打乱">字母：自动</button>
           <button class="mini-btn sm" id="btnWordDetail" title="展开这个词的全部义项">详细释义</button>
         </div>
@@ -2345,8 +2349,10 @@ body.td-typing #typingView { height: 100%; }
         <div class="setting-row"><span>按字母显示小空格</span><button class="switch" data-set="letterBoxes" id="swLetterBoxes"></button></div>
         <div class="setting-row"><span>预先露出字母 <b id="revealVal">0</b> 个</span><input class="rate" type="range" id="revealRange" min="0" max="3" step="1" value="0"></div>
         <div class="subtle" style="margin-top:8px">小空格数量＝该单词的字母数，整句按单词真实宽度横向排列、放不下自动换行；特别长的单词只在自己这一格内折行，不会盖住相邻单词。露出的字母是提示，不用再输入。改动后当前题会重做。</div>
+        <div class="setting-row"><span>单词音标提示</span><button class="switch" data-set="showPhonetic" id="swPhonetic"></button></div>
         <div class="setting-row"><span>单词字母块顺序</span><span class="sel"><select id="wordOrderSel"><option value="auto">先顺序，熟悉后打乱</option><option value="ordered">始终按顺序</option><option value="shuffle">始终打乱</option></select></span></div>
         <div class="subtle" style="margin-top:8px">单词速记下方的字母块：新词按顺序排列当提示，同一个词拼对 2 次算掌握，之后打乱顺序增加难度；也可以在上面固定一种方式。切换后当前词立即重排。</div>
+        <div class="subtle" style="margin-top:8px">音标提示跟随下方「朗读口音」显示英式 / 美式，练习卡片上也有「音标：开 / 关」按钮可随时切换；内置约 7800 词，没有音标的词自动不显示。</div>
         <div class="setting-row"><span>单词间距 <b id="gapVal">22</b> px</span><input class="rate" type="range" id="gapRange" min="10" max="44" step="2" value="22"></div>
         <div class="subtle" style="margin-top:8px">中文提示现在显示在各自单词的正下方，过长时自动换行、不会挤到相邻单词；加大间距后整句更易读。</div>
         <div class="setting-row"><span>按键 / 判定音效</span><button class="switch" data-set="sound" id="swSound"></button></div>

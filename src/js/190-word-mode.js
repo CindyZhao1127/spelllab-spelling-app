@@ -35,6 +35,20 @@ function wordLetterOrder(en){
   const m=Number((state.wordStats[en]||{}).m)||0;
   return m>=2?'shuffle':'ordered';
 }
+/* 音标提示：默认开启，卡片按钮 / 练习设置开关都能切换；
+   查不到音标的词直接隐藏这一行，不留空白占位。 */
+function updatePhonetic(){
+  const on=!!(state.settings&&state.settings.showPhonetic);
+  const btn=$('btnWordPhonetic'), box=$('wordPhonetic');
+  if(btn){
+    btn.textContent=on?'音标：开':'音标：关';
+    btn.title=on?'点击隐藏音标提示':'点击显示音标提示';
+    btn.classList.toggle('on',on);
+  }
+  const text=on&&wordCur?wordPhonetic(wordCur[0]):'';
+  if(box){ box.textContent=text; box.hidden=!text; }
+  return text;
+}
 function pickWord(){
   const list=currentUnit().words||[];
   if(!list.length){ $('wordCn').textContent='这个单元暂时没有单词卡'; return; }
@@ -59,6 +73,7 @@ function renderWord(){
     if(letters.length>2 && letters.map(l=>l.ch).join('')===en) letters=shuffle(letters);
   }
   $('wordCn').textContent=wordCur[1]||'拼出这个单词';
+  updatePhonetic();
   $('wordMeta').textContent=en.length+' 个字母 · '+(currentUnit().name||'')+
     ' · '+(ordered?'字母顺序提示':'字母打乱挑战');
   updateWordOrderButton();

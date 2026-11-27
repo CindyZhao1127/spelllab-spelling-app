@@ -55,7 +55,9 @@ function renderVocab(){
     '<div class="vocab-item'+(vocabSelected.has(v.id)?' selected':'')+'" data-vocab-row="'+esc(v.id)+'">'+
       '<input type="checkbox" data-vocab-check="'+esc(v.id)+'"'+(vocabSelected.has(v.id)?' checked':'')+' aria-label="选择 '+esc(v.en)+'">'+
       '<div class="vocab-main">'+
-        '<div class="vocab-en">'+esc(v.en)+((v.m||0)>=3?' <span class="badge ok">已掌握</span>':'')+
+        '<div class="vocab-en">'+esc(v.en)+
+          (state.settings.showPhonetic&&wordPhonetic(v.en)?' <span class="vocab-phon">'+esc(wordPhonetic(v.en))+'</span>':'')+
+          ((v.m||0)>=3?' <span class="badge ok">已掌握</span>':'')+
           (pronBest(pronKey(v.en)).score?' <span class="badge '+pronLevel(pronBest(pronKey(v.en)).score)+'">发音 '+pronBest(pronKey(v.en)).score+' 分</span>':'')+'</div>'+
         '<div class="vocab-cn">'+esc(v.cn)+'</div>'+
         '<div class="vocab-detail" id="vocabDetail-'+esc(v.id)+'" hidden>'+esc(wordDetail(v.en,v.cn))+'</div>'+

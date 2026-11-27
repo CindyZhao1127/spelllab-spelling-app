@@ -10,11 +10,16 @@ const htmlPath = path.join(root, 'SpellLab.html');
 const MARK_JS = '/* __SPELLLAB_JS_MODULES__ */';
 const MARK_BANK = '__SPELLLAB_WORDBANK_DATA__';
 const MARK_DETAIL = '__SPELLLAB_WORD_DETAILS__';
+const MARK_PHON = '__SPELLLAB_PHONETICS__';
 const bankDir = path.join(root, 'textbooks', 'wordbank');
 const bankKeys = ['primary', 'junior', 'gaokao', 'cet4', 'cet6', 'itbiz'];
 function wordDetailsLiteral(){
   const obj = JSON.parse(fs.readFileSync(path.join(root, 'textbooks', 'word-details.json'), 'utf8'));
   return JSON.stringify(obj.details);
+}
+function phoneticsLiteral(){
+  const obj = JSON.parse(fs.readFileSync(path.join(root, 'textbooks', 'word-phonetics.json'), 'utf8'));
+  return JSON.stringify(obj.phones);
 }
 // 与 tools/build.py 一致：把词库 JSON 压成数组字面量注入数据模块
 function wordbankLiteral(){
@@ -63,8 +68,10 @@ check('src/ 重建结果与 SpellLab.html 字节一致', () => {
   }).join('\n');
   assert(js.indexOf(MARK_BANK) >= 0, '数据模块缺少词库占位标记');
   assert(js.indexOf(MARK_DETAIL) >= 0, '数据模块缺少释义占位标记');
+  assert(js.indexOf(MARK_PHON) >= 0, '数据模块缺少音标占位标记');
   js = js.replace(MARK_BANK, wordbankLiteral());
   js = js.replace(MARK_DETAIL, wordDetailsLiteral());
+  js = js.replace(MARK_PHON, phoneticsLiteral());
   const rebuilt = shell.replace(MARK_JS, js);
   const current = fs.readFileSync(htmlPath, 'utf8');
   // Windows 下 git checkout 会把产物转成 CRLF，源码模块是 LF；按行尾归一化后比较内容。
@@ -155,5 +162,22 @@ check('详细释义词典已内嵌且常用词有多义项', () => {
   return count + ' 条释义已内嵌（默认常用义，按钮展开多义项）';
 });
 
-console.log('\n合计 5 项，失败 ' + fail + ' 项');
+check('英美音标词典已内嵌且覆盖常用词', () => {
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  assert(html.indexOf(MARK_PHON) < 0, '产物中残留音标占位标记');
+  const start = html.indexOf('const WORD_PHONETICS');
+  assert(start >= 0, '产物缺少 WORD_PHONETICS 常量');
+  const eq = html.indexOf('=', start), open = html.indexOf('{', eq);
+  const end = jsonEnd(html, open);
+  assert(end > open, 'WORD_PHONETICS 对象边界解析失败');
+  const phones = JSON.parse(html.slice(open, end));
+  const count = Object.keys(phones).length;
+  assert(count > 7000, '音标词条数不足：' + count);
+  assert(phones.cancel && (phones.cancel.uk || phones.cancel.us), 'cancel 缺音标');
+  assert(phones.apple && phones.nice, '常用词音标缺失');
+  const both = Object.values(phones).filter(p => p.uk && p.us).length;
+  return count + ' 条音标已内嵌（英美双音标 ' + both + ' 条，跟随口音设置）';
+});
+
+console.log('\n合计 6 项，失败 ' + fail + ' 项');
 if(fail) process.exitCode = 1;

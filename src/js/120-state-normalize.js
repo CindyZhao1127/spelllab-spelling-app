@@ -170,6 +170,8 @@ function normalizeState(s){
   st.revealLetters=Math.max(0,Math.min(3,Number(st.revealLetters)||0));
   /* 字母块顺序：auto=不熟时顺序提示、掌握后打乱；老存档默认 auto */
   if(['auto','ordered','shuffle'].indexOf(st.wordLetterOrder)<0) st.wordLetterOrder='auto';
+  /* 音标提示默认打开；老存档缺字段时不会突然关掉 */
+  if(st.showPhonetic!==false) st.showPhonetic=true;
   if(!DIFFICULTY[st.difficulty]) st.difficulty='normal';
   if(st.timerMode!=='countdown') st.timerMode='count';
   /* 发音练习成绩：老存档补空结构，记录限长 200 条，避免备份无限增大。 */

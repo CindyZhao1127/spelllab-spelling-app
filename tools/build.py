@@ -93,6 +93,16 @@ def build() -> str:
         js = js.replace(detail_placeholder,
                         json.dumps(details, ensure_ascii=False, separators=(",", ":")))
 
+    # 内嵌英美音标词典：textbooks/build_phonetics.py 生成，默认显示在单词卡片上。
+    phon_placeholder = "__SPELLLAB_PHONETICS__"
+    if phon_placeholder in js:
+        phon_path = ROOT / "textbooks" / "word-phonetics.json"
+        if not phon_path.is_file():
+            raise SystemExit("缺少音标数据：%s（先跑 textbooks/build_phonetics.py）" % phon_path)
+        phones = json.loads(phon_path.read_text(encoding="utf-8"))["phones"]
+        js = js.replace(phon_placeholder,
+                        json.dumps(phones, ensure_ascii=False, separators=(",", ":")))
+
     # 样式目前仍在 shell 内联，CSS 模块目录存在时一并拼接。
     css_files = sorted((ROOT / "src" / "css").glob("*.css")) if (ROOT / "src" / "css").is_dir() else []
     if css_files:

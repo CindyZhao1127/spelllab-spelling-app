@@ -2599,6 +2599,29 @@ function newLotteryDay(){ run("state.lottery.daily={date:today(),draws:0,won:fal
     return '2 条记录 · 最佳分保持 100 · 老存档平滑升级';
   });
 
+  check('音标：内置词典、口音跟随与卡片开关', () => {
+    assert(/id="wordPhonetic"/.test(html) && /id="btnWordPhonetic"/.test(html) &&
+      /id="swPhonetic"/.test(html), '缺少音标显示或开关控件');
+    const o = JSON.parse(run(`JSON.stringify((function(){
+      var oldAccent=state.settings.accent, oldShow=state.settings.showPhonetic, oldWord=wordCur;
+      wordCur=['cancel','取消'];
+      state.settings.accent='uk'; var uk=wordPhonetic('cancel');
+      state.settings.accent='us'; var us=wordPhonetic('cancel');
+      state.settings.showPhonetic=true; var shown=updatePhonetic(), box=$('wordPhonetic');
+      var wasHidden=box.hidden;
+      state.settings.showPhonetic=false; var hidden=updatePhonetic(), nowHidden=box.hidden;
+      state.settings.accent=oldAccent; state.settings.showPhonetic=oldShow; wordCur=oldWord;
+      return {uk:uk,us:us,shown:shown,wasHidden:wasHidden,hidden:hidden,nowHidden:nowHidden,
+              missing:wordPhonetic('zzzznotaword'),legacy:normalizeState({settings:{}}).settings.showPhonetic};
+    })())`));
+    assert(o.uk && o.us && o.uk!==o.us, 'cancel 应有英美两套不同音标：'+JSON.stringify(o));
+    assert(/^\/.+\/$/.test(o.uk) && /^\/.+\/$/.test(o.us), '音标应以斜杠包裹');
+    assert(o.shown===o.us && o.wasHidden===false, '开启时卡片应显示当前口音音标');
+    assert(o.hidden==='' && o.nowHidden===true, '关闭时卡片应隐藏音标');
+    assert(o.missing==='' && o.legacy===true, '未收录词应不显示，老存档默认开启');
+    return '英美音标 '+o.uk+' / '+o.us+' · 卡片开关与老存档兼容';
+  });
+
   const failed = results.filter(r => r[1] === 'FAIL');
   results.forEach(r => console.log('[' + r[1] + ']   ' + r[0] + (r[2] ? '  -> ' + r[2] : '')));
   console.log('\n合计 ' + results.length + ' 项，失败 ' + failed.length + ' 项');
