@@ -3,7 +3,7 @@ const fs = require('fs');
 const vm = require('vm');
 const path = require('path');
 const html = fs.readFileSync(path.join(__dirname, '..', 'SpellLab.html'), 'utf8');
-const code = html.match(/<script>([\s\S]*?)<\/script>/)[1];
+const code = html.match(/<script>([\s\S]*?)<\/script>/i)[1];
 
 class ClassList {
   constructor(){ this.s = new Set(); }
