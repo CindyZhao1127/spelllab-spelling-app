@@ -13,7 +13,7 @@ const vm = require('vm');
 
 const root = __dirname;
 const html = fs.readFileSync(path.join(root, '..', 'SpellLab.html'), 'utf8');
-const scriptMatch = html.match(/<script[^>]*>([\s\S]*?)<\/script>/);
+const scriptMatch = html.match(/<script\b[^>]*>([\s\S]*?)<\/script\b[^>]*>/i);
 if (!scriptMatch) throw new Error('SpellLab.html: <script> block not found');
 const src = scriptMatch[1];
 
